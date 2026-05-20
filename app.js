@@ -329,96 +329,63 @@ function filt(q){
   });
 }
 
-/* Real anatomical organ SVG paths, viewBox 0 0 480 720. Body center x=240.
-   Each organ:
-     pos = anchor point for label leader line
-     side = 'L' or 'R' (label column)
-     d = SVG path data (one or more sub-paths) */
+/* Anatomical organs.
+   pos = anchor point for label leader; side = label column;
+   icon = iconify name (https://icon-sets.iconify.design/);
+   size = pixel size of icon in SVG;
+   d = fallback SVG path (used if no icon defined) */
 const ANATOMY={
-  Brain: {pos:{x:240,y:58}, side:'R', d:
-    'M 222 52 Q 222 40 232 38 Q 240 32 248 38 Q 258 40 258 52 '+
-    'Q 264 60 258 68 Q 256 80 246 84 Q 240 88 234 84 Q 224 80 222 68 '+
-    'Q 216 60 222 52 Z '+
-    'M 240 38 L 240 84 '+ /* central fissure */
-    'M 228 50 Q 232 56 228 62 M 252 50 Q 248 56 252 62 '+
-    'M 228 70 Q 232 76 228 82 M 252 70 Q 248 76 252 82'},
-  Eye: {pos:{x:240,y:98}, side:'L', d:
-    'M 232 96 Q 234 92 240 92 Q 246 92 248 96 Q 246 100 240 100 Q 234 100 232 96 Z '+
-    'M 238 96 A 2 2 0 1 0 242 96 A 2 2 0 1 0 238 96 Z'},
-  Salivary_Gland: {pos:{x:240,y:112}, side:'R', d:
-    'M 220 110 Q 216 106 220 102 Q 228 100 230 108 Q 228 112 220 110 Z '+
-    'M 260 110 Q 264 106 260 102 Q 252 100 250 108 Q 252 112 260 110 Z'},
-  Thyroid: {pos:{x:240,y:126}, side:'L', d:
-    'M 226 120 Q 220 124 224 134 Q 232 138 240 134 Q 248 138 256 134 Q 260 124 254 120 Q 244 116 240 124 Q 236 116 226 120 Z '+
-    'M 240 122 L 240 134'},
-  Esophagus: {pos:{x:240,y:154}, side:'R', d:
-    'M 236 138 Q 234 158 236 178 L 244 178 Q 246 158 244 138 Z'},
-  Lung: {pos:{x:240,y:190}, side:'L', d:
-    'M 216 148 Q 200 156 196 174 Q 192 196 196 224 Q 200 248 214 250 Q 224 246 224 230 L 228 178 Q 226 158 220 148 Q 218 146 216 148 Z '+
-    'M 234 188 L 234 220 M 220 178 L 220 224 '+ /* lobes */
-    'M 264 148 Q 280 156 284 174 Q 288 196 284 224 Q 280 248 266 250 Q 256 246 256 230 L 252 178 Q 254 158 260 148 Q 262 146 264 148 Z '+
-    'M 246 188 L 246 220 M 260 178 L 260 224'},
-  Heart: {pos:{x:236,y:200}, side:'R', d:
-    'M 236 186 Q 248 178 254 192 Q 256 208 244 220 L 236 224 L 228 220 Q 218 208 220 192 Q 224 178 236 186 Z '+
-    'M 232 188 L 230 198 M 240 188 L 244 200 '+ /* great vessels */
-    'M 228 198 L 226 210'},
-  Breast: {pos:{x:240,y:174}, side:'L', d:
-    'M 208 170 Q 196 174 198 188 Q 206 196 216 192 Q 222 184 218 176 Z M 212 184 A 1.5 1.5 0 1 0 215 184 A 1.5 1.5 0 1 0 212 184 Z '+
-    'M 272 170 Q 284 174 282 188 Q 274 196 264 192 Q 258 184 262 176 Z M 265 184 A 1.5 1.5 0 1 0 268 184 A 1.5 1.5 0 1 0 265 184 Z'},
-  Liver: {pos:{x:222,y:246}, side:'L', d:
-    'M 198 232 Q 192 244 196 264 Q 208 276 232 272 L 244 264 Q 246 248 240 238 Q 224 228 210 230 Q 202 230 198 232 Z '+
-    'M 218 246 Q 224 248 230 246 '+ /* division line */
-    'M 216 260 L 230 260'},
-  Spleen: {pos:{x:274,y:248}, side:'R', d:
-    'M 266 240 Q 280 242 282 256 Q 280 270 270 270 Q 262 260 264 248 Q 264 240 266 240 Z'},
-  Stomach: {pos:{x:262,y:248}, side:'R', d:
-    'M 246 234 Q 264 230 272 246 Q 274 264 264 274 Q 252 276 246 268 Q 240 256 240 244 Q 240 236 246 234 Z '+
-    'M 250 240 L 252 268 '+ /* curvature */
-    'M 264 244 L 266 270'},
-  Pancreas: {pos:{x:240,y:282}, side:'L', d:
-    'M 214 278 Q 226 274 244 278 Q 256 280 264 286 L 264 292 Q 256 288 244 286 Q 226 284 214 286 Z '+
-    'M 218 284 Q 240 284 260 286'},
-  Adrenal_Gland: {pos:{x:240,y:290}, side:'R', d:
-    'M 224 286 Q 228 282 234 286 Q 232 292 226 292 Q 222 290 224 286 Z '+
-    'M 246 286 Q 252 282 256 286 Q 258 290 254 292 Q 248 292 246 286 Z'},
-  Kidney: {pos:{x:240,y:308}, side:'L', d:
-    'M 224 298 Q 214 304 216 320 Q 222 332 232 330 Q 238 324 236 314 Q 238 308 232 304 Q 230 300 224 298 Z '+
-    'M 230 308 Q 234 314 230 320 '+ /* hilum */
-    'M 256 298 Q 266 304 264 320 Q 258 332 248 330 Q 242 324 244 314 Q 242 308 248 304 Q 250 300 256 298 Z '+
-    'M 250 308 Q 246 314 250 320'},
-  Small_Intestine: {pos:{x:240,y:344}, side:'R', d:
-    'M 220 330 Q 232 326 244 332 Q 256 334 256 340 Q 250 346 240 344 Q 228 346 222 340 Q 220 348 232 350 Q 244 350 254 348 Q 258 352 252 358 Q 240 360 230 356 Q 224 360 232 364 Q 244 366 254 362 Q 258 368 250 372 Q 238 372 228 368'},
-  Colon: {pos:{x:240,y:344}, side:'L', d:
-    'M 210 324 L 210 368 Q 214 378 226 380 L 254 380 Q 266 378 270 368 L 270 324 Q 266 318 256 318 L 224 318 Q 214 318 210 324 Z '+
-    'M 218 330 L 218 370 L 262 370 L 262 330 Z '+ /* hollow center where small intestine sits */
-    'M 218 330 L 262 330 M 218 370 L 262 370'},
-  Bladder: {pos:{x:240,y:390}, side:'R', d:
-    'M 228 384 Q 240 378 252 384 Q 256 396 240 400 Q 224 396 228 384 Z '+
-    'M 234 384 Q 240 380 246 384'},
-  Uterus: {pos:{x:240,y:392}, side:'L', d:
-    'M 230 386 Q 240 378 250 386 L 248 400 L 232 400 Z '+
-    'M 234 388 L 246 388'},
-  Ovary: {pos:{x:240,y:404}, side:'R', d:
-    'M 222 402 Q 218 404 220 410 Q 226 412 228 408 Q 228 404 222 402 Z '+
-    'M 258 402 Q 262 404 260 410 Q 254 412 252 408 Q 252 404 258 402 Z'},
-  Cervix: {pos:{x:240,y:408}, side:'L', d:
-    'M 236 402 L 244 402 L 242 410 L 238 410 Z'},
-  Prostate: {pos:{x:240,y:406}, side:'R', d:
-    'M 232 402 Q 240 398 248 402 Q 248 410 240 412 Q 232 410 232 402 Z'},
-  Testis: {pos:{x:240,y:438}, side:'L', d:
-    'M 230 432 Q 224 442 230 448 Q 238 450 240 442 Q 242 450 250 448 Q 256 442 250 432 Q 242 430 240 438 Q 238 430 230 432 Z'}
+  Brain:           {pos:{x:240,y:62},  side:'R', icon:'game-icons:brain',             size:54},
+  Eye:             {pos:{x:240,y:96},  side:'L', icon:'game-icons:eyeball',           size:22},
+  Salivary_Gland:  {pos:{x:240,y:114}, side:'R', icon:'game-icons:lips',              size:24},
+  Thyroid:         {pos:{x:240,y:130}, side:'L', icon:'healthicons:lungs',            size:24, recolor:true},
+  Esophagus:       {pos:{x:240,y:158}, side:'R', icon:'mdi:pipe',                     size:22, recolor:true},
+  Lung:            {pos:{x:240,y:196}, side:'L', icon:'game-icons:lungs',             size:60},
+  Heart:           {pos:{x:240,y:204}, side:'R', icon:'game-icons:human-heart',       size:38},
+  Breast:          {pos:{x:240,y:176}, side:'L', icon:'game-icons:flat-platform',     size:46, recolor:true},
+  Liver:           {pos:{x:226,y:248}, side:'L', icon:'game-icons:liver',             size:44},
+  Spleen:          {pos:{x:274,y:248}, side:'R', icon:'game-icons:internal-organ',    size:24},
+  Stomach:         {pos:{x:258,y:252}, side:'R', icon:'game-icons:stomach',           size:34},
+  Pancreas:        {pos:{x:240,y:282}, side:'L', icon:'game-icons:bowels',            size:32, recolor:true},
+  Adrenal_Gland:   {pos:{x:240,y:294}, side:'R', icon:'game-icons:kidneys',           size:22, recolor:true},
+  Kidney:          {pos:{x:240,y:312}, side:'L', icon:'game-icons:kidneys',           size:44},
+  Small_Intestine: {pos:{x:240,y:348}, side:'R', icon:'game-icons:intestines-viscera',size:50},
+  Colon:           {pos:{x:240,y:356}, side:'L', icon:'game-icons:bowels',            size:54},
+  Bladder:         {pos:{x:240,y:392}, side:'R', icon:'game-icons:wineglass',         size:22, recolor:true},
+  Uterus:          {pos:{x:240,y:394}, side:'L', icon:'game-icons:internal-organ',    size:22},
+  Ovary:           {pos:{x:240,y:406}, side:'R', icon:'game-icons:internal-organ',    size:20},
+  Cervix:          {pos:{x:240,y:414}, side:'L', icon:'game-icons:internal-organ',    size:18},
+  Prostate:        {pos:{x:240,y:410}, side:'R', icon:'game-icons:internal-organ',    size:20},
+  Testis:          {pos:{x:240,y:444}, side:'L', icon:'game-icons:internal-organ',    size:22}
 };
 
 function organCount(o){ return C[o]||0; }
+
+function iconUrl(icon, color){
+  const c=encodeURIComponent(color);
+  return `https://api.iconify.design/${icon}.svg?color=${c}`;
+}
 
 function organGroup(o){
   if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
   const a=ANATOMY[o];
   const fill=ANATOMY_COL[o]||'#ec9e8b';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
-  return `<g class="organ-g" data-o="${o}" ${eh}>
-    <path class="anatomy-part" d="${a.d}" style="fill:${fill};fill-rule:evenodd"/>
-  </g>`;
+  if(a.icon){
+    const sz=a.size||32;
+    const url=iconUrl(a.icon,fill);
+    const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
+    return `<g class="organ-g" data-o="${o}" ${eh}>
+      <image href="${url}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
+      <rect class="organ-hit" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+    </g>`;
+  }
+  if(a.d){
+    return `<g class="organ-g" data-o="${o}" ${eh}>
+      <path class="anatomy-part" d="${a.d}" style="fill:${fill};fill-rule:evenodd"/>
+    </g>`;
+  }
+  return '';
 }
 
 function organStats(o){
