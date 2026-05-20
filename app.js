@@ -329,43 +329,52 @@ function filt(q){
   });
 }
 
-/* SVG paths: anterior view, patient's right = image left.
-   Designed for viewBox 0 0 360 720. Body occupies x≈90..270 */
+/* Anatomical positions for viewBox 0 0 480 720.
+   Body silhouette occupies x≈180..300 (width ~120, centered at x=240).
+   Each organ: c {cx,cy} = anchor for leader line; r = relative size; side = label side */
 const ANATOMY={
-  Brain:          {d:'M180 60 Q165 48 152 56 Q142 70 148 86 Q160 96 180 96 Q200 96 212 86 Q218 70 208 56 Q195 48 180 60 Z', label:{x:332,y:70,side:'R'}},
-  Eye:            {d:'M168 96 Q166 100 170 102 L174 102 Q178 100 176 96 Z M184 96 Q182 100 186 102 L190 102 Q194 100 192 96 Z', label:{x:28,y:96,side:'L'}},
-  Salivary_Gland: {d:'M154 116 Q150 112 154 108 Q160 108 162 112 Z M198 116 Q202 112 206 108 Q210 108 206 116 Z', label:{x:28,y:114,side:'L'}},
-  Thyroid:        {d:'M168 132 Q180 128 192 132 Q188 138 180 138 Q172 138 168 132 Z', label:{x:332,y:128,side:'R'}},
-  Esophagus:      {d:'M177 138 L183 138 L183 178 L177 178 Z', label:{x:28,y:148,side:'L'}},
-  Lung:           {d:'M150 160 Q128 174 124 208 Q124 244 142 258 Q158 260 168 244 L172 200 Q170 170 158 160 Z M210 160 Q232 174 236 208 Q236 244 218 258 Q202 260 192 244 L188 200 Q190 170 202 160 Z', label:{x:332,y:188,side:'R'}},
-  Heart:          {d:'M188 196 Q200 188 208 200 Q212 218 200 230 Q188 236 180 230 Q172 236 162 230 Q150 218 154 200 Q162 188 174 196 Q180 204 188 196 Z', label:{x:28,y:212,side:'L'}},
-  Breast:         {d:'M150 182 Q140 188 142 200 Q150 208 160 204 Q166 196 162 188 Z M210 182 Q220 188 218 200 Q210 208 200 204 Q194 196 198 188 Z', label:{x:332,y:228,side:'R'}},
-  Liver:          {d:'M132 244 Q124 268 138 286 Q160 296 188 280 L196 264 Q194 244 172 234 Q146 232 132 244 Z', label:{x:28,y:262,side:'L'}},
-  Spleen:         {d:'M222 252 Q232 262 228 282 Q220 290 210 286 Q204 268 214 254 Z', label:{x:332,y:266,side:'R'}},
-  Stomach:        {d:'M188 250 Q210 244 220 264 Q218 286 200 290 Q184 286 180 270 Q180 256 188 250 Z', label:{x:332,y:300,side:'R'}},
-  Pancreas:       {d:'M148 294 L218 290 L220 302 L150 306 Z', label:{x:332,y:338,side:'R'}},
-  Adrenal_Gland:  {d:'M138 314 Q146 308 154 314 Q150 320 142 320 Z M212 314 Q220 308 226 314 Q222 320 214 320 Z', label:{x:28,y:318,side:'L'}},
-  Kidney:         {d:'M132 326 Q120 340 124 360 Q132 372 144 370 Q154 358 152 340 Q146 326 132 326 Z M232 326 Q244 340 240 360 Q232 372 220 370 Q210 358 212 340 Q218 326 232 326 Z', label:{x:28,y:348,side:'L'}},
-  Small_Intestine:{d:'M152 366 Q180 356 208 366 Q220 384 208 402 Q180 412 150 402 Q140 384 152 366 Z', label:{x:332,y:382,side:'R'}},
-  Colon:          {d:'M140 378 L140 408 Q150 422 180 424 Q210 422 220 408 L220 378 Q210 366 180 364 Q150 366 140 378 Z M158 396 L158 416 L202 416 L202 396 Z', label:{x:28,y:398,side:'L'}},
-  Bladder:        {d:'M168 420 Q180 412 192 420 Q196 434 180 440 Q164 434 168 420 Z', label:{x:28,y:432,side:'L'}},
-  Uterus:         {d:'M170 416 Q180 408 190 416 L188 432 L172 432 Z', label:{x:332,y:418,side:'R'}},
-  Ovary:          {d:'M158 440 Q150 444 152 452 Q158 458 164 452 Z M202 440 Q210 444 208 452 Q202 458 196 452 Z', label:{x:332,y:444,side:'R'}},
-  Cervix:         {d:'M176 434 L184 434 L182 442 L178 442 Z', label:{x:28,y:454,side:'L'}},
-  Prostate:       {d:'M172 430 Q180 426 188 430 Q188 438 180 440 Q172 438 172 430 Z', label:{x:332,y:466,side:'R'}},
-  Testis:         {d:'M170 460 Q164 470 172 478 Q180 480 184 472 Q188 480 196 478 Q204 470 198 460 Q188 458 184 466 Q180 458 170 460 Z', label:{x:28,y:474,side:'L'}}
+  Brain:           {c:{x:240,y:62},  r:18, side:'R'},
+  Eye:             {c:{x:240,y:96},  r:5,  side:'L'},
+  Salivary_Gland:  {c:{x:240,y:110}, r:6,  side:'R'},
+  Thyroid:         {c:{x:240,y:128}, r:8,  side:'L'},
+  Esophagus:       {c:{x:240,y:150}, r:5,  side:'R'},
+  Lung:            {c:{x:240,y:188}, r:24, side:'L', pair:true},
+  Heart:           {c:{x:232,y:192}, r:14, side:'R'},
+  Breast:          {c:{x:240,y:170}, r:14, side:'L', pair:true},
+  Liver:           {c:{x:222,y:236}, r:18, side:'R'},
+  Stomach:         {c:{x:258,y:240}, r:14, side:'L'},
+  Spleen:          {c:{x:272,y:232}, r:9,  side:'R'},
+  Pancreas:        {c:{x:240,y:268}, r:14, side:'L'},
+  Adrenal_Gland:   {c:{x:240,y:278}, r:8,  side:'R', pair:true},
+  Kidney:          {c:{x:240,y:296}, r:12, side:'L', pair:true},
+  Small_Intestine: {c:{x:240,y:330}, r:22, side:'R'},
+  Colon:           {c:{x:240,y:344}, r:24, side:'L'},
+  Bladder:         {c:{x:240,y:382}, r:10, side:'R'},
+  Uterus:          {c:{x:240,y:382}, r:9,  side:'L'},
+  Ovary:           {c:{x:240,y:396}, r:6,  side:'R', pair:true},
+  Cervix:          {c:{x:240,y:402}, r:5,  side:'L'},
+  Prostate:        {c:{x:240,y:400}, r:7,  side:'R'},
+  Testis:          {c:{x:240,y:432}, r:7,  side:'L', pair:true}
 };
+
+function organPath(o){
+  const a=ANATOMY[o]; if(!a) return '';
+  const {x,y}=a.c, r=a.r;
+  if(a.pair){
+    const dx=r+2;
+    return `<circle cx="${x-dx}" cy="${y}" r="${r*.85}"/><circle cx="${x+dx}" cy="${y}" r="${r*.85}"/>`;
+  }
+  return `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*.78}"/>`;
+}
 
 function organCount(o){ return C[o]||0; }
 
 function organGroup(o){
   if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
-  const item=ANATOMY[o];
   const fill=ANATOMY_COL[o]||'#ec9e8b';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
-  return `<g class="organ-g" data-o="${o}" ${eh}>
-    <path class="anatomy-part" d="${item.d}" fill="${fill}" style="fill:${fill}!important"/>
-  </g>`;
+  const shape=organPath(o).replace(/<(circle|ellipse)/g,`<$1 class="anatomy-part" style="fill:${fill}"`);
+  return `<g class="organ-g" data-o="${o}" ${eh}>${shape}</g>`;
 }
 
 function organStats(o){
@@ -384,66 +393,104 @@ function organStats(o){
   return {n:uniq.length,nC,nN,topDis:topDis?topDis[0]:'',topDb};
 }
 
-function organLabel(o){
+/* assign label Y positions with no overlap, separately for each side */
+function assignLabelPositions(active){
+  const MIN_GAP=42, TOP=70, BOTTOM=600;
+  const L=[],R=[];
+  active.forEach(o=>{
+    const a=ANATOMY[o];
+    const targetY=a.c.y;
+    (a.side==='L'?L:R).push({o,y:targetY});
+  });
+  function layout(arr){
+    arr.sort((a,b)=>a.y-b.y);
+    let prev=TOP-MIN_GAP;
+    arr.forEach(it=>{
+      it.y=Math.max(it.y,prev+MIN_GAP);
+      prev=it.y;
+    });
+    /* push down past bottom if needed */
+    const excess=arr.length?arr[arr.length-1].y-BOTTOM:0;
+    if(excess>0) arr.forEach(it=>it.y-=excess);
+    return Object.fromEntries(arr.map(it=>[it.o,it.y]));
+  }
+  return {L:layout(L),R:layout(R)};
+}
+
+function organLabel(o, labelY){
   if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
-  const item=ANATOMY[o];
-  const lab=item.label;
-  if(!lab) return '';
+  const a=ANATOMY[o];
+  const isL=a.side==='L';
+  const labelX=isL?12:468;
+  const anchor=isL?'start':'end';
   const name=o.replace(/_/g,' ').toUpperCase();
   const s=organStats(o);
-  const m=item.d.match(/M\s*([\d.]+)\s+([\d.]+)/);
-  const ox=m?parseFloat(m[1]):180;
-  const oy=m?parseFloat(m[2]):lab.y;
-  const isL=lab.side==='L';
-  const lineEnd=isL?lab.x+4:lab.x-4;
-  const turnX=isL?lab.x+24:lab.x-24;
-  const anchor=isL?'start':'end';
+  const ox=a.c.x, oy=a.c.y;
+  const turnX=isL?160:320;
+  const lineEnd=isL?labelX+2:labelX-2;
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
-  const topDisShort=s.topDis.length>22?s.topDis.slice(0,22)+'…':s.topDis;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
-    <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${lab.y} L ${lineEnd} ${lab.y}"/>
-    <text class="lbl-name" x="${lab.x}" y="${lab.y-6}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${lab.x}" y="${lab.y+4}" text-anchor="${anchor}">${s.n} project${s.n===1?'':'s'} · ${s.nC} cancer · ${s.nN} normal</text>
-    ${topDisShort?`<text class="lbl-meta" x="${lab.x}" y="${lab.y+14}" text-anchor="${anchor}">top: ${topDisShort}</text>`:''}
+    <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}"/>
+    <circle class="lbl-dot" cx="${ox}" cy="${oy}" r="2"/>
+    <text class="lbl-name" x="${labelX}" y="${labelY-5}" text-anchor="${anchor}">${name}</text>
+    <text class="lbl-count" x="${labelX}" y="${labelY+8}" text-anchor="${anchor}">${s.n} · ${s.nC}C · ${s.nN}N</text>
   </g>`;
 }
 
 function bodySilhouette(){
-  /* outlined silhouette: transparent body with thin red-pink outline (reference style) */
-  const body='M 180 20 Q 212 20 212 58 Q 212 78 200 92 Q 210 100 222 116'
-           +' L 230 144 Q 234 178 230 222 L 224 282 Q 220 318 214 344'
-           +' L 208 360 L 152 360 L 146 344 Q 140 318 136 282 L 130 222'
-           +' Q 126 178 130 144 L 138 116 Q 150 100 160 92 Q 148 78 148 58'
-           +' Q 148 20 180 20 Z';
-  const armL='M 138 116 Q 116 124 108 152 L 100 216 Q 96 252 102 280 L 110 306'
-           +' Q 116 320 122 320 L 130 320 Q 132 304 128 280 L 122 216'
-           +' Q 122 180 130 154 Q 134 138 144 130';
-  const armR='M 222 116 Q 244 124 252 152 L 260 216 Q 264 252 258 280 L 250 306'
-           +' Q 244 320 238 320 L 230 320 Q 228 304 232 280 L 238 216'
-           +' Q 238 180 230 154 Q 226 138 216 130';
-  const legL='M 152 360 L 146 388 L 138 630 Q 132 660 138 676 L 154 676'
-           +' Q 162 660 166 630 L 176 408 L 152 360 Z';
-  const legR='M 208 360 L 214 388 L 222 630 Q 228 660 222 676 L 206 676'
-           +' Q 198 660 194 630 L 184 408 L 208 360 Z';
+  /* Single continuous human outline. Center x=240, viewBox 0 0 480 720. */
+  const body=`
+    M 240 40
+    Q 268 40 268 70
+    Q 268 92 254 106
+    Q 268 110 280 122
+    L 290 158
+    Q 296 200 292 248
+    L 286 304
+    Q 280 332 274 352
+    L 268 366
+    L 212 366
+    L 206 352
+    Q 200 332 194 304
+    L 188 248
+    Q 184 200 190 158
+    L 200 122
+    Q 212 110 226 106
+    Q 212 92 212 70
+    Q 212 40 240 40 Z`;
+  const armL=`M 190 130 Q 168 138 158 168 L 148 234 Q 144 268 150 296
+              L 158 320 Q 164 332 170 332 L 178 332 Q 180 318 176 296
+              L 170 234 Q 170 200 178 174 Q 184 156 196 144 Z`;
+  const armR=`M 290 130 Q 312 138 322 168 L 332 234 Q 336 268 330 296
+              L 322 320 Q 316 332 310 332 L 302 332 Q 300 318 304 296
+              L 310 234 Q 310 200 302 174 Q 296 156 284 144 Z`;
+  const legL=`M 212 366 L 206 396 Q 200 480 198 560 Q 196 620 192 660
+              L 178 660 Q 174 620 178 560 Q 184 480 200 396 Z`;
+  const legR=`M 268 366 L 274 396 Q 280 480 282 560 Q 284 620 288 660
+              L 302 660 Q 306 620 302 560 Q 296 480 280 396 Z`;
+  const stroke='#c87878', fill='rgba(200,120,120,.05)';
   return `
     <g class="body-silhouette" pointer-events="none">
-      <path d="${body}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2" stroke-linejoin="round" opacity=".85"/>
-      <path d="${armL}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2" fill-rule="evenodd"/>
-      <path d="${armR}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2" fill-rule="evenodd"/>
-      <path d="${legL}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2"/>
-      <path d="${legR}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2"/>
-      <ellipse cx="180" cy="58" rx="22" ry="9" fill="rgba(220,140,140,.06)" stroke="#c87878" stroke-width=".8" opacity=".5"/>
-      <text x="180" y="14" text-anchor="middle" fill="#7a7268" font-family="Inter,sans-serif" font-size="9" letter-spacing="2">HUMAN PROTEOME · ANATOMICAL MAP</text>
+      <path d="${body}" fill="${fill}" stroke="${stroke}" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
+      <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
+      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
+      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
+      <text x="240" y="20" text-anchor="middle" fill="#7a7268" font-family="Inter,sans-serif" font-size="10" letter-spacing="3" font-weight="600">HUMAN PROTEOME · ANATOMICAL MAP</text>
     </g>`;
 }
 
 function renderBody(){
   const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&!SYSTEMIC.has(o));
+  const labelY=assignLabelPositions(active);
+  const orderedY=o=>{
+    const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.c.y;
+  };
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="0 0 360 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 480 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
     ${bodySilhouette()}
     <g class="organs-layer">${active.map(organGroup).join('')}</g>
-    <g class="labels-layer">${active.map(organLabel).join('')}</g>
+    <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
   </svg>`;
 }
 
