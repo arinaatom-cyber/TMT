@@ -9,7 +9,7 @@
 3. В репозитории: **Settings → Pages → Build and deployment → Source: Deploy from a branch**.
 4. Branch: `main`, folder: `/ (root)`.
 5. Сайт будет доступен по адресу:  
-   `https://arinaatom-cyber.github.io/human-proteome-atlas/`
+   `https://arinaatom-cyber.github.io/TMT/`
 
 ## Google Sheets
 

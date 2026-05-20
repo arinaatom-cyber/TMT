@@ -9,7 +9,7 @@
 ## Шаг 2 — новый репозиторий
 
 1. Откройте https://github.com/new
-2. **Repository name:** `human-proteome-atlas` (или любое имя)
+2. **Repository name:** `TMT` (у вас уже создан: https://github.com/arinaatom-cyber/TMT)
 3. **Public**
 4. Не добавляйте README / .gitignore (файлы уже есть локально)
 5. Нажмите **Create repository**
@@ -20,11 +20,9 @@
 
 ```powershell
 cd "C:\Users\Arina1996\Desktop\лаб иеб\human-proteome-atlas"
-git remote add origin https://github.com/arinaatom-cyber/human-proteome-atlas.git
+git remote set-url origin https://github.com/arinaatom-cyber/TMT.git
 git push -u origin main
 ```
-
-(Если `remote origin` уже есть: `git remote set-url origin https://github.com/arinaatom-cyber/human-proteome-atlas.git`)
 
 При первом push GitHub попросит войти (браузер или токен).
 
@@ -37,7 +35,7 @@ git push -u origin main
 
 Через 1–3 минуты сайт откроется по адресу:
 
-`https://arinaatom-cyber.github.io/human-proteome-atlas/`
+`https://arinaatom-cyber.github.io/TMT/`
 
 Эту ссылку можно отправлять коллегам.
 
