@@ -271,26 +271,24 @@ function normalizeTMT(raw){
   return s;
 }
 
-/* Pan-organ atlas projects (GTEx-style) cover so many tissues that they
-   dominate every per-organ count.  We keep them in Multiple_Organs and the
-   project list, but exclude them from individual organ counts/highlights. */
+/* Pan-organ atlas projects (GTEx-style) are flagged so each project card can
+   show a "Pan-organ atlas" badge, but they still count toward every individual
+   organ bucket so users can find them by browsing any organ. */
 const PAN_ORGAN_THRESHOLD=8;
 
 function normalizeRow(x){
   const organRaw=pickOrganRaw(x);
   const tumorType=x['Tumor Type']||x['Disease Subtype']||x['Disease']||'Not specified';
-  const sampleType=(x['Sample Type']||'').trim()||'Unknown';   /* don't fall through to detailed text */
+  const sampleType=(x['Sample Type']||'').trim()||'Unknown';
   const title=x['Title']||'';
-  const allOrgans=classifyAllOrgans(organRaw);
-  const isPan=allOrgans.length>=PAN_ORGAN_THRESHOLD;
-  /* Pan-organ atlases are tagged Multiple_Organs only, not in every single bucket. */
-  const organList=isPan?['Multiple_Organs']:allOrgans;
+  const organList=classifyAllOrgans(organRaw);
+  const isPan=organList.length>=PAN_ORGAN_THRESHOLD;
   let pid=(x['Project ID']||'').trim();
   const m=pid.match(/^(IPX\d+)\s*\((PXD\d+)\)/i);
   if(m) pid=m[2];
   return {
     ...x,
-    organs:organList,allOrgans,om:organList[0],isMulti:organList.length>1,isPan,
+    organs:organList,om:organList[0],isMulti:organList.length>1,isPan,
     dis:tumorType,
     healthy:isHealthy(tumorType,sampleType,title,x['Disease']),
     st:sampleType,
