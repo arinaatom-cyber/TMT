@@ -344,81 +344,79 @@ function filt(q){
    icon = iconify name (https://icon-sets.iconify.design/);
    size = pixel size of icon in SVG;
    d = fallback SVG path (used if no icon defined) */
-/* Anatomically-correct organ atlas (Gray's Anatomy / Netter reference).
-   Body viewBox 0 0 480 720, midline x=240.
-   Vertebral landmarks used as Y-coordinates:
-     C1-C7  neck       y= 95 – 115
-     T1     suprasternal  y=115
-     T4     sternal angle y=140  (aortic arch, bronchi)
-     T6     mid-heart     y=160
-     T8     heart apex    y=180
-     T10    diaphragm     y=200
-     T12    spleen tip    y=220
-     L1     renal hilum   y=240
-     L3     navel         y=270
-     L5     iliac crest   y=310
-     S1     sacral prom.  y=325
-     pubis  symphysis     y=355  (body ends at y=366) */
+/* Anatomically-correct organ atlas matched to the 8-head canon body silhouette.
+   Body viewBox 0 0 480 720, midline x=240.  Vertebral / canonical landmarks:
+     y= 20  vertex
+     y= 62  eye line
+     y= 95  chin (C2)
+     y=120  thyroid cartilage (C5)
+     y=130  shoulder line (T1)
+     y=160  sternal angle (T4)
+     y=190  nipple line / mid-heart (T6)
+     y=210  heart apex (T8)
+     y=220  xiphoid / diaphragm (T10)
+     y=245  L1 (renal hilum)
+     y=275  L3 (navel)
+     y=325  L5 (iliac crest)
+     y=355  pubic symphysis (S2)  — body ends at y=370 */
 const ANATOMY={
-  /* HEAD: skull spans y=36–94 */
-  Brain:           {pos:{x:240, y: 58}, side:'R', size:34, emoji:'1f9e0',                 z:1},
-  Eye:             {pos:{x:240, y: 72}, side:'L', size:11, emoji:'1f441',                 z:2},
-  Salivary_Gland:  {pos:{x:240, y: 90}, side:'R', size:0,  z:2, d:
-    'M 226 86 Q 220 84 222 80 Q 230 80 232 86 Z '+
-    'M 254 86 Q 260 84 258 80 Q 250 80 248 86 Z'},
+  /* HEAD (y=20–95) */
+  Brain:           {pos:{x:240, y: 50}, side:'R', size:42, emoji:'1f9e0',                 z:1},
+  Eye:             {pos:{x:240, y: 68}, side:'L', size:12, emoji:'1f441',                 z:2},
+  Salivary_Gland:  {pos:{x:240, y: 88}, side:'R', size:0,  z:2, d:
+    'M 226 86 Q 220 82 222 78 Q 230 78 232 84 Z '+
+    'M 254 86 Q 260 82 258 78 Q 250 78 248 84 Z'},
 
-  /* NECK: y=94–112 */
-  Thyroid:         {pos:{x:240, y:106}, side:'L', size:0,  z:2, d:
-    'M 230 102 Q 226 106 230 112 Q 236 114 240 112 Q 244 114 250 112 Q 254 106 250 102 Q 244 100 240 104 Q 236 100 230 102 Z'},
+  /* NECK (y=95–130) */
+  Thyroid:         {pos:{x:240, y:118}, side:'L', size:0,  z:2, d:
+    'M 230 114 Q 224 118 228 126 Q 234 128 240 126 Q 246 128 252 126 Q 256 118 250 114 Q 244 112 240 118 Q 236 112 230 114 Z'},
 
-  /* THORAX: y=112–220.  Lungs apex at clavicle, base at diaphragm (T10≈y=200) */
-  Esophagus:       {pos:{x:240, y:148}, side:'R', size:0,  z:1, d:
-    'M 237 116 L 243 116 L 243 196 L 237 196 Z'},
-  Lung:            {pos:{x:240, y:158}, side:'L', size:54, emoji:'1fac1',                 z:2},
-  /* HEART: middle mediastinum, slight left lateralisation (apex points left).
-     Vertical span T5–T8, center at T6 ≈ y=164. */
-  Heart:           {pos:{x:234, y:164}, side:'R', size:30, emoji:'1fac0',                 z:3},
-  Breast:          {pos:{x:240, y:180}, side:'L', size:0,  z:4, d:
-    'M 214 178 A 3 3 0 1 0 220 178 A 3 3 0 1 0 214 178 Z '+
-    'M 260 178 A 3 3 0 1 0 266 178 A 3 3 0 1 0 260 178 Z'},
+  /* THORAX (y=130–220).  Lungs apex at clavicle y=135, base at diaphragm y=220. */
+  Esophagus:       {pos:{x:240, y:170}, side:'R', size:0,  z:1, d:
+    'M 237 130 L 243 130 L 243 220 L 237 220 Z'},
+  Lung:            {pos:{x:240, y:180}, side:'L', size:60, emoji:'1fac1',                 z:2},
+  Heart:           {pos:{x:232, y:196}, side:'R', size:34, emoji:'1fac0',                 z:3},
+  Breast:          {pos:{x:240, y:200}, side:'L', size:0,  z:4, d:
+    'M 210 198 A 3.2 3.2 0 1 0 216.4 198 A 3.2 3.2 0 1 0 210 198 Z '+
+    'M 263.6 198 A 3.2 3.2 0 1 0 270 198 A 3.2 3.2 0 1 0 263.6 198 Z'},
 
-  /* UPPER ABDOMEN: y=220–270.  Diaphragm at y=210. */
-  Liver:           {pos:{x:218, y:232}, side:'L', size:38, icon:'game-icons:liver',       z:2}, /* RUQ */
-  Stomach:         {pos:{x:262, y:232}, side:'R', size:28, icon:'game-icons:stomach',     z:3}, /* LUQ */
-  Spleen:          {pos:{x:276, y:228}, side:'R', size:0,  z:2, d:                              /* LUQ posterior */
-    'M 274 222 Q 286 226 286 238 Q 282 252 274 252 Q 268 240 272 228 Z'},
-  Pancreas:        {pos:{x:240, y:256}, side:'L', size:0,  z:2, d:                              /* retroperitoneal */
-    'M 210 254 Q 228 250 248 254 Q 260 256 268 262 L 268 266 Q 258 262 246 260 Q 226 258 210 260 Z'},
+  /* UPPER ABDOMEN (y=220–275).  Below diaphragm. */
+  Liver:           {pos:{x:218, y:248}, side:'L', size:44, icon:'game-icons:liver',       z:2},
+  Stomach:         {pos:{x:264, y:248}, side:'R', size:32, icon:'game-icons:stomach',     z:3},
+  Spleen:          {pos:{x:282, y:242}, side:'R', size:0,  z:2, d:
+    'M 280 234 Q 292 238 292 252 Q 288 266 280 266 Q 274 254 278 240 Z'},
+  Pancreas:        {pos:{x:240, y:272}, side:'L', size:0,  z:2, d:
+    'M 208 270 Q 228 264 250 270 Q 262 272 270 278 L 270 282 Q 260 278 248 276 Q 226 274 208 276 Z'},
 
-  /* MID ABDOMEN: y=270–310.  Renal hilum at L1≈y=240, kidneys span T12–L3. */
-  Adrenal_Gland:   {pos:{x:240, y:248}, side:'R', size:0,  z:1, d:                              /* on top of kidneys, L1 */
-    'M 222 244 Q 226 240 232 244 Q 230 250 224 250 Q 220 248 222 244 Z '+
-    'M 248 244 Q 254 240 258 244 Q 260 248 256 250 Q 250 250 248 244 Z'},
-  Kidney:          {pos:{x:240, y:262}, side:'L', size:36, icon:'game-icons:kidneys',     z:2},
+  /* MID ABDOMEN (y=240–310).  Renal hilum L1=245, kidneys T12–L3. */
+  Adrenal_Gland:   {pos:{x:240, y:250}, side:'R', size:0,  z:1, d:
+    'M 220 246 Q 224 242 230 246 Q 228 252 222 252 Q 218 250 220 246 Z '+
+    'M 250 246 Q 256 242 260 246 Q 262 250 258 252 Q 252 252 250 246 Z'},
+  Kidney:          {pos:{x:240, y:270}, side:'L', size:42, icon:'game-icons:kidneys',     z:2},
 
-  /* LOWER ABDOMEN: y=290–340.  Small intestine in central abdomen, colon frames it. */
-  Colon:           {pos:{x:240, y:308}, side:'L', size:48, icon:'game-icons:bowels',      z:2},
-  Small_Intestine: {pos:{x:240, y:308}, side:'R', size:0,  z:3, d:                              /* coiled loops */
-    'M 224 296 Q 234 292 246 296 Q 256 300 252 306 Q 240 308 228 304 '+
-    'Q 220 312 232 316 Q 246 316 254 312 Q 256 320 246 322 Q 234 322 226 318 '+
-    'Q 222 326 232 330 Q 246 330 254 326'},
+  /* LOWER ABDOMEN (y=290–345).  Small intestine central, colon frames it. */
+  Colon:           {pos:{x:240, y:312}, side:'L', size:54, icon:'game-icons:bowels',      z:2},
+  Small_Intestine: {pos:{x:240, y:312}, side:'R', size:0,  z:3, d:
+    'M 222 298 Q 234 294 248 298 Q 260 302 256 310 Q 240 312 226 308 '+
+    'Q 218 318 232 322 Q 248 322 258 318 Q 260 326 250 330 Q 234 332 224 326 '+
+    'Q 218 336 232 340 Q 248 340 258 336'},
 
-  /* PELVIS: y=340–366.  Bladder posterior to pubic symphysis. */
-  Bladder:         {pos:{x:240, y:350}, side:'R', size:0,  z:4, d:
-    'M 226 344 Q 240 338 254 344 Q 258 356 240 360 Q 222 356 226 344 Z'},
-  Uterus:          {pos:{x:232, y:352}, side:'L', size:0,  z:3, d:                              /* posterior to bladder */
-    'M 224 346 Q 232 340 240 346 L 238 358 L 226 358 Z'},
-  Prostate:        {pos:{x:248, y:358}, side:'R', size:0,  z:3, d:                              /* below bladder */
-    'M 242 354 Q 250 350 256 354 Q 256 362 248 364 Q 242 362 242 354 Z'},
-  Ovary:           {pos:{x:240, y:354}, side:'R', size:0,  z:3, d:                              /* lateral to uterus */
-    'M 218 352 Q 214 354 216 358 Q 222 360 224 356 Z '+
-    'M 256 352 Q 262 354 260 358 Q 254 360 252 356 Z'},
-  Cervix:          {pos:{x:232, y:360}, side:'L', size:0,  z:3, d:                              /* below uterus */
-    'M 228 358 L 236 358 L 234 362 L 230 362 Z'},
+  /* PELVIS (y=340–370).  Bladder posterior to pubic symphysis (y=355). */
+  Bladder:         {pos:{x:240, y:348}, side:'R', size:0,  z:4, d:
+    'M 224 342 Q 240 334 256 342 Q 260 354 240 360 Q 220 354 224 342 Z'},
+  Uterus:          {pos:{x:232, y:352}, side:'L', size:0,  z:3, d:
+    'M 222 346 Q 232 338 240 346 L 238 360 L 224 360 Z'},
+  Prostate:        {pos:{x:248, y:360}, side:'R', size:0,  z:3, d:
+    'M 240 356 Q 250 350 258 356 Q 258 364 248 366 Q 240 364 240 356 Z'},
+  Ovary:           {pos:{x:240, y:354}, side:'R', size:0,  z:3, d:
+    'M 214 352 Q 210 354 212 358 Q 218 360 220 356 Z '+
+    'M 260 352 Q 266 354 264 358 Q 258 360 256 356 Z'},
+  Cervix:          {pos:{x:232, y:362}, side:'L', size:0,  z:3, d:
+    'M 228 360 L 236 360 L 234 366 L 230 366 Z'},
 
-  /* SCROTUM: between legs, y≥370 */
-  Testis:          {pos:{x:240, y:380}, side:'L', size:0,  z:3, d:
-    'M 232 376 Q 226 386 234 392 Q 240 392 242 386 Q 244 392 248 392 Q 256 386 250 376 Q 244 374 240 382 Q 236 374 232 376 Z'}
+  /* SCROTUM (in gap between legs, y≥375) */
+  Testis:          {pos:{x:240, y:385}, side:'L', size:0,  z:3, d:
+    'M 232 380 Q 224 392 234 398 Q 240 398 242 392 Q 244 398 248 398 Q 256 392 248 380 Q 244 378 240 386 Q 236 378 232 380 Z'}
 };
 
 function organCount(o){ return C[o]||0; }
@@ -527,7 +525,7 @@ function organStats(o){
 
 /* assign label Y positions with no overlap, separately for each side */
 function assignLabelPositions(active){
-  const MIN_GAP=42, TOP=60, BOTTOM=640;
+  const MIN_GAP=40, TOP=40, BOTTOM=620;
   const L=[],R=[];
   active.forEach(o=>{
     const a=ANATOMY[o];
@@ -572,24 +570,38 @@ function organLabel(o, labelY){
 }
 
 function bodySilhouette(){
-  /* Cleaner anatomical silhouette, viewBox 0 0 480 720 (body center x=240) */
-  const head=`M 240 36 Q 264 36 266 60 Q 266 80 252 94 L 228 94 Q 214 80 214 60 Q 216 36 240 36 Z`;
-  const neck=`M 224 94 L 256 94 L 258 112 L 222 112 Z`;
-  const torso=`M 200 112 Q 188 116 184 124
-               L 188 158 Q 192 196 192 232 L 196 296 Q 200 332 206 354
-               L 212 366 L 268 366 L 274 354
-               Q 280 332 284 296 L 288 232 Q 288 196 292 158
-               L 296 124 Q 292 116 280 112 Z`;
-  const armL=`M 188 124 Q 168 134 156 162 L 146 224 Q 142 264 148 300
-              L 158 326 Q 164 336 172 332 L 180 326
-              Q 178 308 174 286 L 168 224 Q 168 196 176 168 Q 182 152 196 138 Z`;
-  const armR=`M 292 124 Q 312 134 324 162 L 334 224 Q 338 264 332 300
-              L 322 326 Q 316 336 308 332 L 300 326
-              Q 302 308 306 286 L 312 224 Q 312 196 304 168 Q 298 152 284 138 Z`;
-  const legL=`M 212 366 L 204 400 Q 198 480 196 560 Q 194 624 192 664
-              L 174 664 Q 170 624 174 560 Q 180 480 196 400 L 212 366 Z`;
-  const legR=`M 268 366 L 276 400 Q 282 480 284 560 Q 286 624 288 664
-              L 306 664 Q 310 624 306 560 Q 300 480 284 400 L 268 366 Z`;
+  /* 8-head canon human body, viewBox 0 0 480 720, midline x=240.
+     Head height = 85 px. Vertical landmarks:
+       y= 20  vertex (top of skull)
+       y= 62  eye line
+       y= 95  chin
+       y=125  mid-neck
+       y=135  acromion (shoulder)
+       y=190  nipple line (T4)
+       y=220  xiphoid / diaphragm (T10)
+       y=275  navel (L3)
+       y=325  iliac crest (L5)
+       y=360  pubic symphysis (S2)
+       y=445  mid-thigh
+       y=530  knee
+       y=700  feet */
+  const head=`M 240 20 Q 272 20 274 50 Q 274 80 258 94 L 222 94 Q 206 80 206 50 Q 208 20 240 20 Z`;
+  const neck=`M 224 94 L 256 94 L 260 130 L 220 130 Z`;
+  /* Torso: shoulders y=130, narrowing to waist y=290, then widening at hips y=355, ends at y=370 */
+  const torso=`M 220 130 Q 196 134 184 144 L 178 188 Q 180 230 184 270
+               Q 186 300 192 332 Q 198 350 206 362 L 212 370
+               L 268 370 L 274 362 Q 282 350 288 332 Q 294 300 296 270
+               Q 300 230 302 188 L 296 144 Q 284 134 260 130 Z`;
+  const armL=`M 184 144 Q 162 154 152 188 L 144 260 Q 140 310 148 350
+              L 158 384 Q 164 396 174 392 L 184 388 Q 184 366 178 348
+              L 170 280 Q 170 240 178 200 Q 184 168 196 152 Z`;
+  const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
+              L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
+              L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
+  const legL=`M 212 370 L 206 410 Q 200 500 198 580 Q 196 650 194 700
+              L 172 700 Q 168 650 172 580 Q 178 500 196 410 L 212 370 Z`;
+  const legR=`M 268 370 L 274 410 Q 280 500 282 580 Q 284 650 286 700
+              L 308 700 Q 312 650 308 580 Q 302 500 284 410 L 268 370 Z`;
   const stroke='#d89a9a', fill='rgba(216,154,154,.03)';
   return `
     <g class="body-silhouette" pointer-events="none">
@@ -600,9 +612,7 @@ function bodySilhouette(){
       <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
       <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
       <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <text x="240" y="18" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="9" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
-      <line x1="180" y1="26" x2="220" y2="26" stroke="#94a3b8" stroke-width=".4" opacity=".5"/>
-      <line x1="260" y1="26" x2="300" y2="26" stroke="#94a3b8" stroke-width=".4" opacity=".5"/>
+      <text x="240" y="10" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="8" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
     </g>`;
 }
 
