@@ -26,14 +26,25 @@ git push -u origin main
 
 При первом push GitHub попросит войти (браузер или токен).
 
-## Шаг 4 — включить GitHub Pages
+## Шаг 4 — включить GitHub Pages (обязательно!)
 
-1. Репозиторий → **Settings** → **Pages**
-2. **Source:** Deploy from a branch
-3. **Branch:** `main` → папка **`/ (root)`**
-4. **Save**
+Без этого шага будет **404 — There isn't a GitHub Pages site here**.
 
-Через 1–3 минуты сайт откроется по адресу:
+1. Откройте https://github.com/arinaatom-cyber/TMT/settings/pages
+2. В блоке **Build and deployment** → **Source** выберите один вариант:
+
+**Вариант A (проще):**
+- Source: **Deploy from a branch**
+- Branch: **main** → **/ (root)**
+- **Save**
+
+**Вариант B (через Actions, уже добавлен workflow):**
+- Source: **GitHub Actions**
+- Зайдите во вкладку **Actions** → дождитесь зелёной галочки у workflow «Deploy site to GitHub Pages»
+
+3. Подождите 1–5 минут, обновите страницу в Settings → Pages — появится зелёная ссылка на сайт.
+
+Адрес сайта:
 
 `https://arinaatom-cyber.github.io/TMT/`
 
