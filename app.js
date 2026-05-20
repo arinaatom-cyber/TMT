@@ -368,14 +368,29 @@ function organGroup(o){
   </g>`;
 }
 
+function organStats(o){
+  const rows=D.filter(r=>r.organs.includes(o));
+  const seen=new Set(),uniq=[];
+  rows.forEach(r=>{if(!seen.has(r.pid)){seen.add(r.pid);uniq.push(r);}});
+  let nC=0,nN=0;
+  const dis={},dbs={};
+  uniq.forEach(r=>{
+    if(r.healthy) nN++; else nC++;
+    if(r.dis) dis[r.dis]=(dis[r.dis]||0)+1;
+    if(r.db) dbs[r.db]=(dbs[r.db]||0)+1;
+  });
+  const topDis=Object.entries(dis).sort((a,b)=>b[1]-a[1])[0];
+  const topDb=Object.entries(dbs).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,3).join(', ');
+  return {n:uniq.length,nC,nN,topDis:topDis?topDis[0]:'',topDb};
+}
+
 function organLabel(o){
   if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
   const item=ANATOMY[o];
   const lab=item.label;
   if(!lab) return '';
   const name=o.replace(/_/g,' ').toUpperCase();
-  const n=organCount(o);
-  /* find a point on the organ near the label */
+  const s=organStats(o);
   const m=item.d.match(/M\s*([\d.]+)\s+([\d.]+)/);
   const ox=m?parseFloat(m[1]):180;
   const oy=m?parseFloat(m[2]):lab.y;
@@ -384,40 +399,48 @@ function organLabel(o){
   const turnX=isL?lab.x+24:lab.x-24;
   const anchor=isL?'start':'end';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
+  const topDisShort=s.topDis.length>22?s.topDis.slice(0,22)+'…':s.topDis;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${lab.y} L ${lineEnd} ${lab.y}"/>
-    <text class="lbl-name" x="${lab.x}" y="${lab.y-1}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${lab.x}" y="${lab.y+9}" text-anchor="${anchor}">${n} ${n===1?'project':'projects'}</text>
+    <text class="lbl-name" x="${lab.x}" y="${lab.y-6}" text-anchor="${anchor}">${name}</text>
+    <text class="lbl-count" x="${lab.x}" y="${lab.y+4}" text-anchor="${anchor}">${s.n} project${s.n===1?'':'s'} · ${s.nC} cancer · ${s.nN} normal</text>
+    ${topDisShort?`<text class="lbl-meta" x="${lab.x}" y="${lab.y+14}" text-anchor="${anchor}">top: ${topDisShort}</text>`:''}
   </g>`;
 }
 
 function bodySilhouette(){
+  /* outlined silhouette: transparent body with thin red-pink outline (reference style) */
+  const body='M 180 20 Q 212 20 212 58 Q 212 78 200 92 Q 210 100 222 116'
+           +' L 230 144 Q 234 178 230 222 L 224 282 Q 220 318 214 344'
+           +' L 208 360 L 152 360 L 146 344 Q 140 318 136 282 L 130 222'
+           +' Q 126 178 130 144 L 138 116 Q 150 100 160 92 Q 148 78 148 58'
+           +' Q 148 20 180 20 Z';
+  const armL='M 138 116 Q 116 124 108 152 L 100 216 Q 96 252 102 280 L 110 306'
+           +' Q 116 320 122 320 L 130 320 Q 132 304 128 280 L 122 216'
+           +' Q 122 180 130 154 Q 134 138 144 130';
+  const armR='M 222 116 Q 244 124 252 152 L 260 216 Q 264 252 258 280 L 250 306'
+           +' Q 244 320 238 320 L 230 320 Q 228 304 232 280 L 238 216'
+           +' Q 238 180 230 154 Q 226 138 216 130';
+  const legL='M 152 360 L 146 388 L 138 630 Q 132 660 138 676 L 154 676'
+           +' Q 162 660 166 630 L 176 408 L 152 360 Z';
+  const legR='M 208 360 L 214 388 L 222 630 Q 228 660 222 676 L 206 676'
+           +' Q 198 660 194 630 L 184 408 L 208 360 Z';
   return `
     <g class="body-silhouette" pointer-events="none">
-      <ellipse cx="180" cy="58" rx="32" ry="38" fill="${BODY_BLUE}"/>
-      <path d="M 168 88 Q 168 100 172 110 L 188 110 Q 192 100 192 88 Z" fill="${BODY_BLUE}"/>
-      <path d="M 138 116 Q 150 110 172 110 L 188 110 Q 210 110 222 116
-               L 230 144 Q 234 178 230 222 L 224 282 Q 220 318 214 344
-               L 208 360 L 152 360 L 146 344 Q 140 318 136 282 L 130 222
-               Q 126 178 130 144 Z" fill="${BODY_BLUE}"/>
-      <path d="M 138 116 Q 116 124 108 152 L 100 216 Q 96 252 102 280 L 110 306
-               Q 116 320 122 320 L 130 320 Q 132 304 128 280 L 122 216
-               Q 122 180 130 154 Q 134 138 144 130 Z" fill="${BODY_BLUE}"/>
-      <path d="M 222 116 Q 244 124 252 152 L 260 216 Q 264 252 258 280 L 250 306
-               Q 244 320 238 320 L 230 320 Q 228 304 232 280 L 238 216
-               Q 238 180 230 154 Q 226 138 216 130 Z" fill="${BODY_BLUE}"/>
-      <path d="M 152 360 L 208 360 L 214 388 L 184 404 L 176 404 L 146 388 Z" fill="${BODY_BLUE}"/>
-      <path d="M 146 388 L 176 404 L 172 504 Q 168 558 162 596 Q 158 622 148 630
-               L 138 630 Q 132 612 134 578 L 136 504 Q 138 446 144 408 Z" fill="${BODY_BLUE}"/>
-      <path d="M 214 388 L 184 404 L 188 504 Q 192 558 198 596 Q 202 622 212 630
-               L 222 630 Q 228 612 226 578 L 224 504 Q 222 446 216 408 Z" fill="${BODY_BLUE}"/>
+      <path d="${body}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2" stroke-linejoin="round" opacity=".85"/>
+      <path d="${armL}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2" fill-rule="evenodd"/>
+      <path d="${armR}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2" fill-rule="evenodd"/>
+      <path d="${legL}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2"/>
+      <path d="${legR}" fill="rgba(220,140,140,.04)" stroke="#c87878" stroke-width="1.2"/>
+      <ellipse cx="180" cy="58" rx="22" ry="9" fill="rgba(220,140,140,.06)" stroke="#c87878" stroke-width=".8" opacity=".5"/>
+      <text x="180" y="14" text-anchor="middle" fill="#7a7268" font-family="Inter,sans-serif" font-size="9" letter-spacing="2">HUMAN PROTEOME · ANATOMICAL MAP</text>
     </g>`;
 }
 
 function renderBody(){
   const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&!SYSTEMIC.has(o));
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="0 0 360 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg">
+  <svg viewBox="0 0 360 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
     ${bodySilhouette()}
     <g class="organs-layer">${active.map(organGroup).join('')}</g>
     <g class="labels-layer">${active.map(organLabel).join('')}</g>
