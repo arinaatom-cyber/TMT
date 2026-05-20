@@ -41,7 +41,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .hstat .v{font-size:18px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
 .hstat .l{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:500}
 
-.app{max-width:1600px;margin:0 auto;padding:20px 24px;display:grid;grid-template-columns:minmax(260px,300px) minmax(380px,440px) minmax(320px,1fr);gap:20px;align-items:start;min-height:calc(100vh - 64px)}
+.app{max-width:1600px;margin:0 auto;padding:20px 24px;display:grid;grid-template-columns:minmax(260px,300px) minmax(260px,320px) minmax(380px,1fr);gap:20px;align-items:start;min-height:calc(100vh - 64px)}
 @media(max-width:1200px){.app{grid-template-columns:1fr;max-width:820px}.body-col{order:-1}}
 
 .panel{display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 100px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
@@ -67,10 +67,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .search input::placeholder{color:var(--t3)}
 .search .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:14px}
 
-.body-col{display:flex;flex-direction:column;align-items:center}
-.body-wrap{position:relative;width:100%;max-width:440px;margin:0 auto}
-.body-wrap svg{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 24px rgba(0,0,0,.35)}
-.body-caption{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.04em}
+.body-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px}
+.body-wrap{position:relative;width:100%;max-width:280px;margin:0 auto}
+.body-wrap svg{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 18px rgba(0,0,0,.3))}
+.body-caption{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.04em;max-width:260px}
 
 .body-out{fill:var(--body-fill);stroke:var(--body-stroke);stroke-width:1.2}
 .body-inner{fill:none;stroke:var(--body-inner);stroke-width:.5;opacity:.55}
