@@ -74,7 +74,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 
 .anatomy-svg{background:transparent}
 
-.organ-g{cursor:pointer;transition:filter .2s}
+.organ-g{cursor:pointer;transition:filter .2s,transform .2s;transform-origin:center}
+.organ-g image{transition:filter .2s,opacity .2s;opacity:.95;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.organ-hit{fill:transparent;stroke:none;pointer-events:all}
+.organ-g:hover image{opacity:1;filter:drop-shadow(0 0 6px rgba(255,255,255,.5)) brightness(1.12)}
+.organ-g.hi image{opacity:1;filter:drop-shadow(0 0 8px var(--accent)) brightness(1.15)}
+
 .anatomy-part{fill:#ec9e8b;stroke:rgba(0,0,0,.55);stroke-width:.7;stroke-linejoin:round;opacity:.92;transition:filter .2s,stroke .2s,opacity .2s}
 .organ-g:hover .anatomy-part{stroke:#fff;stroke-width:1.1;filter:brightness(1.15);opacity:1}
 .organ-g.hi .anatomy-part{stroke:#fff;stroke-width:1.5;filter:brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,.5));opacity:1}
