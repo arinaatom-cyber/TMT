@@ -65,7 +65,8 @@ const MAP={
   't cell':'Blood','t-cell':'Blood','t cells':'Blood',
   'b cell':'Blood','b-cell':'Blood','b cells':'Blood',
   blood:'Blood',leukemia:'Blood',leukaemia:'Blood',lymphoma:'Blood',
-  hematopoietic:'Blood',haematopoietic:'Blood',lymphoid:'Blood',pbmc:'Blood',
+  'hematopoietic system':'Blood',hematopoietic:'Blood',haematopoietic:'Blood',lymphoid:'Blood',pbmc:'Blood',
+  'peripheral blood':'Blood','bone marrow and peripheral blood':'Blood',
   monocyte:'Blood',cd34:'Blood',cd138:'Blood',cd4:'Blood',cd14:'Blood',
   aml:'Blood',cll:'Blood',mds:'Blood',cml:'Blood',
   'jaw bone':'Bone','fibrous dysplasia':'Bone','cemento-ossifying':'Bone',
@@ -134,13 +135,16 @@ function classifyOrgan(n){
 function classifyAllOrgans(raw){
   if(!raw) return ['Other'];
   const cleaned=raw.toLowerCase().trim();
-  if(cleaned.includes('multiple organs')||cleaned.includes('multi-organ')) return ['Multiple_Organs'];
+  if(cleaned.includes('multiple organs')||cleaned.includes('multi-organ')||cleaned.includes('22 types'))
+    return ['Multiple_Organs'];
   const parts=raw.split(';').map(x=>x.trim()).filter(Boolean);
-  if(parts.length>=4) return ['Multiple_Organs'];
+  if(!parts.length) return ['Other'];
   const organs=new Set();
   parts.forEach(p=>organs.add(classifyOrgan(p)));
   if(organs.size===0) organs.add('Other');
-  return [...organs];
+  const list=[...organs];
+  if(list.length>=3&&!list.includes('Multiple_Organs')) list.push('Multiple_Organs');
+  return list;
 }
 function isHealthy(tumorType,sampleType,title,disease){
   const t=(tumorType||'').toLowerCase().trim();
@@ -190,7 +194,14 @@ window.addEventListener('DOMContentLoaded',()=>{
         .filter(x=>(x['Project ID']||'').trim())
         .map(normalizeRow);
       C={};
-      D.forEach(x=>x.organs.forEach(o=>{C[o]=(C[o]||0)+1}));
+      const byOrgan={};
+      D.forEach(x=>{
+        x.organs.forEach(o=>{
+          if(!byOrgan[o]) byOrgan[o]=new Set();
+          byOrgan[o].add(x.pid);
+        });
+      });
+      Object.keys(byOrgan).forEach(o=>{C[o]=byOrgan[o].size});
       go();
       document.getElementById('loader').classList.add('hidden');
     },
@@ -203,8 +214,10 @@ function go(){
   const dbs=new Set(D.map(x=>x.db).filter(Boolean)).size;
   const types=new Set(D.map(x=>x.st)).size;
   const tmt=new Set(D.map(x=>x.tmt).filter(Boolean)).size;
+  const uniqPid=new Set(D.map(x=>x.pid)).size;
   document.getElementById('hs').innerHTML=
-    `<div class="hstat"><div class="v">${D.length}</div><div class="l">Projects</div></div>`+
+    `<div class="hstat"><div class="v">${uniqPid}</div><div class="l">Projects</div></div>`+
+    `<div class="hstat"><div class="v">${D.length}</div><div class="l">Rows</div></div>`+
     `<div class="hstat"><div class="v">${tis}</div><div class="l">Organs</div></div>`+
     `<div class="hstat"><div class="v">${dbs}</div><div class="l">Databases</div></div>`+
     `<div class="hstat"><div class="v">${tmt}</div><div class="l">TMT Formats</div></div>`+
@@ -434,6 +447,7 @@ function ht(){document.getElementById('tip').style.display='none'}
 
 function sel(o){
   if(!C[o]) return;
+  const rows=D.filter(x=>x.organs.includes(o));
   document.querySelectorAll('.oitem').forEach(x=>x.classList.toggle('on',x.dataset.o===o));
   document.querySelectorAll('[data-o]').forEach(x=>{
     if(x.closest('.olist')) return;
@@ -442,7 +456,13 @@ function sel(o){
   document.querySelectorAll('[data-cb]').forEach(x=>x.classList.toggle('hi',x.dataset.cb===o));
   document.querySelectorAll('[data-lead]').forEach(x=>x.classList.toggle('hi',x.dataset.lead===o));
 
-  const rows=D.filter(x=>x.organs.includes(o)), col=COL[o]||'#888';
+  const col=COL[o]||'#888';
+  const seen=new Set();
+  const uniqRows=rows.filter(r=>{
+    if(seen.has(r.pid)) return false;
+    seen.add(r.pid);
+    return true;
+  });
   charts.forEach(x=>x.destroy()); charts=[];
 
   const dis={}, sam={}, dbs={};
@@ -461,10 +481,10 @@ function sel(o){
   <div class="hero">
     <div class="ic" style="background:${col}33;border:2px solid ${col}">🏥</div>
     <div><h2 style="color:${col}">${o.replace(/_/g,' ')}</h2>
-    <div class="sub">${rows.length} projects · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} tumor types</div></div>
+    <div class="sub">${uniqRows.length} unique projects · ${rows.length} dataset rows · ${nCancer} cancer · ${nHealthy} normal</div></div>
   </div>
   <div class="mstats">
-    <div class="ms"><div class="v" style="color:${col}">${rows.length}</div><div class="l">Projects</div></div>
+    <div class="ms"><div class="v" style="color:${col}">${uniqRows.length}</div><div class="l">Projects</div></div>
     <div class="ms"><div class="v" style="color:var(--red)">${nCancer}</div><div class="l">Cancer</div></div>
     <div class="ms"><div class="v" style="color:var(--green)">${nHealthy}</div><div class="l">Normal</div></div>
     <div class="ms"><div class="v" style="color:var(--orange)">${ss.length}</div><div class="l">Sample Types</div></div>
@@ -475,8 +495,9 @@ function sel(o){
     const lw=d.toLowerCase();
     const healthyTag=(lw===''||lw==='normal'||lw==='healthy'||lw==='not specified'||lw.includes('normal')||lw.includes('healthy'));
     const dc=healthyTag?'var(--green)':'var(--red)';
-    h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${d.length>35?d.slice(0,35)+'…':d}<span class="dc">${n}</span></div>`;
+    h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${esc(d.length>35?d.slice(0,35)+'…':d)}<span class="dc">${n}</span></div>`;
   });
+  h+=`</div></div>`;
 
   if(dbList.length){
     h+=`<div class="ccard"><h4>🗄 Data sources</h4><div class="dtags">`;
@@ -490,10 +511,10 @@ function sel(o){
     <div class="ccard"><h4>🔬 Sample Types</h4><canvas id="ch1"></canvas></div>
     <div class="ccard"><h4>📊 Top Tumor Types</h4><canvas id="ch2"></canvas></div>
   </div>
-  <div class="tcard"><h4>📋 Projects (${rows.length})</h4><div class="tscroll"><table class="ptable">
+  <div class="tcard"><h4>📋 Projects (${uniqRows.length})</h4><div class="tscroll"><table class="ptable">
     <thead><tr><th>DB</th><th>Project</th><th>Tumor / Disease</th><th>Sample</th><th>TMT</th><th>Organ(s)</th></tr></thead><tbody>`;
 
-  rows.slice(0,100).forEach(r=>{
+  uniqRows.slice(0,100).forEach(r=>{
     const organsLabel=r.isMulti
       ?`<span style="color:var(--purple)">${esc(r.organs.map(x=>x.replace(/_/g,' ')).join(', '))}</span>`
       :esc(r.organs[0].replace(/_/g,' '));
