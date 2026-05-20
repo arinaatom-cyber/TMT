@@ -271,6 +271,27 @@ function normalizeTMT(raw){
   return s;
 }
 
+/* Normalise Sample Type so "Cell Lines", "Cell line", "Cell lines" collapse. */
+function normalizeSampleType(raw){
+  let s=(raw||'').trim();
+  if(!s) return '';
+  const lower=s.toLowerCase();
+  if(/^cell\s*lines?$/i.test(s)) return 'Cell Lines';
+  if(/^cell\s*line\s*panel$/i.test(s)) return 'Cell Line Panel';
+  if(/^tissue/i.test(lower)&&!/lcm|ffpe/i.test(lower)) return 'Tissue';
+  if(/^ffpe/i.test(lower)) return 'FFPE Tissue';
+  if(/lcm|laser capture/i.test(lower)) return 'LCM Tissue';
+  if(/^pbmc|peripheral blood mononuclear/i.test(lower)) return 'PBMC';
+  if(/^plasma$/i.test(lower)) return 'Plasma';
+  if(/^serum$/i.test(lower)) return 'Serum';
+  if(/^urine$/i.test(lower)) return 'Urine';
+  if(/organoid/i.test(lower)) return 'Organoid';
+  if(/^xenograft|^pdx/i.test(lower)) return 'PDX';
+  if(/^biopsy/i.test(lower)) return 'Biopsy';
+  /* Title-case the first letter of each word for unmapped values */
+  return s.split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
+}
+
 /* Pan-organ atlas projects (GTEx-style) are flagged so each project card can
    show a "Pan-organ atlas" badge, but they still count toward every individual
    organ bucket so users can find them by browsing any organ. */
@@ -279,7 +300,7 @@ const PAN_ORGAN_THRESHOLD=8;
 function normalizeRow(x){
   const organRaw=pickOrganRaw(x);
   const tumorType=x['Tumor Type']||x['Disease Subtype']||x['Disease']||'Not specified';
-  const sampleType=(x['Sample Type']||'').trim()||'Unknown';
+  const sampleType=normalizeSampleType(x['Sample Type'])||'Unknown';
   const title=x['Title']||'';
   const organList=classifyAllOrgans(organRaw);
   const isPan=organList.length>=PAN_ORGAN_THRESHOLD;
