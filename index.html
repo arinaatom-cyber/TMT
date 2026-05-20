@@ -72,7 +72,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .body-wrap svg{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 18px rgba(0,0,0,.35))}
 .body-caption{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.04em;max-width:320px}
 
-.anatomy-svg{background:transparent}
+.anatomy-svg{background:radial-gradient(ellipse at center,rgba(91,159,212,.04) 0%,transparent 70%)}
 
 .organ-g{cursor:pointer;transition:filter .2s,transform .2s;transform-origin:center}
 .organ-g image{transition:filter .2s,opacity .2s;opacity:.95;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
@@ -85,14 +85,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .organ-g.hi .anatomy-part{stroke:#fff;stroke-width:1.5;filter:brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,.5));opacity:1}
 
 .lbl-g{cursor:pointer;transition:opacity .2s}
-.lbl-lead{fill:none;stroke:#c8b8a8;stroke-width:.6;opacity:.4}
-.lbl-dot{fill:#c8b8a8;opacity:.6}
-.lbl-name{font-family:Inter,sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;fill:#f0ebe3}
-.lbl-count{font-family:Inter,sans-serif;font-size:8px;font-weight:500;fill:#b8aea0;letter-spacing:.02em}
-.lbl-g:hover .lbl-lead,.lbl-g.hi .lbl-lead{stroke:var(--accent);opacity:1;stroke-width:1}
+.lbl-lead{fill:none;stroke:#94a3b8;stroke-width:.5;opacity:.35;stroke-linejoin:round;stroke-linecap:round}
+.lbl-dot-organ{opacity:.7}
+.lbl-dot-label{opacity:.8}
+.lbl-name{font-family:Inter,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;fill:#e8ecf4}
+.lbl-count{font-family:Inter,sans-serif;font-size:7.5px;font-weight:500;fill:#94a3b8;letter-spacing:.04em}
+.lbl-g:hover .lbl-lead,.lbl-g.hi .lbl-lead{stroke:var(--accent);opacity:1;stroke-width:.9}
 .lbl-g:hover .lbl-name,.lbl-g.hi .lbl-name{fill:var(--accent)}
-.lbl-g:hover .lbl-count,.lbl-g.hi .lbl-count{fill:#e6eaf2}
-.lbl-g:hover .lbl-dot,.lbl-g.hi .lbl-dot{fill:var(--accent);opacity:1}
+.lbl-g:hover .lbl-count,.lbl-g.hi .lbl-count{fill:#e8ecf4}
+.lbl-g:hover .lbl-dot-organ,.lbl-g:hover .lbl-dot-label,.lbl-g.hi .lbl-dot-organ,.lbl-g.hi .lbl-dot-label{fill:var(--accent);opacity:1}
 
 .tip{position:absolute;background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:12px;pointer-events:none;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.5);display:none;white-space:nowrap}
 .tip .tn{font-weight:700;color:var(--accent)}

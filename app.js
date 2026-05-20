@@ -334,52 +334,54 @@ function filt(q){
    icon = iconify name (https://icon-sets.iconify.design/);
    size = pixel size of icon in SVG;
    d = fallback SVG path (used if no icon defined) */
-/* Mix: Twemoji for organs with native emoji, game-icons for verified anatomical icons,
-   inline SVG paths for the rest. */
+/* Professional medical atlas mapping.
+   Z-order: deeper organs first, surface organs last.
+   Each entry: pos (label anchor), side (label column), size, plus one of:
+     emoji = Twemoji codepoint (🧠 🫀 🫁 👁 etc.)
+     icon  = Iconify identifier (e.g. game-icons:liver)
+     d     = inline SVG path for organs without dedicated icons */
 const ANATOMY={
-  Brain:           {pos:{x:240,y:60},  side:'R', emoji:'1f9e0',                 size:34}, /* 🧠 */
-  Eye:             {pos:{x:240,y:94},  side:'L', emoji:'1f441',                 size:16}, /* 👁 */
-  Salivary_Gland:  {pos:{x:240,y:108}, side:'R', d:
+  Brain:           {pos:{x:240,y:60},  side:'R', size:30, emoji:'1f9e0',        z:1},
+  Eye:             {pos:{x:240,y:92},  side:'L', size:14, emoji:'1f441',        z:1},
+  Salivary_Gland:  {pos:{x:240,y:108}, side:'R', size:0,  z:1, d:
     'M 226 106 Q 222 102 226 100 Q 232 100 234 104 Z '+
     'M 254 106 Q 258 102 254 100 Q 248 100 246 104 Z'},
-  Thyroid:         {pos:{x:240,y:124}, side:'L', d:
+  Thyroid:         {pos:{x:240,y:124}, side:'L', size:0,  z:1, d:
     'M 230 120 Q 224 124 228 132 Q 234 134 240 132 Q 246 134 252 132 Q 256 124 250 120 Q 244 118 240 124 Q 236 118 230 120 Z'},
-  Esophagus:       {pos:{x:240,y:150}, side:'R', d:
-    'M 237 134 L 243 134 L 243 170 L 237 170 Z'},
-  Lung:            {pos:{x:240,y:196}, side:'L', emoji:'1fac1',                 size:48}, /* 🫁 */
-  Heart:           {pos:{x:240,y:200}, side:'R', emoji:'1fac0',                 size:28}, /* 🫀 */
-  Breast:          {pos:{x:240,y:174}, side:'L', d:
-    'M 214 172 Q 206 174 208 182 Q 214 188 220 184 Q 222 178 220 174 Z '+
-    'M 218 178 A 1.6 1.6 0 1 0 221 178 A 1.6 1.6 0 1 0 218 178 Z '+
-    'M 266 172 Q 274 174 272 182 Q 266 188 260 184 Q 258 178 260 174 Z '+
-    'M 259 178 A 1.6 1.6 0 1 0 262 178 A 1.6 1.6 0 1 0 259 178 Z'},
-  Liver:           {pos:{x:224,y:246}, side:'L', icon:'game-icons:liver',       size:38},
-  Spleen:          {pos:{x:272,y:246}, side:'R', d:
-    'M 266 238 Q 280 240 282 254 Q 280 268 270 270 Q 262 260 264 248 Q 264 238 266 238 Z'},
-  Stomach:         {pos:{x:258,y:252}, side:'R', icon:'game-icons:stomach',     size:28},
-  Pancreas:        {pos:{x:240,y:282}, side:'L', d:
-    'M 214 278 Q 226 274 244 278 Q 256 280 264 286 L 264 292 Q 256 288 244 286 Q 226 284 214 286 Z'},
-  Adrenal_Gland:   {pos:{x:240,y:292}, side:'R', d:
+  Esophagus:       {pos:{x:240,y:148}, side:'R', size:0,  z:1, d:
+    'M 237 134 L 243 134 L 243 168 L 237 168 Z'},
+  Lung:            {pos:{x:240,y:194}, side:'L', size:42, emoji:'1fac1',        z:2},
+  Heart:           {pos:{x:240,y:200}, side:'R', size:22, emoji:'1fac0',        z:3},
+  Breast:          {pos:{x:240,y:178}, side:'L', size:0,  z:4, d:
+    'M 218 178 A 2 2 0 1 0 222 178 A 2 2 0 1 0 218 178 Z '+
+    'M 258 178 A 2 2 0 1 0 262 178 A 2 2 0 1 0 258 178 Z'},
+  Liver:           {pos:{x:224,y:248}, side:'L', size:36, icon:'game-icons:liver',  z:2},
+  Spleen:          {pos:{x:272,y:248}, side:'R', size:0,  z:2, d:
+    'M 268 240 Q 282 244 282 256 Q 278 270 268 270 Q 262 258 266 246 Z'},
+  Stomach:         {pos:{x:262,y:252}, side:'R', size:28, icon:'game-icons:stomach',z:3},
+  Pancreas:        {pos:{x:240,y:282}, side:'L', size:0,  z:2, d:
+    'M 214 280 Q 230 276 248 280 Q 258 282 264 286 L 264 290 Q 256 288 246 286 Q 228 284 214 286 Z'},
+  Adrenal_Gland:   {pos:{x:240,y:292}, side:'R', size:0,  z:2, d:
     'M 224 288 Q 228 284 234 288 Q 232 294 226 294 Q 222 292 224 288 Z '+
     'M 246 288 Q 252 284 256 288 Q 258 292 254 294 Q 248 294 246 288 Z'},
-  Kidney:          {pos:{x:240,y:312}, side:'L', icon:'game-icons:kidneys',     size:36},
-  Small_Intestine: {pos:{x:240,y:348}, side:'R', d:
-    'M 220 332 Q 232 328 244 334 Q 256 336 256 342 Q 250 348 240 346 Q 228 348 222 342 '+
-    'Q 220 350 232 352 Q 244 352 254 350 Q 258 354 252 360 Q 240 362 230 358 '+
-    'Q 224 362 232 366 Q 244 368 254 364 Q 258 370 250 374 Q 238 374 228 370'},
-  Colon:           {pos:{x:240,y:354}, side:'L', icon:'game-icons:bowels',      size:46},
-  Bladder:         {pos:{x:240,y:392}, side:'R', d:
+  Kidney:          {pos:{x:240,y:312}, side:'L', size:34, icon:'game-icons:kidneys',z:2},
+  Small_Intestine: {pos:{x:240,y:344}, side:'R', size:0,  z:3, d:
+    'M 222 332 Q 232 328 244 332 Q 256 334 258 340 Q 252 346 240 344 Q 228 346 222 340 '+
+    'Q 220 350 232 352 Q 246 352 256 350 Q 258 356 250 360 Q 238 362 228 358 '+
+    'Q 222 364 232 368 Q 246 368 256 366 Q 258 372 250 374 Q 238 374 226 370'},
+  Colon:           {pos:{x:240,y:354}, side:'L', size:44, icon:'game-icons:bowels', z:2},
+  Bladder:         {pos:{x:240,y:392}, side:'R', size:0,  z:3, d:
     'M 228 386 Q 240 380 252 386 Q 256 396 240 400 Q 224 396 228 386 Z'},
-  Uterus:          {pos:{x:240,y:394}, side:'L', d:
+  Uterus:          {pos:{x:240,y:394}, side:'L', size:0,  z:3, d:
     'M 230 388 Q 240 380 250 388 L 248 402 L 232 402 Z'},
-  Ovary:           {pos:{x:240,y:406}, side:'R', d:
-    'M 222 404 Q 218 406 220 412 Q 226 414 228 410 Q 228 406 222 404 Z '+
-    'M 258 404 Q 262 406 260 412 Q 254 414 252 410 Q 252 406 258 404 Z'},
-  Cervix:          {pos:{x:240,y:412}, side:'L', d:
+  Ovary:           {pos:{x:240,y:404}, side:'R', size:0,  z:3, d:
+    'M 222 402 Q 218 404 220 410 Q 226 412 228 408 Z '+
+    'M 258 402 Q 262 404 260 410 Q 254 412 252 408 Z'},
+  Cervix:          {pos:{x:240,y:412}, side:'L', size:0,  z:3, d:
     'M 236 406 L 244 406 L 242 414 L 238 414 Z'},
-  Prostate:        {pos:{x:240,y:410}, side:'R', d:
+  Prostate:        {pos:{x:240,y:410}, side:'R', size:0,  z:3, d:
     'M 232 406 Q 240 402 248 406 Q 248 412 240 414 Q 232 412 232 406 Z'},
-  Testis:          {pos:{x:240,y:442}, side:'L', d:
+  Testis:          {pos:{x:240,y:442}, side:'L', size:0,  z:3, d:
     'M 230 436 Q 224 446 232 452 Q 240 454 242 446 Q 244 454 250 452 Q 258 446 250 436 Q 242 434 240 442 Q 238 434 230 436 Z'}
 };
 
@@ -468,75 +470,71 @@ function organLabel(o, labelY){
   if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
   const a=ANATOMY[o];
   const isL=a.side==='L';
-  const labelX=isL?12:468;
+  const labelX=isL?10:470;
   const anchor=isL?'start':'end';
   const name=o.replace(/_/g,' ').toUpperCase();
   const s=organStats(o);
   const ox=a.pos.x, oy=a.pos.y;
-  const turnX=isL?160:320;
+  const turnX=isL?156:324;
   const lineEnd=isL?labelX+2:labelX-2;
+  const col=ANATOMY_COL[o]||'#ec9e8b';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}"/>
-    <circle class="lbl-dot" cx="${ox}" cy="${oy}" r="2"/>
-    <text class="lbl-name" x="${labelX}" y="${labelY-5}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${labelX}" y="${labelY+8}" text-anchor="${anchor}">${s.n} · ${s.nC}C · ${s.nN}N</text>
+    <circle class="lbl-dot-organ" cx="${ox}" cy="${oy}" r="1.5" fill="${col}"/>
+    <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="2" fill="${col}" transform="translate(${isL?6:-6},0)"/>
+    <text class="lbl-name" x="${labelX+(isL?14:-14)}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
+    <text class="lbl-count" x="${labelX+(isL?14:-14)}" y="${labelY+8}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N</text>
   </g>`;
 }
 
 function bodySilhouette(){
-  /* Single continuous human outline. Center x=240, viewBox 0 0 480 720. */
-  const body=`
-    M 240 40
-    Q 268 40 268 70
-    Q 268 92 254 106
-    Q 268 110 280 122
-    L 290 158
-    Q 296 200 292 248
-    L 286 304
-    Q 280 332 274 352
-    L 268 366
-    L 212 366
-    L 206 352
-    Q 200 332 194 304
-    L 188 248
-    Q 184 200 190 158
-    L 200 122
-    Q 212 110 226 106
-    Q 212 92 212 70
-    Q 212 40 240 40 Z`;
-  const armL=`M 190 130 Q 168 138 158 168 L 148 234 Q 144 268 150 296
-              L 158 320 Q 164 332 170 332 L 178 332 Q 180 318 176 296
-              L 170 234 Q 170 200 178 174 Q 184 156 196 144 Z`;
-  const armR=`M 290 130 Q 312 138 322 168 L 332 234 Q 336 268 330 296
-              L 322 320 Q 316 332 310 332 L 302 332 Q 300 318 304 296
-              L 310 234 Q 310 200 302 174 Q 296 156 284 144 Z`;
-  const legL=`M 212 366 L 206 396 Q 200 480 198 560 Q 196 620 192 660
-              L 178 660 Q 174 620 178 560 Q 184 480 200 396 Z`;
-  const legR=`M 268 366 L 274 396 Q 280 480 282 560 Q 284 620 288 660
-              L 302 660 Q 306 620 302 560 Q 296 480 280 396 Z`;
-  const stroke='#c87878', fill='rgba(200,120,120,.05)';
+  /* Cleaner anatomical silhouette, viewBox 0 0 480 720 (body center x=240) */
+  const head=`M 240 36 Q 264 36 266 60 Q 266 80 252 94 L 228 94 Q 214 80 214 60 Q 216 36 240 36 Z`;
+  const neck=`M 224 94 L 256 94 L 258 112 L 222 112 Z`;
+  const torso=`M 200 112 Q 188 116 184 124
+               L 188 158 Q 192 196 192 232 L 196 296 Q 200 332 206 354
+               L 212 366 L 268 366 L 274 354
+               Q 280 332 284 296 L 288 232 Q 288 196 292 158
+               L 296 124 Q 292 116 280 112 Z`;
+  const armL=`M 188 124 Q 168 134 156 162 L 146 224 Q 142 264 148 300
+              L 158 326 Q 164 336 172 332 L 180 326
+              Q 178 308 174 286 L 168 224 Q 168 196 176 168 Q 182 152 196 138 Z`;
+  const armR=`M 292 124 Q 312 134 324 162 L 334 224 Q 338 264 332 300
+              L 322 326 Q 316 336 308 332 L 300 326
+              Q 302 308 306 286 L 312 224 Q 312 196 304 168 Q 298 152 284 138 Z`;
+  const legL=`M 212 366 L 204 400 Q 198 480 196 560 Q 194 624 192 664
+              L 174 664 Q 170 624 174 560 Q 180 480 196 400 L 212 366 Z`;
+  const legR=`M 268 366 L 276 400 Q 282 480 284 560 Q 286 624 288 664
+              L 306 664 Q 310 624 306 560 Q 300 480 284 400 L 268 366 Z`;
+  const stroke='#d89a9a', fill='rgba(216,154,154,.03)';
   return `
     <g class="body-silhouette" pointer-events="none">
-      <path d="${body}" fill="${fill}" stroke="${stroke}" stroke-width="1.2" stroke-linejoin="round"/>
-      <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
-      <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
-      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
-      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>
-      <text x="240" y="20" text-anchor="middle" fill="#7a7268" font-family="Inter,sans-serif" font-size="10" letter-spacing="3" font-weight="600">HUMAN PROTEOME · ANATOMICAL MAP</text>
+      <path d="${head}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="${neck}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
+      <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
+      <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
+      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
+      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
+      <text x="240" y="18" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="9" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
+      <line x1="180" y1="26" x2="220" y2="26" stroke="#94a3b8" stroke-width=".4" opacity=".5"/>
+      <line x1="260" y1="26" x2="300" y2="26" stroke="#94a3b8" stroke-width=".4" opacity=".5"/>
     </g>`;
 }
 
 function renderBody(){
   const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&!SYSTEMIC.has(o));
+  /* Render organs in z-order (lower z = drawn first, on bottom) */
+  const drawOrder=[...active].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
   const labelY=assignLabelPositions(active);
   const orderedY=o=>{
-    const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.c.y;
+    const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;
   };
   document.getElementById('bw').innerHTML=`
   <svg viewBox="0 0 480 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
     ${bodySilhouette()}
-    <g class="organs-layer">${active.map(organGroup).join('')}</g>
+    <g class="organs-layer">${drawOrder.map(organGroup).join('')}</g>
     <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
   </svg>`;
 }
