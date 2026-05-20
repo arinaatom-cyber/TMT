@@ -115,7 +115,8 @@ const MAP={
   'melanoma':'Skin','sarcoma':'Soft_Tissue',
   'peritoneal':'Multiple_Organs','omentum':'Multiple_Organs',
   gastrointestinal:'Colon','colon/rectum':'Colon','rectum':'Colon',
-  'hematopoietic system':'Blood','hematopoietic':'Blood',
+  'hematopoietic system':'Blood','hematopoietic':'Blood','hematologic':'Blood','haematologic':'Blood',
+  colorectum:'Colon',
   'brain/cns':'Brain','brain tumour':'Brain','brain tumor':'Brain',
   'oral cavity':'Salivary_Gland','head and neck':'Salivary_Gland',
   'jaw bone':'Bone','orbit':'Eye','ocular adnexal':'Eye',
@@ -261,18 +262,35 @@ function isHealthy(tumorType,sampleType,title,disease){
   return false;
 }
 
+/* Normalise TMT labels so "TMT 10-plex" and "TMT-10-plex" collapse to one bucket. */
+function normalizeTMT(raw){
+  let s=(raw||'').trim();
+  if(!s) return '';
+  s=s.replace(/\s*-\s*/g,' ').replace(/\s+/g,' ');                /* TMT-10-plex → TMT 10 plex */
+  s=s.replace(/(\d+)\s*plex/i,'$1-plex').replace(/\s+/g,' ');     /* TMT 10 plex → TMT 10-plex */
+  return s;
+}
+
+/* Pan-organ atlas projects (GTEx-style) cover so many tissues that they
+   dominate every per-organ count.  We keep them in Multiple_Organs and the
+   project list, but exclude them from individual organ counts/highlights. */
+const PAN_ORGAN_THRESHOLD=8;
+
 function normalizeRow(x){
   const organRaw=pickOrganRaw(x);
   const tumorType=x['Tumor Type']||x['Disease Subtype']||x['Disease']||'Not specified';
-  const sampleType=x['Sample Type']||x['Tissue Cell Type Detailed']||'Unknown';
+  const sampleType=(x['Sample Type']||'').trim()||'Unknown';   /* don't fall through to detailed text */
   const title=x['Title']||'';
-  const organList=classifyAllOrgans(organRaw);
+  const allOrgans=classifyAllOrgans(organRaw);
+  const isPan=allOrgans.length>=PAN_ORGAN_THRESHOLD;
+  /* Pan-organ atlases are tagged Multiple_Organs only, not in every single bucket. */
+  const organList=isPan?['Multiple_Organs']:allOrgans;
   let pid=(x['Project ID']||'').trim();
   const m=pid.match(/^(IPX\d+)\s*\((PXD\d+)\)/i);
   if(m) pid=m[2];
   return {
     ...x,
-    organs:organList,om:organList[0],isMulti:organList.length>1,
+    organs:organList,allOrgans,om:organList[0],isMulti:organList.length>1,isPan,
     dis:tumorType,
     healthy:isHealthy(tumorType,sampleType,title,x['Disease']),
     st:sampleType,
@@ -281,7 +299,7 @@ function normalizeRow(x){
     db:(x['Database']||'').trim(),
     pmid:(x['PMID']||'').trim(),
     platform:(x['Platform MS (Unified)']||'').trim(),
-    tmt:(x['TMT Label (Unified)']||'').trim(),
+    tmt:normalizeTMT(x['TMT Label (Unified)']),
     proteins:(x['Proteins Quantified']||'').trim(),
     link:(x['URL']||'').trim(),
     tissue:(x['Tissue']||'').trim(),
