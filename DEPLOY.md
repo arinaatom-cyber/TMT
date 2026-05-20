@@ -41,11 +41,17 @@ git push -u origin main
 
 ## Шаг 5 — Google Таблица (важно!)
 
-Сайт читает CSV из Google Sheets. Таблица должна быть открыта на просмотр:
+Сайт подключён к вашей таблице:
 
-**Настройки таблицы → Доступ → «Все, у кто есть ссылка» → Просматриватель**
+https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314
 
-ID таблицы в `app.js` (строка `SHEET`). При смене таблицы измените ID и сделайте `git push` — сайт обновится сам.
+**Настройки таблицы → Доступ → «Все, у кого есть ссылка» → Просматриватель**
+
+Используются колонки: `Project ID`, `Organ`, `Tissue`, `Tumor Type`, `Sample Type`, `Database`, `URL`, `TMT Label (Unified)`, `Platform MS (Unified)` и др.
+
+Новые строки (PRIDE, PDC, GTEx…) появятся на карте после обновления страницы — код менять не нужно.
+
+ID в `app.js`: `SHEET` и `GID=1072380314`.
 
 ## Обновление после новых проектов
 
