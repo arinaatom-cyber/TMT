@@ -15,7 +15,9 @@
 
 Таблица должна быть доступна **«всем, у кого есть ссылка»** (просмотр), иначе CSV не загрузится в браузере.
 
-Текущий ID таблицы задан в `app.js` (`SHEET`).
+Таблица: [Google Sheets](https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314) — лист с PRIDE/PDC/CPTAC проектами и колонкой `Organ`.
+
+ID заданы в `app.js` (`SHEET`, `GID=1072380314`).
 
 ## Локальный просмотр
 

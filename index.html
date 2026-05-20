@@ -129,6 +129,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);min-hei
 .ptable th{background:rgba(74,144,217,.08);padding:8px 12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t2);text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0}
 .ptable td{padding:8px 12px;font-size:11px;border-bottom:1px solid rgba(42,54,84,.3);color:var(--t1);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ptable tr:hover td{background:var(--hover)}
+.ptable a{color:var(--accent);text-decoration:none}
+.ptable a:hover{text-decoration:underline}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
 
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:700px){.charts-row{grid-template-columns:1fr}}
@@ -172,7 +176,7 @@ footer{text-align:center;padding:24px;color:var(--t3);font-size:11px;border-top:
   </div>
 </div>
 
-<footer>Human Proteome Atlas · Built for Proteomics Research · Data from Google Sheets</footer>
+<footer>Human Proteome Atlas · TMT proteomics atlas · Data: <a href="https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314" target="_blank" rel="noopener">Google Sheets</a> (PRIDE, CPTAC, PDC…)</footer>
 
 <script src="app.js"></script>
 </body>
