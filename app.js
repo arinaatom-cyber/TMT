@@ -3,6 +3,16 @@ const GID='1072380314';
 const URL=`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv&gid=${GID}`;
 const SHEET_VIEW=`https://docs.google.com/spreadsheets/d/${SHEET}/edit?gid=${GID}`;
 
+/* GitHub repo where result tables / per-project files live.
+   Each project ID becomes a folder under GH_RESULTS_PATH, e.g.
+   https://github.com/arinaatom-cyber/TMT/tree/main/projects/PXD012345 */
+const GH_REPO='https://github.com/arinaatom-cyber/TMT';
+const GH_RESULTS_PATH='projects';
+const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComponent(pid)}`;
+const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
+const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
+const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
+
 const ACCENT='#5b9fd4';
 const BODY_BLUE='#2e7fc8';
 const CHART_COLORS=['#5b9fd4','#7a8fa8','#6b8f9a','#8a9eb8','#5a8a9a','#9a8aa8','#6a7a9a','#4a8ab0'];
@@ -426,6 +436,53 @@ function organGroup(o){
   return '';
 }
 
+/* Build a project card with three reference links:
+   1. Source database (URL field from sheet, or PRIDE-derived for PXD IDs)
+   2. Article on PubMed (from PMID)
+   3. Result files on GitHub (folder named after project ID) */
+function projectCard(r){
+  const isPxd=/^PXD\d+/i.test(r.pid);
+  const projHref=r.link||(isPxd?prideUrl(r.pid):'');
+  const pmHref=r.pmid?pubmedUrl(r.pmid):'';
+  const ghHref=ghResultsUrl(r.pid);
+  const ghAlt =ghSearchUrl(r.pid);
+  const tag=r.healthy
+    ?`<span class="status normal">NORMAL</span>`
+    :`<span class="status cancer">CANCER</span>`;
+  const organs=r.organs.map(x=>x.replace(/_/g,' ')).join(', ');
+  const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
+  const proteins=r.proteins?`<span class="meta-pill">${esc(r.proteins)} proteins</span>`:'';
+  const platform=r.platform?`<span class="meta-pill">${esc(r.platform.slice(0,28))}</span>`:'';
+  const linkProj=projHref
+    ? `<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener" title="Open in ${esc(r.db||'database')}">
+         <span class="li">DB</span><span class="lt">${esc(r.db||'Database')}</span></a>`
+    : `<span class="plink disabled" title="No URL"><span class="li">DB</span><span class="lt">—</span></span>`;
+  const linkArt=pmHref
+    ? `<a class="plink plink-art" href="${esc(pmHref)}" target="_blank" rel="noopener" title="Open article on PubMed">
+         <span class="li">PMID</span><span class="lt">${esc(r.pmid)}</span></a>`
+    : `<span class="plink disabled" title="No PMID"><span class="li">PMID</span><span class="lt">—</span></span>`;
+  const linkGh=`<a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener" title="Result files in repo (or 404 if not uploaded yet)"
+        onmouseup="if(event.button===1){window.open('${esc(ghAlt)}','_blank')}">
+         <span class="li">GH</span><span class="lt">Results</span></a>`;
+  return `<div class="proj-card">
+    <div class="proj-head">
+      <div class="proj-id-block">
+        ${projHref?`<a class="proj-id" href="${esc(projHref)}" target="_blank" rel="noopener">${esc(r.pid)}</a>`:`<span class="proj-id">${esc(r.pid)}</span>`}
+        ${tag}
+      </div>
+      <div class="proj-organs">${esc(organs)}</div>
+    </div>
+    <div class="proj-disease" title="${esc(r.dis)}">${esc(r.dis||'—')}</div>
+    <div class="proj-meta">
+      <span class="meta-pill subtle">${esc(r.st||'—')}</span>
+      ${tmt}${platform}${proteins}
+    </div>
+    <div class="proj-links">
+      ${linkProj}${linkArt}${linkGh}
+    </div>
+  </div>`;
+}
+
 function organStats(o){
   const rows=D.filter(r=>r.organs.includes(o));
   const seen=new Set(),uniq=[];
@@ -612,27 +669,15 @@ function sel(o){
     <div class="ccard"><h4 class="sec-h">Sample Types</h4><canvas id="ch1"></canvas></div>
     <div class="ccard"><h4 class="sec-h">Top Tumor Types</h4><canvas id="ch2"></canvas></div>
   </div>
-  <div class="tcard"><h4 class="sec-h">Projects <span class="sec-count">${nProj}</span></h4><div class="tscroll"><table class="ptable">
-    <thead><tr><th>DB</th><th>Project</th><th>Tumor / Disease</th><th>Sample</th><th>TMT</th><th>Organ(s)</th></tr></thead><tbody>`;
+  <div class="projects-section">
+    <h4 class="sec-h">Projects <span class="sec-count">${nProj}</span></h4>
+    <div class="proj-grid">`;
 
-  uniqRows.slice(0,100).forEach(r=>{
-    const organsLabel=r.isMulti
-      ?`<span style="color:var(--t2)">${esc(r.organs.map(x=>x.replace(/_/g,' ')).join(', '))}</span>`
-      :esc(r.organs[0].replace(/_/g,' '));
-    const pidCell=r.link
-      ?`<a href="${esc(r.link)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(r.pid)}</a>`
-      :`<span class="pid">${esc(r.pid)}</span>`;
-    h+=`<tr>
-      <td>${esc(r.db||'—')}</td>
-      <td class="pid">${pidCell}</td>
-      <td title="${esc(r.dis)}">${esc((r.dis||'').slice(0,36))}</td>
-      <td>${esc((r.st||'').slice(0,22))}</td>
-      <td>${esc((r.tmt||'—').slice(0,14))}</td>
-      <td>${organsLabel}</td>
-    </tr>`;
+  uniqRows.slice(0,200).forEach(r=>{
+    h+=projectCard(r);
   });
 
-  h+=`</tbody></table></div></div>`;
+  h+=`</div></div>`;
 
   const dc=document.getElementById('dc');
   dc.innerHTML=h;
