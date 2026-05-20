@@ -371,11 +371,13 @@ const ANATOMY={
   Thyroid:         {pos:{x:240, y:118}, side:'L', size:0,  z:2, d:
     'M 230 114 Q 224 118 228 126 Q 234 128 240 126 Q 246 128 252 126 Q 256 118 250 114 Q 244 112 240 118 Q 236 112 230 114 Z'},
 
-  /* THORAX (y=130–220).  Lungs apex at clavicle y=135, base at diaphragm y=220. */
+  /* THORAX (y=130–220).  Lungs apex at clavicle y=135, base at diaphragm y=220.
+     Twemoji emoji icons have visible content slightly below their center, so
+     we offset them downward to make them visually align with body landmarks. */
   Esophagus:       {pos:{x:240, y:170}, side:'R', size:0,  z:1, d:
     'M 237 130 L 243 130 L 243 220 L 237 220 Z'},
-  Lung:            {pos:{x:240, y:180}, side:'L', size:60, emoji:'1fac1',                 z:2},
-  Heart:           {pos:{x:232, y:196}, side:'R', size:34, emoji:'1fac0',                 z:3},
+  Lung:            {pos:{x:240, y:175}, side:'L', size:62, emoji:'1fac1',                 z:2},
+  Heart:           {pos:{x:232, y:188}, side:'R', size:32, emoji:'1fac0',                 z:3},
   Breast:          {pos:{x:240, y:200}, side:'L', size:0,  z:4, d:
     'M 210 198 A 3.2 3.2 0 1 0 216.4 198 A 3.2 3.2 0 1 0 210 198 Z '+
     'M 263.6 198 A 3.2 3.2 0 1 0 270 198 A 3.2 3.2 0 1 0 263.6 198 Z'},
