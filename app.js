@@ -364,7 +364,7 @@ function organGroup(o){
   const fill=ANATOMY_COL[o]||'#ec9e8b';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   return `<g class="organ-g" data-o="${o}" ${eh}>
-    <path class="anatomy-part" d="${item.d}" fill="${fill}"/>
+    <path class="anatomy-part" d="${item.d}" fill="${fill}" style="fill:${fill}!important"/>
   </g>`;
 }
 
