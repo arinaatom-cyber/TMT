@@ -80,9 +80,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .organ-g:hover image{opacity:1;filter:drop-shadow(0 0 6px rgba(255,255,255,.5)) brightness(1.12)}
 .organ-g.hi image{opacity:1;filter:drop-shadow(0 0 8px var(--accent)) brightness(1.15)}
 
-.anatomy-part{fill:#ec9e8b;stroke:rgba(0,0,0,.55);stroke-width:.7;stroke-linejoin:round;opacity:.92;transition:filter .2s,stroke .2s,opacity .2s}
-.organ-g:hover .anatomy-part{stroke:#fff;stroke-width:1.1;filter:brightness(1.15);opacity:1}
-.organ-g.hi .anatomy-part{stroke:#fff;stroke-width:1.5;filter:brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,.5));opacity:1}
+.anatomy-part{fill:#ec9e8b;stroke:rgba(255,255,255,.6);stroke-width:.9;stroke-linejoin:round;opacity:1;transition:filter .2s,stroke .2s,opacity .2s;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.organ-g:hover .anatomy-part{stroke:#fff;stroke-width:1.4;filter:drop-shadow(0 0 6px rgba(255,255,255,.6)) brightness(1.15);opacity:1}
+.organ-g.hi .anatomy-part{stroke:#fff;stroke-width:1.7;filter:drop-shadow(0 0 8px var(--accent)) brightness(1.2);opacity:1}
 
 .lbl-g{cursor:pointer;transition:opacity .2s}
 .lbl-lead{fill:none;stroke:#94a3b8;stroke-width:.5;opacity:.35;stroke-linejoin:round;stroke-linecap:round}

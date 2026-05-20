@@ -19,13 +19,21 @@ const CHART_COLORS=['#5b9fd4','#7a8fa8','#6b8f9a','#8a9eb8','#5a8a9a','#9a8aa8',
 const SYSTEMIC=new Set(['Blood','Bone_Marrow','Lymph_Node','Nerve','Skin','Muscle','Bone',
   'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other','Pituitary']);
 
+/* Brightened anatomical palette — readable on the dark blue body background.
+   Bigger organs (used as Iconify icons) keep darker realistic tones;
+   small custom-path organs use brighter hues so they stay visible. */
 const ANATOMY_COL={
-  Brain:'#e89aa0',Eye:'#7a4a4a',Salivary_Gland:'#d4a890',Thyroid:'#d49a8a',
-  Esophagus:'#d4a890',Lung:'#ec9e8b',Heart:'#c8454a',Breast:'#e8b0b0',
-  Liver:'#8a2a2a',Stomach:'#eba98b',Spleen:'#7a2828',Pancreas:'#d4a868',
-  Adrenal_Gland:'#d4b060',Kidney:'#6e2e2e',Small_Intestine:'#e6a48a',Colon:'#d89a80',
-  Bladder:'#e58fa8',Uterus:'#e89aa8',Ovary:'#e8a8c0',Cervix:'#c88898',
-  Prostate:'#b8809a',Testis:'#e8a8a8'
+  Brain:'#f0a4aa',           Eye:'#a0656a',
+  Salivary_Gland:'#f0c8a8',  Thyroid:'#f4a890',
+  Esophagus:'#e8a890',       Lung:'#ec9e8b',
+  Heart:'#e85060',           Breast:'#f4b8b8',
+  Liver:'#8a2a2a',           Stomach:'#eba98b',
+  Spleen:'#c44848',          Pancreas:'#f0c878',
+  Adrenal_Gland:'#f4c870',   Kidney:'#6e2e2e',
+  Small_Intestine:'#f4b890', Colon:'#d89a80',
+  Bladder:'#f49ab8',         Uterus:'#f4a8b8',
+  Ovary:'#f4b8d0',           Cervix:'#d898a8',
+  Prostate:'#c898b8',        Testis:'#f0b8b8'
 };
 
 const GRP=[
