@@ -373,21 +373,25 @@ function callout(o, pos){
   const col=COL[o]||'#888';
   const name=pos.label||o.replace(/_/g,' ');
   const isL=pos.side==='L';
-  const pillW=name.length>10?102:88, pillH=18;
-  const pillX=isL?6:(414-pillW);
-  const pillY=pos.cy-pillH/2;
+  const pillW=name.length>12?108:90, pillH=17;
+  const pillX=isL?4:(416-pillW);
+  let cy=pos.cy;
+  if(!callout._used) callout._used=new Set();
+  while([...callout._used].some(u=>Math.abs(u-cy)<16)) cy+=16;
+  callout._used.add(cy);
+  const pillY=cy-pillH/2;
   const dotCx=isL?pillX+7:pillX+pillW-7;
   const textX=isL?pillX+14:pillX+pillW-14;
   const countX=isL?pillX+pillW-11:pillX+11;
   const leaderEndX=isL?pillX+pillW:pillX;
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   return `
-    <path class="lead" data-lead="${o}" d="M ${pos.x} ${pos.y} L ${leaderEndX} ${pos.cy}" style="color:${col}"/>
+    <path class="lead" data-lead="${o}" d="M ${pos.x} ${pos.y} L ${leaderEndX} ${cy}" style="color:${col}"/>
     <g class="cb" data-cb="${o}" ${eh} style="color:${col}">
       <rect class="cb-pill" x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}"/>
-      <circle class="cb-dot" cx="${dotCx}" cy="${pos.cy}" r="3" fill="${col}"/>
-      <text class="cb-name ${isL?'':'right'}" x="${textX}" y="${pos.cy}">${name}</text>
-      <text class="cb-count" x="${countX}" y="${pos.cy}" style="fill:${col}">${n}</text>
+      <circle class="cb-dot" cx="${dotCx}" cy="${cy}" r="3" fill="${col}"/>
+      <text class="cb-name ${isL?'':'right'}" x="${textX}" y="${cy}">${name}</text>
+      <text class="cb-count" x="${countX}" y="${cy}" style="fill:${col}">${n}</text>
     </g>`;
 }
 
@@ -488,8 +492,8 @@ function bodySilhouette(){
   return `
     <defs>
       <linearGradient id="sk" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#4a443c"/>
-        <stop offset="100%" stop-color="#353028"/>
+        <stop offset="0%" stop-color="#243049"/>
+        <stop offset="100%" stop-color="#151c2c"/>
       </linearGradient>
     </defs>
     <g class="body-silhouette" pointer-events="none">
@@ -511,11 +515,12 @@ function bodySilhouette(){
       <path d="M 250 426 L 214 444 L 218 548 Q 222 604 230 642 Q 234 668 244 676
                L 256 676 Q 262 658 260 622 L 258 548 Q 256 488 250 448 Z" fill="url(#sk)" class="body-out"/>
       <line x1="210" y1="126" x2="210" y2="382" class="body-inner"/>
-      <text x="210" y="14" text-anchor="middle" fill="#7a7268" font-size="9" font-family="Inter,sans-serif">Anterior · R ← · → L</text>
+      <text x="210" y="14" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">Anterior · R ← · → L</text>
     </g>`;
 }
 
 function renderBody(){
+  callout._used=new Set();
   const active=Object.keys(ORGANS).filter(o=>organCount(o)>0);
   active.sort((a,b)=>(ORGANS[a].cy||0)-(ORGANS[b].cy||0));
   let organHTML='', calloutHTML='';
