@@ -16,24 +16,25 @@ const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeU
 const ACCENT='#5b9fd4';
 const BODY_BLUE='#2e7fc8';
 const CHART_COLORS=['#5b9fd4','#7a8fa8','#6b8f9a','#8a9eb8','#5a8a9a','#9a8aa8','#6a7a9a','#4a8ab0'];
-const SYSTEMIC=new Set(['Blood','Bone_Marrow','Lymph_Node','Nerve','Skin','Muscle','Bone',
+const SYSTEMIC=new Set(['Blood','Bone_Marrow','Lymph_Node','Nerve','Skin','Muscle',
   'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other','Pituitary']);
 
 /* Brightened anatomical palette — readable on the dark blue body background.
    Bigger organs (used as Iconify icons) keep darker realistic tones;
    small custom-path organs use brighter hues so they stay visible. */
 const ANATOMY_COL={
-  Brain:'#f0a4aa',           Eye:'#a0656a',
+  Brain:'#f0a4aa',           Eye:'#ffffff',
   Salivary_Gland:'#f0c8a8',  Thyroid:'#f4a890',
-  Esophagus:'#e8a890',       Lung:'#ec9e8b',
-  Heart:'#e85060',           Breast:'#f4b8b8',
+  Esophagus:'#e8a890',       Lung:'#f4b0a0',
+  Heart:'#e6404a',           Breast:'#f4b8b8',
   Liver:'#8a2a2a',           Stomach:'#eba98b',
   Spleen:'#c44848',          Pancreas:'#f0c878',
   Adrenal_Gland:'#f4c870',   Kidney:'#6e2e2e',
   Small_Intestine:'#f4b890', Colon:'#d89a80',
   Bladder:'#f49ab8',         Uterus:'#f4a8b8',
   Ovary:'#f4b8d0',           Cervix:'#d898a8',
-  Prostate:'#c898b8',        Testis:'#f0b8b8'
+  Prostate:'#c898b8',        Testis:'#f0b8b8',
+  Bone:'#e8dcc4'
 };
 
 const GRP=[
@@ -407,25 +408,36 @@ function filt(q){
 const ANATOMY={
   /* HEAD (y=20–95) */
   Brain:           {pos:{x:240, y: 50}, side:'R', size:42, emoji:'1f9e0',                 z:1},
-  Eye:             {pos:{x:240, y: 68}, side:'L', size:12, emoji:'1f441',                 z:2},
-  Salivary_Gland:  {pos:{x:240, y: 88}, side:'R', size:0,  z:2, d:
-    'M 226 86 Q 220 82 222 78 Q 230 78 232 84 Z '+
-    'M 254 86 Q 260 82 258 78 Q 250 78 248 84 Z'},
+  /* Two eyes — left and right, anatomically separated */
+  Eye:             {pos:{x:240, y: 70}, side:'L', size:0,  z:2, d:
+    'M 224 70 A 6 3 0 1 0 236 70 A 6 3 0 1 0 224 70 Z '+
+    'M 244 70 A 6 3 0 1 0 256 70 A 6 3 0 1 0 244 70 Z '+
+    'M 230 70 A 1.6 1.6 0 1 0 230.01 70 Z '+
+    'M 250 70 A 1.6 1.6 0 1 0 250.01 70 Z'},
+  /* Salivary glands clearly inside face (above jaw line y=94) */
+  Salivary_Gland:  {pos:{x:240, y: 84}, side:'R', size:0,  z:2, d:
+    'M 224 84 Q 218 80 220 76 Q 230 76 232 82 Z '+
+    'M 256 84 Q 262 80 260 76 Q 250 76 248 82 Z'},
 
   /* NECK (y=95–130) */
   Thyroid:         {pos:{x:240, y:118}, side:'L', size:0,  z:2, d:
-    'M 230 114 Q 224 118 228 126 Q 234 128 240 126 Q 246 128 252 126 Q 256 118 250 114 Q 244 112 240 118 Q 236 112 230 114 Z'},
+    'M 228 114 Q 222 118 226 126 Q 234 128 240 126 Q 246 128 254 126 Q 258 118 252 114 Q 244 112 240 118 Q 236 112 228 114 Z'},
 
-  /* THORAX (y=130–220).  Lungs apex at clavicle y=135, base at diaphragm y=220.
-     Twemoji emoji icons have visible content slightly below their center, so
-     we offset them downward to make them visually align with body landmarks. */
+  /* THORAX (y=130–220). Two anatomical lungs as custom paths so the heart
+     is clearly visible between them (cardiac notch). */
   Esophagus:       {pos:{x:240, y:170}, side:'R', size:0,  z:1, d:
     'M 237 130 L 243 130 L 243 220 L 237 220 Z'},
-  Lung:            {pos:{x:240, y:175}, side:'L', size:62, emoji:'1fac1',                 z:2},
-  Heart:           {pos:{x:232, y:188}, side:'R', size:32, emoji:'1fac0',                 z:3},
-  Breast:          {pos:{x:240, y:200}, side:'L', size:0,  z:4, d:
-    'M 210 198 A 3.2 3.2 0 1 0 216.4 198 A 3.2 3.2 0 1 0 210 198 Z '+
-    'M 263.6 198 A 3.2 3.2 0 1 0 270 198 A 3.2 3.2 0 1 0 263.6 198 Z'},
+  /* RIGHT LUNG (patient's right = viewer's LEFT side, x<240).  3 lobes, larger. */
+  Lung:            {pos:{x:240, y:175}, side:'L', size:0,  z:2, d:
+    'M 222 138 Q 198 144 192 162 Q 184 200 198 218 Q 214 222 230 218 Q 234 200 232 162 Q 230 144 222 138 Z '+
+    /* LEFT LUNG (patient's left = viewer's RIGHT, x>240).  2 lobes, smaller, with cardiac notch on inner side. */
+    'M 258 138 Q 282 144 288 162 Q 296 200 282 218 Q 266 222 254 218 L 252 200 Q 247 196 247 188 L 251 180 Q 248 162 250 154 Q 252 144 258 138 Z'},
+  /* HEART — anatomical shape (apex pointing down-left), sits in cardiac notch */
+  Heart:           {pos:{x:236, y:188}, side:'R', size:0,  z:3, d:
+    'M 236 174 Q 224 174 222 188 Q 222 200 232 212 L 240 220 Q 252 206 252 192 Q 252 174 240 174 Q 238 172 236 174 Z'},
+  Breast:          {pos:{x:240, y:208}, side:'L', size:0,  z:4, d:
+    'M 208 206 A 3.2 3.2 0 1 0 214.4 206 A 3.2 3.2 0 1 0 208 206 Z '+
+    'M 265.6 206 A 3.2 3.2 0 1 0 272 206 A 3.2 3.2 0 1 0 265.6 206 Z'},
 
   /* UPPER ABDOMEN (y=220–275).  Below diaphragm. */
   Liver:           {pos:{x:218, y:248}, side:'L', size:44, icon:'game-icons:liver',       z:2},
@@ -435,35 +447,48 @@ const ANATOMY={
   Pancreas:        {pos:{x:240, y:272}, side:'L', size:0,  z:2, d:
     'M 208 270 Q 228 264 250 270 Q 262 272 270 278 L 270 282 Q 260 278 248 276 Q 226 274 208 276 Z'},
 
-  /* MID ABDOMEN (y=240–310).  Renal hilum L1=245, kidneys T12–L3. */
+  /* MID ABDOMEN (y=240–310). */
   Adrenal_Gland:   {pos:{x:240, y:250}, side:'R', size:0,  z:1, d:
     'M 220 246 Q 224 242 230 246 Q 228 252 222 252 Q 218 250 220 246 Z '+
     'M 250 246 Q 256 242 260 246 Q 262 250 258 252 Q 252 252 250 246 Z'},
   Kidney:          {pos:{x:240, y:270}, side:'L', size:42, icon:'game-icons:kidneys',     z:2},
 
-  /* LOWER ABDOMEN (y=290–345).  Small intestine central, colon frames it. */
+  /* LOWER ABDOMEN (y=290–340). */
   Colon:           {pos:{x:240, y:312}, side:'L', size:54, icon:'game-icons:bowels',      z:2},
   Small_Intestine: {pos:{x:240, y:312}, side:'R', size:0,  z:3, d:
     'M 222 298 Q 234 294 248 298 Q 260 302 256 310 Q 240 312 226 308 '+
     'Q 218 318 232 322 Q 248 322 258 318 Q 260 326 250 330 Q 234 332 224 326 '+
     'Q 218 336 232 340 Q 248 340 258 336'},
 
-  /* PELVIS (y=340–370).  Bladder posterior to pubic symphysis (y=355). */
-  Bladder:         {pos:{x:240, y:348}, side:'R', size:0,  z:4, d:
-    'M 224 342 Q 240 334 256 342 Q 260 354 240 360 Q 220 354 224 342 Z'},
-  Uterus:          {pos:{x:232, y:352}, side:'L', size:0,  z:3, d:
-    'M 222 346 Q 232 338 240 346 L 238 360 L 224 360 Z'},
-  Prostate:        {pos:{x:248, y:360}, side:'R', size:0,  z:3, d:
-    'M 240 356 Q 250 350 258 356 Q 258 364 248 366 Q 240 364 240 356 Z'},
-  Ovary:           {pos:{x:240, y:354}, side:'R', size:0,  z:3, d:
-    'M 214 352 Q 210 354 212 358 Q 218 360 220 356 Z '+
-    'M 260 352 Q 266 354 264 358 Q 258 360 256 356 Z'},
-  Cervix:          {pos:{x:232, y:362}, side:'L', size:0,  z:3, d:
-    'M 228 360 L 236 360 L 234 366 L 230 366 Z'},
+  /* PELVIS — spread organs across y=336–366 instead of stacking them.
+     Anatomically: bladder anterior-superior; uterus/prostate posterior;
+     ovaries lateral; cervix at uterine outlet. */
+  Bladder:         {pos:{x:240, y:336}, side:'R', size:0,  z:4, d:
+    'M 226 332 Q 240 326 254 332 Q 258 342 240 346 Q 222 342 226 332 Z'},
+  Uterus:          {pos:{x:240, y:348}, side:'L', size:0,  z:3, d:
+    'M 230 344 Q 240 338 250 344 L 248 356 L 232 356 Z'},
+  Ovary:           {pos:{x:240, y:350}, side:'R', size:0,  z:3, d:
+    'M 212 350 Q 206 352 208 358 Q 216 360 220 356 Q 220 352 212 350 Z '+
+    'M 268 350 Q 274 352 272 358 Q 264 360 260 356 Q 260 352 268 350 Z'},
+  Cervix:          {pos:{x:240, y:360}, side:'L', size:0,  z:3, d:
+    'M 235 358 L 245 358 L 243 364 L 237 364 Z'},
+  Prostate:        {pos:{x:240, y:354}, side:'R', size:0,  z:3, d:
+    'M 232 350 Q 240 344 248 350 Q 250 358 240 360 Q 230 358 232 350 Z'},
 
-  /* SCROTUM (in gap between legs, y≥375) */
-  Testis:          {pos:{x:240, y:385}, side:'L', size:0,  z:3, d:
-    'M 232 380 Q 224 392 234 398 Q 240 398 242 392 Q 244 398 248 398 Q 256 392 248 380 Q 244 378 240 386 Q 236 378 232 380 Z'}
+  /* SCROTUM (between legs, body ends at y=370) */
+  Testis:          {pos:{x:240, y:386}, side:'L', size:0,  z:3, d:
+    'M 232 380 Q 224 392 234 398 Q 240 398 242 392 Q 244 398 248 398 Q 256 392 248 380 Q 244 378 240 386 Q 236 378 232 380 Z'},
+
+  /* BONE — femur silhouettes in the upper-thigh area */
+  Bone:            {pos:{x:240, y:430}, side:'R', size:0,  z:1, d:
+    'M 196 408 Q 192 410 192 416 Q 188 418 188 424 Q 188 430 192 432 L 200 438 '+
+    'Q 198 460 198 490 L 196 540 Q 196 548 200 552 Q 200 558 198 564 Q 196 568 200 572 '+
+    'Q 206 572 208 568 Q 208 562 206 558 Q 210 552 210 548 L 212 490 Q 212 462 210 440 '+
+    'Q 214 432 214 426 Q 212 418 208 416 Q 208 410 204 408 Z '+
+    'M 268 408 Q 272 410 272 416 Q 276 418 276 424 Q 276 430 272 432 L 264 438 '+
+    'Q 266 460 266 490 L 268 540 Q 268 548 264 552 Q 264 558 266 564 Q 268 568 264 572 '+
+    'Q 258 572 256 568 Q 256 562 258 558 Q 254 552 254 548 L 252 490 Q 252 462 254 440 '+
+    'Q 250 432 250 426 Q 252 418 256 416 Q 256 410 260 408 Z'}
 };
 
 function organCount(o){ return C[o]||0; }
