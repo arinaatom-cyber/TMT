@@ -4,18 +4,19 @@ const URL=`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv&gid
 const SHEET_VIEW=`https://docs.google.com/spreadsheets/d/${SHEET}/edit?gid=${GID}`;
 
 const COL={
-  Brain:'#8E6BB8',Pituitary:'#C39BD3',Eye:'#4169E1',Thyroid:'#20B2AA',
-  Salivary_Gland:'#F5B041',Esophagus:'#DAA520',
-  Lung:'#FF6B6B',Heart:'#DC143C',Breast:'#FFB347',
-  Liver:'#CD853F',Stomach:'#FFA07A',Pancreas:'#9370DB',Spleen:'#B22222',
-  Adrenal_Gland:'#FFD700',Kidney:'#D2691E',Small_Intestine:'#A8D870',Colon:'#E9967A',
-  Bladder:'#87CEEB',
-  Blood:'#EF4444',Bone_Marrow:'#8B0000',Lymph_Node:'#E74C3C',
-  Ovary:'#DDA0DD',Uterus:'#FF69B4',Cervix:'#FF1493',Prostate:'#5DADE2',Testis:'#6495ED',
-  Bone:'#A0AEC0',Muscle:'#CD5C5C',Skin:'#DEB887',Adipose_Tissue:'#FFDAB9',
-  Soft_Tissue:'#708090',Nerve:'#F1C40F',
-  Multiple_Organs:'#778899',Other:'#909090'
+  Brain:'#6B7BA8',Pituitary:'#8B9CC4',Eye:'#5B8FA8',Thyroid:'#5A9A94',
+  Salivary_Gland:'#B89A6E',Esophagus:'#A68B62',
+  Lung:'#B86B6B',Heart:'#9E5B5B',Breast:'#C49292',
+  Liver:'#8E7A62',Stomach:'#A67E72',Pancreas:'#7E6F9A',Spleen:'#9A6262',
+  Adrenal_Gland:'#B5A66E',Kidney:'#9A7258',Small_Intestine:'#7A9468',Colon:'#A68A7E',
+  Bladder:'#6A8FA8',
+  Blood:'#A85858',Bone_Marrow:'#7A4545',Lymph_Node:'#B07070',
+  Ovary:'#A88AA8',Uterus:'#B87A9A',Cervix:'#9A6A82',Prostate:'#5A82A8',Testis:'#6A82B0',
+  Bone:'#8A9098',Muscle:'#9A7070',Skin:'#B8A088',Adipose_Tissue:'#C4B098',
+  Soft_Tissue:'#7A8494',Nerve:'#B0A060',
+  Multiple_Organs:'#7A8499',Other:'#6B7280'
 };
+const CHART_COLORS=['#5B8FA8','#7E6F9A','#7A9468','#B5A66E','#B86B6B','#9A7258','#6A8FA8','#A88AA8','#8A9098'];
 
 const GRP=[
   {t:'Head & Neck',i:'🧠',o:['Brain','Pituitary','Eye','Thyroid','Salivary_Gland','Esophagus']},
@@ -92,7 +93,27 @@ const MAP={
   'lymphoma':'Lymph_Node','myeloma':'Bone_Marrow',
   'prostate':'Prostate','pancreatic':'Pancreas','gastric':'Stomach',
   'melanoma':'Skin','sarcoma':'Soft_Tissue',
-  'peritoneal':'Multiple_Organs','omentum':'Multiple_Organs'
+  'peritoneal':'Multiple_Organs','omentum':'Multiple_Organs',
+  gastrointestinal:'Colon','colon/rectum':'Colon','rectum':'Colon',
+  'hematopoietic system':'Blood','hematopoietic':'Blood',
+  'brain/cns':'Brain','brain tumour':'Brain','brain tumor':'Brain',
+  'oral cavity':'Salivary_Gland','head and neck':'Salivary_Gland',
+  'jaw bone':'Bone','orbit':'Eye','ocular adnexal':'Eye',
+  'embryonic stem':'Other','biliary tract':'Liver','pleura':'Lung',
+  endometrium:'Uterus',myometrium:'Uterus',thymus:'Lymph_Node',
+  omentum:'Multiple_Organs',peritoneum:'Multiple_Organs',diaphragm:'Multiple_Organs',
+  'fallopian tube':'Ovary','oesophagus':'Esophagus','esophagus mucosa':'Esophagus',
+  'urinary tract':'Bladder','leukemia cell line':'Blood',
+  'cancer cell line panel':'Multiple_Organs','cancer cell lines':'Multiple_Organs',
+  'soft tissue sarcoma':'Soft_Tissue','neural progenitor':'Brain',
+  'primary b cells':'Blood','primary t cells':'Blood','pbmc':'Blood',
+  'bone marrow and peripheral blood':'Bone_Marrow',
+  'mammary gland':'Breast','mammary tissue':'Breast','cerebellum':'Brain',
+  'cerebral cortex':'Brain','ventral mesencephalon':'Brain','substantia nigra':'Brain',
+  'lymph nodes':'Lymph_Node','lymph node':'Lymph_Node',
+  'adnexa':'Eye','uveal':'Eye','hgsoc':'Ovary','pdac':'Pancreas',
+  'escc':'Esophagus','luad':'Lung','lusc':'Lung',
+  'kidney tumor':'Kidney','colon epithelium':'Colon'
 };
 
 const ORGAN_EXACT={
@@ -103,9 +124,56 @@ const ORGAN_EXACT={
   thyroid:'Thyroid',bladder:'Bladder',muscle:'Muscle',bone:'Bone',skin:'Skin',
   esophagus:'Esophagus',heart:'Heart',nerve:'Nerve',pituitary:'Pituitary',
   'small intestine':'Small_Intestine','adrenal gland':'Adrenal_Gland',
-  'salivary gland':'Salivary_Gland','adipose tissue':'Adipose_Tissue',
-  'soft tissue':'Soft_Tissue','multiple organs':'Multiple_Organs'
+  'salivary gland':'Salivary_Gland','minor salivary gland':'Salivary_Gland',
+  'adipose tissue':'Adipose_Tissue','soft tissue':'Soft_Tissue',
+  'multiple organs':'Multiple_Organs','multiple organs (22 types)':'Multiple_Organs',
+  'not specified':'Other',
+  'adrenal gland':'Adrenal_Gland','artery aorta':'Heart','artery coronary':'Heart',
+  'artery tibial':'Nerve','brain cerebellum':'Brain','brain cortex':'Brain',
+  'breast mammary tissue':'Breast','colon sigmoid':'Colon','colon transverse':'Colon',
+  'esophagus gastroesophageal junction':'Esophagus','esophagus mucosa':'Esophagus',
+  'esophagus muscularis':'Esophagus','heart atrial appendage':'Heart',
+  'heart left ventricle':'Heart','muscle skeletal':'Muscle',
+  'nerve tibial':'Nerve','skin not sun exposed suprapubic':'Skin',
+  'skin sun exposed lower leg':'Skin','small intestine terminal ileum':'Small_Intestine',
+  'ovary':'Ovary','uterus':'Uterus','vagina':'Uterus','prostate':'Prostate',
+  'testis':'Testis','pituitary':'Pituitary','placenta':'Uterus',
+  'liver metastases':'Liver','matched primary tumor':'Pancreas',
+  'tumor-adjacent liver':'Liver','liver; pancreas':'Liver',
+  'ovary; fallopian tube':'Ovary','ovary; omentum':'Ovary',
+  'colon/rectum':'Colon','brain/cns':'Brain','bone marrow; peripheral blood':'Bone_Marrow',
+  'breast; blood; embryonic stem cells':'Breast',
+  'multiple (lung, colon, breast, blood)':'Multiple_Organs'
 };
+
+const VAGUE_ORGAN=/^(not specified|unknown|n\/a|na|—|-)$/i;
+
+function splitOrganParts(raw){
+  return raw.split(/[;\n,]+/)
+    .map(x=>x.trim().replace(/^multiple\s+organs?\s*/i,'').replace(/^\(\d+[^)]*\)\s*/,'').trim())
+    .filter(p=>p&&!VAGUE_ORGAN.test(p));
+}
+
+function hintOrgansFromText(text){
+  if(!text) return [];
+  const l=text.toLowerCase();
+  const found=new Set();
+  const hints=[
+    [/epidermoid|a431\b/i,'Skin'],[/mcf[- ]?7|breast cancer|mammary/i,'Breast'],
+    [/glioblastoma|glioma|u251|dao[y]?/i,'Brain'],[/lung cancer|hcc827|nci-h322|luad|nsclc/i,'Lung'],
+    [/hepat|liver|hcc/i,'Liver'],[/colon|colorectal|crc|rectal/i,'Colon'],
+    [/pancrea|pdac/i,'Pancreas'],[/ovarian|ovary|hgsoc/i,'Ovary'],
+    [/prostate|pca\b/i,'Prostate'],[/kidney|renal|rcc/i,'Kidney'],
+    [/stomach|gastric/i,'Stomach'],[/melanoma/i,'Skin'],
+    [/leukemia|aml|cll|myeloma|jurkat|k562|thp-1/i,'Blood'],
+    [/fibroblast|skin/i,'Skin'],[/endometri/i,'Uterus'],
+    [/esophag|barrett/i,'Esophagus'],[/thyroid/i,'Thyroid'],
+    [/bladder|urothel/i,'Bladder'],[/sarcoma|osteosarcoma|fibrosarcoma/i,'Soft_Tissue'],
+    [/b cell|t cell|pbmc|monocyte|cd14|cd4\+/i,'Blood']
+  ];
+  hints.forEach(([re,o])=>{if(re.test(l)) found.add(o);});
+  return [...found];
+}
 
 let D=[],C={},charts=[];
 
@@ -115,12 +183,18 @@ function esc(s){
 
 function pickOrganRaw(row){
   const parts=[];
-  ['Organ','Tissue','Cell Line Organ','Tissue for cell lines'].forEach(k=>{
-    const v=(row[k]||'').trim();
-    if(v) v.split(';').forEach(p=>{const t=p.trim();if(t)parts.push(t);});
-  });
+  const addParts=raw=>{
+    splitOrganParts(raw).forEach(p=>{
+      if(p&&!VAGUE_ORGAN.test(p)) parts.push(p);
+    });
+  };
+  ['Organ','Tissue','Cell Line Organ','Tissue for cell lines'].forEach(k=>addParts(row[k]||''));
   const detail=(row['Tissue Cell Type Detailed']||'').trim();
-  if(!parts.length&&detail) parts.push(detail);
+  const organMain=(row['Organ']||'').trim();
+  if((!parts.length||VAGUE_ORGAN.test(organMain))&&detail) addParts(detail);
+  if(parts.length<=1&&(organMain.toLowerCase().includes('multiple')||/cancer cell lines/i.test(detail))){
+    hintOrgansFromText(detail).forEach(o=>parts.push(o.replace(/_/g,' ')));
+  }
   return parts.length?parts.join('; '):'Unknown';
 }
 
@@ -135,12 +209,19 @@ function classifyOrgan(n){
 function classifyAllOrgans(raw){
   if(!raw) return ['Other'];
   const cleaned=raw.toLowerCase().trim();
-  if(cleaned.includes('multiple organs')||cleaned.includes('multi-organ')||cleaned.includes('22 types'))
+  if(cleaned.includes('multiple organs')||cleaned.includes('multi-organ')||cleaned.includes('22 types')||cleaned.includes('22 lineages'))
     return ['Multiple_Organs'];
-  const parts=raw.split(';').map(x=>x.trim()).filter(Boolean);
+  const parts=splitOrganParts(raw);
   if(!parts.length) return ['Other'];
   const organs=new Set();
-  parts.forEach(p=>organs.add(classifyOrgan(p)));
+  parts.forEach(p=>{
+    const o=classifyOrgan(p);
+    if(o!=='Other'||p.toLowerCase()==='other') organs.add(o);
+    else hintOrgansFromText(p).forEach(h=>organs.add(h));
+  });
+  if(organs.size===0){
+    hintOrgansFromText(raw).forEach(h=>organs.add(h));
+  }
   if(organs.size===0) organs.add('Other');
   const list=[...organs];
   if(list.length>=3&&!list.includes('Multiple_Organs')) list.push('Multiple_Organs');
@@ -166,7 +247,9 @@ function normalizeRow(x){
   const sampleType=x['Sample Type']||x['Tissue Cell Type Detailed']||'Unknown';
   const title=x['Title']||'';
   const organList=classifyAllOrgans(organRaw);
-  const pid=(x['Project ID']||'').trim();
+  let pid=(x['Project ID']||'').trim();
+  const m=pid.match(/^(IPX\d+)\s*\((PXD\d+)\)/i);
+  if(m) pid=m[2];
   return {
     ...x,
     organs:organList,om:organList[0],isMulti:organList.length>1,
@@ -227,7 +310,7 @@ function go(){
     h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
     g.o.forEach(o=>{
       const n=C[o]||0,c=COL[o]||'#888',off=n===0?'off':'';
-      h+=`<div class="oitem ${off}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${o.replace(/_/g,' ')}</span><span class="ct">${n}</span></div>`;
+      h+=`<div class="oitem ${off}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${o.replace(/_/g,' ')}</span><span class="ct" data-count="${n}">${n}</span></div>`;
     });
     h+=`</div></div>`;
   });
@@ -463,11 +546,12 @@ function sel(o){
     seen.add(r.pid);
     return true;
   });
+  const nProj=C[o]||uniqRows.length;
   charts.forEach(x=>x.destroy()); charts=[];
 
   const dis={}, sam={}, dbs={};
   let nHealthy=0,nCancer=0;
-  rows.forEach(r=>{
+  uniqRows.forEach(r=>{
     dis[r.dis]=(dis[r.dis]||0)+1;
     sam[r.st]=(sam[r.st]||0)+1;
     if(r.db) dbs[r.db]=(dbs[r.db]||0)+1;
@@ -478,18 +562,18 @@ function sel(o){
   const dbList=Object.entries(dbs).sort((a,b)=>b[1]-a[1]);
 
   let h=`
-  <div class="hero">
-    <div class="ic" style="background:${col}33;border:2px solid ${col}">🏥</div>
-    <div><h2 style="color:${col}">${o.replace(/_/g,' ')}</h2>
-    <div class="sub">${uniqRows.length} unique projects · ${rows.length} dataset rows · ${nCancer} cancer · ${nHealthy} normal</div></div>
+  <div class="hero" style="border-left-color:${col}">
+    <div class="ic" style="background:${col}22;border:1px solid ${col}"></div>
+    <div><h2 class="hero-title">${o.replace(/_/g,' ')}</h2>
+    <div class="sub">${nProj} projects · ${rows.length} rows in sheet · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} disease types</div></div>
   </div>
   <div class="mstats">
-    <div class="ms"><div class="v" style="color:${col}">${uniqRows.length}</div><div class="l">Projects</div></div>
-    <div class="ms"><div class="v" style="color:var(--red)">${nCancer}</div><div class="l">Cancer</div></div>
-    <div class="ms"><div class="v" style="color:var(--green)">${nHealthy}</div><div class="l">Normal</div></div>
-    <div class="ms"><div class="v" style="color:var(--orange)">${ss.length}</div><div class="l">Sample Types</div></div>
+    <div class="ms"><div class="v accent" style="color:${col}">${nProj}</div><div class="l">Projects</div></div>
+    <div class="ms"><div class="v">${nCancer}</div><div class="l">Cancer</div></div>
+    <div class="ms"><div class="v">${nHealthy}</div><div class="l">Normal</div></div>
+    <div class="ms"><div class="v">${ss.length}</div><div class="l">Sample Types</div></div>
   </div>
-  <div class="ccard"><h4>🦠 Tumor / Disease Types</h4><div class="dtags">`;
+  <div class="ccard"><h4 class="sec-h">Tumor / Disease Types</h4><div class="dtags">`;
 
   ds.slice(0,15).forEach(([d,n])=>{
     const lw=d.toLowerCase();
@@ -500,7 +584,7 @@ function sel(o){
   h+=`</div></div>`;
 
   if(dbList.length){
-    h+=`<div class="ccard"><h4>🗄 Data sources</h4><div class="dtags">`;
+    h+=`<div class="ccard"><h4 class="sec-h">Data Sources</h4><div class="dtags">`;
     dbList.slice(0,8).forEach(([d,n])=>{
       h+=`<div class="dtag"><span class="dd" style="background:var(--accent)"></span>${esc(d.length>28?d.slice(0,28)+'…':d)}<span class="dc">${n}</span></div>`;
     });
@@ -508,22 +592,22 @@ function sel(o){
   }
 
   h+=`<div class="charts-row">
-    <div class="ccard"><h4>🔬 Sample Types</h4><canvas id="ch1"></canvas></div>
-    <div class="ccard"><h4>📊 Top Tumor Types</h4><canvas id="ch2"></canvas></div>
+    <div class="ccard"><h4 class="sec-h">Sample Types</h4><canvas id="ch1"></canvas></div>
+    <div class="ccard"><h4 class="sec-h">Top Tumor Types</h4><canvas id="ch2"></canvas></div>
   </div>
-  <div class="tcard"><h4>📋 Projects (${uniqRows.length})</h4><div class="tscroll"><table class="ptable">
+  <div class="tcard"><h4 class="sec-h">Projects <span class="sec-count">${nProj}</span></h4><div class="tscroll"><table class="ptable">
     <thead><tr><th>DB</th><th>Project</th><th>Tumor / Disease</th><th>Sample</th><th>TMT</th><th>Organ(s)</th></tr></thead><tbody>`;
 
   uniqRows.slice(0,100).forEach(r=>{
     const organsLabel=r.isMulti
-      ?`<span style="color:var(--purple)">${esc(r.organs.map(x=>x.replace(/_/g,' ')).join(', '))}</span>`
+      ?`<span style="color:var(--t2)">${esc(r.organs.map(x=>x.replace(/_/g,' ')).join(', '))}</span>`
       :esc(r.organs[0].replace(/_/g,' '));
     const pidCell=r.link
       ?`<a href="${esc(r.link)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(r.pid)}</a>`
-      :`<span style="color:var(--accent);font-family:'JetBrains Mono',monospace">${esc(r.pid)}</span>`;
+      :`<span class="pid">${esc(r.pid)}</span>`;
     h+=`<tr>
       <td>${esc(r.db||'—')}</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-size:10px">${pidCell}</td>
+      <td class="pid">${pidCell}</td>
       <td title="${esc(r.dis)}">${esc((r.dis||'').slice(0,36))}</td>
       <td>${esc((r.st||'').slice(0,22))}</td>
       <td>${esc((r.tmt||'—').slice(0,14))}</td>
@@ -538,13 +622,13 @@ function sel(o){
   dc.scrollTo({top:0,behavior:'smooth'});
 
   requestAnimationFrame(()=>{
-    const colors=['#4a90d9','#a78bfa','#34d399','#fbbf24','#f87171','#22d3ee','#f472b6','#818cf8','#fb923c'];
+    const colors=CHART_COLORS;
     const c1=document.getElementById('ch1');
     if(c1){
       charts.push(new Chart(c1,{
         type:'doughnut',
         data:{labels:ss.map(s=>s[0]),datasets:[{data:ss.map(s=>s[1]),backgroundColor:colors,borderWidth:0}]},
-        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#8899b4',font:{size:10},padding:10}}}}
+        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Inter',size:10},padding:10}}}}
       }));
     }
     const c2=document.getElementById('ch2');
@@ -554,8 +638,8 @@ function sel(o){
         type:'bar',
         data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{data:top8.map(d=>d[1]),backgroundColor:col+'cc',borderRadius:6,borderSkipped:false}]},
         options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
-          scales:{x:{grid:{color:'#2a3654'},ticks:{color:'#8899b4',font:{size:9}}},
-                  y:{grid:{display:false},ticks:{color:'#8899b4',font:{size:9}}}}}
+          scales:{x:{grid:{color:'#2d3a52'},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}},
+                  y:{grid:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}}}}
       }));
     }
   });
