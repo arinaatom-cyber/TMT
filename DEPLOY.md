@@ -16,13 +16,15 @@
 
 ## Шаг 3 — загрузка файлов
 
-В PowerShell (замените `ВАШ_ЛОГИН` на свой GitHub-логин):
+В PowerShell:
 
 ```powershell
 cd "C:\Users\Arina1996\Desktop\лаб иеб\human-proteome-atlas"
-git remote add origin https://github.com/ВАШ_ЛОГИН/human-proteome-atlas.git
+git remote add origin https://github.com/arinaatom-cyber/human-proteome-atlas.git
 git push -u origin main
 ```
+
+(Если `remote origin` уже есть: `git remote set-url origin https://github.com/arinaatom-cyber/human-proteome-atlas.git`)
 
 При первом push GitHub попросит войти (браузер или токен).
 
@@ -35,7 +37,7 @@ git push -u origin main
 
 Через 1–3 минуты сайт откроется по адресу:
 
-`https://ВАШ_ЛОГИН.github.io/human-proteome-atlas/`
+`https://arinaatom-cyber.github.io/human-proteome-atlas/`
 
 Эту ссылку можно отправлять коллегам.
 
