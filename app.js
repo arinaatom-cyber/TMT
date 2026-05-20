@@ -3,21 +3,10 @@ const GID='1072380314';
 const URL=`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv&gid=${GID}`;
 const SHEET_VIEW=`https://docs.google.com/spreadsheets/d/${SHEET}/edit?gid=${GID}`;
 
-/* Atlas-style organ colors (anterior view, textbook palette) */
-const COL={
-  Brain:'#9a8aa8',Pituitary:'#8a7a98',Eye:'#7a8a9a',Thyroid:'#c9a878',
-  Salivary_Gland:'#d4b896',Esophagus:'#b8a088',
-  Lung:'#d4a0a0',Heart:'#c06058',Breast:'#d8b0b0',
-  Liver:'#8b6848',Stomach:'#c09070',Pancreas:'#d4c090',Spleen:'#a85858',
-  Adrenal_Gland:'#c9b060',Kidney:'#8b5840',Small_Intestine:'#c9b888',Colon:'#a89078',
-  Bladder:'#90a8b8',
-  Blood:'#b05050',Bone_Marrow:'#904848',Lymph_Node:'#b87878',
-  Ovary:'#c8a0b8',Uterus:'#d8a0b0',Cervix:'#b88898',Prostate:'#7098b0',Testis:'#88a0c0',
-  Bone:'#c9c0b0',Muscle:'#b88878',Skin:'#d4c4b0',Adipose_Tissue:'#e8d8c0',
-  Soft_Tissue:'#a8a098',Nerve:'#d4c878',
-  Multiple_Organs:'#989898',Other:'#888880'
-};
-const CHART_COLORS=['#5B8FA8','#7E6F9A','#7A9468','#B5A66E','#B86B6B','#9A7258','#6A8FA8','#A88AA8','#8A9098'];
+const ACCENT='#5b9fd4';
+const CHART_COLORS=['#5b9fd4','#7a8fa8','#6b8f9a','#8a9eb8','#5a8a9a','#9a8aa8','#6a7a9a','#4a8ab0'];
+const SYSTEMIC=new Set(['Blood','Bone_Marrow','Lymph_Node','Nerve','Skin','Muscle','Bone',
+  'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other','Pituitary']);
 
 const GRP=[
   {t:'Head & Neck',i:'🧠',o:['Brain','Pituitary','Eye','Thyroid','Salivary_Gland','Esophagus']},
@@ -27,6 +16,8 @@ const GRP=[
   {t:'Blood & Immune',i:'🩸',o:['Blood','Bone_Marrow','Lymph_Node']},
   {t:'Structural & Other',i:'🦴',o:['Bone','Muscle','Skin','Adipose_Tissue','Soft_Tissue','Nerve','Multiple_Organs','Other']}
 ];
+const COL={};
+GRP.forEach(g=>g.o.forEach(o=>{COL[o]=ACCENT;}));
 
 const MAP={
   'substantia nigra':'Brain','ventral mesencephalon':'Brain','pontine glioma':'Brain','rhabdoid tumor':'Brain',
@@ -328,164 +319,42 @@ function filt(q){
   });
 }
 
-/* Anterior anatomical view: image LEFT = patient RIGHT (standard atlas convention) */
-const ORGANS={
-  Brain:          {x:210, y:54,  side:'L', cy:44,  label:'Brain'},
-  Pituitary:      {x:210, y:78,  side:'R', cy:60,  label:'Pituitary'},
-  Eye:            {x:210, y:66,  side:'L', cy:76,  label:'Eye'},
-  Salivary_Gland: {x:210, y:100, side:'R', cy:92,  label:'Salivary'},
-  Thyroid:        {x:210, y:114, side:'L', cy:108, label:'Thyroid'},
-  Esophagus:      {x:210, y:158, side:'R', cy:124, label:'Esophagus'},
-  Lung:           {x:210, y:200, side:'L', cy:164, label:'Lung'},
-  Heart:          {x:228, y:208, side:'R', cy:152, label:'Heart'},
-  Breast:         {x:210, y:180, side:'L', cy:184, label:'Breast'},
-  Liver:          {x:172, y:252, side:'L', cy:216, label:'Liver'},
-  Stomach:        {x:248, y:268, side:'R', cy:236, label:'Stomach'},
-  Spleen:         {x:258, y:258, side:'R', cy:256, label:'Spleen'},
-  Pancreas:       {x:210, y:290, side:'L', cy:276, label:'Pancreas'},
-  Adrenal_Gland:  {x:210, y:308, side:'R', cy:292, label:'Adrenal'},
-  Kidney:         {x:210, y:330, side:'L', cy:312, label:'Kidney'},
-  Small_Intestine:{x:210, y:362, side:'R', cy:344, label:'Small Intestine'},
-  Colon:          {x:210, y:392, side:'L', cy:368, label:'Colon'},
-  Bladder:        {x:210, y:418, side:'R', cy:400, label:'Bladder'},
-  Uterus:         {x:210, y:412, side:'L', cy:416, label:'Uterus'},
-  Ovary:          {x:210, y:432, side:'R', cy:432, label:'Ovary'},
-  Cervix:         {x:210, y:442, side:'L', cy:448, label:'Cervix'},
-  Prostate:       {x:210, y:426, side:'R', cy:460, label:'Prostate'},
-  Testis:         {x:210, y:458, side:'L', cy:472, label:'Testis'},
-  Blood:          {x:118, y:272, side:'L', cy:288, label:'Blood'},
-  Bone_Marrow:    {x:210, y:228, side:'R', cy:208, label:'Bone Marrow'},
-  Lymph_Node:     {x:158, y:138, side:'L', cy:132, label:'Lymph Node'},
-  Nerve:          {x:118, y:360, side:'L', cy:360, label:'Nerve'},
-  Skin:           {x:300, y:200, side:'R', cy:184, label:'Skin'},
-  Muscle:         {x:152, y:500, side:'L', cy:512, label:'Muscle'},
-  Bone:           {x:152, y:580, side:'L', cy:580, label:'Bone'},
-  Adipose_Tissue: {x:300, y:300, side:'R', cy:300, label:'Adipose'},
-  Soft_Tissue:    {x:300, y:380, side:'R', cy:380, label:'Soft Tissue'},
-  Multiple_Organs:{x:210, y:318, side:'R', cy:520, label:'Multi-organ'}
+/* SVG paths: anterior view, patient's right = image left */
+const ANATOMY={
+  Brain:'M210 38 Q235 38 248 54 Q252 72 240 86 Q220 94 210 94 Q200 94 180 86 Q168 72 172 54 Q185 38 210 38 Z',
+  Eye:'M188 64 Q188 58 194 56 L200 56 Q206 58 206 64 Q206 70 200 72 L194 72 Q188 70 188 64 Z M214 64 Q214 58 220 56 L226 56 Q232 58 232 64 Q232 70 226 72 L220 72 Q214 70 214 64 Z',
+  Salivary_Gland:'M168 98 Q164 94 168 90 Q174 88 178 92 Q178 98 174 100 Z M252 98 Q256 94 252 90 Q246 88 242 92 Q242 98 246 100 Z',
+  Thyroid:'M196 112 Q210 106 224 112 Q220 120 210 122 Q200 120 196 112 Z',
+  Esophagus:'M207 128 L213 128 L213 188 L207 188 Z',
+  Lung:'M168 148 Q148 160 144 200 Q144 236 160 252 Q178 258 192 240 L198 200 Q198 168 186 152 Z M252 148 Q272 160 276 200 Q276 236 260 252 Q242 258 228 240 L222 200 Q222 168 234 152 Z',
+  Heart:'M218 188 Q232 178 240 192 Q244 210 232 224 Q218 232 210 224 Q202 232 188 224 Q176 210 180 192 Q188 178 202 188 Q210 196 218 188 Z',
+  Breast:'M176 172 Q164 178 164 192 Q164 206 176 210 Q188 206 188 192 Q188 178 176 172 Z M244 172 Q256 178 256 192 Q256 206 244 210 Q232 206 232 192 Q232 178 244 172 Z',
+  Liver:'M148 228 Q140 252 152 272 Q172 282 198 268 L210 248 Q208 228 188 218 Q162 214 148 228 Z',
+  Stomach:'M228 242 Q248 236 256 258 Q252 282 232 288 Q214 284 210 266 Q208 250 228 242 Z',
+  Spleen:'M262 248 Q272 258 268 278 Q258 290 246 282 Q242 262 252 250 Z',
+  Pancreas:'M178 286 L242 282 L244 294 L180 298 Z',
+  Adrenal_Gland:'M168 306 Q176 300 184 306 Q180 314 172 312 Z M236 306 Q244 300 252 306 Q248 314 240 312 Z',
+  Kidney:'M162 318 Q152 330 154 348 Q160 364 172 362 Q182 350 180 332 Q176 318 162 318 Z M258 318 Q268 330 266 348 Q260 364 248 362 Q238 350 240 332 Q244 318 258 318 Z',
+  Small_Intestine:'M182 352 Q210 340 238 352 Q252 372 240 392 Q210 404 180 392 Q168 372 182 352 Z',
+  Colon:'M168 368 L168 400 Q180 412 210 414 Q240 412 252 400 L252 368 Q240 356 210 354 Q180 356 168 368 Z',
+  Bladder:'M196 408 Q210 400 224 408 Q228 422 210 428 Q192 422 196 408 Z',
+  Uterus:'M198 404 Q210 396 222 404 L220 422 L200 422 Z',
+  Ovary:'M186 428 Q178 432 180 440 Q186 446 192 440 Z M234 428 Q242 432 240 440 Q234 446 228 440 Z',
+  Cervix:'M204 424 L216 424 L214 434 L206 434 Z',
+  Prostate:'M200 418 Q210 414 220 418 Q220 426 210 428 Q200 426 200 418 Z',
+  Testis:'M198 448 Q192 458 198 468 Q206 472 210 464 Q214 472 222 468 Q228 458 222 448 Q214 444 210 452 Q206 444 198 448 Z'
 };
 
 function organCount(o){ return C[o]||0; }
 
-function callout(o, pos){
-  const n=organCount(o);
-  if(!n) return '';
-  const col=COL[o]||'#888';
-  const name=pos.label||o.replace(/_/g,' ');
-  const isL=pos.side==='L';
-  const pillW=name.length>12?108:90, pillH=17;
-  const pillX=isL?4:(416-pillW);
-  let cy=pos.cy;
-  if(!callout._used) callout._used=new Set();
-  while([...callout._used].some(u=>Math.abs(u-cy)<16)) cy+=16;
-  callout._used.add(cy);
-  const pillY=cy-pillH/2;
-  const dotCx=isL?pillX+7:pillX+pillW-7;
-  const textX=isL?pillX+14:pillX+pillW-14;
-  const countX=isL?pillX+pillW-11:pillX+11;
-  const leaderEndX=isL?pillX+pillW:pillX;
+function organGroup(o){
+  if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
+  const d=ANATOMY[o];
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
-  return `
-    <path class="lead" data-lead="${o}" d="M ${pos.x} ${pos.y} L ${leaderEndX} ${cy}" style="color:${col}"/>
-    <g class="cb" data-cb="${o}" ${eh} style="color:${col}">
-      <rect class="cb-pill" x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}"/>
-      <circle class="cb-dot" cx="${dotCx}" cy="${cy}" r="3" fill="${col}"/>
-      <text class="cb-name ${isL?'':'right'}" x="${textX}" y="${cy}">${name}</text>
-      <text class="cb-count" x="${countX}" y="${cy}" style="fill:${col}">${n}</text>
-    </g>`;
-}
-
-function organShape(o, pos){
-  const n=organCount(o);
-  if(!n) return '';
-  const fill=COL[o]||'#888';
-  const cls='org';
-  const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
-  const da=`data-o="${o}"`;
-  const op='opacity=".88"';
-  const {x,y}=pos;
-  switch(o){
-    case 'Brain':
-      return `<ellipse cx="${x}" cy="${y}" rx="24" ry="20" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>`;
-    case 'Pituitary':
-      return `<circle cx="${x}" cy="${y}" r="2.5" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Eye':
-      return `<ellipse cx="${x-11}" cy="${y}" rx="5" ry="3.5" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <ellipse cx="${x+11}" cy="${y}" rx="5" ry="3.5" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Salivary_Gland':
-      return `<ellipse cx="${x-28}" cy="${y}" rx="5" ry="4" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <ellipse cx="${x+28}" cy="${y}" rx="5" ry="4" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Thyroid':
-      return `<path d="M ${x-10} ${y} Q ${x} ${y-4} ${x+10} ${y} Q ${x+5} ${y+4} ${x} ${y+2} Q ${x-5} ${y+4} ${x-10} ${y} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Esophagus':
-      return `<rect x="${x-2.5}" y="${y-28}" width="5" height="56" rx="2" fill="${fill}" class="${cls}" ${eh} ${da} opacity=".7"/>`;
-    case 'Lung':
-      return `<ellipse cx="${x-34}" cy="${y}" rx="20" ry="38" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>
-              <ellipse cx="${x+34}" cy="${y}" rx="20" ry="38" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>`;
-    case 'Heart':
-      return `<path d="M ${x} ${y-9} Q ${x-11} ${y-14} ${x-9} ${y+1} Q ${x-7} ${y+12} ${x} ${y+16} Q ${x+9} ${y+12} ${x+9} ${y+1} Q ${x+11} ${y-14} ${x} ${y-9} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Breast':
-      return `<ellipse cx="${x-32}" cy="${y}" rx="11" ry="9" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>
-              <ellipse cx="${x+32}" cy="${y}" rx="11" ry="9" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>`;
-    case 'Liver':
-      return `<path d="M ${x-24} ${y-10} Q ${x-28} ${y+10} ${x-4} ${y+12} Q ${x+18} ${y+8} ${x+16} ${y-6} Q ${x-2} ${y-14} ${x-24} ${y-10} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Stomach':
-      return `<path d="M ${x-10} ${y-8} Q ${x+8} ${y-12} ${x+12} ${y+2} Q ${x+8} ${y+12} ${x-2} ${y+10} Q ${x-14} ${y+4} ${x-10} ${y-8} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Spleen':
-      return `<ellipse cx="${x}" cy="${y}" rx="8" ry="11" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Pancreas':
-      return `<path d="M ${x-18} ${y} Q ${x} ${y-3} ${x+18} ${y+1} L ${x+18} ${y+5} Q ${x} ${y+1} ${x-18} ${y+3} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Adrenal_Gland':
-      return `<ellipse cx="${x-30}" cy="${y}" rx="6" ry="3" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <ellipse cx="${x+30}" cy="${y}" rx="6" ry="3" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Kidney':
-      return `<path d="M ${x-32} ${y-12} Q ${x-40} ${y} ${x-32} ${y+12} Q ${x-22} ${y+12} ${x-22} ${y} Q ${x-24} ${y-12} ${x-32} ${y-12} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <path d="M ${x+32} ${y-12} Q ${x+40} ${y} ${x+32} ${y+12} Q ${x+22} ${y+12} ${x+22} ${y} Q ${x+24} ${y-12} ${x+32} ${y-12} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Small_Intestine':
-      return `<ellipse cx="${x}" cy="${y}" rx="28" ry="22" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>`;
-    case 'Colon':
-      return `<path d="M ${x-30} ${y+8} L ${x-30} ${y-14} L ${x+30} ${y-14} L ${x+30} ${y+6} L ${x-6} ${y+6} Z" fill="none" stroke="${fill}" stroke-width="4" class="${cls}" ${eh} ${da} stroke-linejoin="round"/>`;
-    case 'Bladder':
-      return `<ellipse cx="${x}" cy="${y}" rx="11" ry="9" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Prostate':
-      return `<ellipse cx="${x}" cy="${y}" rx="7" ry="5" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Ovary':
-      return `<ellipse cx="${x-14}" cy="${y}" rx="5" ry="3.5" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <ellipse cx="${x+14}" cy="${y}" rx="5" ry="3.5" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Uterus':
-      return `<path d="M ${x-10} ${y-6} L ${x-8} ${y+10} L ${x+8} ${y+10} L ${x+10} ${y-6} Q ${x+5} ${y-10} ${x} ${y-8} Q ${x-5} ${y-10} ${x-10} ${y-6} Z" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Cervix':
-      return `<rect x="${x-4}" y="${y-3}" width="8" height="7" rx="2" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Testis':
-      return `<ellipse cx="${x-8}" cy="${y}" rx="5" ry="7" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <ellipse cx="${x+8}" cy="${y}" rx="5" ry="7" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Blood':
-      return `<path d="M ${x} ${y-16} Q ${x-8} ${y} ${x} ${y+16} Q ${x+8} ${y} ${x} ${y-16} Z" fill="none" stroke="${fill}" stroke-width="3" class="${cls}" ${eh} ${da}/>`;
-    case 'Bone_Marrow':
-      return `<rect x="${x-14}" y="${y-6}" width="28" height="12" rx="4" fill="${fill}" class="${cls}" ${eh} ${da} opacity=".85"/>`;
-    case 'Lymph_Node':
-      return `<circle cx="${x}" cy="${y}" r="5" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <circle cx="${x+10}" cy="${y+12}" r="4" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <circle cx="${x-8}" cy="${y+14}" r="3.5" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    case 'Nerve':
-      return `<path d="M ${x} ${y-14} Q ${x+6} ${y} ${x} ${y+14}" fill="none" stroke="${fill}" stroke-width="2.5" class="${cls}" ${eh} ${da} stroke-linecap="round"/>`;
-    case 'Skin':
-      return `<path d="M ${x-8} ${y-20} Q ${x} ${y-8} ${x+8} ${y-20}" fill="none" stroke="${fill}" stroke-width="2" class="${cls}" ${eh} ${da}/>`;
-    case 'Muscle':
-      return `<ellipse cx="${x}" cy="${y}" rx="14" ry="28" fill="${fill}" class="${cls}" ${eh} ${da} ${op}/>`;
-    case 'Bone':
-      return `<rect x="${x-5}" y="${y-18}" width="10" height="36" rx="3" fill="${fill}" class="${cls}" ${eh} ${da} opacity=".8"/>`;
-    case 'Adipose_Tissue':
-      return `<ellipse cx="${x}" cy="${y}" rx="10" ry="8" fill="${fill}" class="${cls}" ${eh} ${da} opacity=".75"/>`;
-    case 'Soft_Tissue':
-      return `<ellipse cx="${x}" cy="${y}" rx="12" ry="8" fill="${fill}" class="${cls}" ${eh} ${da} opacity=".8"/>`;
-    case 'Multiple_Organs':
-      return `<circle cx="${x-5}" cy="${y-3}" r="4" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <circle cx="${x+5}" cy="${y-3}" r="4" fill="${fill}" class="${cls}" ${eh} ${da}/>
-              <circle cx="${x}" cy="${y+5}" r="4" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-    default:
-      return `<circle cx="${x}" cy="${y}" r="6" fill="${fill}" class="${cls}" ${eh} ${da}/>`;
-  }
+  return `<g class="organ-g" data-o="${o}" ${eh}>
+    <path class="anatomy-part" d="${d}"/>
+    <path class="org-hit" d="${d}"/>
+  </g>`;
 }
 
 function bodySilhouette(){
@@ -520,20 +389,11 @@ function bodySilhouette(){
 }
 
 function renderBody(){
-  callout._used=new Set();
-  const active=Object.keys(ORGANS).filter(o=>organCount(o)>0);
-  active.sort((a,b)=>(ORGANS[a].cy||0)-(ORGANS[b].cy||0));
-  let organHTML='', calloutHTML='';
-  active.forEach(o=>{
-    const pos=ORGANS[o];
-    organHTML+=organShape(o,pos);
-    calloutHTML+=callout(o,pos);
-  });
+  const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&!SYSTEMIC.has(o));
   document.getElementById('bw').innerHTML=`
   <svg viewBox="0 0 420 720" xmlns="http://www.w3.org/2000/svg">
     ${bodySilhouette()}
-    <g class="organs-layer">${organHTML}</g>
-    <g class="labels-layer">${calloutHTML}</g>
+    <g class="organs-layer">${active.map(organGroup).join('')}</g>
   </svg>`;
 }
 
@@ -551,14 +411,9 @@ function sel(o){
   if(!C[o]) return;
   const rows=D.filter(x=>x.organs.includes(o));
   document.querySelectorAll('.oitem').forEach(x=>x.classList.toggle('on',x.dataset.o===o));
-  document.querySelectorAll('[data-o]').forEach(x=>{
-    if(x.closest('.olist')) return;
-    x.classList.toggle('hi',x.dataset.o===o);
-  });
-  document.querySelectorAll('[data-cb]').forEach(x=>x.classList.toggle('hi',x.dataset.cb===o));
-  document.querySelectorAll('[data-lead]').forEach(x=>x.classList.toggle('hi',x.dataset.lead===o));
+  document.querySelectorAll('.organ-g').forEach(x=>x.classList.toggle('hi',x.dataset.o===o));
 
-  const col=COL[o]||'#888';
+  const col=ACCENT;
   const seen=new Set();
   const uniqRows=rows.filter(r=>{
     if(seen.has(r.pid)) return false;
@@ -595,8 +450,8 @@ function sel(o){
   <div class="ccard"><h4 class="sec-h">Tumor / Disease Types</h4><div class="dtags">`;
 
   ds.slice(0,15).forEach(([d,n])=>{
-    const lw=d.toLowerCase();
-    const healthyTag=(lw===''||lw==='normal'||lw==='healthy'||lw==='not specified'||lw.includes('normal')||lw.includes('healthy'));
+    const rowsD=uniqRows.filter(r=>r.dis===d);
+    const healthyTag=rowsD.length&&rowsD.every(r=>r.healthy);
     const dc=healthyTag?'var(--green)':'var(--red)';
     h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${esc(d.length>35?d.slice(0,35)+'…':d)}<span class="dc">${n}</span></div>`;
   });
@@ -655,7 +510,7 @@ function sel(o){
       const top8=ds.slice(0,8);
       charts.push(new Chart(c2,{
         type:'bar',
-        data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{data:top8.map(d=>d[1]),backgroundColor:col+'cc',borderRadius:6,borderSkipped:false}]},
+        data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{data:top8.map(d=>d[1]),backgroundColor:ACCENT+'bb',borderRadius:6,borderSkipped:false}]},
         options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
           scales:{x:{grid:{color:'#2d3a52'},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}},
                   y:{grid:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}}}}
