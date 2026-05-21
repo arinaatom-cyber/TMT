@@ -107,14 +107,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .organ-hit{fill:rgba(0,0,0,0.01)!important;stroke:none!important;pointer-events:all}
 .organ-g.organ-skeleton{pointer-events:none}
 .organ-g.organ-skeleton path{pointer-events:none}
-.anatomy-part{fill:#ec9e8b;stroke:rgba(255,255,255,.6);stroke-width:.9;stroke-linejoin:round}
+.anatomy-part{fill:#c08080;stroke:rgba(255,255,255,.55);stroke-width:.9;stroke-linejoin:round}
 /* Skeleton: lines only, no solid fill blocks */
 .skeleton-part{fill:none;stroke:rgba(255,255,255,.5);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
 .systemic-part{fill:rgba(156,184,217,.18);stroke:var(--pastel-sky);stroke-width:1.1;stroke-dasharray:4 3}
 .organ-g{cursor:pointer}
 .organ-g:hover .anatomy-part,.organ-g.hi .anatomy-part{stroke:#fff;filter:brightness(1.15)}
 .organ-g:hover .skeleton-part,.organ-g.hi .skeleton-part{stroke:#fff;stroke-width:2;filter:brightness(1.12)}
-.organ-g:hover .systemic-part,.organ-g.hi .systemic-part{fill:rgba(91,159,212,.45)}
+.organ-g:hover .systemic-part,.organ-g.hi .systemic-part{fill:rgba(200,140,120,.5)}
 
 /* Labels sit above organs — must not block clicks on the body map */
 .lbl-g{pointer-events:none;cursor:default}
@@ -273,6 +273,6 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </div>
 
-<script src="app.js?v=20260521-full2"></script>
+<script src="app.js?v=20260521-orgcolors"></script>
 </body>
 </html>

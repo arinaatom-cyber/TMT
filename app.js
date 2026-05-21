@@ -154,6 +154,9 @@ function rowMatchesSidebar(o){
 }
 function setFilter(key,val){
   F[key]=val||'';
+  const selMap={tmt:'fTmt',db:'fDb',health:'fHealth'};
+  const el=document.getElementById(selMap[key]);
+  if(el) el.value=F[key];
   rebuildCounts();
   refreshAll();
 }
@@ -299,7 +302,7 @@ function buildSidebar(){
     if(!items.length) return;
     h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
     items.forEach(o=>{
-      const n=C[o],c=COL[o]||'#888';
+      const n=C[o],c=organColor(o);
       h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${o.replace(/_/g,' ')}</span><span class="ct">${n}</span></div>`;
     });
     h+=`</div></div>`;
@@ -355,26 +358,27 @@ function cmpRows(s){
   ).join('');
 }
 
-/* Brightened anatomical palette — readable on the dark blue body background.
-   Bigger organs (used as Iconify icons) keep darker realistic tones;
-   small custom-path organs use brighter hues so they stay visible. */
-/* Organ map colors — muted pastels (readable on dark body) */
+/* Realistic organ hues (muted for dark UI — pink lungs, red heart, brown liver, etc.) */
 const ANATOMY_COL={
-  Brain:'#c4a8d4',           Eye:'#e8e4dc',
-  Salivary_Gland:'#e0b8a8',  Thyroid:'#d4c48a',
-  Esophagus:'#d8c0a8',       Lung:'#9cb8d9',
-  Heart:'#d4a8a8',           Breast:'#d4a8b8',
-  Liver:'#b8a0a0',           Stomach:'#e0c4b0',
-  Spleen:'#c8a8b0',          Pancreas:'#d4c48a',
-  Adrenal_Gland:'#d8c0a8',   Kidney:'#a89090',
-  Small_Intestine:'#e0c8a8', Colon:'#c4b0a0',
-  Bladder:'#d4b0c8',         Uterus:'#d4a8b8',
-  Ovary:'#c8b0d8',           Cervix:'#c4a8b8',
-  Prostate:'#b0b8d0',        Testis:'#d4b8b8',
-  Bone:'#d8d4cc',
-  Pituitary:'#c8b0d8',       Blood:'#d4a8a8',
-  Skin:'#e0c4b0',            Muscle:'#b8c8a8'
+  Brain:'#b898a8',           Pituitary:'#9a88a0',
+  Eye:'#d8d0c0',             Salivary_Gland:'#d4a098',
+  Thyroid:'#b88870',         Esophagus:'#c4a088',
+  Lung:'#c08080',            Heart:'#a84848',
+  Breast:'#d4a0a0',          Liver:'#8b5c48',
+  Stomach:'#c8a878',         Spleen:'#8b5868',
+  Pancreas:'#c4a860',        Adrenal_Gland:'#a89058',
+  Kidney:'#9a6860',          Small_Intestine:'#d4b888',
+  Colon:'#a07868',           Bladder:'#c8b070',
+  Uterus:'#c08890',          Ovary:'#d4a090',
+  Cervix:'#b87888',          Prostate:'#a89080',
+  Testis:'#c4a888',          Bone:'#d8d0c4',
+  Blood:'#a84040',           Bone_Marrow:'#8b4848',
+  Lymph_Node:'#88a088',      Skin:'#e0c0a8',
+  Muscle:'#9a7068',          Adipose_Tissue:'#d8c898',
+  Soft_Tissue:'#b8a090',     Nerve:'#d4c878',
+  Multiple_Organs:'#a0a0a8', Other:'#9498a0'
 };
+function organColor(o){return ANATOMY_COL[o]||'#b8a090';}
 
 const GRP=[
   {t:'Head & Neck',i:'🧠',o:['Brain','Pituitary','Eye','Thyroid','Salivary_Gland','Esophagus']},
@@ -385,7 +389,7 @@ const GRP=[
   {t:'Structural & Other',i:'🦴',o:['Bone','Muscle','Skin','Adipose_Tissue','Soft_Tissue','Nerve','Multiple_Organs','Other']}
 ];
 const COL={};
-GRP.forEach((g,gi)=>g.o.forEach((o,oi)=>{COL[o]=chartColor(gi*4+oi);}));
+GRP.forEach(g=>g.o.forEach(o=>{COL[o]=organColor(o);}));
 
 const MAP={
   'substantia nigra':'Brain','ventral mesencephalon':'Brain','pontine glioma':'Brain','rhabdoid tumor':'Brain',
@@ -881,7 +885,7 @@ function twemojiUrl(code){
 function organGroup(o){
   if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
   const a=ANATOMY[o];
-  const fill=ANATOMY_COL[o]||'#ec9e8b';
+  const fill=organColor(o);
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
 
   if(a.emoji){
@@ -907,7 +911,7 @@ function organGroup(o){
     const psty=a.skeleton
       ?`fill:none;stroke:rgba(255,255,255,.55);stroke-width:1;stroke-linejoin:round`
       :a.systemic
-        ?`fill:${fill};fill-opacity:.35;stroke:${ACCENT};stroke-width:1.2`
+        ?`fill:${fill};fill-opacity:.4;stroke:${fill};stroke-width:1.2`
         :`fill:${fill};fill-rule:evenodd`;
     const clsExtra=a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'';
     const pe=a.skeleton?' pointer-events="none"':'';
@@ -1018,7 +1022,7 @@ function organLabel(o, labelY){
   const ox=a.pos.x, oy=a.pos.y;
   const turnX=isL?156:324;
   const lineEnd=isL?labelX+2:labelX-2;
-  const col=ANATOMY_COL[o]||'#ec9e8b';
+  const col=organColor(o);
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}"/>
@@ -1128,7 +1132,7 @@ function sel(o){
   document.querySelectorAll('.organ-g').forEach(x=>x.classList.toggle('hi',x.dataset.o===o));
   document.querySelectorAll('.lbl-g').forEach(x=>x.classList.toggle('hi',x.dataset.cb===o));
 
-  const col=ANATOMY_COL[o]||ACCENT;
+  const col=organColor(o);
   let uniqRows=sortProjects(uniqProjects(rows),organUI.sort);
   uniqRows=filterOrganProjects(uniqRows,organUI.projQ);
   const nProj=uniqProjects(getOrganRows(o)).length;
