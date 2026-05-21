@@ -1,0 +1,27 @@
+name: Sync projects CSV
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Google Sheet CSV
+        run: |
+          curl -fsSL "https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/export?format=csv&gid=1072380314" -o data/projects.csv
+          test -s data/projects.csv
+          head -1 data/projects.csv | grep -q "Project ID"
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/projects.csv
+          git diff --staged --quiet || git commit -m "chore: sync data/projects.csv from Google Sheet"
+          git push
