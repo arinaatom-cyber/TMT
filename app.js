@@ -34,7 +34,7 @@ const ANATOMY_COL={
   Bladder:'#f49ab8',         Uterus:'#f4a8b8',
   Ovary:'#f4b8d0',           Cervix:'#d898a8',
   Prostate:'#c898b8',        Testis:'#f0b8b8',
-  Bone:'#e8dcc4'
+  Bone:'#f8f0e4'
 };
 
 const GRP=[
@@ -406,14 +406,14 @@ function filt(q){
      y=325  L5 (iliac crest)
      y=355  pubic symphysis (S2)  — body ends at y=370 */
 const ANATOMY={
-  /* HEAD (y=20–95) */
-  Brain:           {pos:{x:240, y: 50}, side:'R', size:42, emoji:'1f9e0',                 z:1},
-  /* Two eyes — left and right, anatomically separated */
-  Eye:             {pos:{x:240, y: 70}, side:'L', size:0,  z:2, d:
-    'M 224 70 A 6 3 0 1 0 236 70 A 6 3 0 1 0 224 70 Z '+
-    'M 244 70 A 6 3 0 1 0 256 70 A 6 3 0 1 0 244 70 Z '+
-    'M 230 70 A 1.6 1.6 0 1 0 230.01 70 Z '+
-    'M 250 70 A 1.6 1.6 0 1 0 250.01 70 Z'},
+  /* HEAD (y=20–95).  Eye line y=62, brain fills upper cranium. */
+  Brain:           {pos:{x:240, y: 42}, side:'R', size:42, emoji:'1f9e0',                 z:1},
+  /* Two eyes on the eye line (y=62), not on the neck */
+  Eye:             {pos:{x:240, y: 62}, side:'L', size:0,  z:2, d:
+    'M 224 62 A 6 3 0 1 0 236 62 A 6 3 0 1 0 224 62 Z '+
+    'M 244 62 A 6 3 0 1 0 256 62 A 6 3 0 1 0 244 62 Z '+
+    'M 230 62 A 1.6 1.6 0 1 0 230.01 62 Z '+
+    'M 250 62 A 1.6 1.6 0 1 0 250.01 62 Z'},
   /* Salivary glands clearly inside face (above jaw line y=94) */
   Salivary_Gland:  {pos:{x:240, y: 84}, side:'R', size:0,  z:2, d:
     'M 224 84 Q 218 80 220 76 Q 230 76 232 82 Z '+
@@ -479,16 +479,30 @@ const ANATOMY={
   Testis:          {pos:{x:240, y:386}, side:'L', size:0,  z:3, d:
     'M 232 380 Q 224 392 234 398 Q 240 398 242 392 Q 244 398 248 398 Q 256 392 248 380 Q 244 378 240 386 Q 236 378 232 380 Z'},
 
-  /* BONE — femur silhouettes in the upper-thigh area */
-  Bone:            {pos:{x:240, y:430}, side:'R', size:0,  z:1, d:
-    'M 196 408 Q 192 410 192 416 Q 188 418 188 424 Q 188 430 192 432 L 200 438 '+
-    'Q 198 460 198 490 L 196 540 Q 196 548 200 552 Q 200 558 198 564 Q 196 568 200 572 '+
-    'Q 206 572 208 568 Q 208 562 206 558 Q 210 552 210 548 L 212 490 Q 212 462 210 440 '+
-    'Q 214 432 214 426 Q 212 418 208 416 Q 208 410 204 408 Z '+
-    'M 268 408 Q 272 410 272 416 Q 276 418 276 424 Q 276 430 272 432 L 264 438 '+
-    'Q 266 460 266 490 L 268 540 Q 268 548 264 552 Q 264 558 266 564 Q 268 568 264 572 '+
-    'Q 258 572 256 568 Q 256 562 258 558 Q 254 552 254 548 L 252 490 Q 252 462 254 440 '+
-    'Q 250 432 250 426 Q 252 418 256 416 Q 256 410 260 408 Z'}
+  /* SKELETON — clavicles, ribs, sternum, spine, pelvis, femurs, tibias */
+  Bone:            {pos:{x:240, y:320}, side:'R', size:0,  z:0, skeleton:true, d:
+    /* clavicles */
+    'M 198 132 Q 218 126 240 128 Q 262 126 282 132 '+
+    /* rib cage (6 pairs per side) */
+    'M 240 142 Q 200 146 188 158 M 240 152 Q 196 158 186 172 '+
+    'M 240 162 Q 194 170 184 186 M 240 172 Q 192 182 182 200 '+
+    'M 240 182 Q 194 194 184 212 M 240 192 Q 196 206 188 222 '+
+    'M 240 142 Q 280 146 292 158 M 240 152 Q 284 158 294 172 '+
+    'M 240 162 Q 286 170 296 186 M 240 172 Q 288 182 298 200 '+
+    'M 240 182 Q 286 194 296 212 M 240 192 Q 284 206 292 222 '+
+    /* sternum */
+    'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
+    /* spine */
+    'M 238 128 L 242 128 L 241 368 L 239 368 Z '+
+    /* pelvis */
+    'M 208 318 Q 196 328 196 348 Q 206 362 240 366 Q 274 362 284 348 Q 284 328 272 318 '+
+    'M 220 358 L 260 358 '+
+    /* femurs (thigh) */
+    'M 204 366 Q 198 368 196 378 L 192 460 Q 190 520 188 568 L 186 598 Q 184 608 190 612 Q 198 612 202 606 L 206 568 Q 210 500 214 420 L 218 378 Q 216 368 210 366 Z '+
+    'M 276 366 Q 282 368 284 378 L 288 460 Q 290 520 292 568 L 294 598 Q 296 608 290 612 Q 282 612 278 606 L 274 568 Q 270 500 266 420 L 262 378 Q 264 368 270 366 Z '+
+    /* tibias (shin) */
+    'M 192 612 L 190 680 Q 188 698 194 702 L 200 702 Q 206 698 208 680 L 210 612 Z '+
+    'M 288 612 L 290 680 Q 292 698 286 702 L 280 702 Q 274 698 272 680 L 270 612 Z'}
 };
 
 function organCount(o){ return C[o]||0; }
@@ -525,8 +539,12 @@ function organGroup(o){
     </g>`;
   }
   if(a.d){
-    return `<g class="organ-g" data-o="${o}" ${eh}>
-      <path class="anatomy-part" d="${a.d}" style="fill:${fill};fill-rule:evenodd"/>
+    const pcls=a.skeleton?'skeleton-part':'anatomy-part';
+    const psty=a.skeleton
+      ?`fill:${fill};fill-opacity:.42;stroke:#fff;stroke-width:1.2;stroke-linejoin:round`
+      :`fill:${fill};fill-rule:evenodd`;
+    return `<g class="organ-g${a.skeleton?' organ-skeleton':''}" data-o="${o}" ${eh}>
+      <path class="${pcls}" d="${a.d}" style="${psty}"/>
     </g>`;
   }
   return '';
