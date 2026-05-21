@@ -1,7 +1,11 @@
 /* Protein lists from GitHub project folders + optional ID mapping (gene / protein / UniProt). */
 (function(global){
-  const GH_RAW='https://raw.githubusercontent.com/arinaatom-cyber/TMT/main';
-  const LOCAL_PROJECTS='projects';
+  const GH_SOURCES=[
+    {raw:'https://raw.githubusercontent.com/arinaatom-cyber/tmt-projects/main',path:'Projects'},
+    {raw:'https://raw.githubusercontent.com/arinaatom-cyber/TMT/main',path:'projects'}
+  ];
+  const GH_API_REPO='arinaatom-cyber/tmt-projects';
+  const GH_API_PATH='Projects';
   const MAX_COMPARE_PROJECTS=10;
   const MAX_LIST=80;
 
@@ -24,13 +28,14 @@
       .filter(x=>x&&x.length<220&&!/^count\s/i.test(x)&&!x.includes('→'));
   }
 
-  function ghRawUrl(pid,file){
+  function ghRawUrl(pid,file,srcIdx=0){
+    const s=GH_SOURCES[srcIdx]||GH_SOURCES[0];
     const f=encodeURIComponent(file).replace(/%2F/g,'/');
-    return `${GH_RAW}/${LOCAL_PROJECTS}/${encodeURIComponent(pid)}/${f}`;
+    return `${s.raw}/${s.path}/${encodeURIComponent(pid)}/${f}`;
   }
 
-  function ghLocalUrl(pid,file){
-    return `${LOCAL_PROJECTS}/${encodeURIComponent(pid)}/${encodeURIComponent(file)}`;
+  function ghTreeUrl(pid){
+    return `https://github.com/${GH_API_REPO}/tree/main/${GH_API_PATH}/${encodeURIComponent(pid)}`;
   }
 
   function uniprotLink(id){
@@ -74,7 +79,7 @@
     headers.forEach((col,i)=>{
       const c=String(col||'').toLowerCase();
       if(/uniprot|uniprotkb/.test(c)) idx.uniprot=i;
-      else if(/^gene|^symbol|gene.?names?/.test(c)) idx.gene=i;
+      else if(/^gene|^symbol|gene.?names?|gene.?name/.test(c)) idx.gene=i;
       else if(/protein.?names?|^description$|protein.?description/.test(c)) idx.protein=i;
       else if(/^id$|accession|identifier|protein.?id/.test(c)) idx.id=i;
       else if(/^name$/.test(c)&&idx.protein<0) idx.protein=i;
@@ -83,14 +88,28 @@
     return idx;
   }
 
+  function splitIds(raw){
+    return String(raw||'').split(/[;,|]/).map(s=>s.trim()).filter(s=>s&&s.length<80);
+  }
+
   function parseProteinTable(text,fastaDb){
     if(typeof Papa==='undefined') throw new Error('PapaParse missing');
-    const parsed=Papa.parse(text,{header:true,skipEmptyLines:'greedy'});
+    const head=text.slice(0,4000);
+    const delim=head.includes('\t')&&head.split('\n')[0].split('\t').length>head.split('\n')[0].split(',').length?'\t':',';
+    const parsed=Papa.parse(text,{header:true,skipEmptyLines:'greedy',delimiter:delim});
     if(!parsed.data?.length) return [];
     const headers=parsed.meta?.fields||Object.keys(parsed.data[0]||{});
     const idx=detectColumns(headers);
     const out=[];
     const seen=new Set();
+    const pushRaw=raw=>{
+      splitIds(raw).forEach(part=>{
+        const e=resolveEntry(part,fastaDb);
+        if(!e||seen.has(e.key)) return;
+        seen.add(e.key);
+        out.push(e);
+      });
+    };
     parsed.data.forEach(row=>{
       const cells=headers.map(h=>row[h]);
       const pick=i=>(i>=0&&cells[i]!=null)?String(cells[i]).trim():'';
@@ -100,23 +119,57 @@
         raw=first?String(first).trim():'';
       }
       if(!raw||raw.length>120) return;
-      const e=resolveEntry(raw,fastaDb);
-      if(!e||seen.has(e.key)) return;
-      seen.add(e.key);
-      out.push(e);
+      pushRaw(raw);
     });
     return out;
   }
 
-  function candidateFilenames(r){
+  function candidateFilenames(r,remote){
     const names=new Set();
-    (r.resultFiles||[]).forEach(f=>names.add(f));
-    if(r.resultFile) names.add(r.resultFile);
-    ['protein_table.csv','proteins.csv','proteins.tsv','protein_groups.csv'].forEach(f=>names.add(f));
-    [...names].forEach(f=>{
-      if(!/\./.test(f)){names.add(f+'.csv');names.add(f+'.tsv');}
+    (remote||[]).forEach(f=>names.add(f));
+    (r.resultFiles||[]).forEach(f=>{
+      names.add(f);
+      if(/\.(txt|tsv|csv)$/i.test(f)) names.add(f);
     });
-    return [...names].filter(Boolean);
+    if(r.resultFile) names.add(r.resultFile);
+    ['proteinGroups.txt','proteins_table.txt','protein_groups.txt',
+      'protein_table.csv','proteins.csv','proteins.tsv'].forEach(f=>names.add(f));
+    [...names].forEach(f=>{
+      if(!/\./.test(f)){names.add(f+'.txt');names.add(f+'.csv');names.add(f+'.tsv');}
+      if(/proteingroups/i.test(f)&&!/\.txt$/i.test(f)) names.add(f+'.txt');
+    });
+    return [...names].filter(f=>f&&!/\.(xlsx|pdf|xml|fasta|zip)$/i.test(f));
+  }
+
+  async function listGithubProjectFiles(pid){
+    const url=`https://api.github.com/repos/${GH_API_REPO}/contents/${GH_API_PATH}/${encodeURIComponent(pid)}`;
+    try{
+      const res=await fetch(url,{cache:'no-store'});
+      if(!res.ok) return [];
+      const items=await res.json();
+      if(!Array.isArray(items)) return [];
+      const files=[];
+      const walk=async (path,depth)=>{
+        if(depth>2) return;
+        const r=await fetch(`https://api.github.com/repos/${GH_API_REPO}/contents/${path}`,{cache:'no-store'});
+        if(!r.ok) return;
+        const list=await r.json();
+        if(!Array.isArray(list)) return;
+        for(const it of list){
+          if(it.type==='file'&&/\.(txt|tsv|csv)$/i.test(it.name)&&
+            /protein|proteingroup|gene|symbol|table/i.test(it.name)){
+            files.push(it.name);
+          }else if(it.type==='dir'&&depth<1){
+            await walk(it.path,depth+1);
+          }
+        }
+      };
+      for(const it of items){
+        if(it.type==='file'&&/\.(txt|tsv|csv)$/i.test(it.name)) files.push(it.name);
+        else if(it.type==='dir') await walk(it.path,1);
+      }
+      return [...new Set(files)];
+    }catch(e){return [];}
   }
 
   async function fetchText(url){
@@ -132,9 +185,11 @@
     if(proteinCache.has(cacheKey)) return proteinCache.get(cacheKey);
     const pending={status:'loading',proteins:[],file:'',error:''};
     proteinCache.set(cacheKey,pending);
-    const files=candidateFilenames(r);
+    const remote=await listGithubProjectFiles(r.pid);
+    const files=candidateFilenames(r,remote);
     for(const file of files){
-      for(const url of [ghLocalUrl(r.pid,file), ghRawUrl(r.pid,file)]){
+      for(let si=0;si<GH_SOURCES.length;si++){
+        const url=ghRawUrl(r.pid,file,si);
         try{
           const text=await fetchText(url);
           if(!/[,;\t]/.test(text.slice(0,500))) continue;
@@ -147,7 +202,7 @@
         }catch(e){/* try next */ }
       }
     }
-    const miss={status:'missing',proteins:[],file:files[0]||'',error:'no file'};
+    const miss={status:'missing',proteins:[],file:files[0]||'',error:'no file',tree:ghTreeUrl(r.pid)};
     proteinCache.set(cacheKey,miss);
     return miss;
   }
@@ -273,8 +328,8 @@
     }else{
       const hint=(global.t||(()=>''))('noProtFile');
       el.innerHTML=`<p class="prot-hint">${hint}</p>
-        <p class="prot-hint"><code>projects/${escHtml(pid)}/${escHtml(hit.file||'protein_table.csv')}</code></p>
-        <a class="tbtn" href="${escHtml(global.ghResultsUrl(pid))}" target="_blank" rel="noopener">GitHub → ${escHtml(pid)}</a>`;
+        <p class="prot-hint"><code>Projects/${escHtml(pid)}/</code> — ${(global.t||(()=>''))('protFileHint')}</p>
+        <a class="tbtn" href="${escHtml(hit.tree||global.ghResultsUrl(pid))}" target="_blank" rel="noopener">GitHub → ${escHtml(pid)}</a>`;
     }
   }
 
