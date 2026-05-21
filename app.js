@@ -569,31 +569,56 @@ function normalizeRow(x){
   };
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-  Papa.parse(URL,{
-    download:true,header:true,skipEmptyLines:true,
-    complete(r){
-      D=r.data
-        .filter(x=>(x['Project ID']||'').trim())
-        .map(normalizeRow);
-      C={};
-      const byOrgan={};
-      D.forEach(x=>{
-        x.organs.forEach(o=>{
-          if(!byOrgan[o]) byOrgan[o]=new Set();
-          byOrgan[o].add(x.pid);
-        });
-      });
-      Object.keys(byOrgan).forEach(o=>{C[o]=byOrgan[o].size});
-      META={rawRows:r.data.filter(x=>(x['Project ID']||'').trim()).length,uniqPids:new Set(D.map(x=>x.pid)).size};
-      i18nApply();
-      refreshAll();
-      parseUrlOrgan();
-      document.getElementById('loader').classList.add('hidden');
-    },
-    error(){document.querySelector('#loader p').textContent='Error loading data :('}
+function onDataLoaded(rows){
+  D=rows
+    .filter(x=>(x['Project ID']||'').trim())
+    .map(normalizeRow);
+  C={};
+  const byOrgan={};
+  D.forEach(x=>{
+    x.organs.forEach(o=>{
+      if(!byOrgan[o]) byOrgan[o]=new Set();
+      byOrgan[o].add(x.pid);
+    });
   });
-});
+  Object.keys(byOrgan).forEach(o=>{C[o]=byOrgan[o].size});
+  META={rawRows:rows.filter(x=>(x['Project ID']||'').trim()).length,uniqPids:new Set(D.map(x=>x.pid)).size};
+  i18nApply();
+  refreshAll();
+  parseUrlOrgan();
+  document.getElementById('loader').classList.add('hidden');
+}
+
+async function loadSheetData(){
+  const msg=document.querySelector('#loader p');
+  try{
+    if(typeof Papa==='undefined') throw new Error('PapaParse not loaded');
+    msg.textContent=t('loading');
+    const res=await fetch(SHEET_CSV,{cache:'no-store'});
+    if(!res.ok) throw new Error('Google Sheet HTTP '+res.status);
+    const text=await res.text();
+    if(!text||text.length<100) throw new Error('Empty CSV from sheet');
+    Papa.parse(text,{
+      header:true,
+      skipEmptyLines:true,
+      complete(r){
+        try{onDataLoaded(r.data);}
+        catch(e){
+          console.error(e);
+          msg.textContent=(lang==='ru'?'Ошибка обработки: ':'Parse error: ')+e.message;
+        }
+      },
+      error(err){
+        msg.textContent=(lang==='ru'?'Ошибка CSV: ':'CSV error: ')+(err.message||err);
+      }
+    });
+  }catch(e){
+    console.error(e);
+    msg.textContent=(lang==='ru'?'Не удалось загрузить таблицу: ':'Failed to load sheet: ')+e.message;
+  }
+}
+
+window.addEventListener('DOMContentLoaded',loadSheetData);
 
 /* Anatomical organs.
    pos = anchor point for label leader; side = label column;
