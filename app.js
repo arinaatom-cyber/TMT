@@ -745,8 +745,8 @@ function organGroup(o){
     const url=twemojiUrl(a.emoji);
     const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
     return `<g class="organ-g organ-img" data-o="${o}" ${eh}>
-      <image href="${url}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
-      <rect class="organ-hit" fill="none" stroke="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+      <image href="${url}" pointer-events="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
+      <rect class="organ-hit" fill="transparent" pointer-events="all" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
     </g>`;
   }
   if(a.icon){
@@ -754,8 +754,8 @@ function organGroup(o){
     const url=iconUrl(a.icon,fill);
     const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
     return `<g class="organ-g organ-img" data-o="${o}" ${eh}>
-      <image href="${url}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
-      <rect class="organ-hit" fill="none" stroke="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+      <image href="${url}" pointer-events="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
+      <rect class="organ-hit" fill="transparent" pointer-events="all" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
     </g>`;
   }
   if(a.d){
@@ -766,8 +766,9 @@ function organGroup(o){
         ?`fill:${fill};fill-opacity:.35;stroke:${ACCENT};stroke-width:1.2`
         :`fill:${fill};fill-rule:evenodd`;
     const clsExtra=a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'';
-    return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}>
-      <path class="${pcls}" d="${a.d}" style="${psty}"/>
+    const pe=a.skeleton?' pointer-events="none"':'';
+    return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}${a.skeleton?' style="pointer-events:none"':''}>
+      <path class="${pcls}" d="${a.d}" style="${psty}"${pe}/>
     </g>`;
   }
   return '';
@@ -945,6 +946,19 @@ function renderBody(){
     <g class="organs-layer">${drawOrder.map(organGroup).join('')}</g>
     <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
   </svg>`;
+  bindMapClicks();
+}
+
+function bindMapClicks(){
+  const bw=document.getElementById('bw');
+  if(!bw||bw._mapBound) return;
+  bw._mapBound=true;
+  bw.addEventListener('click',e=>{
+    const g=e.target.closest('.organ-g[data-o],.lbl-g[data-cb]');
+    if(!g) return;
+    const o=g.dataset.o||g.dataset.cb;
+    if(o) sel(o);
+  });
 }
 
 function st(ev,o){
@@ -962,6 +976,7 @@ function ht(){document.getElementById('tip').style.display='none'}
 
 function sel(o){
   if(!C[o]) return;
+  try{
   selOrgan=o;
   updateUrl(o);
   const rows=getOrganRows(o);
@@ -1031,29 +1046,48 @@ function sel(o){
   uniqRows.slice(0,200).forEach(r=>{h+=projectCard(r);});
   h+=`</div></div>`;
 
-  document.getElementById('dc').innerHTML=h;
-  document.getElementById('dc').scrollTo({top:0,behavior:'smooth'});
+  const dc=document.getElementById('dc');
+  dc.innerHTML=h;
+  dc.scrollTo({top:0,behavior:'smooth'});
+  dc.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   requestAnimationFrame(()=>{
-    const colors=CHART_COLORS;
-    const c1=document.getElementById('ch1');
-    if(c1){
-      charts.push(new Chart(c1,{
-        type:'doughnut',
-        data:{labels:ss.map(s=>s[0]),datasets:[{data:ss.map(s=>s[1]),backgroundColor:colors,borderWidth:0}]},
-        options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Inter',size:10},padding:10}}}}
-      }));
-    }
-    const c2=document.getElementById('ch2');
-    if(c2){
-      const top8=ds.slice(0,8);
-      charts.push(new Chart(c2,{
-        type:'bar',
-        data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{data:top8.map(d=>d[1]),backgroundColor:ACCENT+'bb',borderRadius:6,borderSkipped:false}]},
-        options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
-          scales:{x:{grid:{color:'#2d3a52'},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}},
-                  y:{grid:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}}}}
-      }));
-    }
+    try{
+      if(typeof Chart==='undefined') return;
+      const colors=CHART_COLORS;
+      const c1=document.getElementById('ch1');
+      if(c1&&ss.length){
+        charts.push(new Chart(c1,{
+          type:'doughnut',
+          data:{labels:ss.map(s=>s[0]),datasets:[{data:ss.map(s=>s[1]),backgroundColor:colors,borderWidth:0}]},
+          options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Inter',size:10},padding:10}}}}
+        }));
+      }
+      const c2=document.getElementById('ch2');
+      if(c2&&ds.length){
+        const top8=ds.slice(0,8);
+        charts.push(new Chart(c2,{
+          type:'bar',
+          data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{data:top8.map(d=>d[1]),backgroundColor:ACCENT+'bb',borderRadius:6,borderSkipped:false}]},
+          options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
+            scales:{x:{grid:{color:'#2d3a52'},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}},
+                    y:{grid:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}}}}
+        }));
+      }
+    }catch(err){console.warn('Charts:',err);}
   });
+  }catch(err){
+    console.error('sel()',err);
+    document.getElementById('dc').innerHTML=`<div class="placeholder"><p>Error loading organ: ${esc(String(err.message))}</p></div>`;
+  }
 }
+window.sel=sel;
+window.setFilter=setFilter;
+window.onGlobalSearch=onGlobalSearch;
+window.exportAllCSV=exportAllCSV;
+window.exportOrganCSV=exportOrganCSV;
+window.runCompare=runCompare;
+window.filtSidebar=filtSidebar;
+window.openAbout=openAbout;
+window.closeAbout=closeAbout;
+window.toggleLang=toggleLang;

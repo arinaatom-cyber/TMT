@@ -60,7 +60,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .tbtn.lang{min-width:40px}
 
 .app{max-width:1700px;margin:0 auto;padding:16px 24px 20px;display:grid;grid-template-columns:minmax(240px,280px) minmax(420px,520px) minmax(380px,1fr);gap:20px;align-items:start;min-height:calc(100vh - 120px)}
-@media(max-width:1200px){.app{grid-template-columns:1fr;max-width:820px;padding:16px}.body-col{order:-1}.toolbar{padding:10px 16px 0}}
+@media(max-width:1200px){.app{grid-template-columns:1fr;max-width:820px;padding:16px}.body-col{order:-1}.toolbar{padding:10px 16px 0}.detail{scroll-margin-top:80px}}
 
 .panel{display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 160px);overflow-y:auto;scrollbar-width:thin}
 .detail{max-height:calc(100vh - 160px);overflow-y:auto;scrollbar-width:thin}
@@ -87,7 +87,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .body-caption{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;max-width:360px}
 
 .organ-g image{opacity:.95;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
-.organ-hit{fill:none!important;stroke:none!important;pointer-events:all}
+.organ-hit{fill:rgba(0,0,0,0.01)!important;stroke:none!important;pointer-events:all}
+.organ-g.organ-skeleton{pointer-events:none}
+.organ-g.organ-skeleton path{pointer-events:none}
 .anatomy-part{fill:#ec9e8b;stroke:rgba(255,255,255,.6);stroke-width:.9;stroke-linejoin:round}
 /* Skeleton: lines only, no solid fill blocks */
 .skeleton-part{fill:none;stroke:rgba(255,255,255,.5);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
@@ -97,8 +99,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .organ-g:hover .skeleton-part,.organ-g.hi .skeleton-part{stroke:#fff;stroke-width:2;filter:brightness(1.12)}
 .organ-g:hover .systemic-part,.organ-g.hi .systemic-part{fill:rgba(91,159,212,.45)}
 
-.lbl-g{cursor:pointer}
-.lbl-lead{fill:none;stroke:#94a3b8;stroke-width:.5;opacity:.35}
+/* Labels sit above organs — must not block clicks on the body map */
+.lbl-g{pointer-events:none;cursor:default}
+.lbl-lead{fill:none;stroke:#94a3b8;stroke-width:.5;opacity:.35;pointer-events:none}
+.lbl-name,.lbl-count,.lbl-dot-label,.lbl-dot-organ{pointer-events:all;cursor:pointer}
 .lbl-name{font-family:Inter,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;fill:#e8ecf4}
 .lbl-count{font-family:Inter,sans-serif;font-size:7.5px;fill:#94a3b8}
 .lbl-g:hover .lbl-lead,.lbl-g.hi .lbl-lead{stroke:var(--accent);opacity:1}
@@ -240,6 +244,6 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </div>
 
-<script src="app.js?v=20260521-fix-black"></script>
+<script src="app.js?v=20260521-click-fix"></script>
 </body>
 </html>
