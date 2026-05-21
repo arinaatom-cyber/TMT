@@ -32,9 +32,15 @@ const GH_RESULTS_PATH = 'projects';
 If no folder exists for a given project, GitHub returns 404 — middle-click on the
 "GH · Results" button to fall back to a code-search across the whole repo.
 
+## Protein lists in the web atlas
+
+1. Column **Result Files** in the sheet → primary filename to fetch from GitHub.
+2. The app also tries `protein_table.csv`, `proteins.csv`, `proteins.tsv`.
+3. Optional mapping: `data/id-map.csv` (gene ↔ protein name ↔ UniProt) without editing the master sheet.
+
 ## Adding a project
 
 1. Create `projects/<PROJECT_ID>/`
-2. Drop the result files into the folder
+2. Add `protein_table.csv` (or the exact **Result Files** name from the sheet)
 3. Push to `main`
-4. The atlas link will start working immediately
+4. On the site: open an organ → **Show proteins** / **Compare proteins**
