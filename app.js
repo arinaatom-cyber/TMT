@@ -589,33 +589,49 @@ function onDataLoaded(rows){
   document.getElementById('loader').classList.add('hidden');
 }
 
+const LOCAL_CSV='data/projects.csv';
+
+function parseCsvText(text,msg){
+  if(typeof Papa==='undefined') throw new Error('PapaParse not loaded');
+  if(!text||text.length<100) throw new Error('Empty CSV');
+  Papa.parse(text,{
+    header:true,
+    skipEmptyLines:true,
+    complete(r){
+      try{onDataLoaded(r.data);}
+      catch(e){
+        console.error(e);
+        msg.textContent=(lang==='ru'?'Ошибка обработки: ':'Parse error: ')+e.message;
+      }
+    },
+    error(err){
+      msg.textContent=(lang==='ru'?'Ошибка CSV: ':'CSV error: ')+(err.message||err);
+    }
+  });
+}
+
 async function loadSheetData(){
   const msg=document.querySelector('#loader p');
-  try{
-    if(typeof Papa==='undefined') throw new Error('PapaParse not loaded');
-    msg.textContent=t('loading');
-    const res=await fetch(SHEET_CSV,{cache:'no-store'});
-    if(!res.ok) throw new Error('Google Sheet HTTP '+res.status);
-    const text=await res.text();
-    if(!text||text.length<100) throw new Error('Empty CSV from sheet');
-    Papa.parse(text,{
-      header:true,
-      skipEmptyLines:true,
-      complete(r){
-        try{onDataLoaded(r.data);}
-        catch(e){
-          console.error(e);
-          msg.textContent=(lang==='ru'?'Ошибка обработки: ':'Parse error: ')+e.message;
-        }
-      },
-      error(err){
-        msg.textContent=(lang==='ru'?'Ошибка CSV: ':'CSV error: ')+(err.message||err);
-      }
-    });
-  }catch(e){
-    console.error(e);
-    msg.textContent=(lang==='ru'?'Не удалось загрузить таблицу: ':'Failed to load sheet: ')+e.message;
+  msg.textContent=t('loading');
+  const sources=[
+    {name:'sheet',url:SHEET_CSV},
+    {name:'local',url:LOCAL_CSV}
+  ];
+  for(const src of sources){
+    try{
+      const res=await fetch(src.url,{cache:'no-store'});
+      if(!res.ok) continue;
+      const text=await res.text();
+      if(!text.includes('Project ID')) continue;
+      parseCsvText(text,msg);
+      return;
+    }catch(e){
+      console.warn('CSV source failed:',src.name,e);
+    }
   }
+  msg.textContent=lang==='ru'
+    ?'Не удалось загрузить данные. Обновите страницу (Ctrl+Shift+R).'
+    :'Failed to load data. Hard-refresh the page (Ctrl+Shift+R).';
 }
 
 window.addEventListener('DOMContentLoaded',loadSheetData);
