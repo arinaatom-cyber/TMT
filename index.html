@@ -13,10 +13,11 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#0b0e14;--bg2:#121820;--card:#171f2e;--hover:#1e2a3d;
-  --border:#2a3650;--accent:#5b9fd4;--accent-dim:rgba(91,159,212,.14);
-  --glow:rgba(91,159,212,.22);
+  --border:#2a3650;--accent:#9cb8d9;--accent-dim:rgba(156,184,217,.16);
+  --glow:rgba(156,184,217,.18);
   --t1:#e8ecf4;--t2:#94a3b8;--t3:#64748b;
-  --green:#5daa7a;--red:#d07070;--amber:#e8b86a;--muted:#8899b4;
+  --green:#9dc9b0;--red:#d4a8a8;--amber:#d4c48a;--muted:#a8b4c8;
+  --pastel-lav:#c4a8d4;--pastel-sage:#9dc9b0;--pastel-peach:#e0b8a8;--pastel-sky:#a8c4e0;
   --radius:10px;
   --font:'Inter',system-ui,-apple-system,sans-serif;
 }
@@ -94,7 +95,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .anatomy-part{fill:#ec9e8b;stroke:rgba(255,255,255,.6);stroke-width:.9;stroke-linejoin:round}
 /* Skeleton: lines only, no solid fill blocks */
 .skeleton-part{fill:none;stroke:rgba(255,255,255,.5);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
-.systemic-part{fill:rgba(91,159,212,.22);stroke:var(--accent);stroke-width:1.1;stroke-dasharray:4 3}
+.systemic-part{fill:rgba(156,184,217,.18);stroke:var(--pastel-sky);stroke-width:1.1;stroke-dasharray:4 3}
 .organ-g{cursor:pointer}
 .organ-g:hover .anatomy-part,.organ-g.hi .anatomy-part{stroke:#fff;filter:brightness(1.15)}
 .organ-g:hover .skeleton-part,.organ-g.hi .skeleton-part{stroke:#fff;stroke-width:2;filter:brightness(1.12)}
@@ -126,22 +127,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .dtags{display:flex;flex-wrap:wrap;gap:6px}
 .dtag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:11px;border:1px solid var(--border);background:var(--bg2)}
-.dtag .dc{font-weight:700;color:var(--accent)}
+.dtag .dc{font-weight:700;opacity:.95}
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
 .proj-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:8px}
 .proj-card:hover{border-color:var(--accent)}
 .proj-id{font-size:13px;font-weight:700;color:var(--accent);text-decoration:none}
 .status{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase}
-.status.cancer{background:rgba(208,112,112,.15);color:var(--red);border:1px solid rgba(208,112,112,.4)}
-.status.normal{background:rgba(93,170,122,.15);color:var(--green);border:1px solid rgba(93,170,122,.4)}
-.status.pan{background:rgba(232,184,106,.15);color:var(--amber);border:1px solid rgba(232,184,106,.45)}
+.status.cancer{background:rgba(212,168,168,.12);color:var(--red);border:1px solid rgba(212,168,168,.35)}
+.status.normal{background:rgba(157,201,176,.12);color:var(--green);border:1px solid rgba(157,201,176,.35)}
+.status.pan{background:rgba(212,196,138,.12);color:var(--amber);border:1px solid rgba(212,196,138,.35)}
 .proj-links{display:flex;gap:6px;padding-top:10px;border-top:1px solid var(--border)}
 .plink{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--t2);font-size:11px;text-decoration:none}
 .plink:hover{border-color:var(--accent);color:var(--t1)}
 .plink.disabled{opacity:.4;pointer-events:none}
-.plink .li{font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;background:rgba(91,159,212,.18);color:var(--accent)}
-.plink-art .li{background:rgba(93,170,122,.18);color:var(--green)}
-.plink-gh .li{background:rgba(180,140,200,.18);color:#c8a0d8}
+.plink .li{font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;background:rgba(156,184,217,.2);color:var(--accent)}
+.plink-art .li{background:rgba(157,201,176,.2);color:var(--green)}
+.plink-gh .li{background:rgba(200,168,216,.2);color:var(--pastel-lav)}
 .meta-pill{font-size:10px;color:var(--t2);background:var(--bg2);border:1px solid var(--border);padding:2px 8px;border-radius:10px}
 .proj-id-block{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .proj-organs{font-size:10px;color:var(--t3);text-transform:uppercase}
@@ -254,6 +255,6 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </div>
 
-<script src="app.js?v=20260521-extras"></script>
+<script src="app.js?v=20260521-pastel"></script>
 </body>
 </html>

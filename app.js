@@ -13,9 +13,17 @@ const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=cod
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
 
-const ACCENT='#5b9fd4';
-const BODY_BLUE='#2e7fc8';
-const CHART_COLORS=['#5b9fd4','#7a8fa8','#6b8f9a','#8a9eb8','#5a8a9a','#9a8aa8','#6a7a9a','#4a8ab0'];
+/* Muted pastel palette — distinct hues, not bright on dark UI */
+const PASTEL=[
+  '#9cb8d9','#c4a8d4','#9dc9b0','#e0b8a8','#d4c48a','#a8c4e0',
+  '#d4a8b8','#b8c8a8','#c8b0d8','#a8d0d0','#d8c0a8','#b0b8d0'
+];
+const ACCENT=PASTEL[0];
+const CHART_COLORS=PASTEL;
+function chartColor(i){return PASTEL[Math.abs(i)%PASTEL.length];}
+const PASTEL_CANCER='#d4a8a8';
+const PASTEL_NORMAL='#9dc9b0';
+const PASTEL_PAN='#d4c48a';
 const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
   'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other']);
 
@@ -277,21 +285,22 @@ function cmpRows(s){
 /* Brightened anatomical palette — readable on the dark blue body background.
    Bigger organs (used as Iconify icons) keep darker realistic tones;
    small custom-path organs use brighter hues so they stay visible. */
+/* Organ map colors — muted pastels (readable on dark body) */
 const ANATOMY_COL={
-  Brain:'#f0a4aa',           Eye:'#ffffff',
-  Salivary_Gland:'#f0c8a8',  Thyroid:'#f4a890',
-  Esophagus:'#e8a890',       Lung:'#f4b0a0',
-  Heart:'#e6404a',           Breast:'#f4b8b8',
-  Liver:'#8a2a2a',           Stomach:'#eba98b',
-  Spleen:'#c44848',          Pancreas:'#f0c878',
-  Adrenal_Gland:'#f4c870',   Kidney:'#6e2e2e',
-  Small_Intestine:'#f4b890', Colon:'#d89a80',
-  Bladder:'#f49ab8',         Uterus:'#f4a8b8',
-  Ovary:'#f4b8d0',           Cervix:'#d898a8',
-  Prostate:'#c898b8',        Testis:'#f0b8b8',
-  Bone:'#f8f0e4',
-  Pituitary:'#e8b8c8',      Blood:'#c45a5a',
-  Skin:'#f0c8a0',           Muscle:'#b88878'
+  Brain:'#c4a8d4',           Eye:'#e8e4dc',
+  Salivary_Gland:'#e0b8a8',  Thyroid:'#d4c48a',
+  Esophagus:'#d8c0a8',       Lung:'#9cb8d9',
+  Heart:'#d4a8a8',           Breast:'#d4a8b8',
+  Liver:'#b8a0a0',           Stomach:'#e0c4b0',
+  Spleen:'#c8a8b0',          Pancreas:'#d4c48a',
+  Adrenal_Gland:'#d8c0a8',   Kidney:'#a89090',
+  Small_Intestine:'#e0c8a8', Colon:'#c4b0a0',
+  Bladder:'#d4b0c8',         Uterus:'#d4a8b8',
+  Ovary:'#c8b0d8',           Cervix:'#c4a8b8',
+  Prostate:'#b0b8d0',        Testis:'#d4b8b8',
+  Bone:'#d8d4cc',
+  Pituitary:'#c8b0d8',       Blood:'#d4a8a8',
+  Skin:'#e0c4b0',            Muscle:'#b8c8a8'
 };
 
 const GRP=[
@@ -303,7 +312,7 @@ const GRP=[
   {t:'Structural & Other',i:'🦴',o:['Bone','Muscle','Skin','Adipose_Tissue','Soft_Tissue','Nerve','Multiple_Organs','Other']}
 ];
 const COL={};
-GRP.forEach(g=>g.o.forEach(o=>{COL[o]=ACCENT;}));
+GRP.forEach((g,gi)=>g.o.forEach((o,oi)=>{COL[o]=chartColor(gi*4+oi);}));
 
 const MAP={
   'substantia nigra':'Brain','ventral mesencephalon':'Brain','pontine glioma':'Brain','rhabdoid tumor':'Brain',
@@ -1069,25 +1078,26 @@ function sel(o){
   </div>
   <div class="mstats">
     <div class="ms"><div class="v accent" style="color:${col}">${nProj}</div><div class="l">${t('projects')}</div></div>
-    <div class="ms"><div class="v">${nCancer}</div><div class="l">Cancer</div></div>
-    <div class="ms"><div class="v">${nHealthy}</div><div class="l">Normal</div></div>
+    <div class="ms"><div class="v" style="color:${PASTEL_CANCER}">${nCancer}</div><div class="l">Cancer</div></div>
+    <div class="ms"><div class="v" style="color:${PASTEL_NORMAL}">${nHealthy}</div><div class="l">Normal</div></div>
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
   </div>
   ${compareBlock(o)}
   <div class="ccard"><h4 class="sec-h">Disease groups</h4><div class="dtags">`;
 
-  ds.slice(0,15).forEach(([d,n])=>{
+  ds.slice(0,15).forEach(([d,n],i)=>{
     const rowsD=uniqRows.filter(r=>(r.disCanon||r.dis)===d);
     const healthyTag=rowsD.length&&rowsD.every(r=>r.healthy);
-    const dc=healthyTag?'var(--green)':'var(--red)';
-    h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${esc(d)}<span class="dc">${n}</span></div>`;
+    const dc=healthyTag?PASTEL_NORMAL:chartColor(i+2);
+    h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${esc(d)}<span class="dc" style="color:${dc}">${n}</span></div>`;
   });
   h+=`</div></div>`;
 
   if(dbList.length){
     h+=`<div class="ccard"><h4 class="sec-h">Data Sources</h4><div class="dtags">`;
-    dbList.slice(0,8).forEach(([d,n])=>{
-      h+=`<div class="dtag"><span class="dd" style="background:var(--accent)"></span>${esc(d.length>28?d.slice(0,28)+'…':d)}<span class="dc">${n}</span></div>`;
+    dbList.slice(0,8).forEach(([d,n],i)=>{
+      const c=chartColor(i+6);
+      h+=`<div class="dtag"><span class="dd" style="background:${c}"></span>${esc(d.length>28?d.slice(0,28)+'…':d)}<span class="dc" style="color:${c}">${n}</span></div>`;
     });
     h+=`</div></div>`;
   }
@@ -1111,13 +1121,23 @@ function sel(o){
   requestAnimationFrame(()=>{
     try{
       if(typeof Chart==='undefined') return;
-      const colors=CHART_COLORS;
       const c1=document.getElementById('ch1');
       if(c1&&ss.length){
         charts.push(new Chart(c1,{
           type:'doughnut',
-          data:{labels:ss.map(s=>s[0]),datasets:[{data:ss.map(s=>s[1]),backgroundColor:colors,borderWidth:0}]},
-          options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Inter',size:10},padding:10}}}}
+          data:{labels:ss.map(s=>s[0]),datasets:[{
+            data:ss.map(s=>s[1]),
+            backgroundColor:ss.map((_,i)=>chartColor(i)),
+            borderWidth:0
+          }]},
+          options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Inter',size:10},padding:10,
+            generateLabels:chart=>{
+              const ds=chart.data.datasets[0];
+              return chart.data.labels.map((lbl,i)=>({
+                text:lbl,fillStyle:ds.backgroundColor[i],strokeStyle:'transparent',index:i
+              }));
+            }
+          }}}}
         }));
       }
       const c2=document.getElementById('ch2');
@@ -1125,9 +1145,13 @@ function sel(o){
         const top8=ds.slice(0,8);
         charts.push(new Chart(c2,{
           type:'bar',
-          data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{data:top8.map(d=>d[1]),backgroundColor:ACCENT+'bb',borderRadius:6,borderSkipped:false}]},
+          data:{labels:top8.map(d=>d[0].length>18?d[0].slice(0,18)+'…':d[0]),datasets:[{
+            data:top8.map(d=>d[1]),
+            backgroundColor:top8.map((_,i)=>chartColor(i)),
+            borderRadius:6,borderSkipped:false
+          }]},
           options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},
-            scales:{x:{grid:{color:'#2d3a52'},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}},
+            scales:{x:{grid:{color:'rgba(148,163,184,.12)'},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}},
                     y:{grid:{display:false},ticks:{color:'#94a3b8',font:{family:'Inter',size:9}}}}}
         }));
       }
