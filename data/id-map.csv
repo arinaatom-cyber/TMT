@@ -1,0 +1,4 @@
+input_id,gene_symbol,protein_name,uniprot,id_type,notes
+APP,APP,Amyloid beta precursor protein,P05067,gene,example mapping
+TP53,TP53,Cellular tumor antigen p53,P04637,gene,example mapping
+EGFR,EGFR,Epidermal growth factor receptor,P00533,gene,example mapping

@@ -40,14 +40,19 @@ const I18N={
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
     cite:'Цитирование',exportOrgan:'Экспорт органа',extras:'Дополнительно',
     compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
-    panBadge:'PAN-ORGAN',projects:'проектов',rows:'строк',organs:'органов',databases:'баз',
+    panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда',
     legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ atlas',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
     projSearch:'Поиск в проектах…',updated:'Обновлено',fromSheet:'Google Sheet',fromLocal:'копия на сайте',
-    linkCopied:'Ссылка скопирована',openSheet:'Таблица'
+    linkCopied:'Ссылка скопирована',openSheet:'Таблица',
+    protSummary:'Белки в органе',protSummaryHint:'Число из таблицы Google; список — из файла Result Files в папке GitHub projects/PXD…',
+    withCount:'с количеством',sheetTotal:'Σ из таблицы',loadOrganProt:'Загрузить белки проектов',
+    loadingProt:'Загрузка белков…',fromSheet:'из таблицы',fromFile:'из файла',showProt:'Показать белки',
+    noProtFile:'Файл не найден в GitHub — загрузите в projects/PXD…/',loaded:'загружено',
+    compareProt:'Сравнить белки',shared:'Общие',protCompareHint:'Сопоставление по UniProt или символу гена (см. data/id-map.csv). Данные таблицы не изменяются.'
   },
   en:{
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
@@ -68,7 +73,12 @@ const I18N={
     legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ atlas',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
     projSearch:'Search projects…',updated:'Updated',fromSheet:'Google Sheet',fromLocal:'site copy',
-    linkCopied:'Link copied',openSheet:'Spreadsheet'
+    linkCopied:'Link copied',openSheet:'Spreadsheet',
+    protSummary:'Proteins in organ',protSummaryHint:'Counts from Google Sheet; lists from Result Files in GitHub projects/PXD…',
+    withCount:'with count',sheetTotal:'Σ from sheet',loadOrganProt:'Load project proteins',
+    loadingProt:'Loading proteins…',fromSheet:'from sheet',fromFile:'from file',showProt:'Show proteins',
+    noProtFile:'File not on GitHub — add to projects/PXD…/',loaded:'loaded',
+    compareProt:'Compare proteins',shared:'Shared',protCompareHint:'Matched by UniProt or gene symbol (see data/id-map.csv). Sheet data unchanged.'
   }
 };
 let lang=localStorage.getItem('hpa-lang')||'ru';
@@ -336,6 +346,8 @@ function compareBlock(currentOrgan){
       <button type="button" class="tbtn primary" onclick="runCompare()">${t('runCompare')}</button>
     </div>
     <div id="cmpOut"></div>
+    <p class="extras-hint" style="padding-top:8px">${t('protCompareHint')}</p>
+    ${window.ProteinAtlas?ProteinAtlas.proteinCompareBar():''}
   </details>`;
 }
 function runCompare(){
@@ -651,6 +663,9 @@ function normalizeRow(x){
   let pid=(x['Project ID']||'').trim();
   const m=pid.match(/^(IPX\d+)\s*\((PXD\d+)\)/i);
   if(m) pid=m[2];
+  const resultFiles=window.ProteinAtlas?ProteinAtlas.parseResultFiles(x['Result Files']):[];
+  const resultFile=resultFiles[0]||'';
+  const proteinCount=window.ProteinAtlas?ProteinAtlas.parseProteinCount(x['Proteins Quantified']):null;
   return {
     ...x,
     organs:organList,om:organList[0],isMulti:organList.length>1,isPan,
@@ -664,6 +679,10 @@ function normalizeRow(x){
     platform:(x['Platform MS (Unified)']||'').trim(),
     tmt:normalizeTMT(x['TMT Label (Unified)']),
     proteins:(x['Proteins Quantified']||'').trim(),
+    proteinCount,
+    resultFile,
+    resultFiles,
+    fastaDb:(x['FASTA (Unified)']||'').trim(),
     link:(x['URL']||'').trim(),
     tissue:(x['Tissue']||'').trim(),
     organRaw,
@@ -741,7 +760,10 @@ async function loadSheetData(){
     :'Failed to load data. Hard-refresh the page (Ctrl+Shift+R).';
 }
 
-window.addEventListener('DOMContentLoaded',loadSheetData);
+window.addEventListener('DOMContentLoaded',()=>{
+  const boot=window.ProteinAtlas?ProteinAtlas.initIdMap():Promise.resolve();
+  boot.then(loadSheetData);
+});
 
 /* Anatomical organs.
    pos = anchor point for label leader; side = label column;
@@ -967,6 +989,7 @@ function projectCard(r){
     <div class="proj-links">
       ${linkProj}${linkArt}${linkGh}
     </div>
+    ${window.ProteinAtlas?ProteinAtlas.projectProteinBlock(r):''}
   </div>`;
 }
 
@@ -1178,6 +1201,7 @@ function sel(o){
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
   </div>
   ${compareBlock(o)}
+  ${window.ProteinAtlas?ProteinAtlas.organProteinsSummaryHtml(o,uniqRows):''}
   <div class="ccard"><h4 class="sec-h">Disease groups</h4><div class="dtags">`;
 
   ds.slice(0,15).forEach(([d,n],i)=>{
@@ -1273,3 +1297,6 @@ window.setOrganProjQ=setOrganProjQ;
 window.shareOrganLink=shareOrganLink;
 window.filterByDb=filterByDb;
 window.filterByHealth=filterByHealth;
+window.ghResultsUrl=ghResultsUrl;
+window.getOrganRows=getOrganRows;
+window.uniqProjects=uniqProjects;
