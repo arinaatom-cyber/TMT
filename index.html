@@ -81,6 +81,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .organ-g.hi image{opacity:1;filter:drop-shadow(0 0 8px var(--accent)) brightness(1.15)}
 
 .anatomy-part{fill:#ec9e8b;stroke:rgba(255,255,255,.6);stroke-width:.9;stroke-linejoin:round;opacity:1;transition:filter .2s,stroke .2s,opacity .2s;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.skeleton-part{fill:#f8f0e4;fill-opacity:.45;stroke:rgba(255,255,255,.85);stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round;opacity:1;transition:filter .2s,stroke .2s}
+.organ-g.organ-skeleton:hover .skeleton-part{stroke:#fff;stroke-width:1.8;filter:drop-shadow(0 0 6px rgba(255,255,255,.5)) brightness(1.1)}
+.organ-g.organ-skeleton.hi .skeleton-part{stroke:#fff;stroke-width:2;filter:drop-shadow(0 0 8px var(--accent)) brightness(1.15)}
 .organ-g:hover .anatomy-part{stroke:#fff;stroke-width:1.4;filter:drop-shadow(0 0 6px rgba(255,255,255,.6)) brightness(1.15);opacity:1}
 .organ-g.hi .anatomy-part{stroke:#fff;stroke-width:1.7;filter:drop-shadow(0 0 8px var(--accent)) brightness(1.2);opacity:1}
 
@@ -215,6 +218,6 @@ footer{text-align:center;padding:24px;color:var(--t3);font-size:11px;border-top:
 
 <footer>Human Proteome Atlas · TMT proteomics atlas · Data: <a href="https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314" target="_blank" rel="noopener">Google Sheets</a> (PRIDE, CPTAC, PDC…)</footer>
 
-<script src="app.js?v=20260520-5"></script>
+<script src="app.js?v=20260520-6"></script>
 </body>
 </html>
