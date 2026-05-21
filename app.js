@@ -3,11 +3,9 @@ const GID='1072380314';
 const SHEET_CSV=`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv&gid=${GID}`;
 const SHEET_VIEW=`https://docs.google.com/spreadsheets/d/${SHEET}/edit?gid=${GID}`;
 
-/* GitHub repo where result tables / per-project files live.
-   Each project ID becomes a folder under GH_RESULTS_PATH, e.g.
-   https://github.com/arinaatom-cyber/TMT/tree/main/projects/PXD012345 */
-const GH_REPO='https://github.com/arinaatom-cyber/TMT';
-const GH_RESULTS_PATH='projects';
+/* Result files live in tmt-projects → Projects/<PID>/ */
+const GH_REPO='https://github.com/arinaatom-cyber/tmt-projects';
+const GH_RESULTS_PATH='Projects';
 const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComponent(pid)}`;
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
@@ -48,10 +46,11 @@ const I18N={
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
     projSearch:'Поиск в проектах…',updated:'Обновлено',fromSheet:'Google Sheet',fromLocal:'копия на сайте',
     linkCopied:'Ссылка скопирована',openSheet:'Таблица',
-    protSummary:'Белки в органе',protSummaryHint:'Число из таблицы Google; список — из файла Result Files в папке GitHub projects/PXD…',
+    protSummary:'Белки в органе',protSummaryHint:'Число из Google Sheets; списки белков — из файлов в github.com/arinaatom-cyber/tmt-projects/tree/main/Projects/PXD…',
+    protFileHint:'положите .txt/.csv с колонками Gene / UniProt (см. Result Files в таблице)',
     withCount:'с количеством',sheetTotal:'Σ из таблицы',loadOrganProt:'Загрузить белки проектов',
     loadingProt:'Загрузка белков…',fromSheet:'из таблицы',fromFile:'из файла',showProt:'Показать белки',
-    noProtFile:'Файл не найден в GitHub — загрузите в projects/PXD…/',loaded:'загружено',
+    noProtFile:'Файл не найден — откройте папку в tmt-projects/Projects/PXD…',loaded:'загружено',
     compareProt:'Сравнить белки',shared:'Общие',protCompareHint:'Сопоставление по UniProt или символу гена (см. data/id-map.csv). Данные таблицы не изменяются.'
   },
   en:{
@@ -66,7 +65,7 @@ const I18N={
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
     cite:'Citation',exportOrgan:'Export organ',extras:'More',
     compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
-    panBadge:'PAN-ORGAN',projects:'projects',rows:'rows',organs:'organs',databases:'databases',
+    panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend',
@@ -74,10 +73,11 @@ const I18N={
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
     projSearch:'Search projects…',updated:'Updated',fromSheet:'Google Sheet',fromLocal:'site copy',
     linkCopied:'Link copied',openSheet:'Spreadsheet',
-    protSummary:'Proteins in organ',protSummaryHint:'Counts from Google Sheet; lists from Result Files in GitHub projects/PXD…',
+    protSummary:'Proteins in organ',protSummaryHint:'Counts from Google Sheets; protein lists from github.com/arinaatom-cyber/tmt-projects/tree/main/Projects/PXD…',
+    protFileHint:'add .txt/.csv with Gene / UniProt columns (see Result Files in the sheet)',
     withCount:'with count',sheetTotal:'Σ from sheet',loadOrganProt:'Load project proteins',
     loadingProt:'Loading proteins…',fromSheet:'from sheet',fromFile:'from file',showProt:'Show proteins',
-    noProtFile:'File not on GitHub — add to projects/PXD…/',loaded:'loaded',
+    noProtFile:'File not found — open folder in tmt-projects/Projects/PXD…',loaded:'loaded',
     compareProt:'Compare proteins',shared:'Shared',protCompareHint:'Matched by UniProt or gene symbol (see data/id-map.csv). Sheet data unchanged.'
   }
 };

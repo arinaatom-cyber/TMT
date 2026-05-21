@@ -1,46 +1,18 @@
-# Per-project result files
+# Project result files (main storage)
 
-Each subfolder is named after a project ID (e.g. `PXD012345`, `IPX0001234`) and contains
-the result tables / processed data for that project.
+**All project folders live in a separate repository:**
 
-The Human Proteome Atlas web app links to these folders automatically using the project
-ID from the master spreadsheet.
+https://github.com/arinaatom-cyber/tmt-projects/tree/main/Projects
 
-## Folder layout
+The web atlas links there automatically (`Projects/<Project ID>/`).
 
-```
-projects/
-  PXD012345/
-    proteins.tsv
-    peptides.tsv
-    metadata.json
-    ...
-  PXD067890/
-    ...
-```
+This `projects/` folder in the **TMT** repo is only a small demo fallback (e.g. PXD005410).
 
-## How the link is built
+## Supported file types for protein lists in the browser
 
-In `app.js`:
+- `proteinGroups.txt` (MaxQuant)
+- `proteins_table.txt`
+- Names from column **Result Files** in Google Sheets (`.txt`, `.csv`, `.tsv`)
+- Optional ID mapping: `data/id-map.csv` (gene ↔ protein ↔ UniProt)
 
-```js
-const GH_REPO = 'https://github.com/arinaatom-cyber/TMT';
-const GH_RESULTS_PATH = 'projects';
-// → https://github.com/arinaatom-cyber/TMT/tree/main/projects/<PID>
-```
-
-If no folder exists for a given project, GitHub returns 404 — middle-click on the
-"GH · Results" button to fall back to a code-search across the whole repo.
-
-## Protein lists in the web atlas
-
-1. Column **Result Files** in the sheet → primary filename to fetch from GitHub.
-2. The app also tries `protein_table.csv`, `proteins.csv`, `proteins.tsv`.
-3. Optional mapping: `data/id-map.csv` (gene ↔ protein name ↔ UniProt) without editing the master sheet.
-
-## Adding a project
-
-1. Create `projects/<PROJECT_ID>/`
-2. Add `protein_table.csv` (or the exact **Result Files** name from the sheet)
-3. Push to `main`
-4. On the site: open an organ → **Show proteins** / **Compare proteins**
+`.xlsx` files are linked on GitHub but not parsed in the browser yet.
