@@ -1,0 +1,1175 @@
+{
+"PXD005361": {
+"sheet_result": "NIHMS884016-supplement-SFigure1",
+"fasta": "UniProt",
+"sheet_count": 8590,
+"files": [
+"27862958.pdf",
+"NIHMS884016-supplement-SFigure1.xlsx"
+]
+},
+"PXD005410": {
+"sheet_result": "ElenaP_perv-mitotic_2015feb_TMT_nonphospho_300ugIPG3-10_50min_10of15ul_fr01-72_10ppm_perc_psms",
+"fasta": "UniProt",
+"sheet_count": 9350,
+"files": [
+"28674419.pdf",
+"ElenaP_perv-mitotic_2015feb_TMT_nonphospho_300ugIPG3-10_50min_10of15ul_fr01-72_10ppm_perc_psms.rar",
+"README.txt"
+]
+},
+"PXD006430": {
+"sheet_result": "shTRAP_TMT10_IPG3-10_psms",
+"fasta": "UniProt",
+"sheet_count": 9848,
+"files": [
+"28915803.pdf",
+"README.txt",
+"sdrf-tmt.docx",
+"shTRAP_TMT10_IPG3-10_psms.xlsx"
+]
+},
+"PXD002004": {
+"sheet_result": "supp_RA117.000539_134638_0_supp_38938_p0ykzb",
+"fasta": "UniProt",
+"sheet_count": 8694,
+"files": [
+"29367434.pdf",
+"README.txt",
+"supp_RA117.000539_134638_0_supp_38936_p0ykzb.xlsx",
+"supp_RA117.000539_134638_0_supp_38937_p0y7zb.xlsx",
+"supp_RA117.000539_134638_0_supp_38938_p0ykzb.xlsx"
+]
+},
+"PXD008378": {
+"sheet_result": "Supplemental_Table_S1",
+"fasta": "UniProt",
+"sheet_count": 2070,
+"files": [
+"29439554.pdf",
+"Supplemental_Table_S1.xlsx",
+"Supplemental_Table_S2.xlsx",
+"Supplemental_Table_S3.xlsx",
+"Supplemental_Table_S4.xlsx"
+]
+},
+"PXD006291": {
+"sheet_result": "UUtissues_HiRIEFII_protein_table_proteincentric",
+"fasta": "Ensembl v75",
+"sheet_count": 0,
+"files": [
+"29500430.pdf",
+"UUtissues_HiRIEFII_protein_table_proteincentric.xlsx"
+]
+},
+"PXD006895": {
+"sheet_result": "totallysate_protein_table_symbolcentric",
+"fasta": "Ensembl v75",
+"sheet_count": 10,
+"files": [
+"30609389.pdf",
+"A431_protein_table_symbolcentric.xlsx",
+"H322_peptide_table_fix_nrpsms.xlsx",
+"HCC827_protein_table_symbolcentric.xlsx",
+"HCC827_replicates_protein_table_symbolcentric.xlsx",
+"MCF7_protein_table_symbolcentric.xlsx",
+"U251_protein_table_symbolcentric.xlsx",
+"mmc2.xlsx",
+"mmc9.pdf",
+"totallysate_protein_table_symbolcentric.xlsx"
+]
+},
+"PXD010779": {
+"sheet_result": "TMT_proteins_patientdatabase_proteinGroups",
+"fasta": "RefSeq (custom)",
+"sheet_count": 4061,
+"files": [
+"30617155.pdf",
+"TMT_pST_patientmousedatabase_proteinGroups.xlsx",
+"TMT_proteins_patientdatabase_proteinGroups.xlsx"
+]
+},
+"PXD010846": {
+"sheet_result": "total_proteome_baseline",
+"fasta": "UniProt",
+"sheet_count": 8000,
+"files": [
+"30778261.pdf",
+"Data_descriptor_worksheet.xlsx",
+"TMT_labeling_schema.xlsx",
+"dataset_list.xlsx",
+"phosphoMS_baseline.xlsx",
+"sdata201916.pdf",
+"total_proteome_baseline.xlsx"
+]
+},
+"PXD012845": {
+"sheet_result": "proteinGroups.xlsx",
+"fasta": "UniProt",
+"sheet_count": 3040,
+"files": [
+"30840888.pdf",
+"NIHMS1523294-supplement-10.xlsx",
+"NIHMS1523294-supplement-11.xlsx",
+"NIHMS1523294-supplement-2.xlsx",
+"NIHMS1523294-supplement-7.xlsx",
+"NIHMS1523294-supplement-8.xlsx",
+"NIHMS1523294-supplement-9.xlsx",
+"RA006_proteinGroups_rerun.txt",
+"experimentalDesignTemplate.txt",
+"mqpar.xml",
+"nihms-1523294.pdf",
+"proteinGroups.txt",
+"proteinGroups.xlsx"
+]
+},
+"PXD011456": {
+"sheet_result": "pnas.1819851116.sd01",
+"fasta": "UniProt",
+"sheet_count": 3260,
+"files": [
+"30846556.pdf",
+"pnas.1819851116.sapp.pdf",
+"pnas.1819851116.sd01.xlsx"
+]
+},
+"PXD010744": {
+"sheet_result": "12014_2019_9236_MOESM2_ESM",
+"fasta": "UniProt",
+"sheet_count": 5562,
+"files": [
+"12014_2019_9236_MOESM2_ESM.xlsx",
+"31011308.pdf",
+"General_cell_lines_annotated.xlsx",
+"experimentalDesignTemplate.txt"
+]
+},
+"PXD013024": {
+"sheet_result": "NET-tumors_iTRAQset1_200ugIPG37-49_fr01-72_proteingroups",
+"fasta": "Ensembl",
+"sheet_count": 6500,
+"files": [
+"31406256.pdf",
+"NET-tumors_iTRAQset1_200ugIPG37-49_fr01-72_proteingroups.txt",
+"NET-tumors_iTRAQset1_200ugIPG37-49_fr01-72_proteingroups.xlsx",
+"PXD009877",
+"PXD012574 part 1and 2"
+]
+},
+"PXD014186": {
+"sheet_result": "ProteinGroups_TPP",
+"fasta": "UniProt",
+"sheet_count": 6000,
+"files": [
+"31792063.pdf",
+"ProteinGroups_TPP.xlsx"
+]
+},
+"PXD012173": {
+"sheet_result": "NIHMS1546927-supplement-4",
+"fasta": "Sequest HT",
+"sheet_count": 3960,
+"files": [
+"31848187.pdf",
+"NIHMS1546927-supplement-4.xlsx"
+]
+},
+"PXD013284": {
+"sheet_result": "protein_table",
+"fasta": "Ensembl (human)",
+"sheet_count": 6572,
+"files": [
+"31849937.pdf",
+"protein_table.xlsx"
+]
+},
+"MSV000085836": {
+"sheet_result": "sn_non_normalized_v1.1",
+"fasta": "UniProt",
+"sheet_count": 12755,
+"files": [
+"31978347.pdf",
+"CCLE_TMT_channel_mapping_wide.xlsx",
+"Table_S1_Sample_Information.xlsx",
+"sn_non_normalized_v1.1.xlsx"
+]
+},
+"PXD017025": {
+"sheet_result": "mmc2",
+"fasta": "UniProt",
+"sheet_count": 10400,
+"files": [
+"32058975.pdf",
+"mmc2.xlsx"
+]
+},
+"PXD016192": {
+"sheet_result": "proteinGroups.xlsx",
+"fasta": "UniProt",
+"sheet_count": 5154,
+"files": [
+"32071147.pdf",
+"proteinGroups.xlsx"
+]
+},
+"PXD016563": {
+"sheet_result": "157418_1_supp_477733_q5x4r2",
+"fasta": "UniProt",
+"sheet_count": 5677,
+"files": [
+"157418_1_supp_477733_q5x4r2.xlsx",
+"32132230.pdf"
+]
+},
+"PXD015359": {
+"sheet_result": "mmc2",
+"fasta": "UniProt",
+"sheet_count": 1715,
+"files": [
+"32302559.pdf",
+"mmc2.xlsx"
+]
+},
+"PXD010425": {
+"sheet_result": "Differential_expression_analyses",
+"fasta": "UniProt",
+"sheet_count": 5687,
+"files": [
+"32461585.pdf",
+"Differential_expression_analyses.xlsx"
+]
+},
+"PXD013408": {
+"sheet_result": "5min_pH8_final",
+"fasta": "UniProt",
+"sheet_count": 7000,
+"files": [
+"15min_pH8_final.xlsx",
+"32576205.pdf",
+"5min_pH8_final.xlsx"
+]
+},
+"PXD017852": {
+"sheet_result": "NIHMS1592411-supplement-1592411_SuppTable1",
+"fasta": "UniProt",
+"sheet_count": 8000,
+"files": [
+"32612236.pdf",
+"NIHMS1592411-supplement-1592411_SuppTable1.xlsx"
+]
+},
+"PXD017857": {
+"sheet_result": "NIHMS1592411-supplement-1592411_SuppTable3",
+"fasta": "UniProt",
+"sheet_count": 8000,
+"files": [
+"32612236.pdf",
+"NIHMS1592411-supplement-1592411_SuppTable3.xlsx"
+]
+},
+"PXD019240": {
+"sheet_result": "proteinGroups.xlsx",
+"fasta": "UniProt",
+"sheet_count": 6000,
+"files": [
+"32891189.pdf",
+"Annotation_CReM_JJ.xlsx",
+"proteinGroups.xlsx"
+]
+},
+"PXD016999": {
+"sheet_result": "NIHMS1624446-supplement-2",
+"fasta": "GENCODE v19",
+"sheet_count": 12627,
+"files": [
+"32916130.pdf",
+"ModifiedSampleInfo_v2.xlsx",
+"PXD016999.rar"
+]
+},
+"PXD017291": {
+"sheet_result": "recovery_rep1_np40_light",
+"fasta": "UniProt",
+"sheet_count": 3452,
+"files": [
+"33022891.pdf",
+"recovery_rep1_np40_light.xlsx"
+]
+},
+"PXD019544": {
+"sheet_result": "recovery_rep1_np40_SDS_light",
+"fasta": "UniProt",
+"sheet_count": 5100,
+"files": [
+"33441310.pdf",
+"recovery_rep1_np40_SDS_light.xlsx"
+]
+},
+"PXD022834": {
+"sheet_result": "Table_1",
+"fasta": "UniProt",
+"sheet_count": 606,
+"files": [
+"33628210.pdf",
+"Table_1.xlsx"
+]
+},
+"PXD022252": {
+"sheet_result": "NIHMS1665499-supplement-1665499_Supp_Tab1-3",
+"fasta": "UniProt",
+"sheet_count": null,
+"files": [
+"33649590.pdf",
+"NIHMS1665499-supplement-1665499_Supp_Tab1-3.xlsx"
+]
+},
+"PXD022733": {
+"sheet_result": "Supplementary Table 1",
+"fasta": "UniProt",
+"sheet_count": 3112,
+"files": [
+"33672863.pdf",
+"Supplementary Table 1.xlsx"
+]
+},
+"PXD010557": {
+"sheet_result": "mmc2",
+"fasta": "UniProt",
+"sheet_count": 8908,
+"files": [
+"33910018.pdf",
+"mmc2.xlsx"
+]
+},
+"PXD020586": {
+"sheet_result": "integrated_Proteins_FULL",
+"fasta": "UniProt",
+"sheet_count": 2723,
+"files": [
+"34099695.pdf",
+"integrated_Proteins_FULL.xlsx",
+"sample_annotation.xlsx"
+]
+},
+"PXD022714": {
+"sheet_result": "mmc4.xlsx",
+"fasta": "UniProt",
+"sheet_count": 10288,
+"files": []
+},
+"PXD025052": {
+"sheet_result": "thnov11p9705s3",
+"fasta": "UniProt",
+"sheet_count": 5800,
+"files": [
+"34646394.pdf",
+"thnov11p9705s3.xlsx"
+]
+},
+"PXD026279": {
+"sheet_result": "Supplementary Table S3_Proteins list_111721",
+"fasta": "UniProt",
+"sheet_count": 4846,
+"files": [
+"34885041.pdf",
+"Supplementary Table S3_Proteins list_111721.xlsx"
+]
+},
+"PXD030818": {
+"sheet_result": "Total_proteome_data",
+"fasta": "UniProt",
+"sheet_count": 4000,
+"files": [
+"35103997.pdf",
+"Total_proteome_data.xlsx"
+]
+},
+"PXD030671": {
+"sheet_result": "Table S4",
+"fasta": "UniProt",
+"sheet_count": 4031,
+"files": [
+"35159257.pdf",
+"Table S4.xlsx",
+"tileshop.jfif"
+]
+},
+"PXD024322": {
+"sheet_result": "41467_2022_28524_MOESM9_ESM",
+"fasta": "UniProt",
+"sheet_count": 4214,
+"files": [
+"35173148.pdf",
+"41467_2022_28524_MOESM9_ESM.xlsx"
+]
+},
+"PXD021265": {
+"sheet_result": "proteinGroups_global_patients",
+"fasta": "UniProt",
+"sheet_count": 6094,
+"files": [
+"35197447.pdf",
+"proteinGroups_global_MM1S.xlsx",
+"proteinGroups_global_patients.xlsx"
+]
+},
+"PXD029320": {
+"sheet_result": "INTENSITIES_all_F",
+"fasta": "UniProt",
+"sheet_count": 1000,
+"files": [
+"35219906.pdf",
+"INTENSITIES_all_F.xlsx"
+]
+},
+"PXD034370": {
+"sheet_result": "Fig4_proteinGroups",
+"fasta": "UniProt",
+"sheet_count": 1588,
+"files": [
+"35784653.pdf",
+"Fig4_proteinGroups.xlsx"
+]
+},
+"PXD023293": {
+"sheet_result": "Supplementary_Table_2",
+"fasta": "UniProt",
+"sheet_count": 6810,
+"files": [
+"35885999.pdf",
+"Supplementary_Table_2.xlsx"
+]
+},
+"IPX0004253000": {
+"sheet_result": "13046_2022_2445_MOESM9_ESM",
+"fasta": "RefSeq",
+"sheet_count": 6000,
+"files": [
+"13046_2022_2445_MOESM9_ESM.xlsx",
+"35906682.pdf"
+]
+},
+"PXD032355": {
+"sheet_result": "PXD032355_Proteins_33_sheets",
+"fasta": "UniProt",
+"sheet_count": 7468,
+"files": [
+"36031730.pdf",
+"PXD032355_Proteins_33_sheets.xlsx"
+]
+},
+"PXD027341": {
+"sheet_result": "GBM_tumour_tissue__TMT10plex_HiRIEF_3-10_proteins_table",
+"fasta": "Ensembl",
+"sheet_count": 7800,
+"files": [
+"36495079.pdf",
+"GBM_tumour_tissue__TMT10plex_HiRIEF_3-10_proteins_table.xlsx"
+]
+},
+"PXD027339": {
+"sheet_result": "HGCC_GBM_stem_cell_lines_TMT16_HiRIEF_IPG3-10_proteins_table_",
+"fasta": "Ensembl",
+"sheet_count": 10000,
+"files": [
+"36495079.pdf",
+"HGCC_GBM_stem_cell_lines_TMT16_HiRIEF_IPG3-10_proteins_table_.xlsx"
+]
+},
+"PXD027335": {
+"sheet_result": "GBM_BT_stem_cells_TMT10plex_250ug__HiRIEF_IPG_3-10_proteins_table",
+"fasta": "Ensembl",
+"sheet_count": 11000,
+"files": [
+"36495079.pdf",
+"GBM_BT_stem_cells_TMT10plex_250ug__HiRIEF_IPG_3-10_proteins_table.xlsx"
+]
+},
+"PXD031107": {
+"sheet_result": "41375_2022_1796_MOESM2_ESM",
+"fasta": "Ensembl",
+"sheet_count": 10218,
+"files": [
+"36572751.pdf",
+"41375_2022_1796_MOESM2_ESM.xlsx"
+]
+},
+"PXD037371": {
+"sheet_result": "pmic.202200432&file=pmic13638-sup-0001-SuppMat1",
+"fasta": "UniProt",
+"sheet_count": null,
+"files": [
+"36625413.pdf",
+"pmic.202200432&file=pmic13638-sup-0001-SuppMat1.xlsx"
+]
+},
+"PXD030034": {
+"sheet_result": "PXD030034.rar",
+"fasta": "UniProt",
+"sheet_count": null,
+"files": [
+"36849657.pdf"
+]
+},
+"PXD028285": {
+"sheet_result": "noad064_suppl_supplementary_table_s4",
+"fasta": "UniProt",
+"sheet_count": 9462,
+"files": [
+"36971093.pdf",
+"noad064_suppl_supplementary_table_s4.xlsx"
+]
+},
+"PXD030092": {
+"sheet_result": "LSA-2022-01680_TableS2",
+"fasta": "UniProt",
+"sheet_count": 10,
+"files": [
+"37037593.pdf",
+"LSA-2022-01680_TableS1.xlsx",
+"LSA-2022-01680_TableS2.xlsx"
+]
+},
+"PXD036226": {
+"sheet_result": "41467_2023_39486_MOESM4_ES",
+"fasta": "UniProt",
+"sheet_count": 3290,
+"files": [
+"37386008.pdf",
+"41467_2023_39486_MOESM4_ESM.xlsx"
+]
+},
+"PXD036238": {
+"sheet_result": "Supplementary_Table S2",
+"fasta": "UniProt",
+"sheet_count": 6000,
+"files": [
+"37444412.pdf",
+"Supplementary_Table S2.xlsx"
+]
+},
+"PXD054500": {
+"sheet_result": "Supplementary_table3.xlsx",
+"fasta": "UniProt",
+"sheet_count": 9460,
+"files": [
+"37481068.pdf",
+"Supplementary_table3.xlsx"
+]
+},
+"PXD034337": {
+"sheet_result": "proteinGroups_global_TMT",
+"fasta": "UniProt",
+"sheet_count": 2700,
+"files": [
+"37648814.pdf",
+"proteinGroups_global_TMT.xlsx"
+]
+},
+"MSV000090700": {
+"sheet_result": "mmc3",
+"fasta": "UniProt",
+"sheet_count": 7000,
+"files": [
+"37730182.pdf",
+"mmc3.xlsx"
+]
+},
+"PXD040309": {
+"sheet_result": "EMS209392-supplement-Table_S6",
+"fasta": "UniProt",
+"sheet_count": 1500,
+"files": [
+"37852252.pdf",
+"EMS209392-supplement-Table_S6.xlsx",
+"Копия EMS209392-supplement-Table_S6.xlsx"
+]
+},
+"PXD045417": {
+"sheet_result": "41698_2024_519_MOESM4_ESM (1)",
+"fasta": "UniProt",
+"sheet_count": 10000,
+"files": [
+"38480868.pdf",
+"41698_2024_519_MOESM4_ESM (1).xlsx"
+]
+},
+"PXD043580": {
+"sheet_result": "43018_2024_784_MOESM2_ESM",
+"fasta": "UniProt",
+"sheet_count": 10,
+"files": [
+"38942927.pdf",
+"43018_2024_784_MOESM2_ESM.xlsx"
+]
+},
+"PXD039319": {
+"sheet_result": "proteinGroups",
+"fasta": "UniProt",
+"sheet_count": 6000,
+"files": [
+"39043693.pdf",
+"proteinGroups.xlsx",
+"~$proteinGroups.xlsx"
+]
+},
+"PXD052353": {
+"sheet_result": "proteinGroups",
+"fasta": "UniProt",
+"sheet_count": 6000,
+"files": [
+"39314461.pdf",
+"proteinGroups.xlsx"
+]
+},
+"PXD057703": {
+"sheet_result": "pbio.3002943.s011",
+"fasta": "UniProt",
+"sheet_count": 8401,
+"files": [
+"39689157.pdf",
+"pbio.3002943.s011.xlsx"
+]
+},
+"PXD058995": {
+"sheet_result": "mmc2",
+"fasta": "UniProt",
+"sheet_count": null,
+"files": [
+"39914663.pdf",
+"mmc2.xlsx"
+]
+},
+"PXD051882": {
+"sheet_result": "1-s2",
+"fasta": "UniProt",
+"sheet_count": 3060,
+"files": [
+"1-s2.xlsx",
+"39947398.pdf"
+]
+},
+"PXD051907": {
+"sheet_result": "1-s2",
+"fasta": "UniProt",
+"sheet_count": 1584,
+"files": [
+"1-s2.xlsx",
+"39947398.pdf"
+]
+},
+"PXD059755": {
+"sheet_result": "1-s2",
+"fasta": "UniProt",
+"sheet_count": 391,
+"files": [
+"1-s2.xlsx",
+"39947398.pdf"
+]
+},
+"PXD058689": {
+"sheet_result": "12014_2025_9534_MOESM2_ESM",
+"fasta": "UniProt",
+"sheet_count": 8010,
+"files": [
+"12014_2025_9534_MOESM2_ESM.xlsx",
+"40254573.pdf"
+]
+},
+"PXD055089": {
+"sheet_result": "proteins_table",
+"fasta": "Ensembl v103",
+"sheet_count": 7732,
+"files": [
+"40669378.pdf",
+"Sample_Labeling.sdrf.csv",
+"Sample_Labeling.xlsx",
+"proteins_table.txt"
+]
+},
+"PXD060290": {
+"sheet_result": "mmc2",
+"fasta": "Not specified",
+"sheet_count": 11596,
+"files": [
+"40749681.pdf",
+"mmc2.xlsx"
+]
+},
+"PXD066224": {
+"sheet_result": "PXD066224.rar",
+"fasta": "UniProt Swiss-Prot Homo sapiens + porcine trypsin",
+"sheet_count": 3,
+"files": [
+"40826002.pdf",
+"90406_TK278137.pdf",
+"A34807_TJ269217.pdf",
+"AP4C_v2_QEHFX1_AP4C-APT_P1_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX1_AP4C-APT_P1_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX1_AP4C-APT_P3_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX1_AP4C-APT_P3_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX2_AP4C-APT_P5_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX2_AP4C-APT_P5_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX3_AP4C-APT_P6_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX3_AP4C-APT_P6_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX3_AP4C-APT_P8_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX3_AP4C-APT_P8_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX3_AP4C-APT_P9_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX3_AP4C-APT_P9_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX4_AP4C-APT_P7_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX4_AP4C-APT_P7_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX5_AP4C-APT_P2_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX5_AP4C-APT_P2_TiO2_PSMs.txt",
+"AP4C_v2_QEHFX5_AP4C-APT_P4_FeNTA_PSMs.txt",
+"AP4C_v2_QEHFX5_AP4C-APT_P4_TiO2_PSMs.txt",
+"APOLLO4C_Sample_Reference_File.xlsx",
+"Human_SP_120117.fasta",
+"PXD066224.rar",
+"checksum.txt",
+"submission.px_1"
+]
+},
+"PXD057700": {
+"sheet_result": "McAlpine_BMBP_SS_Endometrial_B1_F_Proteins.xlsx",
+"fasta": "UniProt",
+"sheet_count": 6089,
+"files": [
+"40966993.pdf",
+"McAlpine_BMBP_SS_Endometrial_B1_F_Proteins.xlsx"
+]
+},
+"PXD050642": {
+"sheet_result": "PXD050642",
+"fasta": "UniProt",
+"sheet_count": 7043,
+"files": [
+"41053579.pdf",
+"Fallopian_Sample_Reference_File.xlsx",
+"PXD050642.rar"
+]
+},
+"PXD029216_BLAST": {
+"sheet_result": "PXD029216_BLAST.xlsx",
+"fasta": "UniProt",
+"sheet_count": 3044,
+"files": []
+},
+"PXD029216_LSC": {
+"sheet_result": "PXD029216_LSC.xlsx",
+"fasta": "UniProt",
+"sheet_count": 3044,
+"files": []
+},
+"PXD029216_PROG": {
+"sheet_result": "PXD029216_PROG.xlsx",
+"fasta": "UniProt",
+"sheet_count": 3044,
+"files": []
+},
+"PXD029216_BULK": {
+"sheet_result": "PXD029216_BULK.xlsx",
+"fasta": "UniProt",
+"sheet_count": 3044,
+"files": []
+},
+"PDC000110": {
+"sheet_result": "result_PDC000110.xlsx",
+"fasta": "UniProt; Refseq",
+"sheet_count": 10706,
+"files": [
+"32529193.pdf",
+"result_PDC000110.xlsx"
+]
+},
+"PDC000116": {
+"sheet_result": "result_PDC000116.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8067,
+"files": [
+"31031003.pdf",
+"result_PDC000116.xlsx"
+]
+},
+"PDC000118": {
+"sheet_result": "result_PDC000118.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10706,
+"files": [
+"32529193.pdf",
+"result_PDC000118.xlsx"
+]
+},
+"PDC000120": {
+"sheet_result": "result_PDC000120.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10494,
+"files": [
+"33212010.pdf",
+"result_PDC000120.xlsx"
+]
+},
+"PDC000125": {
+"sheet_result": "result_PDC000125.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10767,
+"files": [
+"32059776.pdf",
+"result_PDC000125.xlsx"
+]
+},
+"PDC000127": {
+"sheet_result": "result_PDC000127.xlsx",
+"fasta": "UniProt; RefSeq",
+"sheet_count": 9963,
+"files": [
+"31675502.pdf",
+"result_PDC000127.xlsx"
+]
+},
+"PDC000153": {
+"sheet_result": "result_PDC000153.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 111028,
+"files": [
+"40749670.pdf",
+"result_PDC000153.xlsx"
+]
+},
+"PDC000180": {
+"sheet_result": "result_PDC000180.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 7153,
+"files": [
+"33242424.pdf",
+"result_PDC000180.xlsx"
+]
+},
+"PDC000198": {
+"sheet_result": "result_PDC000198.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10148,
+"files": [
+"31585088.pdf",
+"result_PDC000198.xlsx"
+]
+},
+"PDC000204": {
+"sheet_result": "result_PDC000204.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10976,
+"files": [
+"33577785.pdf",
+"result_PDC000204.xlsx"
+]
+},
+"PDC000219": {
+"sheet_result": "result_PDC000219.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 11207,
+"files": [
+"40749670.pdf",
+"result_PDC000219.xlsx"
+]
+},
+"PDC000221": {
+"sheet_result": "result_PDC000221.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 11000,
+"files": [
+"33417831.pdf",
+"result_PDC000221.xlsx"
+]
+},
+"PDC000234": {
+"sheet_result": "result_PDC000234.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 11000,
+"files": [
+"34358469.pdf",
+"result_PDC000234.xlsx"
+]
+},
+"PDC000248": {
+"sheet_result": "result_PDC000248.xlsx",
+"fasta": "UniProt",
+"sheet_count": 9000,
+"files": [
+"36550235.pdf",
+"result_PDC000248.xlsx"
+]
+},
+"PDC000270": {
+"sheet_result": "result_PDC000270.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10000,
+"files": [
+"34534465.pdf",
+"result_PDC000270.xlsx"
+]
+},
+"PDC000295": {
+"sheet_result": "result_PDC000295.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 10000,
+"files": [
+"29718670.pdf",
+"result_PDC000295.xlsx"
+]
+},
+"PDC000315": {
+"sheet_result": "result_PDC000315.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8000,
+"files": [
+"34171263.pdf",
+"result_PDC000315.xlsx"
+]
+},
+"PDC000316": {
+"sheet_result": "result_PDC000316.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8000,
+"files": [
+"34171263.pdf",
+"result_PDC000316.xlsx"
+]
+},
+"PDC000317": {
+"sheet_result": "result_PDC000317.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8000,
+"files": [
+"34171263.pdf",
+"result_PDC000317.xlsx"
+]
+},
+"PDC000325": {
+"sheet_result": "result_PDC000325.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 7000,
+"files": [
+"31988290.pdf",
+"result_PDC000325.xlsx"
+]
+},
+"PDC000342": {
+"sheet_result": "result_PDC000342.xlsx",
+"fasta": "RefSeq",
+"sheet_count": null,
+"files": [
+"40087745.pdf"
+]
+},
+"PDC000356": {
+"sheet_result": "result_PDC000356.xlsx",
+"fasta": "UniProt; RefSeq",
+"sheet_count": 9000,
+"files": [
+"36898552.pdf",
+"result_PDC000356.xlsx"
+]
+},
+"PDC000358": {
+"sheet_result": "result_PDC000358.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8000,
+"files": [
+"37541199.pdf",
+"result_PDC000358.xlsx"
+]
+},
+"PDC000360": {
+"sheet_result": "result_PDC000360.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8000,
+"files": [
+"37541199.pdf",
+"result_PDC000360.xlsx"
+]
+},
+"PDC000362": {
+"sheet_result": "result_PDC000362.xlsx",
+"fasta": "UniProt",
+"sheet_count": 10000,
+"files": [
+"37541199.pdf",
+"result_PDC000362.xlsx"
+]
+},
+"PDC000393": {
+"sheet_result": "result_PDC000393.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 8000,
+"files": [
+"36266629.pdf",
+"result_PDC000393.xlsx"
+]
+},
+"PDC000398": {
+"sheet_result": "result_PDC000398.xlsx",
+"fasta": "",
+"sheet_count": 7000,
+"files": [
+"35896960.pdf",
+"result_PDC000398.xlsx"
+]
+},
+"PDC000400": {
+"sheet_result": "result_PDC000400.xlsx",
+"fasta": "",
+"sheet_count": 7000,
+"files": [
+"35896960.pdf",
+"result_PDC000400.xlsx"
+]
+},
+"PDC000402": {
+"sheet_result": "result_PDC000402.xlsx",
+"fasta": "",
+"sheet_count": 7000,
+"files": [
+"35896960.pdf",
+"result_PDC000402.xlsx"
+]
+},
+"PDC000408": {
+"sheet_result": "result_PDC000408.xlsx",
+"fasta": "UniProt; RefSeq",
+"sheet_count": 10000,
+"files": [
+"36001024.pdf",
+"result_PDC000408.xlsx"
+]
+},
+"PDC000433": {
+"sheet_result": "",
+"fasta": "",
+"sheet_count": null,
+"files": [
+"30205044.pdf"
+]
+},
+"PDC000434": {
+"sheet_result": "result_PDC000434.xlsx",
+"fasta": "UniProt; RefSeq",
+"sheet_count": 10000,
+"files": [
+"36384096.pdf",
+"result_PDC000434.xlsx"
+]
+},
+"PDC000439": {
+"sheet_result": "result_PDC000439.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 11000,
+"files": [
+"37567170.pdf",
+"result_PDC000439.xlsx"
+]
+},
+"PDC000446": {
+"sheet_result": "result_PDC000446.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 11000,
+"files": [
+"38981438.pdf",
+"result_PDC000446.xlsx"
+]
+},
+"PDC000464": {
+"sheet_result": "result_PDC000464.xlsx",
+"fasta": "UniProt; RefSeq",
+"sheet_count": 10000,
+"files": [
+"38703764.pdf",
+"result_PDC000464.xlsx"
+]
+},
+"PDC000477": {
+"sheet_result": "result_PDC000477.xlsx",
+"fasta": "",
+"sheet_count": 8800,
+"files": [
+"38232702.pdf",
+"result_PDC000477.xlsx"
+]
+},
+"PDC000489": {
+"sheet_result": "result_PDC000489.xlsx",
+"fasta": "UniProt",
+"sheet_count": 11000,
+"files": [
+"40749670.pdf",
+"result_PDC000489.xlsx"
+]
+},
+"PDC000514": {
+"sheet_result": "result_PDC000514.xlsx",
+"fasta": "UniProt",
+"sheet_count": 9000,
+"files": [
+"38215747.pdf",
+"result_PDC000514.xlsx"
+]
+},
+"PDC000519": {
+"sheet_result": "result_PDC000519.xlsx",
+"fasta": "RefSeq",
+"sheet_count": 9000,
+"files": [
+"39842500.pdf",
+"result_PDC000519.xlsx"
+]
+},
+"PDC000563": {
+"sheet_result": "result_PDC000563.xlsx",
+"fasta": "UniProt",
+"sheet_count": 10000,
+"files": [
+"40749670.pdf",
+"result_PDC000563.xlsx"
+]
+},
+"PDC000579": {
+"sheet_result": "result_PDC000579.xlsx",
+"fasta": "",
+"sheet_count": 9000,
+"files": [
+"result_PDC000579.xlsx"
+]
+},
+"PDC000582": {
+"sheet_result": "result_PDC000582.xlsx",
+"fasta": "",
+"sheet_count": 9000,
+"files": [
+"40480221.pdf",
+"result_PDC000582.xlsx"
+]
+},
+"PDC000585": {
+"sheet_result": "result_PDC000585.xlsx",
+"fasta": "UniProt",
+"sheet_count": 10000,
+"files": [
+"38480868.pdf",
+"result_PDC000585.xlsx"
+]
+},
+"PDC000588": {
+"sheet_result": "result_PDC000588.xlsx",
+"fasta": "",
+"sheet_count": 9000,
+"files": [
+"result_PDC000588.xlsx"
+]
+},
+"PDC000590": {
+"sheet_result": "result_PDC000590.xlsx",
+"fasta": "",
+"sheet_count": 9000,
+"files": [
+"result_PDC000590.xlsx"
+]
+}
+}
