@@ -30,7 +30,8 @@ const I18N={
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
     m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
-    cite:'Цитирование',exportOrgan:'Экспорт органа',compare:'Сравнить органы',runCompare:'Сравнить',
+    cite:'Цитирование',exportOrgan:'Экспорт органа',extras:'Дополнительно',
+    compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
     panBadge:'PAN-ORGAN',projects:'проектов',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…'
@@ -45,7 +46,8 @@ const I18N={
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
     m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
-    cite:'Citation',exportOrgan:'Export organ',compare:'Compare organs',runCompare:'Compare',
+    cite:'Citation',exportOrgan:'Export organ',extras:'More',
+    compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
     panBadge:'PAN-ORGAN',projects:'projects',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…'
@@ -229,14 +231,28 @@ function filtSidebar(q){
     e.style.display=e.dataset.o.toLowerCase().replace(/_/g,' ').includes(s)?'':'none';
   });
 }
-function compareBlock(){
+function compareBlock(currentOrgan){
   const organs=Object.keys(C).filter(o=>C[o]>0).sort((a,b)=>C[b]-C[a]);
-  const opts=organs.map(o=>`<option value="${o}">${o.replace(/_/g,' ')} (${C[o]})</option>`).join('');
-  return `<div class="compare-bar">
-    <select id="cmpA">${opts}</select>
-    <select id="cmpB">${opts}</select>
-    <button type="button" class="tbtn primary" onclick="runCompare()">${t('runCompare')}</button>
-  </div><div id="cmpOut"></div>`;
+  if(organs.length<2) return '';
+  const optA=organs.map(o=>{
+    const sel=o===currentOrgan?' selected':'';
+    return `<option value="${o}"${sel}>${o.replace(/_/g,' ')} (${C[o]})</option>`;
+  }).join('');
+  const other=organs.find(o=>o!==currentOrgan)||organs[1];
+  const optB=organs.map(o=>{
+    const sel=o===other?' selected':'';
+    return `<option value="${o}"${sel}>${o.replace(/_/g,' ')} (${C[o]})</option>`;
+  }).join('');
+  return `<details class="extras-block">
+    <summary>${t('extras')}</summary>
+    <p class="extras-hint">${t('compareHint')}</p>
+    <div class="compare-bar">
+      <select id="cmpA">${optA}</select>
+      <select id="cmpB">${optB}</select>
+      <button type="button" class="tbtn primary" onclick="runCompare()">${t('runCompare')}</button>
+    </div>
+    <div id="cmpOut"></div>
+  </details>`;
 }
 function runCompare(){
   const a=document.getElementById('cmpA')?.value;
@@ -1057,7 +1073,7 @@ function sel(o){
     <div class="ms"><div class="v">${nHealthy}</div><div class="l">Normal</div></div>
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
   </div>
-  ${compareBlock()}
+  ${compareBlock(o)}
   <div class="ccard"><h4 class="sec-h">Disease groups</h4><div class="dtags">`;
 
   ds.slice(0,15).forEach(([d,n])=>{
