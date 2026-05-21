@@ -16,8 +16,247 @@ const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeU
 const ACCENT='#5b9fd4';
 const BODY_BLUE='#2e7fc8';
 const CHART_COLORS=['#5b9fd4','#7a8fa8','#6b8f9a','#8a9eb8','#5a8a9a','#9a8aa8','#6a7a9a','#4a8ab0'];
-const SYSTEMIC=new Set(['Blood','Bone_Marrow','Lymph_Node','Nerve','Skin','Muscle',
-  'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other','Pituitary']);
+const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
+  'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other']);
+
+const I18N={
+  ru:{
+    loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
+    searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
+    cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
+    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · только органы с проектами',
+    pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
+    aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
+    methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
+    m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
+    m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
+    cite:'Цитирование',exportOrgan:'Экспорт органа',compare:'Сравнить органы',runCompare:'Сравнить',
+    panBadge:'PAN-ORGAN',projects:'проектов',rows:'строк',organs:'органов',databases:'баз',
+    tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
+    validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…'
+  },
+  en:{
+    loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
+    searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
+    cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
+    about:'About',close:'Close',bodyCap:'Anterior view · organs with projects only',
+    pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
+    aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
+    methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
+    m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
+    m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
+    cite:'Citation',exportOrgan:'Export organ',compare:'Compare organs',runCompare:'Compare',
+    panBadge:'PAN-ORGAN',projects:'projects',rows:'rows',organs:'organs',databases:'databases',
+    tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
+    validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…'
+  }
+};
+let lang=localStorage.getItem('hpa-lang')||'ru';
+function t(k){return (I18N[lang]||I18N.ru)[k]||k;}
+function i18nApply(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');if(I18N[lang][k]) el.textContent=I18N[lang][k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const k=el.getAttribute('data-i18n-ph');if(I18N[lang][k]) el.placeholder=I18N[lang][k];
+  });
+  const lb=document.getElementById('langBtn');if(lb) lb.textContent=lang==='ru'?'EN':'RU';
+  document.documentElement.lang=lang;
+}
+function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();refreshAll();}
+
+const F={q:'',tmt:'',health:''};
+let META={rawRows:0,uniqPids:0},selOrgan=null;
+const DIS_RULES=[
+  [/nsclc|non[- ]?small[- ]?cell lung|luad|lusc|lung adenocarcinoma|lung carcinoma|sclc/i,'Lung cancer'],
+  [/colorectal|crc\b|colon adenocarcinoma|rectal adenocarcinoma/i,'Colorectal cancer'],
+  [/hcc|hepatocellular|liver cancer|hepatoma/i,'Liver cancer'],
+  [/pdac|pancreatic adenocarcinoma|pancreatic cancer/i,'Pancreatic cancer'],
+  [/hgsoc|ovarian cancer|ovarian carcinoma|ovarian serous/i,'Ovarian cancer'],
+  [/glioblastoma|gbm|glioma|brain tumor|brain tumour/i,'Brain cancer'],
+  [/breast cancer|breast carcinoma|mammary carcinoma|tnbc|her2/i,'Breast cancer'],
+  [/gastric cancer|stomach cancer|gastric adenocarcinoma/i,'Gastric cancer'],
+  [/renal cell|rcc|kidney cancer/i,'Kidney cancer'],
+  [/prostate cancer|prostate adenocarcinoma|pca\b/i,'Prostate cancer'],
+  [/melanoma/i,'Melanoma'],
+  [/aml\b|acute myeloid/i,'AML'],
+  [/cll\b|chronic lymphocytic/i,'CLL'],
+  [/multiple myeloma|myeloma/i,'Multiple myeloma'],
+  [/lymphoma|hodgkin|non-hodgkin/i,'Lymphoma'],
+  [/leukemia|leukaemia/i,'Leukemia'],
+  [/sarcoma|osteosarcoma|liposarcoma/i,'Sarcoma'],
+  [/bladder cancer|urothelial/i,'Bladder cancer'],
+  [/thyroid cancer|papillary thyroid/i,'Thyroid cancer'],
+  [/endometri|uterine cancer/i,'Endometrial cancer'],
+  [/cervical cancer/i,'Cervical cancer'],
+  [/esophageal|escc/i,'Esophageal cancer'],
+  [/head and neck|hnscc|oropharyngeal/i,'Head & neck cancer'],
+  [/normal|healthy|control/i,'Normal / control']
+];
+function canonDisease(dis){
+  const s=(dis||'').trim();
+  if(!s) return 'Not specified';
+  for(const [re,label] of DIS_RULES){if(re.test(s)) return label;}
+  return s.length>42?s.slice(0,42)+'…':s;
+}
+function filteredRows(){return D.filter(r=>{
+  if(F.tmt&&r.tmt!==F.tmt) return false;
+  if(F.health==='cancer'&&r.healthy) return false;
+  if(F.health==='normal'&&!r.healthy) return false;
+  if(F.q){
+    const q=F.q.toLowerCase();
+    if(r.pid.toLowerCase().includes(q)) return true;
+    if((r.pmid||'').toLowerCase().includes(q)) return true;
+    if((r.dis||'').toLowerCase().includes(q)) return true;
+    if((r.disCanon||'').toLowerCase().includes(q)) return true;
+    if(r.organs.some(o=>o.replace(/_/g,' ').toLowerCase().includes(q))) return true;
+    return false;
+  }
+  return true;
+});}
+function rebuildCounts(){
+  C={};
+  const by={};
+  filteredRows().forEach(x=>x.organs.forEach(o=>{
+    if(!by[o]) by[o]=new Set();
+    by[o].add(x.pid);
+  }));
+  Object.keys(by).forEach(o=>{C[o]=by[o].size;});
+}
+function rowMatchesSidebar(o){
+  if(!F.q) return true;
+  const q=F.q.toLowerCase();
+  const name=o.replace(/_/g,' ').toLowerCase();
+  if(name.includes(q)) return true;
+  return filteredRows().some(r=>r.organs.includes(o));
+}
+function setFilter(key,val){
+  F[key]=val||'';
+  rebuildCounts();
+  refreshAll();
+  if(selOrgan) sel(selOrgan);
+}
+function onGlobalSearch(v){F.q=(v||'').trim();rebuildCounts();refreshAll();if(selOrgan) sel(selOrgan);}
+function updateUrl(organ){
+  const u=new URL(location.href);
+  if(organ) u.searchParams.set('organ',organ);else u.searchParams.delete('organ');
+  history.replaceState({},'',u);
+}
+function parseUrlOrgan(){
+  const o=new URLSearchParams(location.search).get('organ');
+  if(o&&C[o]) sel(o);
+}
+function openAbout(){document.getElementById('aboutModal').classList.add('open');}
+function closeAbout(){document.getElementById('aboutModal').classList.remove('open');}
+function csvEscape(s){const x=String(s??'');return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
+function downloadCSV(filename,rows){
+  const cols=['Project ID','PMID','Organs','Disease','Disease group','TMT','Sample Type','Database','Status','URL'];
+  const lines=[cols.join(',')];
+  rows.forEach(r=>lines.push([
+    r.pid,r.pmid,r.organs.join('; '),r.dis,r.disCanon,r.tmt,r.st,r.db,
+    r.healthy?'Normal':'Cancer',r.link||prideUrl(r.pid)
+  ].map(csvEscape).join(',')));
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'}));
+  a.download=filename;a.click();URL.revokeObjectURL(a.href);
+}
+function exportAllCSV(){
+  const seen=new Set(),u=[];
+  filteredRows().forEach(r=>{if(!seen.has(r.pid)){seen.add(r.pid);u.push(r);}});
+  downloadCSV('human-proteome-atlas-all.csv',u);
+}
+function exportOrganCSV(o){
+  const seen=new Set(),u=[];
+  filteredRows().filter(r=>r.organs.includes(o)).forEach(r=>{
+    if(!seen.has(r.pid)){seen.add(r.pid);u.push(r);}
+  });
+  downloadCSV(`atlas-${o.replace(/_/g,'-').toLowerCase()}.csv`,u);
+}
+function uniqProjects(rows){
+  const seen=new Set(),u=[];
+  rows.forEach(r=>{if(!seen.has(r.pid)){seen.add(r.pid);u.push(r);}});
+  return u;
+}
+function getOrganRows(o){return filteredRows().filter(r=>r.organs.includes(o));}
+function refreshAll(){buildHeader();buildSidebar();renderBody();fillTmtFilter();}
+function fillTmtFilter(){
+  const el=document.getElementById('fTmt');if(!el) return;
+  const cur=F.tmt;
+  const tmts=[...new Set(D.map(x=>x.tmt).filter(Boolean))].sort();
+  el.innerHTML=`<option value="">${esc(t('allTmt'))}</option>`+
+    tmts.map(x=>`<option value="${esc(x)}"${x===cur?' selected':''}>${esc(x)}</option>`).join('');
+}
+function buildHeader(){
+  const rows=filteredRows();
+  const tis=Object.keys(C).filter(k=>C[k]>0).length;
+  const dbs=new Set(rows.map(x=>x.db).filter(Boolean)).size;
+  const types=new Set(rows.map(x=>x.st)).size;
+  const tmt=new Set(rows.map(x=>x.tmt).filter(Boolean)).size;
+  const uniqPid=new Set(rows.map(x=>x.pid)).size;
+  document.getElementById('hs').innerHTML=
+    `<div class="hstat"><div class="v">${uniqPid}</div><div class="l">${t('projects')}</div></div>`+
+    `<div class="hstat"><div class="v">${rows.length}</div><div class="l">${t('rows')}</div></div>`+
+    `<div class="hstat"><div class="v">${tis}</div><div class="l">${t('organs')}</div></div>`+
+    `<div class="hstat"><div class="v">${dbs}</div><div class="l">${t('databases')}</div></div>`+
+    `<div class="hstat"><div class="v">${tmt}</div><div class="l">${t('tmtFormats')}</div></div>`+
+    `<div class="hstat"><div class="v">${types}</div><div class="l">${t('sampleTypes')}</div></div>`;
+  const vb=document.getElementById('validBanner');
+  if(vb){
+    const ok=META.uniqPids===uniqPid||!F.q&&!F.tmt&&!F.health;
+    vb.className='valid-banner '+(ok?'ok':'warn');
+    vb.textContent=ok
+      ? `✓ ${t('validOk')}: ${META.rawRows} ${t('rows')}, ${META.uniqPids} unique IDs in sheet · ${uniqPid} shown`
+      : `⚠ ${t('validWarn')}: filters active (${uniqPid}/${META.uniqPids} projects)`;
+  }
+}
+function buildSidebar(){
+  let h=`<div class="search"><span class="si">🔍</span><input placeholder="${esc(t('searchOrgan'))}" oninput="filtSidebar(this.value)"></div>`;
+  GRP.forEach(g=>{
+    const items=g.o.filter(o=>(C[o]||0)>0&&rowMatchesSidebar(o));
+    if(!items.length) return;
+    h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
+    items.forEach(o=>{
+      const n=C[o],c=COL[o]||'#888';
+      h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${o.replace(/_/g,' ')}</span><span class="ct">${n}</span></div>`;
+    });
+    h+=`</div></div>`;
+  });
+  document.getElementById('lp').innerHTML=h;
+}
+function filtSidebar(q){
+  const s=(q||'').toLowerCase();
+  document.querySelectorAll('.oitem').forEach(e=>{
+    e.style.display=e.dataset.o.toLowerCase().replace(/_/g,' ').includes(s)?'':'none';
+  });
+}
+function compareBlock(){
+  const organs=Object.keys(C).filter(o=>C[o]>0).sort((a,b)=>C[b]-C[a]);
+  const opts=organs.map(o=>`<option value="${o}">${o.replace(/_/g,' ')} (${C[o]})</option>`).join('');
+  return `<div class="compare-bar">
+    <select id="cmpA">${opts}</select>
+    <select id="cmpB">${opts}</select>
+    <button type="button" class="tbtn primary" onclick="runCompare()">${t('runCompare')}</button>
+  </div><div id="cmpOut"></div>`;
+}
+function runCompare(){
+  const a=document.getElementById('cmpA')?.value;
+  const b=document.getElementById('cmpB')?.value;
+  if(!a||!b||a===b) return;
+  const sa=organStats(a),sb=organStats(b);
+  const out=document.getElementById('cmpOut');
+  if(!out) return;
+  out.innerHTML=`<div class="compare-grid">
+    <div class="compare-col"><h5>${a.replace(/_/g,' ')}</h5>
+      ${cmpRows(sa)}</div>
+    <div class="compare-col"><h5>${b.replace(/_/g,' ')}</h5>
+      ${cmpRows(sb)}</div>
+  </div>`;
+}
+function cmpRows(s){
+  return [['Projects',s.n],['Cancer',s.nC],['Normal',s.nN],['Top disease',s.topDis||'—'],['Top TMT',s.topTmt||'—']].map(
+    ([k,v])=>`<div class="compare-row"><span>${k}</span><strong>${esc(String(v))}</strong></div>`
+  ).join('');
+}
 
 /* Brightened anatomical palette — readable on the dark blue body background.
    Bigger organs (used as Iconify icons) keep darker realistic tones;
@@ -34,7 +273,9 @@ const ANATOMY_COL={
   Bladder:'#f49ab8',         Uterus:'#f4a8b8',
   Ovary:'#f4b8d0',           Cervix:'#d898a8',
   Prostate:'#c898b8',        Testis:'#f0b8b8',
-  Bone:'#f8f0e4'
+  Bone:'#f8f0e4',
+  Pituitary:'#e8b8c8',      Blood:'#c45a5a',
+  Skin:'#f0c8a0',           Muscle:'#b88878'
 };
 
 const GRP=[
@@ -323,7 +564,8 @@ function normalizeRow(x){
     proteins:(x['Proteins Quantified']||'').trim(),
     link:(x['URL']||'').trim(),
     tissue:(x['Tissue']||'').trim(),
-    organRaw
+    organRaw,
+    disCanon:canonDisease(tumorType)
   };
 }
 
@@ -343,47 +585,15 @@ window.addEventListener('DOMContentLoaded',()=>{
         });
       });
       Object.keys(byOrgan).forEach(o=>{C[o]=byOrgan[o].size});
-      go();
+      META={rawRows:r.data.filter(x=>(x['Project ID']||'').trim()).length,uniqPids:new Set(D.map(x=>x.pid)).size};
+      i18nApply();
+      refreshAll();
+      parseUrlOrgan();
       document.getElementById('loader').classList.add('hidden');
     },
     error(){document.querySelector('#loader p').textContent='Error loading data :('}
   });
 });
-
-function go(){
-  const tis=Object.keys(C).filter(k=>C[k]>0).length;
-  const dbs=new Set(D.map(x=>x.db).filter(Boolean)).size;
-  const types=new Set(D.map(x=>x.st)).size;
-  const tmt=new Set(D.map(x=>x.tmt).filter(Boolean)).size;
-  const uniqPid=new Set(D.map(x=>x.pid)).size;
-  document.getElementById('hs').innerHTML=
-    `<div class="hstat"><div class="v">${uniqPid}</div><div class="l">Projects</div></div>`+
-    `<div class="hstat"><div class="v">${D.length}</div><div class="l">Rows</div></div>`+
-    `<div class="hstat"><div class="v">${tis}</div><div class="l">Organs</div></div>`+
-    `<div class="hstat"><div class="v">${dbs}</div><div class="l">Databases</div></div>`+
-    `<div class="hstat"><div class="v">${tmt}</div><div class="l">TMT Formats</div></div>`+
-    `<div class="hstat"><div class="v">${types}</div><div class="l">Sample Types</div></div>`;
-  let h=`<div class="search"><span class="si">🔍</span><input placeholder="Search organ…" oninput="filt(this.value)"></div>`;
-  GRP.forEach(g=>{
-    const items=g.o.filter(o=>(C[o]||0)>0);
-    if(!items.length) return;
-    h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
-    items.forEach(o=>{
-      const n=C[o],c=COL[o]||'#888';
-      h+=`<div class="oitem" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${o.replace(/_/g,' ')}</span><span class="ct" data-count="${n}">${n}</span></div>`;
-    });
-    h+=`</div></div>`;
-  });
-  document.getElementById('lp').innerHTML=h;
-  renderBody();
-}
-
-function filt(q){
-  const s=(q||'').toLowerCase();
-  document.querySelectorAll('.oitem').forEach(e=>{
-    e.style.display=e.dataset.o.toLowerCase().replace(/_/g,' ').includes(s)?'':'none';
-  });
-}
 
 /* Anatomical organs.
    pos = anchor point for label leader; side = label column;
@@ -408,6 +618,8 @@ function filt(q){
 const ANATOMY={
   /* HEAD (y=20–95).  Eye line y=62, brain fills upper cranium. */
   Brain:           {pos:{x:240, y: 42}, side:'R', size:42, emoji:'1f9e0',                 z:1},
+  Pituitary:       {pos:{x:240, y: 56}, side:'R', size:0,  z:2, d:
+    'M 236 54 A 4 3 0 1 0 244 54 A 4 3 0 1 0 236 54 Z'},
   /* Two eyes on the eye line (y=62), not on the neck */
   Eye:             {pos:{x:240, y: 62}, side:'L', size:0,  z:2, d:
     'M 224 62 A 6 3 0 1 0 236 62 A 6 3 0 1 0 224 62 Z '+
@@ -502,7 +714,15 @@ const ANATOMY={
     'M 276 366 Q 282 368 284 378 L 288 460 Q 290 520 292 568 L 294 598 Q 296 608 290 612 Q 282 612 278 606 L 274 568 Q 270 500 266 420 L 262 378 Q 264 368 270 366 Z '+
     /* tibias (shin) */
     'M 192 612 L 190 680 Q 188 698 194 702 L 200 702 Q 206 698 208 680 L 210 612 Z '+
-    'M 288 612 L 290 680 Q 292 698 286 702 L 280 702 Q 274 698 272 680 L 270 612 Z'}
+    'M 288 612 L 290 680 Q 292 698 286 702 L 280 702 Q 274 698 272 680 L 270 612 Z'},
+
+  /* Systemic tissues — shown on limbs / surface */
+  Blood:           {pos:{x:168, y:268}, side:'L', size:0,  z:2, systemic:true, d:
+    'M 160 258 A 10 14 0 1 0 160.01 258 Z'},
+  Skin:            {pos:{x:312, y:268}, side:'R', size:0,  z:2, systemic:true, d:
+    'M 304 258 A 10 14 0 1 0 304.01 258 Z'},
+  Muscle:          {pos:{x:240, y:318}, side:'L', size:0,  z:2, systemic:true, d:
+    'M 228 308 Q 240 302 252 308 Q 254 322 240 326 Q 226 322 228 308 Z'}
 };
 
 function organCount(o){ return C[o]||0; }
@@ -539,11 +759,14 @@ function organGroup(o){
     </g>`;
   }
   if(a.d){
-    const pcls=a.skeleton?'skeleton-part':'anatomy-part';
+    const pcls=a.skeleton?'skeleton-part':a.systemic?'systemic-part':'anatomy-part';
     const psty=a.skeleton
-      ?`fill:${fill};fill-opacity:.42;stroke:#fff;stroke-width:1.2;stroke-linejoin:round`
-      :`fill:${fill};fill-rule:evenodd`;
-    return `<g class="organ-g${a.skeleton?' organ-skeleton':''}" data-o="${o}" ${eh}>
+      ?`fill:${fill};fill-opacity:.55;stroke:#fff;stroke-width:1.6;stroke-linejoin:round`
+      :a.systemic
+        ?`fill:${fill};fill-opacity:.35;stroke:${ACCENT};stroke-width:1.2`
+        :`fill:${fill};fill-rule:evenodd`;
+    const clsExtra=a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'';
+    return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}>
       <path class="${pcls}" d="${a.d}" style="${psty}"/>
     </g>`;
   }
@@ -563,6 +786,7 @@ function projectCard(r){
   const tag=r.healthy
     ?`<span class="status normal">NORMAL</span>`
     :`<span class="status cancer">CANCER</span>`;
+  const pan=r.isPan?`<span class="status pan">${t('panBadge')}</span>`:'';
   const organs=r.organs.map(x=>x.replace(/_/g,' ')).join(', ');
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
   const proteins=r.proteins?`<span class="meta-pill">${esc(r.proteins)} proteins</span>`:'';
@@ -582,11 +806,11 @@ function projectCard(r){
     <div class="proj-head">
       <div class="proj-id-block">
         ${projHref?`<a class="proj-id" href="${esc(projHref)}" target="_blank" rel="noopener">${esc(r.pid)}</a>`:`<span class="proj-id">${esc(r.pid)}</span>`}
-        ${tag}
+        ${tag}${pan}
       </div>
       <div class="proj-organs">${esc(organs)}</div>
     </div>
-    <div class="proj-disease" title="${esc(r.dis)}">${esc(r.dis||'—')}</div>
+    <div class="proj-disease" title="${esc(r.dis)}">${esc(r.disCanon||'—')}<span style="color:var(--t3);font-size:10px"> · ${esc((r.dis||'').slice(0,40))}</span></div>
     <div class="proj-meta">
       <span class="meta-pill subtle">${esc(r.st||'—')}</span>
       ${tmt}${platform}${proteins}
@@ -598,19 +822,20 @@ function projectCard(r){
 }
 
 function organStats(o){
-  const rows=D.filter(r=>r.organs.includes(o));
-  const seen=new Set(),uniq=[];
-  rows.forEach(r=>{if(!seen.has(r.pid)){seen.add(r.pid);uniq.push(r);}});
+  const uniq=uniqProjects(getOrganRows(o));
   let nC=0,nN=0;
-  const dis={},dbs={};
+  const dis={},dbs={},tmts={};
   uniq.forEach(r=>{
     if(r.healthy) nN++; else nC++;
-    if(r.dis) dis[r.dis]=(dis[r.dis]||0)+1;
+    const dk=r.disCanon||r.dis;
+    if(dk) dis[dk]=(dis[dk]||0)+1;
     if(r.db) dbs[r.db]=(dbs[r.db]||0)+1;
+    if(r.tmt) tmts[r.tmt]=(tmts[r.tmt]||0)+1;
   });
   const topDis=Object.entries(dis).sort((a,b)=>b[1]-a[1])[0];
+  const topTmt=Object.entries(tmts).sort((a,b)=>b[1]-a[1])[0];
   const topDb=Object.entries(dbs).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,3).join(', ');
-  return {n:uniq.length,nC,nN,topDis:topDis?topDis[0]:'',topDb};
+  return {n:uniq.length,nC,nN,topDis:topDis?topDis[0]:'',topTmt:topTmt?topTmt[0]:'',topDb};
 }
 
 /* assign label Y positions with no overlap, separately for each side */
@@ -723,36 +948,37 @@ function renderBody(){
 }
 
 function st(ev,o){
-  const t=document.getElementById('tip');
-  t.innerHTML=`<div class="tn">${o.replace(/_/g,' ')}</div><div class="tc">${C[o]||0} projects</div>`;
-  t.style.display='block';
+  const tip=document.getElementById('tip');
+  const s=organStats(o);
+  tip.innerHTML=`<div class="tn">${o.replace(/_/g,' ')}</div>
+    <div class="tc">${s.n} ${t('projects')} · ${s.nC}C · ${s.nN}N</div>
+    ${s.topDis?`<div class="td">${esc(s.topDis)}</div>`:''}`;
+  tip.style.display='block';
   const r=document.getElementById('bw').getBoundingClientRect();
-  t.style.left=(ev.clientX-r.left+12)+'px';
-  t.style.top=(ev.clientY-r.top-8)+'px';
+  tip.style.left=(ev.clientX-r.left+12)+'px';
+  tip.style.top=(ev.clientY-r.top-8)+'px';
 }
 function ht(){document.getElementById('tip').style.display='none'}
 
 function sel(o){
   if(!C[o]) return;
-  const rows=D.filter(x=>x.organs.includes(o));
+  selOrgan=o;
+  updateUrl(o);
+  const rows=getOrganRows(o);
   document.querySelectorAll('.oitem').forEach(x=>x.classList.toggle('on',x.dataset.o===o));
   document.querySelectorAll('.organ-g').forEach(x=>x.classList.toggle('hi',x.dataset.o===o));
   document.querySelectorAll('.lbl-g').forEach(x=>x.classList.toggle('hi',x.dataset.cb===o));
 
-  const col=ACCENT;
-  const seen=new Set();
-  const uniqRows=rows.filter(r=>{
-    if(seen.has(r.pid)) return false;
-    seen.add(r.pid);
-    return true;
-  });
+  const col=ANATOMY_COL[o]||ACCENT;
+  const uniqRows=uniqProjects(rows);
   const nProj=C[o]||uniqRows.length;
   charts.forEach(x=>x.destroy()); charts=[];
 
   const dis={}, sam={}, dbs={};
   let nHealthy=0,nCancer=0;
   uniqRows.forEach(r=>{
-    dis[r.dis]=(dis[r.dis]||0)+1;
+    const dk=r.disCanon||r.dis;
+    dis[dk]=(dis[dk]||0)+1;
     sam[r.st]=(sam[r.st]||0)+1;
     if(r.db) dbs[r.db]=(dbs[r.db]||0)+1;
     if(r.healthy) nHealthy++; else nCancer++;
@@ -761,25 +987,28 @@ function sel(o){
   const ss=Object.entries(sam).sort((a,b)=>b[1]-a[1]);
   const dbList=Object.entries(dbs).sort((a,b)=>b[1]-a[1]);
 
-  let h=`
+  let h=`<div class="detail-actions">
+    <button type="button" class="tbtn primary" onclick="exportOrganCSV('${o}')">${t('exportOrgan')}</button>
+  </div>
   <div class="hero" style="border-left-color:${col}">
     <div class="ic" style="background:${col}22;border:1px solid ${col}"></div>
     <div><h2 class="hero-title">${o.replace(/_/g,' ')}</h2>
-    <div class="sub">${nProj} projects · ${rows.length} rows in sheet · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} disease types</div></div>
+    <div class="sub">${nProj} ${t('projects')} · ${rows.length} rows · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} disease groups</div></div>
   </div>
   <div class="mstats">
-    <div class="ms"><div class="v accent" style="color:${col}">${nProj}</div><div class="l">Projects</div></div>
+    <div class="ms"><div class="v accent" style="color:${col}">${nProj}</div><div class="l">${t('projects')}</div></div>
     <div class="ms"><div class="v">${nCancer}</div><div class="l">Cancer</div></div>
     <div class="ms"><div class="v">${nHealthy}</div><div class="l">Normal</div></div>
-    <div class="ms"><div class="v">${ss.length}</div><div class="l">Sample Types</div></div>
+    <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
   </div>
-  <div class="ccard"><h4 class="sec-h">Tumor / Disease Types</h4><div class="dtags">`;
+  ${compareBlock()}
+  <div class="ccard"><h4 class="sec-h">Disease groups</h4><div class="dtags">`;
 
   ds.slice(0,15).forEach(([d,n])=>{
-    const rowsD=uniqRows.filter(r=>r.dis===d);
+    const rowsD=uniqRows.filter(r=>(r.disCanon||r.dis)===d);
     const healthyTag=rowsD.length&&rowsD.every(r=>r.healthy);
     const dc=healthyTag?'var(--green)':'var(--red)';
-    h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${esc(d.length>35?d.slice(0,35)+'…':d)}<span class="dc">${n}</span></div>`;
+    h+=`<div class="dtag"><span class="dd" style="background:${dc}"></span>${esc(d)}<span class="dc">${n}</span></div>`;
   });
   h+=`</div></div>`;
 
@@ -793,21 +1022,17 @@ function sel(o){
 
   h+=`<div class="charts-row">
     <div class="ccard"><h4 class="sec-h">Sample Types</h4><canvas id="ch1"></canvas></div>
-    <div class="ccard"><h4 class="sec-h">Top Tumor Types</h4><canvas id="ch2"></canvas></div>
+    <div class="ccard"><h4 class="sec-h">Disease groups</h4><canvas id="ch2"></canvas></div>
   </div>
   <div class="projects-section">
     <h4 class="sec-h">Projects <span class="sec-count">${nProj}</span></h4>
     <div class="proj-grid">`;
 
-  uniqRows.slice(0,200).forEach(r=>{
-    h+=projectCard(r);
-  });
-
+  uniqRows.slice(0,200).forEach(r=>{h+=projectCard(r);});
   h+=`</div></div>`;
 
-  const dc=document.getElementById('dc');
-  dc.innerHTML=h;
-  dc.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('dc').innerHTML=h;
+  document.getElementById('dc').scrollTo({top:0,behavior:'smooth'});
 
   requestAnimationFrame(()=>{
     const colors=CHART_COLORS;
