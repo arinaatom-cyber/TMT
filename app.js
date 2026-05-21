@@ -746,7 +746,7 @@ function organGroup(o){
     const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
     return `<g class="organ-g organ-img" data-o="${o}" ${eh}>
       <image href="${url}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
-      <rect class="organ-hit" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+      <rect class="organ-hit" fill="none" stroke="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
     </g>`;
   }
   if(a.icon){
@@ -755,13 +755,13 @@ function organGroup(o){
     const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
     return `<g class="organ-g organ-img" data-o="${o}" ${eh}>
       <image href="${url}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
-      <rect class="organ-hit" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+      <rect class="organ-hit" fill="none" stroke="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
     </g>`;
   }
   if(a.d){
     const pcls=a.skeleton?'skeleton-part':a.systemic?'systemic-part':'anatomy-part';
     const psty=a.skeleton
-      ?`fill:${fill};fill-opacity:.55;stroke:#fff;stroke-width:1.6;stroke-linejoin:round`
+      ?`fill:none;stroke:rgba(255,255,255,.55);stroke-width:1;stroke-linejoin:round`
       :a.systemic
         ?`fill:${fill};fill-opacity:.35;stroke:${ACCENT};stroke-width:1.2`
         :`fill:${fill};fill-rule:evenodd`;
