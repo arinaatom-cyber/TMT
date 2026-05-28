@@ -16,10 +16,20 @@
   --border:#2a3650;--accent:#9cb8d9;--accent-dim:rgba(156,184,217,.16);
   --glow:rgba(156,184,217,.18);
   --t1:#e8ecf4;--t2:#94a3b8;--t3:#64748b;
+  --header-bg:rgba(10,14,26,.92);
   --green:#9dc9b0;--red:#d4a8a8;--amber:#d4c48a;--muted:#a8b4c8;
   --pastel-lav:#c4a8d4;--pastel-sage:#9dc9b0;--pastel-peach:#e0b8a8;--pastel-sky:#a8c4e0;
   --radius:10px;
   --font:'Inter',system-ui,-apple-system,sans-serif;
+}
+[data-theme="light"]{
+  --bg:#ffffff;--bg2:#f5f5f5;--card:#ffffff;--hover:#ececec;
+  --border:#d0d7de;--accent:#111111;--accent-dim:rgba(0,0,0,.08);
+  --glow:rgba(0,0,0,.08);
+  --t1:#0f172a;--t2:#334155;--t3:#64748b;
+  --header-bg:rgba(255,255,255,.95);
+  --green:#2e7d32;--red:#b91c1c;--amber:#a16207;--muted:#64748b;
+  --pastel-lav:#7c3aed;--pastel-sage:#15803d;--pastel-peach:#c2410c;--pastel-sky:#1d4ed8;
 }
 html,body{height:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
@@ -30,7 +40,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 @keyframes spin{to{transform:rotate(360deg)}}
 #loader p{margin-top:16px;color:var(--t2);font-size:13px;letter-spacing:2px;text-transform:uppercase}
 
-.header{position:sticky;top:0;z-index:100;background:rgba(10,14,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 16px}
+.header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 16px}
 .header-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;min-height:56px;padding:8px 0;gap:12px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .logo-icon{width:36px;height:36px;border-radius:8px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -120,8 +130,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .lbl-g{pointer-events:none;cursor:default}
 .lbl-lead{fill:none;stroke:#94a3b8;stroke-width:.5;opacity:.35;pointer-events:none}
 .lbl-name,.lbl-count,.lbl-dot-label,.lbl-dot-organ{pointer-events:all;cursor:pointer}
-.lbl-name{font-family:Inter,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;fill:#e8ecf4}
-.lbl-count{font-family:Inter,sans-serif;font-size:7.5px;fill:#94a3b8}
+.lbl-name{font-family:Inter,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;fill:var(--t1)}
+.lbl-count{font-family:Inter,sans-serif;font-size:7.5px;fill:var(--t2)}
 .lbl-g:hover .lbl-lead,.lbl-g.hi .lbl-lead{stroke:var(--accent);opacity:1}
 .lbl-g:hover .lbl-name,.lbl-g.hi .lbl-name{fill:var(--accent)}
 
@@ -232,6 +242,7 @@ footer a{color:var(--accent);text-decoration:none}
       </div>
     </div>
     <div class="header-actions">
+      <button type="button" class="tbtn" id="themeBtn" onclick="toggleTheme()" title="Theme">☀️</button>
       <button type="button" class="tbtn lang" id="langBtn" onclick="toggleLang()" title="RU / EN">RU</button>
       <button type="button" class="tbtn" onclick="openAbout()" data-i18n="about">About</button>
       <div class="hstats" id="hs"></div>
@@ -295,6 +306,28 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <script src="proteins.js?v=20260522-index"></script>
+<script>
+const THEME_KEY = 'tmt-theme';
+
+function applyTheme(theme){
+  const useTheme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', useTheme);
+  const themeBtn = document.getElementById('themeBtn');
+  if (themeBtn) themeBtn.textContent = useTheme === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme(){
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  localStorage.setItem(THEME_KEY, next);
+}
+
+(function initTheme(){
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  applyTheme(savedTheme || 'dark');
+})();
+</script>
 <script src="app.js?v=20260522-index"></script>
 </body>
 </html>
