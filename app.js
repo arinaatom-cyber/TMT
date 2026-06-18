@@ -117,6 +117,25 @@ const I18N={
 };
 let lang=localStorage.getItem('hpa-lang')||'ru';
 function t(k){return (I18N[lang]||I18N.ru)[k]||k;}
+const ORGAN_LABELS={
+  ru:{
+    Testis:'Яички',Colon:'Толстая кишка',Small_Intestine:'Тонкая кишка',
+    Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз'
+  },
+  en:{
+    Testis:'Testicles',Colon:'Large intestine',Small_Intestine:'Small intestine',
+    Salivary_Gland:'Salivary glands',Pituitary:'Pituitary'
+  }
+};
+function organDisplayName(o){
+  const m=ORGAN_LABELS[lang]||ORGAN_LABELS.en;
+  return m[o]||o.replace(/_/g,' ');
+}
+function organSearchText(o){
+  const base=o.replace(/_/g,' ').toLowerCase();
+  const disp=organDisplayName(o).toLowerCase();
+  return base+' '+disp;
+}
 function i18nApply(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n');if(I18N[lang][k]) el.textContent=I18N[lang][k];
@@ -175,7 +194,7 @@ function filteredRows(){return D.filter(r=>{
     if((r.pmid||'').toLowerCase().includes(q)) return true;
     if((r.dis||'').toLowerCase().includes(q)) return true;
     if((r.disCanon||'').toLowerCase().includes(q)) return true;
-    if(r.organs.some(o=>o.replace(/_/g,' ').toLowerCase().includes(q))) return true;
+    if(r.organs.some(o=>organSearchText(o).includes(q))) return true;
     return false;
   }
   return true;
@@ -192,7 +211,7 @@ function rebuildCounts(){
 function rowMatchesSidebar(o){
   if(!F.q) return true;
   const q=F.q.toLowerCase();
-  const name=o.replace(/_/g,' ').toLowerCase();
+  const name=organSearchText(o);
   if(name.includes(q)) return true;
   return filteredRows().some(r=>r.organs.includes(o));
 }
@@ -347,7 +366,7 @@ function buildSidebar(){
     h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
     items.forEach(o=>{
       const n=C[o],c=organColor(o);
-      h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${o.replace(/_/g,' ')}</span><span class="ct">${n}</span></div>`;
+      h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${organDisplayName(o)}</span><span class="ct">${n}</span></div>`;
     });
     h+=`</div></div>`;
   });
@@ -356,7 +375,7 @@ function buildSidebar(){
 function filtSidebar(q){
   const s=(q||'').toLowerCase();
   document.querySelectorAll('.oitem').forEach(e=>{
-    e.style.display=e.dataset.o.toLowerCase().replace(/_/g,' ').includes(s)?'':'none';
+    e.style.display=organSearchText(e.dataset.o).includes(s)?'':'none';
   });
 }
 function compareBlock(currentOrgan){
@@ -364,12 +383,12 @@ function compareBlock(currentOrgan){
   if(organs.length<2) return '';
   const optA=organs.map(o=>{
     const sel=o===currentOrgan?' selected':'';
-    return `<option value="${o}"${sel}>${o.replace(/_/g,' ')} (${C[o]})</option>`;
+    return `<option value="${o}"${sel}>${organDisplayName(o)} (${C[o]})</option>`;
   }).join('');
   const other=organs.find(o=>o!==currentOrgan)||organs[1];
   const optB=organs.map(o=>{
     const sel=o===other?' selected':'';
-    return `<option value="${o}"${sel}>${o.replace(/_/g,' ')} (${C[o]})</option>`;
+    return `<option value="${o}"${sel}>${organDisplayName(o)} (${C[o]})</option>`;
   }).join('');
   return `<details class="extras-block">
     <summary>${t('extras')}</summary>
@@ -393,9 +412,9 @@ function runCompare(){
     ?window.ProteinAtlas.renderVennCompare(a,b)
     :`<p class="prot-hint">${t('indexLoading')}</p>`;
   out.innerHTML=`<div class="compare-grid">
-    <div class="compare-col"><h5>${a.replace(/_/g,' ')}</h5>
+    <div class="compare-col"><h5>${organDisplayName(a)}</h5>
       ${cmpRows(sa)}</div>
-    <div class="compare-col"><h5>${b.replace(/_/g,' ')}</h5>
+    <div class="compare-col"><h5>${organDisplayName(b)}</h5>
       ${cmpRows(sb)}</div>
   </div>${venn}`;
 }
@@ -836,82 +855,80 @@ window.addEventListener('DOMContentLoaded',()=>{
      y=325  L5 (iliac crest)
      y=355  pubic symphysis (S2)  — body ends at y=370 */
 const ANATOMY={
-  /* HEAD (y=20–95).  Eye line y=62, brain fills upper cranium. */
-  Brain:           {pos:{x:240, y: 42}, side:'R', size:42, emoji:'1f9e0',                 z:1},
-  Pituitary:       {pos:{x:240, y: 56}, side:'R', size:0,  z:2, d:
-    'M 236 54 A 4 3 0 1 0 244 54 A 4 3 0 1 0 236 54 Z'},
-  /* Two eyes on the eye line (y=62), not on the neck */
+  /* HEAD (y=20–95) */
+  Brain:           {pos:{x:240, y: 42}, side:'R', size:42, emoji:'1f9e0', z:1},
+  Pituitary:       {pos:{x:240, y: 58}, side:'R', size:0,  z:3, d:
+    'M 232 54 Q 240 49 248 54 Q 250 63 240 66 Q 230 63 232 54 Z'},
   Eye:             {pos:{x:240, y: 62}, side:'L', size:0,  z:2, d:
     'M 224 62 A 6 3 0 1 0 236 62 A 6 3 0 1 0 224 62 Z '+
     'M 244 62 A 6 3 0 1 0 256 62 A 6 3 0 1 0 244 62 Z '+
     'M 230 62 A 1.6 1.6 0 1 0 230.01 62 Z '+
     'M 250 62 A 1.6 1.6 0 1 0 250.01 62 Z'},
-  /* Salivary glands clearly inside face (above jaw line y=94) */
-  Salivary_Gland:  {pos:{x:240, y: 84}, side:'R', size:0,  z:2, d:
-    'M 224 84 Q 218 80 220 76 Q 230 76 232 82 Z '+
-    'M 256 84 Q 262 80 260 76 Q 250 76 248 82 Z'},
+  Salivary_Gland:  {pos:{x:240, y: 78}, side:'R', size:0,  z:3, d:
+    'M 212 70 Q 204 64 210 58 Q 224 56 230 64 Q 228 76 218 78 Q 210 76 212 70 Z '+
+    'M 268 70 Q 276 64 270 58 Q 256 56 250 64 Q 252 76 262 78 Q 270 76 268 70 Z '+
+    'M 224 86 Q 220 90 224 95 Q 232 93 230 86 Z '+
+    'M 256 86 Q 260 90 256 95 Q 248 93 250 86 Z'},
 
-  /* NECK (y=95–130) */
+  /* NECK */
   Thyroid:         {pos:{x:240, y:118}, side:'L', size:0,  z:2, d:
     'M 228 114 Q 222 118 226 126 Q 234 128 240 126 Q 246 128 254 126 Q 258 118 252 114 Q 244 112 240 118 Q 236 112 228 114 Z'},
 
-  /* THORAX (y=130–220). Two anatomical lungs as custom paths so the heart
-     is clearly visible between them (cardiac notch). */
-  Esophagus:       {pos:{x:240, y:170}, side:'R', size:0,  z:1, d:
-    'M 237 130 L 243 130 L 243 220 L 237 220 Z'},
-  /* RIGHT LUNG (patient's right = viewer's LEFT side, x<240).  3 lobes, larger. */
+  /* THORAX — esophagus descends toward stomach (left) */
+  Esophagus:       {pos:{x:248, y:178}, side:'L', size:0,  z:1, d:
+    'M 238 130 L 246 130 L 248 218 Q 250 228 256 236 L 258 238'},
   Lung:            {pos:{x:240, y:175}, side:'L', size:0,  z:2, d:
     'M 222 138 Q 198 144 192 162 Q 184 200 198 218 Q 214 222 230 218 Q 234 200 232 162 Q 230 144 222 138 Z '+
-    /* LEFT LUNG (patient's left = viewer's RIGHT, x>240).  2 lobes, smaller, with cardiac notch on inner side. */
     'M 258 138 Q 282 144 288 162 Q 296 200 282 218 Q 266 222 254 218 L 252 200 Q 247 196 247 188 L 251 180 Q 248 162 250 154 Q 252 144 258 138 Z'},
-  /* HEART — anatomical shape (apex pointing down-left), sits in cardiac notch */
-  Heart:           {pos:{x:236, y:188}, side:'R', size:0,  z:3, d:
-    'M 236 174 Q 224 174 222 188 Q 222 200 232 212 L 240 220 Q 252 206 252 192 Q 252 174 240 174 Q 238 172 236 174 Z'},
+  Heart:           {pos:{x:254, y:186}, side:'R', size:0,  z:3, d:
+    'M 254 168 Q 242 166 240 180 Q 240 194 250 206 L 258 214 Q 270 200 270 186 Q 268 170 256 168 Z'},
   Breast:          {pos:{x:240, y:208}, side:'L', size:0,  z:4, d:
     'M 208 206 A 3.2 3.2 0 1 0 214.4 206 A 3.2 3.2 0 1 0 208 206 Z '+
     'M 265.6 206 A 3.2 3.2 0 1 0 272 206 A 3.2 3.2 0 1 0 265.6 206 Z'},
 
-  /* UPPER ABDOMEN (y=220–275).  Below diaphragm. */
-  Liver:           {pos:{x:218, y:248}, side:'L', size:44, icon:'game-icons:liver',       z:2},
-  Stomach:         {pos:{x:264, y:248}, side:'R', size:32, icon:'game-icons:stomach',     z:3},
-  Spleen:          {pos:{x:282, y:242}, side:'R', size:0,  z:2, d:
-    'M 280 234 Q 292 238 292 252 Q 288 266 280 266 Q 274 254 278 240 Z'},
-  Pancreas:        {pos:{x:240, y:272}, side:'L', size:0,  z:2, d:
-    'M 208 270 Q 228 264 250 270 Q 262 272 270 278 L 270 282 Q 260 278 248 276 Q 226 274 208 276 Z'},
+  /* UPPER ABDOMEN — liver ~⅓ lung; stomach ~½ liver; spleen left-upper quadrant */
+  Liver:           {pos:{x:200, y:252}, side:'L', size:0,  z:2, d:
+    'M 184 222 Q 172 244 176 272 Q 182 296 204 302 Q 232 304 250 288 Q 262 266 258 240 Q 248 224 226 220 Q 200 218 184 222 Z'},
+  Stomach:         {pos:{x:272, y:252}, side:'R', size:0,  z:3, d:
+    'M 258 238 L 264 238 L 268 256 Q 274 276 276 296 Q 274 310 262 314 Q 250 310 248 292 L 250 258 Q 252 246 258 238 Z'},
+  Spleen:          {pos:{x:286, y:242}, side:'R', size:0,  z:2, d:
+    'M 278 230 Q 294 228 298 244 Q 296 266 284 270 Q 272 256 274 238 Z'},
+  Pancreas:        {pos:{x:262, y:284}, side:'R', size:0,  z:3, d:
+    'M 276 280 Q 268 274 254 276 Q 238 280 226 288 Q 220 294 228 298 Q 246 294 262 290 Q 278 286 286 282 Q 290 278 282 276 Q 276 274 276 280 Z'},
 
-  /* MID ABDOMEN (y=240–310). */
   Adrenal_Gland:   {pos:{x:240, y:250}, side:'R', size:0,  z:1, d:
-    'M 220 246 Q 224 242 230 246 Q 228 252 222 252 Q 218 250 220 246 Z '+
-    'M 250 246 Q 256 242 260 246 Q 262 250 258 252 Q 252 252 250 246 Z'},
-  Kidney:          {pos:{x:240, y:270}, side:'L', size:42, icon:'game-icons:kidneys',     z:2},
+    'M 192 246 Q 196 242 202 246 Q 200 252 194 252 Q 190 250 192 246 Z '+
+    'M 278 246 Q 284 242 288 246 Q 290 250 286 252 Q 280 252 278 246 Z'},
+  Kidney:          {pos:{x:240, y:266}, side:'L', size:0,  z:2, d:
+    'M 184 256 Q 174 266 176 284 Q 184 296 194 292 Q 202 280 200 266 Q 196 254 184 256 Z '+
+    'M 296 256 Q 306 266 304 284 Q 296 296 286 292 Q 278 280 280 266 Q 284 254 296 256 Z'},
 
-  /* LOWER ABDOMEN (y=290–340). */
-  Colon:           {pos:{x:240, y:312}, side:'L', size:54, icon:'game-icons:bowels',      z:2},
-  Small_Intestine: {pos:{x:240, y:312}, side:'R', size:0,  z:3, d:
-    'M 222 298 Q 234 294 248 298 Q 260 302 256 310 Q 240 312 226 308 '+
-    'Q 218 318 232 322 Q 248 322 258 318 Q 260 326 250 330 Q 234 332 224 326 '+
-    'Q 218 336 232 340 Q 248 340 258 336'},
+  /* INTESTINES — duodenum from stomach; coiled small bowel; framing colon */
+  Small_Intestine: {pos:{x:252, y:322}, side:'L', size:0,  z:3, d:
+    'M 264 302 Q 270 306 268 316 Q 262 324 252 322 Q 240 318 238 328 Q 236 342 248 348 Q 262 350 270 340 Q 274 330 268 322 Q 260 314 264 302 Z '+
+    'M 246 348 Q 234 352 230 364 Q 232 376 244 380 Q 258 378 262 366 Q 260 356 246 348 Z '+
+    'M 254 378 Q 266 382 270 394 Q 268 404 256 406 Q 242 402 238 392 Q 240 384 254 378 Z '+
+    'M 248 400 Q 236 404 234 414 Q 236 422 246 424 Q 256 420 258 412 Q 254 404 248 400 Z'},
+  Colon:           {pos:{x:240, y:342}, side:'R', size:0,  z:2, d:
+    'M 200 318 Q 184 334 182 358 Q 180 384 196 402 Q 218 414 248 412 Q 278 410 296 394 Q 308 370 304 344 Q 294 322 274 314 Q 252 310 230 314 Q 210 318 200 318 Z '+
+    'M 200 318 Q 224 310 248 308 Q 272 310 296 318'},
 
-  /* PELVIS — spread organs across y=336–366 instead of stacking them.
-     Anatomically: bladder anterior-superior; uterus/prostate posterior;
-     ovaries lateral; cervix at uterine outlet. */
-  Bladder:         {pos:{x:240, y:336}, side:'R', size:0,  z:4, d:
-    'M 226 332 Q 240 326 254 332 Q 258 342 240 346 Q 222 342 226 332 Z'},
-  Uterus:          {pos:{x:240, y:348}, side:'L', size:0,  z:3, d:
-    'M 230 344 Q 240 338 250 344 L 248 356 L 232 356 Z'},
-  Ovary:           {pos:{x:240, y:350}, side:'R', size:0,  z:3, d:
-    'M 212 350 Q 206 352 208 358 Q 216 360 220 356 Q 220 352 212 350 Z '+
-    'M 268 350 Q 274 352 272 358 Q 264 360 260 356 Q 260 352 268 350 Z'},
-  Cervix:          {pos:{x:240, y:360}, side:'L', size:0,  z:3, d:
-    'M 235 358 L 245 358 L 243 364 L 237 364 Z'},
+  /* PELVIS */
+  Bladder:         {pos:{x:240, y:356}, side:'R', size:0,  z:4, d:
+    'M 232 352 Q 240 348 248 352 Q 250 360 240 362 Q 230 360 232 352 Z'},
+  Uterus:          {pos:{x:240, y:346}, side:'L', size:0,  z:3, d:
+    'M 226 336 Q 240 328 254 336 L 258 362 Q 240 370 222 362 Z'},
+  Ovary:           {pos:{x:240, y:334}, side:'R', size:0,  z:3, d:
+    'M 210 330 Q 204 332 206 338 Q 212 340 216 336 Q 216 332 210 330 Z '+
+    'M 270 330 Q 276 332 274 338 Q 268 340 264 336 Q 264 332 270 330 Z '+
+    'M 216 334 Q 222 332 226 336 M 264 336 Q 258 332 254 336'},
+  Cervix:          {pos:{x:240, y:364}, side:'L', size:0,  z:3, d:
+    'M 235 362 L 245 362 L 243 368 L 237 368 Z'},
   Prostate:        {pos:{x:240, y:354}, side:'R', size:0,  z:3, d:
     'M 232 350 Q 240 344 248 350 Q 250 358 240 360 Q 230 358 232 350 Z'},
+  Testis:          {pos:{x:240, y:388}, side:'L', size:0,  z:3, d:
+    'M 232 382 Q 224 394 234 400 Q 240 400 242 394 Q 244 400 248 400 Q 256 394 248 382 Q 244 380 240 388 Q 236 380 232 382 Z'},
 
-  /* SCROTUM (between legs, body ends at y=370) */
-  Testis:          {pos:{x:240, y:386}, side:'L', size:0,  z:3, d:
-    'M 232 380 Q 224 392 234 398 Q 240 398 242 392 Q 244 398 248 398 Q 256 392 248 380 Q 244 378 240 386 Q 236 378 232 380 Z'},
-
-  /* SKELETON — clavicles, ribs, sternum, spine, pelvis, femurs, tibias */
   Bone:            {pos:{x:240, y:320}, side:'R', size:0,  z:0, skeleton:true, d:
     /* clavicles */
     'M 198 132 Q 218 126 240 128 Q 262 126 282 132 '+
@@ -1008,7 +1025,7 @@ function projectCard(r){
     ?`<span class="status normal">NORMAL</span>`
     :`<span class="status cancer">CANCER</span>`;
   const pan=r.isPan?`<span class="status pan">${t('panBadge')}</span>`:'';
-  const organs=r.organs.map(x=>x.replace(/_/g,' ')).join(', ');
+  const organs=r.organs.map(x=>organDisplayName(x)).join(', ');
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
   const proteins=window.ProteinAtlas?ProteinAtlas.proteinBadgesHtml(r):'';
   const platform=r.platform?`<span class="meta-pill">${esc(r.platform.slice(0,28))}</span>`:'';
@@ -1090,7 +1107,7 @@ function organLabel(o, labelY){
   const isL=a.side==='L';
   const labelX=isL?10:470;
   const anchor=isL?'start':'end';
-  const name=o.replace(/_/g,' ').toUpperCase();
+  const name=organDisplayName(o).toUpperCase();
   const s=organStats(o);
   const ox=a.pos.x, oy=a.pos.y;
   const turnX=isL?156:324;
@@ -1185,7 +1202,7 @@ function bindMapClicks(){
 function st(ev,o){
   const tip=document.getElementById('tip');
   const s=organStats(o);
-  tip.innerHTML=`<div class="tn">${o.replace(/_/g,' ')}</div>
+  tip.innerHTML=`<div class="tn">${organDisplayName(o)}</div>
     <div class="tc">${s.n} ${t('projects')} · ${s.nC}C · ${s.nN}N</div>
     ${s.topDis?`<div class="td">${esc(s.topDis)}</div>`:''}`;
   tip.style.display='block';
@@ -1241,7 +1258,7 @@ function sel(o){
   </div>
   <div class="hero" style="border-left-color:${col}">
     <div class="ic" style="background:${col}22;border:1px solid ${col}"></div>
-    <div><h2 class="hero-title">${o.replace(/_/g,' ')}</h2>
+    <div><h2 class="hero-title">${organDisplayName(o)}</h2>
     <div class="sub">${nShown} shown / ${nProj} ${t('projects')} · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} disease groups</div></div>
   </div>
   <div class="mstats">
