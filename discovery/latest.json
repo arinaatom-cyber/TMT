@@ -33,6 +33,11 @@
       "abstract_regex_only": 24,
       "abstract_atlas_fit_yes": 4,
       "abstract_atlas_fit_maybe": 6
+    },
+    "data_availability": {
+      "quant_table": 26,
+      "raw_only": 10,
+      "no_files": 12
     }
   },
   "catalog_profile": {
@@ -150,7 +155,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PXD077831",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PXD077831",
+        "source_checked": "PRIDE",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Protein.txt"
+        ],
+        "psm_files": [
+          "Peptide.txt"
+        ],
+        "raw_count": 4,
+        "n_listed": 9,
+        "sample_files": [
+          "Protein.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000649",
@@ -197,7 +221,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000649",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000649",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 496,
+        "n_listed": 496,
+        "sample_files": [
+          "20220719_GC_NTUH_Batch01_TMT11_phos_F02_01.raw",
+          "20231108_GC_TMT11_Phos_B17re_F05_01.raw",
+          "20221025_GC_Batch03_TMT11_phos_F03_02.raw",
+          "20230503_GC_Batch10re_TMT11_phos_F02_01.raw",
+          "20231227_GC_TMT11_Phos_B22_F01_01.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000645",
@@ -244,7 +287,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000645",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000645",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 744,
+        "n_listed": 744,
+        "sample_files": [
+          "20241014_GC_TMT11_B27_prot_F19.raw",
+          "20240226_GC_TMT11_Prot_B23_F15.raw",
+          "20230822_GC_TMT11_Prot_B16_F10.raw",
+          "20240301_GC_TMT11_Prot_B24_F01.raw",
+          "20231222_GC_TMT11_B20re_prot_F23.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000564",
@@ -291,7 +353,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000564",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000564",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.qcmetrics.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.phosphosite.tmt10.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.sample.txt",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.label.txt",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.summary.tsv"
+        ],
+        "psm_files": [
+          "20210127_LC_Batch75-L15_phos_F04_01.mzid.gz",
+          "20201201_LC_Batch35-L02_phos_F03_01.mzid.gz",
+          "20210909_LC_Batch78-L31_phos_F05_02.mzid.gz",
+          "20201210_LC_Batch54-L05_phos_F07_02.mzid.gz",
+          "20200926_LC_Latetest_Batch34_phos_F02_02.mzid.gz"
+        ],
+        "raw_count": 504,
+        "n_listed": 2024,
+        "sample_files": [
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.qcmetrics.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.phosphosite.tmt10.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.sample.txt",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000220",
@@ -338,7 +433,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000220",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000220",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Academia_Sinica_LUAD100_Phosphoproteome.label.txt",
+          "Academia_Sinica_LUAD100_Phosphoproteome.summary.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.qcmetrics.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.phosphosite.tmt10.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "20170627_LC_TMTB12_phospho_F06_02.mzid.gz",
+          "20170613_LC_TMTB10_phospho_F03_02.mzid.gz",
+          "20171101_LC_TMTB16_phospho_F09_01.mzid.gz",
+          "20170515_LC_TMTB6_phospho_F11_02.mzid.gz",
+          "20180207_LC_TMTB22_phospho_F11_02.mzid.gz"
+        ],
+        "raw_count": 504,
+        "n_listed": 2032,
+        "sample_files": [
+          "Academia_Sinica_LUAD100_Phosphoproteome.label.txt",
+          "Academia_Sinica_LUAD100_Phosphoproteome.summary.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.qcmetrics.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000436",
@@ -385,7 +513,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000436",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000436",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.peptides.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.qcmetrics.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.summary.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.label.txt",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.phosphosite.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "AP1_QEHF1_AP1_6_FeNTA_01.mzid.gz",
+          "AP1_QEHF1_AP1_9_FeNTA_02.mzid.gz",
+          "AP1_QEHF2_AP1_5_FeNTA_02.mzid.gz",
+          "AP1_QEHF1_AP1_6_FeNTA_05.mzid.gz",
+          "AP1_QEHF2_AP1_10_FeNTA_07.mzid.gz"
+        ],
+        "raw_count": 120,
+        "n_listed": 489,
+        "sample_files": [
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.peptides.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.qcmetrics.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.summary.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000435",
@@ -432,7 +593,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000435",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000435",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "APOLLO_LUAD_Phosphoproteome_TiO2.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphosite.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphopeptide.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.label.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.peptides.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.qcmetrics.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.summary.tsv"
+        ],
+        "psm_files": [
+          "AP1_QEHF2_AP1_3_TiO2_04.mzid.gz",
+          "AP1_QEHF1_AP1_1_TiO2_02.mzid.gz",
+          "AP1_QEHF2_AP1_5_TiO2_02.mzid.gz",
+          "AP1_QEHF2_AP1_10_TiO2_03.mzid.gz",
+          "AP1_QEHF2_AP1_3_TiO2_01.mzid.gz"
+        ],
+        "raw_count": 120,
+        "n_listed": 489,
+        "sample_files": [
+          "APOLLO_LUAD_Phosphoproteome_TiO2.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphosite.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphopeptide.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.label.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000430",
@@ -481,7 +675,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000430",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000430",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 17,
+        "n_listed": 17,
+        "sample_files": [
+          "BL20161130_BI_FM_Medullo_KAc_Plex01_Fxn3.raw",
+          "BA20161202_BI_FM_Medullo_KAc_Plex04_Fxn3.raw",
+          "BA20161203_BI_FM_Medullo_KAc_Plex05_Fxn3.raw",
+          "BA20161201_BI_FM_Medullo_KAc_Plex03_Fxn3.raw",
+          "BA20161201_BI_FM_Medullo_KAc_Plex02_Fxn1.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000431",
@@ -530,7 +743,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000431",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000431",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 10,
+        "n_listed": 10,
+        "sample_files": [
+          "BL20161004_BI_FM_Medullo_pY_Plex01_Fxn1.raw",
+          "BL20170113_BI_FM_Medullo_pY_Plex05_Fxn1.raw",
+          "BA20161122_BI_FM_Medullo_pY_Plex04_Fxn1.raw",
+          "BL20161004_BI_FM_Medullo_pY_Plex02_Fxn1.raw",
+          "BL20161004_BI_FM_Medullo_pY_Plex03_Fxn1.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000432",
@@ -579,7 +811,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000432",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000432",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 65,
+        "n_listed": 65,
+        "sample_files": [
+          "BL20160819_FM_Medullo_Phosphoproteome_Plex02_Fxn02.raw",
+          "BL20160823_FM_Medullo_Phosphoproteome_Plex04_Fxn07.raw",
+          "BL20160819_FM_Medullo_Phosphoproteome_Plex02_Fxn03.raw",
+          "BL20160819_FM_Medullo_Phosphoproteome_Plex01_Fxn03.raw",
+          "BL20160823_FM_Medullo_Phosphoproteome_Plex04_Fxn11.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000520",
@@ -626,7 +877,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000520",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000520",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.peptides.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.sample.txt",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.qcmetrics.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.label.txt"
+        ],
+        "psm_files": [
+          "20200924_900ug_KCGMHb2-T-pp_R-s05.mzid.gz",
+          "20200506_900ug_OCb1r-T-pp-s04.mzid.gz",
+          "20200616_900ug_OCb12-T-pp-s30.mzid.gz",
+          "20190620_900ug_CMb3-T-pp_R-s28.mzid.gz",
+          "20190121_900ug_OCb4-N-pp-s27.mzid.gz"
+        ],
+        "raw_count": 2016,
+        "n_listed": 8072,
+        "sample_files": [
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.peptides.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000521",
@@ -673,7 +957,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000521",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000521",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.label.txt",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.qcmetrics.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.sample.txt",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.peptides.tsv"
+        ],
+        "psm_files": [
+          "20190730-OCb7-N-multiple-ppep-UPLC.mzid.gz",
+          "20200511-OCb1r-N-multiple-ppep-R-UPLC.mzid.gz",
+          "20200615-OCb12-T-multiple-ppep-R-UPLC.mzid.gz",
+          "20200106-OCb9-N-multiple-ppep-UPLC.mzid.gz",
+          "20200519-OCb3r-T-multiple-ppep-UPLC.mzid.gz"
+        ],
+        "raw_count": 56,
+        "n_listed": 232,
+        "sample_files": [
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.label.txt",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.qcmetrics.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000199",
@@ -734,7 +1051,39 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000199",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000199",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Zhou_Liver_Cancer_Phosphoproteome.qcmetrics.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.summary.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphosite.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.peptides.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "20180630_fusion_zhw_TMT11_liver30_pho_F16.mzid.gz",
+          "20180702_fusion_zhw_TMT11_liver31_pho_F13.mzid.gz",
+          "20180427_fusion_zhw_TMT11_liver11_pho_F19.mzid.gz",
+          "20180611_fusion_zhw_TMT11_liver22_pho_F13.mzid.gz",
+          "20180629_fusion_zhw_TMT11_liver29_pho_F10.mzid.gz"
+        ],
+        "raw_count": 971,
+        "n_listed": 3896,
+        "sample_files": [
+          "Zhou_Liver_Cancer_Phosphoproteome.qcmetrics.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.summary.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphosite.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000496",
@@ -781,7 +1130,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000496",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000496",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "01CPTAC_CompRef_AYA_P_PNNL_20191126_B1S6_f06.mzid.gz",
+          "01CPTAC_CompRef_AYA_P_PNNL_20191126_B1S6_f07.mzid.gz",
+          "01CPTAC_CompRef_AYA_P_PNNL_20191126_B1S6_f09.mzid.gz",
+          "02CPTAC_CompRef_AYA_P_PNNL_20200204_B2S6_f06.mzid.gz",
+          "02CPTAC_CompRef_AYA_P_PNNL_20200204_B2S6_f01.mzid.gz"
+        ],
+        "raw_count": 24,
+        "n_listed": 107,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000495",
@@ -828,7 +1210,39 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000495",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000495",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.sample.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.qcmetrics.tsv"
+        ],
+        "psm_files": [
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f05.mzid.gz",
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f21.mzid.gz",
+          "01CPTAC_CompRef_AYA_W_PNNL_20191126_B1S6_f23.mzid.gz",
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f16.mzid.gz",
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f12.mzid.gz"
+        ],
+        "raw_count": 48,
+        "n_listed": 202,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000499",
@@ -875,7 +1289,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000499",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000499",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 120,
+        "n_listed": 243,
+        "sample_files": [
+          "09CPTAC_AYA_G_JHU_20230323_B2S4_f06.mzML.gz",
+          "10CPTAC_AYA_G_JHU_20230326_B2S5_f07.mzML.gz",
+          "01CPTAC_AYA_G_JHU_20230303_B1S1_f11.raw",
+          "02CPTAC_AYA_G_JHU_20230305_B1S2_f10.raw",
+          "06CPTAC_AYA_G_JHU_20230317_B2S1_f11.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000497",
@@ -922,7 +1355,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000497",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000497",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "07CPTAC_AYA_P_PNNL_20200204_B2S2_f12.mzid.gz",
+          "04CPTAC_AYA_P_PNNL_20191126_B1S4_f04.mzid.gz",
+          "08CPTAC_AYA_P_PNNL_20200204_B2S3_f07.mzid.gz",
+          "08CPTAC_AYA_P_PNNL_20200204_B2S3_f01.mzid.gz",
+          "02CPTAC_AYA_P_PNNL_20191126_B1S2_f07.mzid.gz"
+        ],
+        "raw_count": 120,
+        "n_listed": 491,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000498",
@@ -969,7 +1435,39 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000498",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000498",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.sample.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.peptides.tsv"
+        ],
+        "psm_files": [
+          "02CPTAC_AYA_W_PNNL_20191126_B1S2_f14.mzid.gz",
+          "01CPTAC_AYA_W_PNNL_20191126_B1S1_f14.mzid.gz",
+          "10CPTAC_AYA_W_PNNL_20200204_B2S5_f05.mzid.gz",
+          "05CPTAC_AYA_W_PNNL_20191126_B1S5_f21.mzid.gz",
+          "04CPTAC_AYA_W_PNNL_20191126_B1S4_f08.mzid.gz"
+        ],
+        "raw_count": 240,
+        "n_listed": 970,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000515",
@@ -1016,7 +1514,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000515",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000515",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.qcmetrics.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.sample.txt",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.peptides.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.summary.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.phosphosite.tmt11.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.label.txt"
+        ],
+        "psm_files": [
+          "GBM_TMT_Phospho_S06_F12.mzid.gz",
+          "GBM_TMT_Phospho_S29_F06.mzid.gz",
+          "GBM_TMT_Phospho_S07_F11.mzid.gz",
+          "GBM_TMT_Phospho_S03_F07.mzid.gz",
+          "GBM_TMT_Phospho_S08_F11.mzid.gz"
+        ],
+        "raw_count": 264,
+        "n_listed": 1064,
+        "sample_files": [
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.qcmetrics.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.sample.txt",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.peptides.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000343",
@@ -1063,7 +1594,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000343",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000343",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "KU_CCA_Discovery_Phosphoproteome.peptides.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.sample.txt",
+          "KU_CCA_Discovery_Phosphoproteome.phosphosite.tmt11.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.qcmetrics.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.summary.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.label.txt",
+          "KU_CCA_Discovery_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "CCA_064212_Phospho_FN12_C2_180min_071918.mzid.gz",
+          "CCA_124226_Phospho_FN12_C2_180min_020119.mzid.gz",
+          "CCA_063217_Phospho_FN09_C1_180min_072518.mzid.gz",
+          "CCA_054172_Phospho_FN12_C2_180min_080318.mzid.gz",
+          "CCA_124226_Phospho_FN09_C1_180min_020119.mzid.gz"
+        ],
+        "raw_count": 180,
+        "n_listed": 728,
+        "sample_files": [
+          "KU_CCA_Discovery_Phosphoproteome.peptides.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.sample.txt",
+          "KU_CCA_Discovery_Phosphoproteome.phosphosite.tmt11.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.qcmetrics.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000249",
@@ -1110,7 +1674,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000249",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000249",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "KU_PDAC_Discovery_Study_Phosphoproteome.peptides.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.sample.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.phosphosite.tmt10.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.label.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.summary.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.qcmetrics.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.phosphopeptide.tmt10.tsv"
+        ],
+        "psm_files": [
+          "PDAC_049152_T10_Phos_2mg_FN10_C2_180min_042818.mzid.gz",
+          "PDAC_074013_T10_Phos_2mg_FN03_C1_180min_022718.mzid.gz",
+          "PDAC_029174_T10_Phos_2mg_FN02_C2_180min_042618.mzid.gz",
+          "PDAC_029174_T10_Phos_2mg_FN12_C2_180min_031918.mzid.gz",
+          "PDAC_234232_T10_Phos_2mg_FN01_C1_180min_100818.mzid.gz"
+        ],
+        "raw_count": 360,
+        "n_listed": 1448,
+        "sample_files": [
+          "KU_PDAC_Discovery_Study_Phosphoproteome.peptides.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.sample.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.phosphosite.tmt10.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.label.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000363",
@@ -1157,7 +1754,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000363",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000363",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "iCC_NCC_Phosphoproteome.qcmetrics.tsv",
+          "iCC_NCC_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "iCC_NCC_Phosphoproteome.summary.tsv",
+          "iCC_NCC_Phosphoproteome.sample.txt",
+          "iCC_NCC_Phosphoproteome.phosphosite.tmt10.tsv",
+          "iCC_NCC_Phosphoproteome.label.txt",
+          "iCC_NCC_Phosphoproteome.peptides.tsv"
+        ],
+        "psm_files": [
+          "20181202_NCC_TMT10_06set_phospho_Frac_09.mzid.gz",
+          "20190129_NCC_TMT10_17set-phospho_Frac_04.mzid.gz",
+          "20190206_NCC_TMT10_3set-phospho_Frac_02.mzid.gz",
+          "20181225_NCC_TMT10_14set_phospho_Frac_08.mzid.gz",
+          "20190203_NCC_TMT10_1set-phospho_Frac_04.mzid.gz"
+        ],
+        "raw_count": 260,
+        "n_listed": 1048,
+        "sample_files": [
+          "iCC_NCC_Phosphoproteome.qcmetrics.tsv",
+          "iCC_NCC_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "iCC_NCC_Phosphoproteome.summary.tsv",
+          "iCC_NCC_Phosphoproteome.sample.txt",
+          "iCC_NCC_Phosphoproteome.phosphosite.tmt10.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000591",
@@ -1218,7 +1848,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000591",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000591",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.summary.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.peptides.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.phosphosite.tmt11.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "20210422_HFX_GJ_PNET_GROUP01_Pho_F03.mzid.gz",
+          "20210308_HFX_GJ_PNET_GROUP06_Pho_F05.mzid.gz",
+          "20210528_HFX_GJ_PNET_GROUP08_Pho_F23.mzid.gz",
+          "20210411_HFX_GJ_PNET_GROUP21_Pho_F15.mzid.gz",
+          "20210420_HFX_GJ_PNET_GROUP23_Pho_F20.mzid.gz"
+        ],
+        "raw_count": 575,
+        "n_listed": 2309,
+        "sample_files": [
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.summary.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000589",
@@ -1279,7 +1942,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000589",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000589",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphopeptide.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphosite.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.peptides.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.sample.txt",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.summary.tsv"
+        ],
+        "psm_files": [
+          "20211229_HFX_GJ_PNET_21_GROUP03_TMT16_Pho_F24.mzid.gz",
+          "20211226_HFX_GJ_PNET_21_GROUP02_TMT16_Pho_F20.mzid.gz",
+          "20220113_HFX_GJ_PNET_21_GROUP06_TMT16_Pho_F23.mzid.gz",
+          "20211229_HFX_GJ_PNET_21_GROUP03_TMT16_Pho_F22.mzid.gz",
+          "20220103_HFX_GJ_PNET_21_GROUP08_TMT16_Pho_F03.mzid.gz"
+        ],
+        "raw_count": 150,
+        "n_listed": 609,
+        "sample_files": [
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphopeptide.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphosite.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000176",
@@ -1346,7 +2042,41 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000176",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000176",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Gygi_TCMP_HMS_Phosphoproteome.qcmetrics.tsv",
+          "Gygi_TCMP_HMS_Phosphoproteome.sample.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.peptides.tsv",
+          "S047 Reporter QuantIsotopicPurityCorrectionParameterFile.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.mzIdentML.txt",
+          "S047 ReporterQuantParameter File.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.phosphosite.tmt11.tsv",
+          "Gygi_TCMP_HMS_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "NCI-11pex-12H-Phos-JM05254.mzid.gz",
+          "NCI-11pex-20C-Phos-c05391.mzid.gz",
+          "NCI-11pex-8C-Phos-c05379.mzid.gz",
+          "NCI-11pex-3H-Phos-JM05262.mzid.gz",
+          "NCI-11pex-20H-Phos-JM05245.mzid.gz"
+        ],
+        "raw_count": 46,
+        "n_listed": 210,
+        "sample_files": [
+          "Gygi_TCMP_HMS_Phosphoproteome.qcmetrics.tsv",
+          "Gygi_TCMP_HMS_Phosphoproteome.sample.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.peptides.tsv",
+          "S047 Reporter QuantIsotopicPurityCorrectionParameterFile.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.mzIdentML.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000607",
@@ -1393,7 +2123,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000607",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000607",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 396,
+        "n_listed": 396,
+        "sample_files": [
+          "20220906_HFX_SYL_GBC_TMT16_Pho_Group10_F05.raw",
+          "20220906_HFX_SYL_GBC_TMT16_Pho_Group10_F09.raw",
+          "20220920_HFX_SYL_GBC_TMT16_Pho_Group17_F06.raw",
+          "20221024_HFX_SYL_GBC_TMT16_Pho_Group30_F03.raw",
+          "20221023_HFX_SYL_GBC_TMT16_Pho_Group32_F07.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000606",
@@ -1440,7 +2189,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000606",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000606",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 768,
+        "n_listed": 768,
+        "sample_files": [
+          "20220813_HF_SYL_GBC_TMT16_Pro_Group_32_F15.raw",
+          "20220516_HF_LDY_GBC_TMT16_Pro_Group_05_F12.raw",
+          "20220726_HF_SYL_GBC_TMT16_Pro_Group_25_F20.raw",
+          "20220830_HF_SYL_GBC_TMT16_Pro_Group_03_F24.raw",
+          "20220826_HF_SYL_GBC_TMT16_Pro_Group_28_F06.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000696",
@@ -1487,7 +2255,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000696",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000696",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 96,
+        "n_listed": 96,
+        "sample_files": [
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S03_F08.raw",
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S02_F03.raw",
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S04_F07.raw",
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S02_F01.raw",
+          "TNBC_NCC_TMTpro16plex_Phospho_S03_F01.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000695",
@@ -1534,7 +2321,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000695",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000695",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 216,
+        "n_listed": 216,
+        "sample_files": [
+          "TNBC_NCC-OP_TMTpro16plex_Global_S04_F03.raw",
+          "TNBC_NCC-OP_TMTpro16plex_Global_S04_F07.raw",
+          "TNBC_NCC-OP_TMTpro16plex_Global_S03_F24.raw",
+          "TNBC_NCC-OP_TMTpro16plex_Global_S04_F23.raw",
+          "TNBC_NCC_TMTpro16plex_Global_S04_F18.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000403",
@@ -1582,7 +2388,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000403",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000403",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.phosphosite.tmt11.tsv"
+        ],
+        "psm_files": [
+          "PTRC_Kurtz_Plex_02_P_f06.mzid.gz",
+          "PTRC_Kurtz_Plex_01_P_f04.mzid.gz",
+          "PTRC_Kurtz_Plex_01_P_f06.mzid.gz",
+          "PTRC_Kurtz_Plex_02_P_f05.mzid.gz",
+          "PTRC_Kurtz_Plex_01_P_f01.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 57,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000399",
@@ -1630,7 +2469,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000399",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000399",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.phosphopeptide.tmt10.tsv"
+        ],
+        "psm_files": [
+          "PTRC_Baseline_Plex_01_P_f04.mzid.gz",
+          "PTRC_Baseline_Plex_02_P_f03.mzid.gz",
+          "PTRC_Baseline_Plex_02_P_f01.mzid.gz",
+          "PTRC_Baseline_Plex_01_P_f06.mzid.gz",
+          "PTRC_Baseline_Plex_01_P_f03.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 57,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.phosphosite.tmt10.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000401",
@@ -1678,7 +2550,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000401",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000401",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.qcmetrics.tsv"
+        ],
+        "psm_files": [
+          "PTRC_4patient_Plex_01_P_f02.mzid.gz",
+          "PTRC_4patient_Plex_02_P_f03.mzid.gz",
+          "PTRC_4patient_Plex_01_P_f06.mzid.gz",
+          "PTRC_4patient_Plex_01_P_f04.mzid.gz",
+          "PTRC_4patient_Plex_01_P_f01.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 57,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000318",
@@ -1726,7 +2631,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000318",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000318",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.phosphosite.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.label.txt",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "PTRC_exp12_plex_02_P_f05.mzid.gz",
+          "PTRC_exp12_plex_04_P_f03.mzid.gz",
+          "PTRC_exp12_plex_03_P_f06.mzid.gz",
+          "PTRC_exp12_plex_01_P_f05.mzid.gz",
+          "PTRC_exp12_plex_01_P_f03.mzid.gz"
+        ],
+        "raw_count": 24,
+        "n_listed": 108,
+        "sample_files": [
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.phosphosite.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000319",
@@ -1774,7 +2712,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000319",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000319",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphosite.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.label.txt"
+        ],
+        "psm_files": [
+          "PTRC_Ex8_FLT3_ref_plex3_P_f03.mzid.gz",
+          "PTRC_Ex8_Par_ref_Plex1_P_f02.mzid.gz",
+          "PTRC_Ex8_FLT3_ref_plex3_P_f02.mzid.gz",
+          "PTRC_Ex8_FGF2_ref_plex2_P_f01.mzid.gz",
+          "PTRC_Ex8_FLT3_ref_plex3_P_f04.mzid.gz"
+        ],
+        "raw_count": 18,
+        "n_listed": 84,
+        "sample_files": [
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphosite.tmt11.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000320",
@@ -1822,7 +2793,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000320",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000320",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.label.txt",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.phosphosite.tmt11.tsv"
+        ],
+        "psm_files": [
+          "PTRC_exp12_plex_05_P_f01.mzid.gz",
+          "PTRC_exp12_plex_06_P_f06.mzid.gz",
+          "PTRC_exp12_plex_06_P_f02.mzid.gz",
+          "PTRC_exp12_plex_06_P_f04.mzid.gz",
+          "PTRC_exp12_plex_05_P_f05.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 60,
+        "sample_files": [
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000478",
@@ -1870,7 +2874,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000478",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000478",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "PTRC_exp10_Plex_01_P_f03.mzid.gz",
+          "PTRC_exp10_Plex_07_P_f08.mzid.gz",
+          "PTRC_exp10_Plex_01_P_f11.mzid.gz",
+          "PTRC_exp10_Plex_18_P_f07.mzid.gz",
+          "PTRC_exp10_Plex_09_P_f08.mzid.gz"
+        ],
+        "raw_count": 252,
+        "n_listed": 1016,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.label.txt"
+        ]
+      }
     }
   ],
   "candidates": [
@@ -1923,7 +2960,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PXD077831",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PXD077831",
+        "source_checked": "PRIDE",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Protein.txt"
+        ],
+        "psm_files": [
+          "Peptide.txt"
+        ],
+        "raw_count": 4,
+        "n_listed": 9,
+        "sample_files": [
+          "Protein.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000649",
@@ -1970,7 +3026,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000649",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000649",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 496,
+        "n_listed": 496,
+        "sample_files": [
+          "20220719_GC_NTUH_Batch01_TMT11_phos_F02_01.raw",
+          "20231108_GC_TMT11_Phos_B17re_F05_01.raw",
+          "20221025_GC_Batch03_TMT11_phos_F03_02.raw",
+          "20230503_GC_Batch10re_TMT11_phos_F02_01.raw",
+          "20231227_GC_TMT11_Phos_B22_F01_01.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000645",
@@ -2017,7 +3092,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000645",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000645",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 744,
+        "n_listed": 744,
+        "sample_files": [
+          "20241014_GC_TMT11_B27_prot_F19.raw",
+          "20240226_GC_TMT11_Prot_B23_F15.raw",
+          "20230822_GC_TMT11_Prot_B16_F10.raw",
+          "20240301_GC_TMT11_Prot_B24_F01.raw",
+          "20231222_GC_TMT11_B20re_prot_F23.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000564",
@@ -2064,7 +3158,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000564",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000564",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.qcmetrics.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.phosphosite.tmt10.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.sample.txt",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.label.txt",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.summary.tsv"
+        ],
+        "psm_files": [
+          "20210127_LC_Batch75-L15_phos_F04_01.mzid.gz",
+          "20201201_LC_Batch35-L02_phos_F03_01.mzid.gz",
+          "20210909_LC_Batch78-L31_phos_F05_02.mzid.gz",
+          "20201210_LC_Batch54-L05_phos_F07_02.mzid.gz",
+          "20200926_LC_Latetest_Batch34_phos_F02_02.mzid.gz"
+        ],
+        "raw_count": 504,
+        "n_listed": 2024,
+        "sample_files": [
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.qcmetrics.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.phosphosite.tmt10.tsv",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.sample.txt",
+          "Academia_Sinica_LUAD_ICPC_B_Phosphoproteome.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000220",
@@ -2111,7 +3238,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000220",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000220",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Academia_Sinica_LUAD100_Phosphoproteome.label.txt",
+          "Academia_Sinica_LUAD100_Phosphoproteome.summary.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.qcmetrics.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.phosphosite.tmt10.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "20170627_LC_TMTB12_phospho_F06_02.mzid.gz",
+          "20170613_LC_TMTB10_phospho_F03_02.mzid.gz",
+          "20171101_LC_TMTB16_phospho_F09_01.mzid.gz",
+          "20170515_LC_TMTB6_phospho_F11_02.mzid.gz",
+          "20180207_LC_TMTB22_phospho_F11_02.mzid.gz"
+        ],
+        "raw_count": 504,
+        "n_listed": 2032,
+        "sample_files": [
+          "Academia_Sinica_LUAD100_Phosphoproteome.label.txt",
+          "Academia_Sinica_LUAD100_Phosphoproteome.summary.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.peptides.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "Academia_Sinica_LUAD100_Phosphoproteome.qcmetrics.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000436",
@@ -2158,7 +3318,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000436",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000436",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.peptides.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.qcmetrics.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.summary.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.label.txt",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.phosphosite.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "AP1_QEHF1_AP1_6_FeNTA_01.mzid.gz",
+          "AP1_QEHF1_AP1_9_FeNTA_02.mzid.gz",
+          "AP1_QEHF2_AP1_5_FeNTA_02.mzid.gz",
+          "AP1_QEHF1_AP1_6_FeNTA_05.mzid.gz",
+          "AP1_QEHF2_AP1_10_FeNTA_07.mzid.gz"
+        ],
+        "raw_count": 120,
+        "n_listed": 489,
+        "sample_files": [
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.peptides.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.qcmetrics.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.summary.tsv",
+          "APOLLO_LUAD_Phosphoproteome_FeNTA.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000435",
@@ -2205,7 +3398,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000435",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000435",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "APOLLO_LUAD_Phosphoproteome_TiO2.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphosite.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphopeptide.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.label.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.peptides.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.qcmetrics.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.summary.tsv"
+        ],
+        "psm_files": [
+          "AP1_QEHF2_AP1_3_TiO2_04.mzid.gz",
+          "AP1_QEHF1_AP1_1_TiO2_02.mzid.gz",
+          "AP1_QEHF2_AP1_5_TiO2_02.mzid.gz",
+          "AP1_QEHF2_AP1_10_TiO2_03.mzid.gz",
+          "AP1_QEHF2_AP1_3_TiO2_01.mzid.gz"
+        ],
+        "raw_count": 120,
+        "n_listed": 489,
+        "sample_files": [
+          "APOLLO_LUAD_Phosphoproteome_TiO2.sample.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphosite.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.phosphopeptide.tmt11.tsv",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.label.txt",
+          "APOLLO_LUAD_Phosphoproteome_TiO2.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000430",
@@ -2254,7 +3480,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000430",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000430",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 17,
+        "n_listed": 17,
+        "sample_files": [
+          "BL20161130_BI_FM_Medullo_KAc_Plex01_Fxn3.raw",
+          "BA20161202_BI_FM_Medullo_KAc_Plex04_Fxn3.raw",
+          "BA20161203_BI_FM_Medullo_KAc_Plex05_Fxn3.raw",
+          "BA20161201_BI_FM_Medullo_KAc_Plex03_Fxn3.raw",
+          "BA20161201_BI_FM_Medullo_KAc_Plex02_Fxn1.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000431",
@@ -2303,7 +3548,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000431",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000431",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 10,
+        "n_listed": 10,
+        "sample_files": [
+          "BL20161004_BI_FM_Medullo_pY_Plex01_Fxn1.raw",
+          "BL20170113_BI_FM_Medullo_pY_Plex05_Fxn1.raw",
+          "BA20161122_BI_FM_Medullo_pY_Plex04_Fxn1.raw",
+          "BL20161004_BI_FM_Medullo_pY_Plex02_Fxn1.raw",
+          "BL20161004_BI_FM_Medullo_pY_Plex03_Fxn1.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000432",
@@ -2352,7 +3616,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000432",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000432",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 65,
+        "n_listed": 65,
+        "sample_files": [
+          "BL20160819_FM_Medullo_Phosphoproteome_Plex02_Fxn02.raw",
+          "BL20160823_FM_Medullo_Phosphoproteome_Plex04_Fxn07.raw",
+          "BL20160819_FM_Medullo_Phosphoproteome_Plex02_Fxn03.raw",
+          "BL20160819_FM_Medullo_Phosphoproteome_Plex01_Fxn03.raw",
+          "BL20160823_FM_Medullo_Phosphoproteome_Plex04_Fxn11.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000520",
@@ -2399,7 +3682,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000520",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000520",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.peptides.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.sample.txt",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.qcmetrics.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.label.txt"
+        ],
+        "psm_files": [
+          "20200924_900ug_KCGMHb2-T-pp_R-s05.mzid.gz",
+          "20200506_900ug_OCb1r-T-pp-s04.mzid.gz",
+          "20200616_900ug_OCb12-T-pp-s30.mzid.gz",
+          "20190620_900ug_CMb3-T-pp_R-s28.mzid.gz",
+          "20190121_900ug_OCb4-N-pp-s27.mzid.gz"
+        ],
+        "raw_count": 2016,
+        "n_listed": 8072,
+        "sample_files": [
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.peptides.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Global_Phosphoproteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000521",
@@ -2446,7 +3762,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000521",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000521",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.label.txt",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.qcmetrics.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.sample.txt",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.peptides.tsv"
+        ],
+        "psm_files": [
+          "20190730-OCb7-N-multiple-ppep-UPLC.mzid.gz",
+          "20200511-OCb1r-N-multiple-ppep-R-UPLC.mzid.gz",
+          "20200615-OCb12-T-multiple-ppep-R-UPLC.mzid.gz",
+          "20200106-OCb9-N-multiple-ppep-UPLC.mzid.gz",
+          "20200519-OCb3r-T-multiple-ppep-UPLC.mzid.gz"
+        ],
+        "raw_count": 56,
+        "n_listed": 232,
+        "sample_files": [
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.summary.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.label.txt",
+          "CGU_OSCC_APOBEC3A_Multiple_Phosphoproteome.qcmetrics.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000199",
@@ -2507,7 +3856,39 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000199",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000199",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Zhou_Liver_Cancer_Phosphoproteome.qcmetrics.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.summary.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphosite.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.peptides.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "20180630_fusion_zhw_TMT11_liver30_pho_F16.mzid.gz",
+          "20180702_fusion_zhw_TMT11_liver31_pho_F13.mzid.gz",
+          "20180427_fusion_zhw_TMT11_liver11_pho_F19.mzid.gz",
+          "20180611_fusion_zhw_TMT11_liver22_pho_F13.mzid.gz",
+          "20180629_fusion_zhw_TMT11_liver29_pho_F10.mzid.gz"
+        ],
+        "raw_count": 971,
+        "n_listed": 3896,
+        "sample_files": [
+          "Zhou_Liver_Cancer_Phosphoproteome.qcmetrics.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.summary.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.phosphosite.tmt11.tsv",
+          "Zhou_Liver_Cancer_Phosphoproteome.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000496",
@@ -2554,7 +3935,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000496",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000496",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "01CPTAC_CompRef_AYA_P_PNNL_20191126_B1S6_f06.mzid.gz",
+          "01CPTAC_CompRef_AYA_P_PNNL_20191126_B1S6_f07.mzid.gz",
+          "01CPTAC_CompRef_AYA_P_PNNL_20191126_B1S6_f09.mzid.gz",
+          "02CPTAC_CompRef_AYA_P_PNNL_20200204_B2S6_f06.mzid.gz",
+          "02CPTAC_CompRef_AYA_P_PNNL_20200204_B2S6_f01.mzid.gz"
+        ],
+        "raw_count": 24,
+        "n_listed": 107,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000495",
@@ -2601,7 +4015,39 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000495",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000495",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.sample.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.qcmetrics.tsv"
+        ],
+        "psm_files": [
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f05.mzid.gz",
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f21.mzid.gz",
+          "01CPTAC_CompRef_AYA_W_PNNL_20191126_B1S6_f23.mzid.gz",
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f16.mzid.gz",
+          "02CPTAC_CompRef_AYA_W_PNNL_20200204_B2S6_f12.mzid.gz"
+        ],
+        "raw_count": 48,
+        "n_listed": 202,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_CompRef_Proteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000499",
@@ -2648,7 +4094,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000499",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000499",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 120,
+        "n_listed": 243,
+        "sample_files": [
+          "09CPTAC_AYA_G_JHU_20230323_B2S4_f06.mzML.gz",
+          "10CPTAC_AYA_G_JHU_20230326_B2S5_f07.mzML.gz",
+          "01CPTAC_AYA_G_JHU_20230303_B1S1_f11.raw",
+          "02CPTAC_AYA_G_JHU_20230305_B1S2_f10.raw",
+          "06CPTAC_AYA_G_JHU_20230317_B2S1_f11.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000497",
@@ -2695,7 +4160,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000497",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000497",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "07CPTAC_AYA_P_PNNL_20200204_B2S2_f12.mzid.gz",
+          "04CPTAC_AYA_P_PNNL_20191126_B1S4_f04.mzid.gz",
+          "08CPTAC_AYA_P_PNNL_20200204_B2S3_f07.mzid.gz",
+          "08CPTAC_AYA_P_PNNL_20200204_B2S3_f01.mzid.gz",
+          "02CPTAC_AYA_P_PNNL_20191126_B1S2_f07.mzid.gz"
+        ],
+        "raw_count": 120,
+        "n_listed": 491,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Phosphoproteome.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000498",
@@ -2742,7 +4240,39 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000498",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000498",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.sample.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.peptides.tsv"
+        ],
+        "psm_files": [
+          "02CPTAC_AYA_W_PNNL_20191126_B1S2_f14.mzid.gz",
+          "01CPTAC_AYA_W_PNNL_20191126_B1S1_f14.mzid.gz",
+          "10CPTAC_AYA_W_PNNL_20200204_B2S5_f05.mzid.gz",
+          "05CPTAC_AYA_W_PNNL_20191126_B1S5_f21.mzid.gz",
+          "04CPTAC_AYA_W_PNNL_20191126_B1S4_f08.mzid.gz"
+        ],
+        "raw_count": 240,
+        "n_listed": 970,
+        "sample_files": [
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.label.txt",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.summary.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.tmt11.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.qcmetrics.tsv",
+          "CPTAC3_PNNL_HOPE_AYA_GBM_Proteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000515",
@@ -2789,7 +4319,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000515",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000515",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.qcmetrics.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.sample.txt",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.peptides.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.summary.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.phosphosite.tmt11.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.label.txt"
+        ],
+        "psm_files": [
+          "GBM_TMT_Phospho_S06_F12.mzid.gz",
+          "GBM_TMT_Phospho_S29_F06.mzid.gz",
+          "GBM_TMT_Phospho_S07_F11.mzid.gz",
+          "GBM_TMT_Phospho_S03_F07.mzid.gz",
+          "GBM_TMT_Phospho_S08_F11.mzid.gz"
+        ],
+        "raw_count": 264,
+        "n_listed": 1064,
+        "sample_files": [
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.qcmetrics.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.sample.txt",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.peptides.tsv",
+          "KNCC_Glioblastoma_Evolution_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000343",
@@ -2836,7 +4399,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000343",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000343",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "KU_CCA_Discovery_Phosphoproteome.peptides.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.sample.txt",
+          "KU_CCA_Discovery_Phosphoproteome.phosphosite.tmt11.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.qcmetrics.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.summary.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.label.txt",
+          "KU_CCA_Discovery_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "CCA_064212_Phospho_FN12_C2_180min_071918.mzid.gz",
+          "CCA_124226_Phospho_FN12_C2_180min_020119.mzid.gz",
+          "CCA_063217_Phospho_FN09_C1_180min_072518.mzid.gz",
+          "CCA_054172_Phospho_FN12_C2_180min_080318.mzid.gz",
+          "CCA_124226_Phospho_FN09_C1_180min_020119.mzid.gz"
+        ],
+        "raw_count": 180,
+        "n_listed": 728,
+        "sample_files": [
+          "KU_CCA_Discovery_Phosphoproteome.peptides.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.sample.txt",
+          "KU_CCA_Discovery_Phosphoproteome.phosphosite.tmt11.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.qcmetrics.tsv",
+          "KU_CCA_Discovery_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000249",
@@ -2883,7 +4479,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000249",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000249",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "KU_PDAC_Discovery_Study_Phosphoproteome.peptides.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.sample.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.phosphosite.tmt10.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.label.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.summary.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.qcmetrics.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.phosphopeptide.tmt10.tsv"
+        ],
+        "psm_files": [
+          "PDAC_049152_T10_Phos_2mg_FN10_C2_180min_042818.mzid.gz",
+          "PDAC_074013_T10_Phos_2mg_FN03_C1_180min_022718.mzid.gz",
+          "PDAC_029174_T10_Phos_2mg_FN02_C2_180min_042618.mzid.gz",
+          "PDAC_029174_T10_Phos_2mg_FN12_C2_180min_031918.mzid.gz",
+          "PDAC_234232_T10_Phos_2mg_FN01_C1_180min_100818.mzid.gz"
+        ],
+        "raw_count": 360,
+        "n_listed": 1448,
+        "sample_files": [
+          "KU_PDAC_Discovery_Study_Phosphoproteome.peptides.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.sample.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.phosphosite.tmt10.tsv",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.label.txt",
+          "KU_PDAC_Discovery_Study_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000363",
@@ -2930,7 +4559,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000363",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000363",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "iCC_NCC_Phosphoproteome.qcmetrics.tsv",
+          "iCC_NCC_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "iCC_NCC_Phosphoproteome.summary.tsv",
+          "iCC_NCC_Phosphoproteome.sample.txt",
+          "iCC_NCC_Phosphoproteome.phosphosite.tmt10.tsv",
+          "iCC_NCC_Phosphoproteome.label.txt",
+          "iCC_NCC_Phosphoproteome.peptides.tsv"
+        ],
+        "psm_files": [
+          "20181202_NCC_TMT10_06set_phospho_Frac_09.mzid.gz",
+          "20190129_NCC_TMT10_17set-phospho_Frac_04.mzid.gz",
+          "20190206_NCC_TMT10_3set-phospho_Frac_02.mzid.gz",
+          "20181225_NCC_TMT10_14set_phospho_Frac_08.mzid.gz",
+          "20190203_NCC_TMT10_1set-phospho_Frac_04.mzid.gz"
+        ],
+        "raw_count": 260,
+        "n_listed": 1048,
+        "sample_files": [
+          "iCC_NCC_Phosphoproteome.qcmetrics.tsv",
+          "iCC_NCC_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "iCC_NCC_Phosphoproteome.summary.tsv",
+          "iCC_NCC_Phosphoproteome.sample.txt",
+          "iCC_NCC_Phosphoproteome.phosphosite.tmt10.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000591",
@@ -2991,7 +4653,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000591",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000591",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.summary.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.peptides.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.phosphosite.tmt11.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "20210422_HFX_GJ_PNET_GROUP01_Pho_F03.mzid.gz",
+          "20210308_HFX_GJ_PNET_GROUP06_Pho_F05.mzid.gz",
+          "20210528_HFX_GJ_PNET_GROUP08_Pho_F23.mzid.gz",
+          "20210411_HFX_GJ_PNET_GROUP21_Pho_F15.mzid.gz",
+          "20210420_HFX_GJ_PNET_GROUP23_Pho_F20.mzid.gz"
+        ],
+        "raw_count": 575,
+        "n_listed": 2309,
+        "sample_files": [
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.summary.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseI_Phosphoproteome.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000589",
@@ -3052,7 +4747,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000589",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000589",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphopeptide.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphosite.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.peptides.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.sample.txt",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.summary.tsv"
+        ],
+        "psm_files": [
+          "20211229_HFX_GJ_PNET_21_GROUP03_TMT16_Pho_F24.mzid.gz",
+          "20211226_HFX_GJ_PNET_21_GROUP02_TMT16_Pho_F20.mzid.gz",
+          "20220113_HFX_GJ_PNET_21_GROUP06_TMT16_Pho_F23.mzid.gz",
+          "20211229_HFX_GJ_PNET_21_GROUP03_TMT16_Pho_F22.mzid.gz",
+          "20220103_HFX_GJ_PNET_21_GROUP08_TMT16_Pho_F03.mzid.gz"
+        ],
+        "raw_count": 150,
+        "n_listed": 609,
+        "sample_files": [
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphopeptide.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.label.txt",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.phosphosite.tmt16.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.qcmetrics.tsv",
+          "SIMM_NF-PNET_Discovery_PhaseII_Phosphoproteome.peptides.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000176",
@@ -3119,7 +4847,41 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000176",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000176",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "Gygi_TCMP_HMS_Phosphoproteome.qcmetrics.tsv",
+          "Gygi_TCMP_HMS_Phosphoproteome.sample.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.peptides.tsv",
+          "S047 Reporter QuantIsotopicPurityCorrectionParameterFile.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.mzIdentML.txt",
+          "S047 ReporterQuantParameter File.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.phosphosite.tmt11.tsv",
+          "Gygi_TCMP_HMS_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "NCI-11pex-12H-Phos-JM05254.mzid.gz",
+          "NCI-11pex-20C-Phos-c05391.mzid.gz",
+          "NCI-11pex-8C-Phos-c05379.mzid.gz",
+          "NCI-11pex-3H-Phos-JM05262.mzid.gz",
+          "NCI-11pex-20H-Phos-JM05245.mzid.gz"
+        ],
+        "raw_count": 46,
+        "n_listed": 210,
+        "sample_files": [
+          "Gygi_TCMP_HMS_Phosphoproteome.qcmetrics.tsv",
+          "Gygi_TCMP_HMS_Phosphoproteome.sample.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.peptides.tsv",
+          "S047 Reporter QuantIsotopicPurityCorrectionParameterFile.txt",
+          "Gygi_TCMP_HMS_Phosphoproteome.mzIdentML.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000607",
@@ -3166,7 +4928,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000607",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000607",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 396,
+        "n_listed": 396,
+        "sample_files": [
+          "20220906_HFX_SYL_GBC_TMT16_Pho_Group10_F05.raw",
+          "20220906_HFX_SYL_GBC_TMT16_Pho_Group10_F09.raw",
+          "20220920_HFX_SYL_GBC_TMT16_Pho_Group17_F06.raw",
+          "20221024_HFX_SYL_GBC_TMT16_Pho_Group30_F03.raw",
+          "20221023_HFX_SYL_GBC_TMT16_Pho_Group32_F07.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000606",
@@ -3213,7 +4994,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000606",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000606",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 768,
+        "n_listed": 768,
+        "sample_files": [
+          "20220813_HF_SYL_GBC_TMT16_Pro_Group_32_F15.raw",
+          "20220516_HF_LDY_GBC_TMT16_Pro_Group_05_F12.raw",
+          "20220726_HF_SYL_GBC_TMT16_Pro_Group_25_F20.raw",
+          "20220830_HF_SYL_GBC_TMT16_Pro_Group_03_F24.raw",
+          "20220826_HF_SYL_GBC_TMT16_Pro_Group_28_F06.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000696",
@@ -3260,7 +5060,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000696",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000696",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 96,
+        "n_listed": 96,
+        "sample_files": [
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S03_F08.raw",
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S02_F03.raw",
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S04_F07.raw",
+          "TNBC_NCC_OP_TMTpro16plex_Phospho_S02_F01.raw",
+          "TNBC_NCC_TMTpro16plex_Phospho_S03_F01.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000695",
@@ -3307,7 +5126,26 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000695",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000695",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "raw_only",
+        "label": "raw only",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 216,
+        "n_listed": 216,
+        "sample_files": [
+          "TNBC_NCC-OP_TMTpro16plex_Global_S04_F03.raw",
+          "TNBC_NCC-OP_TMTpro16plex_Global_S04_F07.raw",
+          "TNBC_NCC-OP_TMTpro16plex_Global_S03_F24.raw",
+          "TNBC_NCC-OP_TMTpro16plex_Global_S04_F23.raw",
+          "TNBC_NCC_TMTpro16plex_Global_S04_F18.raw"
+        ]
+      }
     },
     {
       "accession": "PDC000403",
@@ -3355,7 +5193,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000403",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000403",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.phosphosite.tmt11.tsv"
+        ],
+        "psm_files": [
+          "PTRC_Kurtz_Plex_02_P_f06.mzid.gz",
+          "PTRC_Kurtz_Plex_01_P_f04.mzid.gz",
+          "PTRC_Kurtz_Plex_01_P_f06.mzid.gz",
+          "PTRC_Kurtz_Plex_02_P_f05.mzid.gz",
+          "PTRC_Kurtz_Plex_01_P_f01.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 57,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Combination_Phosphoproteome.label.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000399",
@@ -3403,7 +5274,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000399",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000399",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.phosphopeptide.tmt10.tsv"
+        ],
+        "psm_files": [
+          "PTRC_Baseline_Plex_01_P_f04.mzid.gz",
+          "PTRC_Baseline_Plex_02_P_f03.mzid.gz",
+          "PTRC_Baseline_Plex_02_P_f01.mzid.gz",
+          "PTRC_Baseline_Plex_01_P_f06.mzid.gz",
+          "PTRC_Baseline_Plex_01_P_f03.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 57,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_PrimaryCohort_Phosphoproteome.phosphosite.tmt10.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000401",
@@ -3451,7 +5355,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000401",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000401",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.phosphopeptide.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.qcmetrics.tsv"
+        ],
+        "psm_files": [
+          "PTRC_4patient_Plex_01_P_f02.mzid.gz",
+          "PTRC_4patient_Plex_02_P_f03.mzid.gz",
+          "PTRC_4patient_Plex_01_P_f06.mzid.gz",
+          "PTRC_4patient_Plex_01_P_f04.mzid.gz",
+          "PTRC_4patient_Plex_01_P_f01.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 57,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.sample.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.phosphosite.tmt10.tsv",
+          "CPTAC3_PTRC_PNNL_AML_DrugResponse_Sorafenib_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000318",
@@ -3499,7 +5436,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000318",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000318",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.phosphosite.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.label.txt",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.phosphopeptide.tmt11.tsv"
+        ],
+        "psm_files": [
+          "PTRC_exp12_plex_02_P_f05.mzid.gz",
+          "PTRC_exp12_plex_04_P_f03.mzid.gz",
+          "PTRC_exp12_plex_03_P_f06.mzid.gz",
+          "PTRC_exp12_plex_01_P_f05.mzid.gz",
+          "PTRC_exp12_plex_01_P_f03.mzid.gz"
+        ],
+        "raw_count": 24,
+        "n_listed": 108,
+        "sample_files": [
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.phosphosite.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_Resistance_Phosphoproteome.sample.txt"
+        ]
+      }
     },
     {
       "accession": "PDC000319",
@@ -3547,7 +5517,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000319",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000319",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphosite.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.label.txt"
+        ],
+        "psm_files": [
+          "PTRC_Ex8_FLT3_ref_plex3_P_f03.mzid.gz",
+          "PTRC_Ex8_Par_ref_Plex1_P_f02.mzid.gz",
+          "PTRC_Ex8_FLT3_ref_plex3_P_f02.mzid.gz",
+          "PTRC_Ex8_FGF2_ref_plex2_P_f01.mzid.gz",
+          "PTRC_Ex8_FLT3_ref_plex3_P_f04.mzid.gz"
+        ],
+        "raw_count": 18,
+        "n_listed": 84,
+        "sample_files": [
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Gilteritinib_TimeCourse_Phosphoproteome.phosphosite.tmt11.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000320",
@@ -3595,7 +5598,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000320",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000320",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.summary.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.label.txt",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.phosphosite.tmt11.tsv"
+        ],
+        "psm_files": [
+          "PTRC_exp12_plex_05_P_f01.mzid.gz",
+          "PTRC_exp12_plex_06_P_f06.mzid.gz",
+          "PTRC_exp12_plex_06_P_f02.mzid.gz",
+          "PTRC_exp12_plex_06_P_f04.mzid.gz",
+          "PTRC_exp12_plex_05_P_f05.mzid.gz"
+        ],
+        "raw_count": 12,
+        "n_listed": 60,
+        "sample_files": [
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.sample.txt",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.peptides.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.qcmetrics.tsv",
+          "PTRC_PNNL_Quizartinib_Resistance_Phosphoproteome.summary.tsv"
+        ]
+      }
     },
     {
       "accession": "PDC000478",
@@ -3643,7 +5679,40 @@
       },
       "recommendation": "review_for_catalog",
       "project_accession": "PDC000478",
-      "is_new_project": true
+      "is_new_project": true,
+      "data_availability": {
+        "accession": "PDC000478",
+        "source_checked": "PDC",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "quant_table",
+        "label": "table",
+        "quant_files": [
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.label.txt",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.phosphopeptide.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.sample.txt"
+        ],
+        "psm_files": [
+          "PTRC_exp10_Plex_01_P_f03.mzid.gz",
+          "PTRC_exp10_Plex_07_P_f08.mzid.gz",
+          "PTRC_exp10_Plex_01_P_f11.mzid.gz",
+          "PTRC_exp10_Plex_18_P_f07.mzid.gz",
+          "PTRC_exp10_Plex_09_P_f08.mzid.gz"
+        ],
+        "raw_count": 252,
+        "n_listed": 1016,
+        "sample_files": [
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.peptides.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.qcmetrics.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.summary.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.phosphosite.tmt11.tsv",
+          "CPTAC3_PTRC_PNNL_BEAT_AML_Phosphoproteome.label.txt"
+        ]
+      }
     }
   ],
   "manual_check": [
@@ -3688,7 +5757,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41771895",
-      "accession": "PMID:41771895"
+      "accession": "PMID:41771895",
+      "data_availability": {
+        "accession": "PMID:41771895",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41622683",
@@ -3728,7 +5810,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41622683",
-      "accession": "PMID:41622683"
+      "accession": "PMID:41622683",
+      "data_availability": {
+        "accession": "PMID:41622683",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "42051158",
@@ -3771,7 +5866,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:42051158",
-      "accession": "PMID:42051158"
+      "accession": "PMID:42051158",
+      "data_availability": {
+        "accession": "PMID:42051158",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41851243",
@@ -3811,7 +5919,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41851243",
-      "accession": "PMID:41851243"
+      "accession": "PMID:41851243",
+      "data_availability": {
+        "accession": "PMID:41851243",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41472394",
@@ -3851,7 +5972,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41472394",
-      "accession": "PMID:41472394"
+      "accession": "PMID:41472394",
+      "data_availability": {
+        "accession": "PMID:41472394",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41981497",
@@ -3894,7 +6028,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41981497",
-      "accession": "PMID:41981497"
+      "accession": "PMID:41981497",
+      "data_availability": {
+        "accession": "PMID:41981497",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41567026",
@@ -3936,7 +6083,20 @@
       "tmt_detected": false,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41567026",
-      "accession": "PMID:41567026"
+      "accession": "PMID:41567026",
+      "data_availability": {
+        "accession": "PMID:41567026",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41966223",
@@ -3979,7 +6139,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41966223",
-      "accession": "PMID:41966223"
+      "accession": "PMID:41966223",
+      "data_availability": {
+        "accession": "PMID:41966223",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41301916",
@@ -4019,7 +6192,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41301916",
-      "accession": "PMID:41301916"
+      "accession": "PMID:41301916",
+      "data_availability": {
+        "accession": "PMID:41301916",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "13006395",
@@ -4061,7 +6247,20 @@
       "tmt_detected": false,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:13006395",
-      "accession": "PMID:13006395"
+      "accession": "PMID:13006395",
+      "data_availability": {
+        "accession": "PMID:13006395",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41055288",
@@ -4101,7 +6300,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41055288",
-      "accession": "PMID:41055288"
+      "accession": "PMID:41055288",
+      "data_availability": {
+        "accession": "PMID:41055288",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     },
     {
       "pmid": "41293887",
@@ -4141,7 +6353,20 @@
       "tmt_detected": true,
       "recommendation": "requires_manual_check",
       "project_accession": "PMID:41293887",
-      "accession": "PMID:41293887"
+      "accession": "PMID:41293887",
+      "data_availability": {
+        "accession": "PMID:41293887",
+        "source_checked": "none",
+        "local_mirror": false,
+        "local_path": null,
+        "status": "no_files",
+        "label": "no data",
+        "quant_files": [],
+        "psm_files": [],
+        "raw_count": 0,
+        "n_listed": 0,
+        "sample_files": []
+      }
     }
   ],
   "rejected_material": [],
