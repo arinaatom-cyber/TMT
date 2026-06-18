@@ -44,7 +44,7 @@ const I18N={
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда',
     legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ atlas',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
-    projSearch:'Поиск в проектах…',updated:'Обновлено',fromSheet:'Google Sheet',fromLocal:'копия на сайте',
+    projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet',dataFromBundle:'копия на сайте',
     linkCopied:'Ссылка скопирована',openSheet:'Таблица',
     protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — Google Sheets.',
     sheetCountHint:'Proteins Quantified — только из таблицы Google.',
@@ -88,7 +88,7 @@ const I18N={
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend',
     legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ atlas',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
-    projSearch:'Search projects…',updated:'Updated',fromSheet:'Google Sheet',fromLocal:'site copy',
+    projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet',dataFromBundle:'site bundle',
     linkCopied:'Link copied',openSheet:'Spreadsheet',
     protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from Google Sheets.',
     sheetCountHint:'Proteins Quantified — from Google Sheet only.',
@@ -331,7 +331,7 @@ function buildHeader(){
   const vb=document.getElementById('validBanner');
   if(vb){
     const ok=META.uniqPids===uniqPid&&!F.q&&!F.tmt&&!F.health&&!F.db;
-    const src=META.dataSource==='sheet'?t('fromSheet'):t('fromLocal');
+    const src=META.dataSource==='sheet'?t('dataFromSheet'):t('dataFromBundle');
     const when=formatUpdated();
     vb.className='valid-banner '+(ok?'ok':'warn');
     vb.innerHTML=ok
@@ -764,6 +764,7 @@ function onDataLoaded(rows,sourceName){
 }
 
 const LOCAL_CSV='data/projects.csv';
+const RAW_CSV='https://raw.githubusercontent.com/arinaatom-cyber/TMT/main/data/projects.csv';
 
 function parseCsvText(text,msg,sourceName){
   if(typeof Papa==='undefined') throw new Error('PapaParse not loaded');
@@ -789,6 +790,7 @@ async function loadSheetData(){
   msg.textContent=t('loading');
   const sources=[
     {name:'local',url:LOCAL_CSV},
+    {name:'raw',url:RAW_CSV},
     {name:'sheet',url:SHEET_CSV}
   ];
   for(const src of sources){
