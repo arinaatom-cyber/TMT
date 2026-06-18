@@ -46,7 +46,7 @@ const I18N={
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
     projSearch:'Поиск в проектах…',updated:'Обновлено',fromSheet:'Google Sheet',fromLocal:'копия на сайте',
     linkCopied:'Ссылка скопирована',openSheet:'Таблица',
-    protSummary:'Белки в органе',protIndexHint:'Индекс UniProt/генов в data/organ-proteome.json (собран из Result Files в tmt-projects). Счётчики в карточке — из Google Sheets.',
+    protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — Google Sheets.',
     sheetCountHint:'Proteins Quantified — только из таблицы Google.',
     resultFile:'Result Files',geneIds:'гены',compareBy:'UniProt или ген',
     fromIndex:'в индексе',inIndex:'в индексе',showOrganProt:'Показать белки органа',
@@ -55,7 +55,20 @@ const I18N={
     withCount:'с количеством',sheetTotal:'Σ из таблицы',loadOrganProt:'Загрузить белки проектов',
     loadingProt:'Загрузка белков…',fromSheet:'из таблицы',fromFile:'из файла',showProt:'Показать белки',
     noProtFile:'Файл не найден — откройте папку в tmt-projects/Projects/PXD…',loaded:'загружено',
-    compareProt:'Сравнить белки',shared:'Общие',protCompareHint:'Сопоставление по UniProt или символу гена (см. data/id-map.csv). Данные таблицы не изменяются.'
+    compareProt:'Сравнить белки',shared:'Общие',
+    vennTitle:'Сравнение белков (диаграмма Венна)',vennOnlyA:'только A',vennOnlyB:'только B',vennBoth:'оба органа',
+    multiProjectHint:'Несколько проектов в одном органе: белки объединяются (объединение). Один и тот же UniProt или ген считается один раз на орган, даже если он есть в PXD001 и PXD002.',
+    multiProjectDetail:'Белок встречается в 2+ проектах этого органа',
+    multiProjectShort:'В 2+ проектах',
+    compareUseExtras:'Сравнение с другим органом — раздел «Дополнительно» → диаграмма Венна.',
+    verifyOk:'белки ✓',verifyOkHint:'Список в индексе совпадает с Result File этого PXD/PDC',
+    verifyNoIndex:'нет в индексе',verifyNoIndexHint:'Нет protein table или другой Result File — см. GitHub',
+    verifyNoFile:'нет файла',verifyNoFolder:'нет папки',verifyMismatch:'расхождение',
+    protLoadedHint:'Белки этого проекта учтены в индексе (свой Result File).',protMissingHint:'В индексе нет — откройте',
+    excelSheets:'листы Excel',multiSheetHint:'В xlsx несколько листов — парсер берёт все листы с колонками Gene/UniProt (не summary).',
+    protCompareHint:'Венн: уникальные наборы белков органов (UniProt или ген). Списки белков не показываются.',
+    protTableTitle:'Белки по проектам',protTableHint:'Таблица: Sheet (Google), File (Result File), Index (индекс), UniProt (после маппинга), гены без UniProt.',
+    organUnique:'уник. в органе',sumIndexProjects:'Σ индекс по проектам',countDiff:'расхождение',countDiffHint:'Число в таблице и в файле отличается более чем на 5% — проверьте Result File или пересоберите индекс (REBUILD.md).'
   },
   en:{
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
@@ -77,7 +90,7 @@ const I18N={
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
     projSearch:'Search projects…',updated:'Updated',fromSheet:'Google Sheet',fromLocal:'site copy',
     linkCopied:'Link copied',openSheet:'Spreadsheet',
-    protSummary:'Proteins in organ',protIndexHint:'UniProt/gene index in data/organ-proteome.json (built from tmt-projects Result Files). Card counts are from Google Sheets.',
+    protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from Google Sheets.',
     sheetCountHint:'Proteins Quantified — from Google Sheet only.',
     resultFile:'Result Files',geneIds:'genes',compareBy:'UniProt or gene',
     fromIndex:'in index',inIndex:'in index',showOrganProt:'Show organ proteins',
@@ -86,7 +99,20 @@ const I18N={
     withCount:'with count',sheetTotal:'Σ from sheet',loadOrganProt:'Load project proteins',
     loadingProt:'Loading proteins…',fromSheet:'from sheet',fromFile:'from file',showProt:'Show proteins',
     noProtFile:'File not found — open folder in tmt-projects/Projects/PXD…',loaded:'loaded',
-    compareProt:'Compare proteins',shared:'Shared',protCompareHint:'Matched by UniProt or gene symbol (see data/id-map.csv). Sheet data unchanged.'
+    compareProt:'Compare proteins',shared:'Shared',
+    vennTitle:'Protein comparison (Venn diagram)',vennOnlyA:'A only',vennOnlyB:'B only',vennBoth:'both organs',
+    multiProjectHint:'Multiple projects per organ: proteins are merged (union). The same UniProt or gene counts once per organ even if seen in PXD001 and PXD002.',
+    multiProjectDetail:'Protein appears in 2+ projects of this organ',
+    multiProjectShort:'In 2+ projects',
+    compareUseExtras:'Compare with another organ: section “More” → Venn diagram.',
+    verifyOk:'proteins OK',verifyOkHint:'Index matches this project Result File',
+    verifyNoIndex:'not in index',verifyNoIndexHint:'No protein table or wrong Result File — see GitHub',
+    verifyNoFile:'no file',verifyNoFolder:'no folder',verifyMismatch:'mismatch',
+    protLoadedHint:'This project proteins are in the index (its own Result File).',protMissingHint:'Not in index — open',
+    excelSheets:'Excel sheets',multiSheetHint:'Multi-sheet xlsx: all sheets with Gene/UniProt columns are merged (not summary).',
+    protCompareHint:'Venn shows unique protein sets per organ (UniProt or gene). Protein lists are hidden.',
+    protTableTitle:'Proteins per project',protTableHint:'Sheet (Google), File (parsed), Index, UniProt (mapped), genes without UniProt.',
+    organUnique:'unique in organ',sumIndexProjects:'Σ index per projects',countDiff:'mismatch',countDiffHint:'Sheet count differs from file/index by >5% — check Result File or rebuild index (REBUILD.md).'
   }
 };
 let lang=localStorage.getItem('hpa-lang')||'ru';
@@ -347,15 +373,13 @@ function compareBlock(currentOrgan){
   }).join('');
   return `<details class="extras-block">
     <summary>${t('extras')}</summary>
-    <p class="extras-hint">${t('compareHint')}</p>
+    <p class="extras-hint">${t('compareHint')} ${t('protCompareHint')}</p>
     <div class="compare-bar">
       <select id="cmpA">${optA}</select>
       <select id="cmpB">${optB}</select>
       <button type="button" class="tbtn primary" onclick="runCompare()">${t('runCompare')}</button>
     </div>
     <div id="cmpOut"></div>
-    <p class="extras-hint" style="padding-top:8px">${t('protCompareHint')}</p>
-    ${window.ProteinAtlas?ProteinAtlas.proteinCompareBar():''}
   </details>`;
 }
 function runCompare(){
@@ -365,12 +389,15 @@ function runCompare(){
   const sa=organStats(a),sb=organStats(b);
   const out=document.getElementById('cmpOut');
   if(!out) return;
+  const venn=window.ProteinAtlas?.renderVennCompare
+    ?window.ProteinAtlas.renderVennCompare(a,b)
+    :`<p class="prot-hint">${t('indexLoading')}</p>`;
   out.innerHTML=`<div class="compare-grid">
     <div class="compare-col"><h5>${a.replace(/_/g,' ')}</h5>
       ${cmpRows(sa)}</div>
     <div class="compare-col"><h5>${b.replace(/_/g,' ')}</h5>
       ${cmpRows(sb)}</div>
-  </div>`;
+  </div>${venn}`;
 }
 function cmpRows(s){
   return [['Projects',s.n],['Cancer',s.nC],['Normal',s.nN],['Top disease',s.topDis||'—'],['Top TMT',s.topTmt||'—']].map(
@@ -512,6 +539,13 @@ const ORGAN_EXACT={
   'salivary gland':'Salivary_Gland','minor salivary gland':'Salivary_Gland',
   'adipose tissue':'Adipose_Tissue','soft tissue':'Soft_Tissue',
   'multiple organs':'Multiple_Organs','multiple organs (22 types)':'Multiple_Organs',
+  'hematopoietic system':'Blood','hematopoietic and reticuloendothelial system':'Blood',
+  'hematopoietic / immune system':'Blood','hematologic':'Blood','haematologic':'Blood',
+  'blood and lymphoid':'Blood','gastrointestinal':'Colon','neural':'Brain',
+  'jaw bone':'Bone','soft tissue sarcoma':'Soft_Tissue','orbit':'Eye',
+  'head and neck':'Salivary_Gland','oral cavity':'Salivary_Gland',
+  'esophageal squamous cell carcinoma':'Esophagus','pleura':'Lung','thymus':'Lymph_Node',
+  'tonsil':'Lymph_Node',
   'not specified':'Other',
   'adrenal gland':'Adrenal_Gland','artery aorta':'Heart','artery coronary':'Heart',
   'artery tibial':'Nerve','brain cerebellum':'Brain','brain cortex':'Brain',
@@ -567,17 +601,22 @@ function esc(s){
 }
 
 function pickOrganRaw(row){
+  const organMain=(row['Organ']||'').trim();
   const parts=[];
   const addParts=raw=>{
     splitOrganParts(raw).forEach(p=>{
       if(p&&!VAGUE_ORGAN.test(p)) parts.push(p);
     });
   };
-  ['Organ','Tissue','Cell Line Organ','Tissue for cell lines'].forEach(k=>addParts(row[k]||''));
+  /* Curator Organ column is authoritative for map counts (TMT ATLAS sheet). */
+  if(organMain&&!VAGUE_ORGAN.test(organMain)){
+    addParts(organMain);
+    return parts.length?parts.join('; '):'Unknown';
+  }
+  ['Cell Line Organ','Tissue for cell lines','Tissue'].forEach(k=>addParts(row[k]||''));
   const detail=(row['Tissue Cell Type Detailed']||'').trim();
-  const organMain=(row['Organ']||'').trim();
-  if((!parts.length||VAGUE_ORGAN.test(organMain))&&detail) addParts(detail);
-  if(parts.length<=1&&(organMain.toLowerCase().includes('multiple')||/cancer cell lines/i.test(detail))){
+  if(!parts.length&&detail) addParts(detail);
+  if(parts.length<=1&&/cancer cell lines/i.test(detail)){
     hintOrgansFromText(detail).forEach(o=>parts.push(o.replace(/_/g,' ')));
   }
   return parts.length?parts.join('; '):'Unknown';
@@ -594,8 +633,9 @@ function classifyOrgan(n){
 function classifyAllOrgans(raw){
   if(!raw) return ['Other'];
   const cleaned=raw.toLowerCase().trim();
-  if(cleaned.includes('multiple organs')||cleaned.includes('multi-organ')||cleaned.includes('22 types')||cleaned.includes('22 lineages'))
+  if(/multiple organs\s*\(\s*22\s*types?\s*\)/i.test(raw)||/22 lineages/i.test(cleaned))
     return ['Multiple_Organs'];
+  if(cleaned==='multiple organs'||cleaned==='multi-organ') return ['Multiple_Organs'];
   const parts=splitOrganParts(raw);
   if(!parts.length) return ['Other'];
   const organs=new Set();
@@ -748,8 +788,8 @@ async function loadSheetData(){
   const msg=document.querySelector('#loader p');
   msg.textContent=t('loading');
   const sources=[
-    {name:'sheet',url:SHEET_CSV},
-    {name:'local',url:LOCAL_CSV}
+    {name:'local',url:LOCAL_CSV},
+    {name:'sheet',url:SHEET_CSV}
   ];
   for(const src of sources){
     try{
@@ -968,7 +1008,7 @@ function projectCard(r){
   const pan=r.isPan?`<span class="status pan">${t('panBadge')}</span>`:'';
   const organs=r.organs.map(x=>x.replace(/_/g,' ')).join(', ');
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
-  const proteins=r.proteins?`<span class="meta-pill">${esc(r.proteins)} proteins</span>`:'';
+  const proteins=window.ProteinAtlas?ProteinAtlas.proteinBadgesHtml(r):'';
   const platform=r.platform?`<span class="meta-pill">${esc(r.platform.slice(0,28))}</span>`:'';
   const linkProj=projHref
     ? `<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener" title="Open in ${esc(r.db||'database')}">
@@ -1295,6 +1335,7 @@ window.onGlobalSearch=onGlobalSearch;
 window.exportAllCSV=exportAllCSV;
 window.exportOrganCSV=exportOrganCSV;
 window.runCompare=runCompare;
+window.organColor=organColor;
 window.filtSidebar=filtSidebar;
 window.openAbout=openAbout;
 window.closeAbout=closeAbout;

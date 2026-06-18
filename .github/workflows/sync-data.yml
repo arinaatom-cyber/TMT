@@ -1,8 +1,9 @@
 name: Sync projects CSV
 
+# Manual only — bundled data/projects.csv is synced from TMT ATLAS xlsx (123 projects).
+# Google Sheet export can lag behind the workbook; auto-sync was overwriting correct counts.
+
 on:
-  schedule:
-    - cron: '0 6 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -18,6 +19,12 @@ jobs:
           curl -fsSL "https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/export?format=csv&gid=1072380314" -o data/projects.csv
           test -s data/projects.csv
           head -1 data/projects.csv | grep -q "Project ID"
+          ROWS=$(python3 -c "import csv; print(sum(1 for r in csv.DictReader(open('data/projects.csv',encoding='utf-8-sig')) if (r.get('Project ID') or '').strip()))")
+          echo "Rows with Project ID: $ROWS"
+          if [ "$ROWS" -lt 120 ] || [ "$ROWS" -gt 125 ]; then
+            echo "Unexpected catalog size ($ROWS) — aborting sync"
+            exit 1
+          fi
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
