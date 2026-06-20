@@ -159,6 +159,16 @@
       ${list.length>200?`<p class="prot-hint">+${list.length-200} …</p>`:''}`;
   }
 
+  function proteinBadgesHtml(r){
+    const t=global.t||((k)=>k);
+    const sheet=r.proteinCount??parseProteinCount(r.proteins);
+    const meta=projectMeta(r.pid);
+    const parts=[];
+    if(sheet) parts.push(`<span class="meta-pill">${sheet.toLocaleString()} ${t('proteins')}</span>`);
+    if(meta?.file_n) parts.push(`<span class="meta-pill">${meta.file_n.toLocaleString()} ${t('inIndex')}</span>`);
+    return parts.join('');
+  }
+
   function projectProteinBlock(r){
     const sheet=parseProteinCount(r.proteins);
     const meta=projectMeta(r.pid);
@@ -262,7 +272,7 @@
 
   global.ProteinAtlas={
     parseProteinCount,parseResultFiles,initIdMap:initProteome,loadProjectProteins,
-    organProteinsSummaryHtml,projectProteinBlock,proteinCompareBar
+    proteinBadgesHtml,organProteinsSummaryHtml,projectProteinBlock,proteinCompareBar
   };
   global.loadOrganProteins=showOrganProteins;
   global.showOrganProteins=showOrganProteins;
