@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-bodyfix4';
+const MAP_BUILD='20260620-bodyfix5';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -1242,7 +1242,7 @@ function organStats(o){
 function organAnchor(a){return a.anchor||a.pos;}
 
 function assignLabelPositions(active){
-  const MIN_GAP=40, TOP=40, BOTTOM=540;
+  const MIN_GAP=40, TOP=40, BOTTOM=620;
   const L=[],R=[];
   active.forEach(o=>{
     const a=ANATOMY[o];
@@ -1325,18 +1325,18 @@ function bodySilhouette(){
   const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
               L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
               L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
-  /* Legs: ~half length/width of prior version; filled like arms */
+  /* Legs: full length, ~half thigh/calf width (narrower, not shorter) */
   const legFill='rgba(216,154,154,.07)', legStroke='#d89a9a';
-  const legL=`M 218 370
-              Q 210 374 206 386 L 202 410 Q 200 428 202 442
-              L 204 458 Q 206 468 212 470 L 220 468
-              Q 222 452 224 430 L 226 408 Q 228 388 226 382
-              L 230 370 Q 224 368 218 370 Z`;
-  const legR=`M 262 370
-              Q 270 374 274 386 L 278 410 Q 280 428 278 442
-              L 276 458 Q 274 468 268 470 L 260 468
-              Q 258 452 256 430 L 254 408 Q 252 388 254 382
-              L 250 370 Q 256 368 262 370 Z`;
+  const legL=`M 222 370
+              Q 210 378 206 418 L 200 498 Q 196 538 198 578
+              L 200 628 Q 204 646 212 650 L 224 646
+              Q 228 578 230 508 L 232 438 Q 234 398 232 382
+              L 234 370 Q 228 368 222 370 Z`;
+  const legR=`M 258 370
+              Q 270 378 274 418 L 280 498 Q 284 538 282 578
+              L 280 628 Q 276 646 268 650 L 256 646
+              Q 252 578 250 508 L 248 438 Q 246 398 248 382
+              L 246 370 Q 252 368 258 370 Z`;
   const stroke='#d89a9a', fill='rgba(216,154,154,.05)';
   return `
     <g class="body-silhouette" pointer-events="none">
@@ -1360,7 +1360,7 @@ function renderBody(){
     const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;
   };
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="-16 0 512 580" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="-16 0 512 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
     ${bodySilhouette()}
     <g class="organs-layer">${drawOrder.map(organGroup).join('')}</g>
     <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
