@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-bodyfix6';
+const MAP_BUILD='20260620-bodyfix7';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -1108,8 +1108,9 @@ const ANATOMY={
     'M 213 350 L 223 350 L 221 356 L 215 356 Z'},
   Prostate:        {pos:{x:262, y:346}, side:'R', size:0,  z:3, d:
     'M 254 342 Q 262 338 270 342 Q 272 348 262 350 Q 252 348 254 342 Z'},
-  Testis:          {pos:{x:254, y:384}, side:'R', size:0,  z:3, d:
-    'M 246 378 Q 238 390 248 396 Q 254 396 256 390 Q 258 396 262 396 Q 270 390 262 378 Q 258 376 254 384 Q 250 376 246 378 Z'},
+  Testis:          {pos:{x:248, y:382}, side:'R', size:0,  z:3, d:
+    'M 236 376 Q 232 384 236 392 Q 242 394 246 388 Q 244 380 236 376 Z '+
+    'M 260 376 Q 264 384 260 392 Q 254 394 250 388 Q 252 380 260 376 Z'},
 
   Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
     'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
@@ -1325,18 +1326,17 @@ function bodySilhouette(){
   const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
               L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
               L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
-  /* Legs: full length, ~half thigh/calf width (narrower, not shorter) */
-  const legFill='rgba(216,154,154,.07)', legStroke='#d89a9a';
-  const legL=`M 222 370
-              Q 210 378 206 418 L 200 498 Q 196 538 198 578
-              L 200 628 Q 204 646 212 650 L 224 646
-              Q 228 578 230 508 L 232 438 Q 234 398 232 382
-              L 234 370 Q 228 368 222 370 Z`;
-  const legR=`M 258 370
-              Q 270 378 274 418 L 280 498 Q 284 538 282 578
-              L 280 628 Q 276 646 268 650 L 256 646
-              Q 252 578 250 508 L 248 438 Q 246 398 248 382
-              L 246 370 Q 252 368 258 370 Z`;
+  /* Legs: filled like arms; narrow (~26px) but one crotch gap — not two inner stick lines */
+  const legL=`M 216 370
+              Q 206 378 202 418 L 196 498 Q 192 548 196 598
+              L 200 638 Q 206 652 216 648 L 224 642
+              Q 226 560 228 480 Q 230 408 232 382
+              L 234 370 L 216 370 Z`;
+  const legR=`M 264 370
+              Q 274 378 278 418 L 284 498 Q 288 548 284 598
+              L 280 638 Q 274 652 264 648 L 256 642
+              Q 254 560 252 480 Q 250 408 248 382
+              L 246 370 L 264 370 Z`;
   const stroke='#d89a9a', fill='rgba(216,154,154,.05)';
   return `
     <g class="body-silhouette" pointer-events="none">
@@ -1345,8 +1345,8 @@ function bodySilhouette(){
       <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
       <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
       <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path class="leg-part" d="${legL}" fill="${legFill}" stroke="${legStroke}" stroke-width="1.35" stroke-linejoin="round"/>
-      <path class="leg-part" d="${legR}" fill="${legFill}" stroke="${legStroke}" stroke-width="1.35" stroke-linejoin="round"/>
+      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
       <text x="240" y="10" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="8" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
     </g>`;
 }
