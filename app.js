@@ -24,7 +24,7 @@ const PASTEL_NORMAL='#9dc9b0';
 const PASTEL_PAN='#d4c48a';
 const PASTEL_MIXED='#c4a8d4';
 const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
-  'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other']);
+  'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other','Muscle']);
 
 const I18N={
   ru:{
@@ -46,6 +46,11 @@ const I18N={
     legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
     legHint:'Цвет точки у подписи = C/N/Pan. Размер ∝ √N. Заливка SVG — анатомия.',
     legSize:'размер ∝ √N',
+    matChartTitle:'Материал образца по органам',
+    matChartHint:'Уникальные Project ID на орган. «Ткань normal» — здоровые образцы, в т.ч. GTEx (PXD016999, 32 ткани).',
+    matClC:'Кл. линии · cancer',matClN:'Кл. линии · normal',
+    matTisC:'Ткань · cancer',matTisN:'Ткань · normal',
+    matOrganTitle:'Материал образца',
     pelvisTip:'Unisex-схема: ♂ и ♀ органы в одной области таза',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
     projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet',dataFromBundle:'копия на сайте',
@@ -93,6 +98,11 @@ const I18N={
     legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
     legHint:'Dot color at label = C/N/Pan mix. Size ∝ √N. SVG fill = anatomy.',
     legSize:'size ∝ √N',
+    matChartTitle:'Sample material by organ',
+    matChartHint:'Unique project IDs per organ. “Tissue normal” includes healthy samples, e.g. GTEx (PXD016999, 32 tissues).',
+    matClC:'Cell lines · cancer',matClN:'Cell lines · normal',
+    matTisC:'Tissue · cancer',matTisN:'Tissue · normal',
+    matOrganTitle:'Sample material',
     pelvisTip:'Unisex map: male & female organs share the pelvic region',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
     projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet',dataFromBundle:'site bundle',
@@ -126,14 +136,31 @@ let lang=localStorage.getItem('hpa-lang')||'ru';
 function t(k){return (I18N[lang]||I18N.ru)[k]||k;}
 const ORGAN_LABELS={
   ru:{
-    Testis:'Яички',Colon:'Толстая кишка',Small_Intestine:'Тонкая кишка',
-    Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз'
+    Liver:'Печень',Lung:'Лёгкие',Heart:'Сердце',Brain:'Мозг',Kidney:'Почки',
+    Stomach:'Желудок',Pancreas:'Поджелудочная',Spleen:'Селезёнка',Colon:'Толстая кишка',
+    Breast:'Молочная железа',Prostate:'Предстательная',Ovary:'Яичники',Uterus:'Матка',
+    Testis:'Яички',Small_Intestine:'Тонкая кишка',
+    Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз',Thyroid:'Щитовидная',
+    Bladder:'Мочевой пузырь',Skin:'Кожа',Muscle:'Мышцы',Bone:'Кость',
+    Blood:'Кровь',Bone_Marrow:'Костный мозг',Lymph_Node:'Лимфоузлы',
+    Esophagus:'Пищевод',Adrenal_Gland:'Надпочечники',Eye:'Глаза',Nerve:'Нервы',
+    Multiple_Organs:'Несколько органов',Other:'Другое'
   },
   en:{
     Testis:'Testicles',Colon:'Large intestine',Small_Intestine:'Small intestine',
     Salivary_Gland:'Salivary glands',Pituitary:'Pituitary'
   }
 };
+const DIS_LABELS={
+  ru:{
+    'Lung cancer':'Рак лёгких','Liver cancer':'Рак печени','Colorectal cancer':'Колоректальный рак',
+    'Pancreatic cancer':'Рак поджелудочной','Breast cancer':'Рак молочной железы',
+    'Gastric cancer':'Рак желудка','Brain cancer':'Рак мозга','Kidney cancer':'Рак почек',
+    'Normal / control':'Норма / контроль','Not specified':'Не указано'
+  },
+  en:{}
+};
+function diseaseDisplayName(d){return (DIS_LABELS[lang]||{})[d]||d;}
 function organDisplayName(o){
   const m=ORGAN_LABELS[lang]||ORGAN_LABELS.en;
   return m[o]||o.replace(/_/g,' ');
@@ -159,9 +186,9 @@ const F={q:'',tmt:'',health:'',db:''};
 let META={rawRows:0,uniqPids:0,loadedAt:null,dataSource:''},selOrgan=null;
 let organUI={sort:'pid',projQ:''};
 const DIS_RULES=[
-  [/nsclc|non[- ]?small[- ]?cell lung|luad|lusc|lung adenocarcinoma|lung carcinoma|sclc/i,'Lung cancer'],
+  [/nsclc|non[- ]?small[- ]?cell lung|luad|lusc|lung adenocarcinoma|lung carcinoma|sclc|hcc827|nci-h322/i,'Lung cancer'],
   [/colorectal|crc\b|colon adenocarcinoma|rectal adenocarcinoma/i,'Colorectal cancer'],
-  [/hcc|hepatocellular|liver cancer|hepatoma/i,'Liver cancer'],
+  [/\bhcc\b|hepatocellular|liver cancer|hepatoma/i,'Liver cancer'],
   [/pdac|pancreatic adenocarcinoma|pancreatic cancer/i,'Pancreatic cancer'],
   [/hgsoc|ovarian cancer|ovarian carcinoma|ovarian serous/i,'Ovarian cancer'],
   [/glioblastoma|gbm|glioma|brain tumor|brain tumour/i,'Brain cancer'],
@@ -274,7 +301,11 @@ function uniqProjects(rows){
   return u;
 }
 function getOrganRows(o){return filteredRows().filter(r=>r.organs.includes(o));}
-function refreshAll(){buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();if(selOrgan&&C[selOrgan]) sel(selOrgan);}
+function refreshAll(){
+  buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();
+  renderAtlasMaterialChart();
+  if(selOrgan&&C[selOrgan]) sel(selOrgan);
+}
 function fillFilterSelects(){
   const tmtEl=document.getElementById('fTmt');
   if(tmtEl){
@@ -482,6 +513,112 @@ function organBadgeColor(o){
   return PASTEL_MIXED;
 }
 
+const MAT_COL={clC:'#e0a898',clN:'#a8c4e0',tisC:'#d4a8a8',tisN:'#9dc9b0'};
+const GTEX_PID='PXD016999';
+const MAT_CHART_SKIP=new Set(['Multiple_Organs','Other']);
+
+function projectMaterialBucket(r){
+  const isCL=r.st==='Cell Lines';
+  if(isCL&&r.healthy) return 'clN';
+  if(isCL&&!r.healthy) return 'clC';
+  if(!isCL&&r.healthy) return 'tisN';
+  return 'tisC';
+}
+
+function organMaterialMatrix(){
+  const m={}, seen={};
+  filteredRows().forEach(r=>{
+    const b=projectMaterialBucket(r);
+    r.organs.forEach(o=>{
+      if(!m[o]) m[o]={clC:0,clN:0,tisC:0,tisN:0,total:0,gtex:false};
+      if(!seen[o]) seen[o]=new Set();
+      if(seen[o].has(r.pid)) return;
+      seen[o].add(r.pid);
+      m[o][b]++;
+      m[o].total++;
+      if(r.pid===GTEX_PID) m[o].gtex=true;
+    });
+  });
+  return m;
+}
+
+function materialChartDatasets(organs,matrix){
+  const mk=key=>organs.map(o=>(matrix[o]||{})[key]||0);
+  return [
+    {key:'clC',label:t('matClC'),bg:MAT_COL.clC},
+    {key:'tisC',label:t('matTisC'),bg:MAT_COL.tisC},
+    {key:'tisN',label:t('matTisN'),bg:MAT_COL.tisN},
+    {key:'clN',label:t('matClN'),bg:MAT_COL.clN},
+  ].map(d=>({
+    label:d.label,data:mk(d.key),backgroundColor:d.bg,stack:'mat',borderRadius:2,borderSkipped:false
+  }));
+}
+
+function chartAxisColors(){
+  return {grid:'rgba(148,163,184,.12)',tick:'#94a3b8',font:{family:'Inter',size:9}};
+}
+
+let atlasCharts=[];
+
+function renderAtlasMaterialChart(){
+  atlasCharts.forEach(c=>c.destroy());
+  atlasCharts=[];
+  const wrap=document.getElementById('materialChartWrap');
+  const canvas=document.getElementById('atlasMaterialChart');
+  if(!wrap||!canvas||typeof Chart==='undefined') return;
+  const matrix=organMaterialMatrix();
+  const organs=Object.keys(matrix)
+    .filter(o=>matrix[o].total>0&&!MAT_CHART_SKIP.has(o))
+    .sort((a,b)=>matrix[b].total-matrix[a].total||organDisplayName(a).localeCompare(organDisplayName(b)));
+  if(!organs.length){wrap.style.display='none';return;}
+  wrap.style.display='';
+  const gtexN=organs.filter(o=>matrix[o].gtex).length;
+  const hint=document.getElementById('matChartHint');
+  if(hint){
+    hint.textContent=gtexN
+      ? `${t('matChartHint')} GTEx → ${gtexN} ${t('organs').toLowerCase()}.`
+      : t('matChartHint');
+  }
+  canvas.height=Math.min(560,Math.max(120,organs.length*24));
+  const ax=chartAxisColors();
+  atlasCharts.push(new Chart(canvas,{
+    type:'bar',
+    data:{labels:organs.map(organDisplayName),datasets:materialChartDatasets(organs,matrix)},
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{color:ax.tick,font:{family:'Inter',size:10},boxWidth:12,padding:8}},
+        tooltip:{callbacks:{
+          afterBody:items=>{
+            const i=items[0]?.dataIndex;
+            if(i==null) return '';
+            const o=organs[i], row=matrix[o];
+            const lines=[];
+            if(row.gtex) lines.push('GTEx PXD016999');
+            if(!row.clC&&!row.clN&&row.tisN&&!row.tisC) lines.push(lang==='ru'?'Только normal ткань':'Normal tissue only');
+            return lines;
+          }
+        }}
+      },
+      scales:{
+        x:{stacked:true,grid:{color:ax.grid},ticks:{color:ax.tick,stepSize:1,precision:0}},
+        y:{stacked:true,grid:{display:false},ticks:{color:ax.tick,font:ax.font}}
+      },
+      onClick:(_,els)=>{
+        if(!els.length) return;
+        const o=organs[els[0].index];
+        if(o&&C[o]) sel(o);
+      }
+    }
+  }));
+}
+
+function organMaterialCounts(rows){
+  const m={clC:0,clN:0,tisC:0,tisN:0};
+  uniqProjects(rows).forEach(r=>{m[projectMaterialBucket(r)]++;});
+  return m;
+}
+
 const GRP=[
   {t:'Head & Neck',i:'🧠',o:['Brain','Pituitary','Eye','Thyroid','Salivary_Gland','Esophagus']},
   {t:'Thorax',i:'❤️',o:['Lung','Heart','Breast']},
@@ -635,7 +772,7 @@ function hintOrgansFromText(text){
   const hints=[
     [/epidermoid|a431\b/i,'Skin'],[/mcf[- ]?7|breast cancer|mammary/i,'Breast'],
     [/glioblastoma|glioma|u251|dao[y]?/i,'Brain'],[/lung cancer|hcc827|nci-h322|luad|nsclc/i,'Lung'],
-    [/hepat|liver|hcc/i,'Liver'],[/colon|colorectal|crc|rectal/i,'Colon'],
+    [/hepatocellular|liver|\bhcc\b/i,'Liver'],[/colon|colorectal|crc|rectal/i,'Colon'],
     [/pancrea|pdac/i,'Pancreas'],[/ovarian|ovary|hgsoc/i,'Ovary'],
     [/prostate|pca\b/i,'Prostate'],[/kidney|renal|rcc/i,'Kidney'],
     [/stomach|gastric/i,'Stomach'],[/melanoma/i,'Skin'],
@@ -665,8 +802,10 @@ function pickOrganRaw(row){
   };
   /* Curator Organ column is authoritative for map counts (TMT ATLAS sheet). */
   if(organMain&&!VAGUE_ORGAN.test(organMain)){
+    if(classifyAllOrgans(organMain).length===1&&classifyAllOrgans(organMain)[0]==='Multiple_Organs')
+      return organMain;
     addParts(organMain);
-    return parts.length?parts.join('; '):'Unknown';
+    return parts.length?parts.join('; '):organMain;
   }
   ['Cell Line Organ','Tissue for cell lines','Tissue'].forEach(k=>addParts(row[k]||''));
   const detail=(row['Tissue Cell Type Detailed']||'').trim();
@@ -706,6 +845,16 @@ function classifyAllOrgans(raw){
   const list=[...organs];
   if(list.length>=3&&!list.includes('Multiple_Organs')) list.push('Multiple_Organs');
   return list;
+}
+/* Metastasis sites in multi-organ strings — keep primary organ only (e.g. LUAD autopsy → not Liver). */
+function trimMetastasisOrgans(organs,tumorType){
+  if(organs.length<2) return organs;
+  const dc=canonDisease(tumorType);
+  if(dc==='Lung cancer'&&organs.includes('Lung'))
+    return organs.filter(o=>o!=='Liver');
+  if(dc==='Liver cancer'&&organs.includes('Liver'))
+    return organs.filter(o=>o!=='Lung');
+  return organs;
 }
 function isHealthy(tumorType,sampleType,title,disease){
   const t=(tumorType||'').toLowerCase().trim();
@@ -761,7 +910,7 @@ function normalizeRow(x){
   const tumorType=x['Tumor Type']||x['Disease Subtype']||x['Disease']||'Not specified';
   const sampleType=normalizeSampleType(x['Sample Type'])||'Unknown';
   const title=x['Title']||'';
-  const organList=classifyAllOrgans(organRaw);
+  const organList=trimMetastasisOrgans(classifyAllOrgans(organRaw),tumorType);
   const isPan=organList.length>=PAN_ORGAN_THRESHOLD;
   let pid=(x['Project ID']||'').trim();
   const m=pid.match(/^(IPX\d+)\s*\((PXD\d+)\)/i);
@@ -919,18 +1068,18 @@ const ANATOMY={
     'M 208 206 A 3.2 3.2 0 1 0 214.4 206 A 3.2 3.2 0 1 0 208 206 Z '+
     'M 265.6 206 A 3.2 3.2 0 1 0 272 206 A 3.2 3.2 0 1 0 265.6 206 Z'},
 
-  /* ABDOMEN — liver ~⅓ lung; stomach ~½ liver, left; spleen unchanged */
-  Liver:           {pos:{x:214, y:248}, side:'L', size:48, icon:'game-icons:liver', z:2},
-  Stomach:         {pos:{x:256, y:248}, side:'R', size:36, icon:'game-icons:stomach', z:3},
-  Spleen:          {pos:{x:282, y:242}, side:'R', size:0,  z:2, d:
+  /* ABDOMEN — liver left; stomach right-upper (anchor ≠ kidney) */
+  Liver:           {pos:{x:214, y:248}, anchor:{x:206, y:246}, side:'L', size:48, icon:'game-icons:liver', z:2},
+  Stomach:         {pos:{x:268, y:242}, anchor:{x:274, y:246}, side:'R', size:36, icon:'game-icons:stomach', z:3},
+  Spleen:          {pos:{x:282, y:242}, anchor:{x:286, y:248}, side:'R', size:0,  z:2, d:
     'M 280 234 Q 292 238 292 252 Q 288 266 280 266 Q 274 254 278 240 Z'},
-  Pancreas:        {pos:{x:258, y:268}, side:'R', size:0,  z:3, d:
+  Pancreas:        {pos:{x:258, y:268}, anchor:{x:256, y:266}, side:'R', size:0,  z:3, d:
     'M 264 262 Q 258 258 252 262 Q 248 268 252 274 Q 258 272 264 268 Q 266 264 264 262 Z'},
 
-  Adrenal_Gland:   {pos:{x:240, y:250}, side:'R', size:0,  z:1, d:
+  Adrenal_Gland:   {pos:{x:240, y:250}, anchor:{x:228, y:248}, side:'R', size:0,  z:1, d:
     'M 220 246 Q 224 242 230 246 Q 228 252 222 252 Q 218 250 220 246 Z '+
     'M 250 246 Q 256 242 260 246 Q 262 250 258 252 Q 252 252 250 246 Z'},
-  Kidney:          {pos:{x:240, y:268}, side:'L', size:0,  z:2, d:
+  Kidney:          {pos:{x:240, y:268}, anchor:{x:194, y:270}, side:'L', size:0,  z:2, d:
     'M 188 258 Q 182 266 184 278 Q 190 286 196 284 Q 200 274 198 264 Q 194 256 188 258 Z '+
     'M 292 258 Q 298 266 296 278 Q 290 286 284 284 Q 280 274 282 264 Q 286 256 292 258 Z'},
 
@@ -943,40 +1092,32 @@ const ANATOMY={
     'M 214 296 Q 206 306 206 320 Q 210 332 226 336 Q 240 338 254 336 Q 270 332 274 320 Q 274 306 266 296 Q 254 292 240 292 Q 226 292 214 296 Z '+
     'M 220 300 Q 214 308 214 318 Q 218 326 240 328 Q 262 326 266 318 Q 266 308 260 300 Q 250 296 240 296 Q 230 296 220 300 Z'},
 
-  /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
-  Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
-    'M 232 340 Q 240 337 248 340 Q 249 344 240 345 Q 231 344 232 340 Z'},
-  Uterus:          {pos:{x:218, y:334}, side:'L', size:0,  z:3, d:
-    'M 206 328 Q 218 322 230 328 L 232 346 Q 218 352 204 346 Z'},
-  Ovary:           {pos:{x:206, y:322}, side:'L', size:0,  z:3, d:
-    'M 198 320 Q 194 321 195 325 Q 199 326 201 323 Z '+
-    'M 214 318 Q 218 319 217 323 Q 213 324 211 321 Z '+
-    'M 201 322 L 208 320'},
-  Cervix:          {pos:{x:218, y:352}, side:'L', size:0,  z:3, d:
-    'M 213 350 L 223 350 L 221 356 L 215 356 Z'},
-  Prostate:        {pos:{x:262, y:346}, side:'R', size:0,  z:3, d:
-    'M 254 342 Q 262 338 270 342 Q 272 348 262 350 Q 252 348 254 342 Z'},
-  Testis:          {pos:{x:254, y:384}, side:'R', size:0,  z:3, d:
-    'M 246 378 Q 238 390 248 396 Q 254 396 256 390 Q 258 396 262 396 Q 270 390 262 378 Q 258 376 254 384 Q 250 376 246 378 Z'},
+  /* PELVIS — midline bladder/uterus; bilateral ovaries; prostate/testis in groin (unisex overlay) */
+  Bladder:         {pos:{x:240, y:334}, side:'R', size:0,  z:4, d:
+    'M 232 330 Q 240 326 248 330 Q 250 338 240 340 Q 230 338 232 330 Z'},
+  Uterus:          {pos:{x:236, y:338}, side:'L', size:0,  z:3, d:
+    'M 228 330 Q 240 326 252 330 L 254 346 Q 240 352 226 346 Z'},
+  Ovary:           {pos:{x:240, y:322}, side:'L', size:0,  z:3, d:
+    'M 214 318 Q 210 322 212 328 Q 218 330 220 324 Q 218 318 214 318 Z '+
+    'M 266 318 Q 270 322 268 328 Q 262 330 260 324 Q 262 318 266 318 Z'},
+  Cervix:          {pos:{x:236, y:350}, side:'L', size:0,  z:3, d:
+    'M 232 348 L 244 348 L 242 354 L 234 354 Z'},
+  Prostate:        {pos:{x:248, y:346}, side:'R', size:0,  z:3, d:
+    'M 242 342 Q 248 338 254 342 Q 256 348 248 350 Q 240 348 242 342 Z'},
+  Testis:          {pos:{x:240, y:378}, side:'R', size:0,  z:3, d:
+    'M 228 374 Q 222 382 226 390 Q 232 392 236 386 Q 234 378 228 374 Z '+
+    'M 252 374 Q 258 382 254 390 Q 248 392 244 386 Q 246 378 252 374 Z'},
 
   Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
-    'M 198 132 Q 218 126 240 128 Q 262 126 282 132 '+
-    'M 240 142 Q 200 146 188 158 M 240 152 Q 196 158 186 172 '+
-    'M 240 162 Q 194 170 184 186 M 240 172 Q 192 182 182 200 '+
-    'M 240 182 Q 194 194 184 212 M 240 192 Q 196 206 188 222 '+
-    'M 240 142 Q 280 146 292 158 M 240 152 Q 284 158 294 172 '+
-    'M 240 162 Q 286 170 296 186 M 240 172 Q 288 182 298 200 '+
-    'M 240 182 Q 286 194 296 212 M 240 192 Q 284 206 292 222 '+
     'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
     'M 238 128 L 242 128 L 241 368 L 239 368 Z '+
-    'M 208 318 Q 196 328 196 348 Q 206 362 240 366 Q 274 362 284 348 Q 284 328 272 318 '+
-    'M 220 358 L 260 358'},
+    'M 214 358 L 266 358'},
 
-  /* Systemic tissues — shown on limbs / surface */
-  Blood:           {pos:{x:168, y:268}, side:'L', size:0,  z:2, systemic:true, d:
-    'M 160 258 A 10 14 0 1 0 160.01 258 Z'},
-  Skin:            {pos:{x:312, y:268}, side:'R', size:0,  z:2, systemic:true, d:
-    'M 304 258 A 10 14 0 1 0 304.01 258 Z'},
+  /* Systemic markers — chest, inside torso (not drawn on map; sidebar only) */
+  Blood:           {pos:{x:228, y:218}, anchor:{x:228, y:218}, side:'L', size:0,  z:2, systemic:true, d:
+    'M 222 212 A 6 7 0 1 0 222.01 212 Z'},
+  Skin:            {pos:{x:252, y:218}, anchor:{x:252, y:218}, side:'R', size:0,  z:2, systemic:true, d:
+    'M 246 212 A 6 7 0 1 0 246.01 212 Z'},
   Muscle:          {pos:{x:240, y:318}, side:'L', size:0,  z:2, systemic:true, d:
     'M 228 308 Q 240 302 252 308 Q 254 322 240 326 Q 226 322 228 308 Z'}
 };
@@ -991,7 +1132,7 @@ function twemojiUrl(code){
 }
 
 function organGroup(o){
-  if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
+  if(!organCount(o)||!mapOrganVisible(o)) return '';
   const a=ANATOMY[o];
   const fill=organColor(o);
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
@@ -1067,7 +1208,7 @@ function projectCard(r){
       </div>
       <div class="proj-organs">${esc(organs)}</div>
     </div>
-    <div class="proj-disease" title="${esc(r.dis)}">${esc(r.disCanon||'—')}<span style="color:var(--t3);font-size:10px"> · ${esc((r.dis||'').slice(0,40))}</span></div>
+    <div class="proj-disease" title="${esc(r.dis)}">${esc(diseaseDisplayName(r.disCanon)||'—')}<span style="color:var(--t3);font-size:10px"> · ${esc((r.dis||'').slice(0,40))}</span></div>
     <div class="proj-meta">
       <span class="meta-pill subtle">${esc(r.st||'—')}</span>
       ${tmt}${platform}${proteins}
@@ -1095,12 +1236,15 @@ function organStats(o){
 }
 
 /* assign label Y positions with no overlap, separately for each side */
+function organAnchor(a){return a.anchor||a.pos;}
+
 function assignLabelPositions(active){
   const MIN_GAP=40, TOP=40, BOTTOM=620;
   const L=[],R=[];
   active.forEach(o=>{
     const a=ANATOMY[o];
-    const targetY=a.pos.y;
+    const p=organAnchor(a);
+    const targetY=p.y;
     (a.side==='L'?L:R).push({o,y:targetY});
   });
   function layout(arr){
@@ -1118,23 +1262,31 @@ function assignLabelPositions(active){
   return {L:layout(L),R:layout(R)};
 }
 
+function mapOrganVisible(o){
+  const a=ANATOMY[o];
+  return a&&!SYSTEMIC.has(o)&&!a.systemic&&!a.skeleton;
+}
+
 function organLabel(o, labelY){
-  if(!organCount(o)||SYSTEMIC.has(o)||!ANATOMY[o]) return '';
+  if(!organCount(o)||!mapOrganVisible(o)) return '';
   const a=ANATOMY[o];
   const isL=a.side==='L';
-  const labelX=isL?10:470;
+  const labelX=isL?22:458;
   const anchor=isL?'start':'end';
   const name=organDisplayName(o).toUpperCase();
   const s=organStats(o);
-  const ox=a.pos.x, oy=a.pos.y;
-  const turnX=isL?156:324;
-  const lineEnd=isL?labelX+2:labelX-2;
+  const ap=organAnchor(a);
+  const ox=ap.x, oy=ap.y;
+  const turnX=isL?162:318;
+  const lineEnd=isL?labelX+4:labelX-4;
   const badge=organBadgeColor(o);
   const dotR=Math.max(3, Math.min(8, 2.2+Math.sqrt(s.n)*0.6));
   const panTag=s.nPan?` · ${s.nPan} pan`:'';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
+  /* elbow at organ Y first — avoids diagonal lines into wrong organs when labelY is stacked */
+  const lead=`M ${ox} ${oy} L ${turnX} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}`;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
-    <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}"/>
+    <path class="lbl-lead" d="${lead}"/>
     <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.45)" stroke-width=".5" transform="translate(${isL?6:-6},0)"/>
     <text class="lbl-name" x="${labelX+(isL?14:-14)}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
     <text class="lbl-count" x="${labelX+(isL?14:-14)}" y="${labelY+8}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
@@ -1170,9 +1322,19 @@ function bodySilhouette(){
   const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
               L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
               L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
-  const legL=`M 214 370 Q 210 480 206 580 Q 204 640 200 700`;
-  const legR=`M 266 370 Q 270 480 274 580 Q 276 640 280 700`;
-  const stroke='#d89a9a', fill='rgba(216,154,154,.03)';
+  /* Legs: same filled taper as arms (~40px thigh width), not single-pixel strokes */
+  const legFill='rgba(216,154,154,.07)', legStroke='#d89a9a';
+  const legL=`M 208 370
+              Q 188 378 180 408 L 170 478 Q 164 518 168 558
+              L 170 612 Q 174 628 186 632 L 206 628
+              Q 214 572 220 508 L 226 438 Q 230 392 228 382
+              L 232 370 Q 222 366 208 370 Z`;
+  const legR=`M 272 370
+              Q 292 378 300 408 L 310 478 Q 316 518 312 558
+              L 310 612 Q 306 628 294 632 L 274 628
+              Q 266 572 260 508 L 254 438 Q 250 392 252 382
+              L 248 370 Q 258 366 272 370 Z`;
+  const stroke='#d89a9a', fill='rgba(216,154,154,.05)';
   return `
     <g class="body-silhouette" pointer-events="none">
       <path d="${head}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
@@ -1180,14 +1342,14 @@ function bodySilhouette(){
       <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
       <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
       <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path d="${legL}" fill="none" stroke="${stroke}" stroke-width="1.1" stroke-linecap="round"/>
-      <path d="${legR}" fill="none" stroke="${stroke}" stroke-width="1.1" stroke-linecap="round"/>
+      <path class="leg-part" d="${legL}" fill="${legFill}" stroke="${legStroke}" stroke-width="1.35" stroke-linejoin="round"/>
+      <path class="leg-part" d="${legR}" fill="${legFill}" stroke="${legStroke}" stroke-width="1.35" stroke-linejoin="round"/>
       <text x="240" y="10" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="8" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
     </g>`;
 }
 
 function renderBody(){
-  const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&!SYSTEMIC.has(o));
+  const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&mapOrganVisible(o));
   /* Render organs in z-order (lower z = drawn first, on bottom) */
   const drawOrder=[...active].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
   const labelY=assignLabelPositions(active);
@@ -1195,7 +1357,7 @@ function renderBody(){
     const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;
   };
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="0 0 480 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="-16 0 512 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
     ${bodySilhouette()}
     <g class="organs-layer">${drawOrder.map(organGroup).join('')}</g>
     <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
@@ -1215,19 +1377,29 @@ function bindMapClicks(){
   });
 }
 
+function hlLabels(o){
+  document.querySelectorAll('.lbl-g').forEach(g=>{
+    g.classList.toggle('hi',!!o&&g.dataset.cb===o);
+  });
+}
+
 function st(ev,o){
+  hlLabels(o);
   const tip=document.getElementById('tip');
   const s=organStats(o);
   const pelvis=PELVIC_ORGANS.has(o)?`<div class="td">${t('pelvisTip')}</div>`:'';
   tip.innerHTML=`<div class="tn">${organDisplayName(o)}</div>
     <div class="tc">${s.n} ${t('projects')} · ${s.nC}C · ${s.nN}N</div>
-    ${s.topDis?`<div class="td">${esc(s.topDis)}</div>`:''}${pelvis}`;
+    ${s.topDis?`<div class="td">${esc(diseaseDisplayName(s.topDis))}</div>`:''}${pelvis}`;
   tip.style.display='block';
   const r=document.getElementById('bw').getBoundingClientRect();
   tip.style.left=(ev.clientX-r.left+12)+'px';
   tip.style.top=(ev.clientY-r.top-8)+'px';
 }
-function ht(){document.getElementById('tip').style.display='none'}
+function ht(){
+  document.getElementById('tip').style.display='none';
+  hlLabels(selOrgan||null);
+}
 
 function sel(o){
   if(!C[o]) return;
@@ -1238,6 +1410,7 @@ function sel(o){
   document.querySelectorAll('.oitem').forEach(x=>x.classList.toggle('on',x.dataset.o===o));
   document.querySelectorAll('.organ-g').forEach(x=>x.classList.toggle('hi',x.dataset.o===o));
   document.querySelectorAll('.lbl-g').forEach(x=>x.classList.toggle('hi',x.dataset.cb===o));
+  hlLabels(o);
 
   const col=organColor(o);
   let uniqRows=sortProjects(uniqProjects(rows),organUI.sort);
@@ -1292,7 +1465,7 @@ function sel(o){
     const rowsD=uniqRows.filter(r=>(r.disCanon||r.dis)===d);
     const healthyTag=rowsD.length&&rowsD.every(r=>r.healthy);
     const dc=healthyTag?PASTEL_NORMAL:chartColor(i+2);
-    h+=`<div class="dtag dtag-click" onclick="filterByHealth('${healthyTag?'normal':'cancer'}')" title="Filter"><span class="dd" style="background:${dc}"></span>${esc(d)}<span class="dc" style="color:${dc}">${n}</span></div>`;
+    h+=`<div class="dtag dtag-click" onclick="filterByHealth('${healthyTag?'normal':'cancer'}')" title="Filter"><span class="dd" style="background:${dc}"></span>${esc(diseaseDisplayName(d))}<span class="dc" style="color:${dc}">${n}</span></div>`;
   });
   h+=`</div></div>`;
 
@@ -1306,7 +1479,7 @@ function sel(o){
   }
 
   h+=`<div class="charts-row">
-    <div class="ccard"><h4 class="sec-h">Sample Types</h4><canvas id="ch1"></canvas></div>
+    <div class="ccard"><h4 class="sec-h">${t('matOrganTitle')}</h4><canvas id="chMat"></canvas></div>
     <div class="ccard"><h4 class="sec-h">Disease groups</h4><canvas id="ch2"></canvas></div>
   </div>
   <div class="projects-section">
@@ -1324,23 +1497,29 @@ function sel(o){
   requestAnimationFrame(()=>{
     try{
       if(typeof Chart==='undefined') return;
-      const c1=document.getElementById('ch1');
-      if(c1&&ss.length){
-        charts.push(new Chart(c1,{
-          type:'doughnut',
-          data:{labels:ss.map(s=>s[0]),datasets:[{
-            data:ss.map(s=>s[1]),
-            backgroundColor:ss.map((_,i)=>chartColor(i)),
-            borderWidth:0
-          }]},
-          options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Inter',size:10},padding:10,
-            generateLabels:chart=>{
-              const ds=chart.data.datasets[0];
-              return chart.data.labels.map((lbl,i)=>({
-                text:lbl,fillStyle:ds.backgroundColor[i],strokeStyle:'transparent',index:i
-              }));
+      const ax=chartAxisColors();
+      const mat=organMaterialCounts(uniqRows);
+      const matLabels=[t('matClC'),t('matTisC'),t('matTisN'),t('matClN')];
+      const matData=[mat.clC,mat.tisC,mat.tisN,mat.clN];
+      const matColors=[MAT_COL.clC,MAT_COL.tisC,MAT_COL.tisN,MAT_COL.clN];
+      const cMat=document.getElementById('chMat');
+      if(cMat&&matData.some(v=>v>0)){
+        charts.push(new Chart(cMat,{
+          type:'bar',
+          data:{
+            labels:[organDisplayName(o)],
+            datasets:matLabels.map((lbl,i)=>({
+              label:lbl,data:[matData[i]],backgroundColor:matColors[i],stack:'o',borderRadius:3,borderSkipped:false
+            }))
+          },
+          options:{
+            indexAxis:'y',responsive:true,
+            plugins:{legend:{position:'bottom',labels:{color:ax.tick,font:{family:'Inter',size:9},boxWidth:10}}},
+            scales:{
+              x:{stacked:true,grid:{color:ax.grid},ticks:{color:ax.tick,stepSize:1,precision:0}},
+              y:{stacked:true,grid:{display:false},ticks:{color:ax.tick}}
             }
-          }}}}
+          }
         }));
       }
       const c2=document.getElementById('ch2');
