@@ -22,6 +22,7 @@ function chartColor(i){return PASTEL[Math.abs(i)%PASTEL.length];}
 const PASTEL_CANCER='#d4a8a8';
 const PASTEL_NORMAL='#9dc9b0';
 const PASTEL_PAN='#d4c48a';
+const PASTEL_MIXED='#c4a8d4';
 const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
   'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other']);
 
@@ -30,7 +31,7 @@ const I18N={
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · только органы с проектами',
+    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · органы с проектами · таз unisex (♂+♀)',
     pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
@@ -41,8 +42,10 @@ const I18N={
     panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
-    allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда',
-    legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ atlas',
+    allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
+    legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ',legMixed:'Mixed C+N',
+    legHint:'Заливка SVG — анатомический цвет ткани',
+    pelvisTip:'Unisex-схема: ♂ и ♀ органы в одной области таза',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
     projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet',dataFromBundle:'копия на сайте',
     linkCopied:'Ссылка скопирована',openSheet:'Таблица',
@@ -74,7 +77,7 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Anterior view · organs with projects only',
+    about:'About',close:'Close',bodyCap:'Anterior view · organs with projects · unisex pelvis (M+F)',
     pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
@@ -85,8 +88,10 @@ const I18N={
     panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
-    allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend',
-    legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ atlas',
+    allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
+    legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ',legMixed:'Mixed C+N',
+    legHint:'SVG fill = anatomical tissue hue',
+    pelvisTip:'Unisex map: male & female organs share the pelvic region',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
     projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet',dataFromBundle:'site bundle',
     linkCopied:'Link copied',openSheet:'Spreadsheet',
@@ -293,7 +298,9 @@ function legendBlock(){
     <span class="leg-title">${t('legend')}</span>
     <span class="leg-item"><i style="background:${PASTEL_NORMAL}"></i>${t('legNormal')}</span>
     <span class="leg-item"><i style="background:${PASTEL_CANCER}"></i>${t('legCancer')}</span>
+    <span class="leg-item"><i style="background:${PASTEL_MIXED}"></i>${t('legMixed')}</span>
     <span class="leg-item"><i style="background:${PASTEL_PAN}"></i>${t('legPan')}</span>
+    <span class="leg-hint">${t('legHint')}</span>
   </div>`;
 }
 function renderLegend(){
@@ -365,8 +372,8 @@ function buildSidebar(){
     if(!items.length) return;
     h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
     items.forEach(o=>{
-      const n=C[o],c=organColor(o);
-      h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c}"></div><span class="nm">${organDisplayName(o)}</span><span class="ct">${n}</span></div>`;
+      const n=C[o],c=organBadgeColor(o),sz=organDotSize(n);
+      h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c};width:${sz}px;height:${sz}px"></div><span class="nm">${organDisplayName(o)}</span><span class="ct">${n}</span></div>`;
     });
     h+=`</div></div>`;
   });
@@ -445,6 +452,25 @@ const ANATOMY_COL={
   Multiple_Organs:'#a0a0a8', Other:'#9498a0'
 };
 function organColor(o){return ANATOMY_COL[o]||'#b8a090';}
+
+const PELVIC_ORGANS=new Set(['Bladder','Uterus','Cervix','Ovary','Prostate','Testis']);
+
+function organDotSize(n){
+  return Math.round(Math.max(10, Math.min(20, 8+Math.sqrt(n||1)*2.2)));
+}
+
+function organBadgeColor(o){
+  const rows=uniqProjects(getOrganRows(o));
+  const core=rows.filter(r=>!r.isPan);
+  if(!core.length){
+    return rows.some(r=>r.isPan)?PASTEL_PAN:'#9498a0';
+  }
+  let nC=0,nN=0;
+  core.forEach(r=>{if(r.healthy) nN++; else nC++;});
+  if(nC>0&&nN===0) return PASTEL_CANCER;
+  if(nN>0&&nC===0) return PASTEL_NORMAL;
+  return PASTEL_MIXED;
+}
 
 const GRP=[
   {t:'Head & Neck',i:'🧠',o:['Brain','Pituitary','Eye','Thyroid','Salivary_Gland','Esophagus']},
@@ -859,7 +885,7 @@ const ANATOMY={
   Brain:           {pos:{x:240, y: 42}, side:'R', size:42, emoji:'1f9e0', z:1},
   Pituitary:       {pos:{x:240, y: 56}, side:'R', size:0,  z:3, d:
     'M 236 54 A 4 3 0 1 0 244 54 A 4 3 0 1 0 236 54 Z'},
-  Eye:             {pos:{x:240, y: 62}, side:'L', size:0,  z:2, d:
+  Eye:             {pos:{x:248, y: 62}, side:'R', size:0,  z:2, d:
     'M 224 62 A 6 3 0 1 0 236 62 A 6 3 0 1 0 224 62 Z '+
     'M 244 62 A 6 3 0 1 0 256 62 A 6 3 0 1 0 244 62 Z '+
     'M 230 62 A 1.6 1.6 0 1 0 230.01 62 Z '+
@@ -907,21 +933,21 @@ const ANATOMY={
     'M 214 296 Q 206 306 206 320 Q 210 332 226 336 Q 240 338 254 336 Q 270 332 274 320 Q 274 306 266 296 Q 254 292 240 292 Q 226 292 214 296 Z '+
     'M 220 300 Q 214 308 214 318 Q 218 326 240 328 Q 262 326 266 318 Q 266 308 260 300 Q 250 296 240 296 Q 230 296 220 300 Z'},
 
-  /* PELVIS — uterus > bladder (½); ovaries above, linked */
+  /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
   Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
     'M 232 340 Q 240 337 248 340 Q 249 344 240 345 Q 231 344 232 340 Z'},
-  Uterus:          {pos:{x:240, y:336}, side:'L', size:0,  z:3, d:
-    'M 228 330 Q 240 324 252 330 L 254 348 Q 240 354 226 348 Z'},
-  Ovary:           {pos:{x:240, y:328}, side:'R', size:0,  z:3, d:
-    'M 212 326 Q 208 327 209 331 Q 213 332 215 329 Z '+
-    'M 268 326 Q 272 327 271 331 Q 267 332 265 329 Z '+
-    'M 215 328 L 222 326 M 265 328 L 258 326'},
-  Cervix:          {pos:{x:240, y:354}, side:'L', size:0,  z:3, d:
-    'M 235 352 L 245 352 L 243 358 L 237 358 Z'},
-  Prostate:        {pos:{x:240, y:346}, side:'R', size:0,  z:3, d:
-    'M 232 342 Q 240 338 248 342 Q 250 348 240 350 Q 230 348 232 342 Z'},
-  Testis:          {pos:{x:240, y:384}, side:'L', size:0,  z:3, d:
-    'M 232 378 Q 224 390 234 396 Q 240 396 242 390 Q 244 396 248 396 Q 256 390 248 378 Q 244 376 240 384 Q 236 376 232 378 Z'},
+  Uterus:          {pos:{x:218, y:334}, side:'L', size:0,  z:3, d:
+    'M 206 328 Q 218 322 230 328 L 232 346 Q 218 352 204 346 Z'},
+  Ovary:           {pos:{x:206, y:322}, side:'L', size:0,  z:3, d:
+    'M 198 320 Q 194 321 195 325 Q 199 326 201 323 Z '+
+    'M 214 318 Q 218 319 217 323 Q 213 324 211 321 Z '+
+    'M 201 322 L 208 320'},
+  Cervix:          {pos:{x:218, y:352}, side:'L', size:0,  z:3, d:
+    'M 213 350 L 223 350 L 221 356 L 215 356 Z'},
+  Prostate:        {pos:{x:262, y:346}, side:'R', size:0,  z:3, d:
+    'M 254 342 Q 262 338 270 342 Q 272 348 262 350 Q 252 348 254 342 Z'},
+  Testis:          {pos:{x:254, y:384}, side:'R', size:0,  z:3, d:
+    'M 246 378 Q 238 390 248 396 Q 254 396 256 390 Q 258 396 262 396 Q 270 390 262 378 Q 258 376 254 384 Q 250 376 246 378 Z'},
 
   Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
     'M 198 132 Q 218 126 240 128 Q 262 126 282 132 '+
@@ -1095,12 +1121,13 @@ function organLabel(o, labelY){
   const ox=a.pos.x, oy=a.pos.y;
   const turnX=isL?156:324;
   const lineEnd=isL?labelX+2:labelX-2;
-  const col=organColor(o);
+  const badge=organBadgeColor(o);
+  const dotR=Math.max(2.5, Math.min(7, 1.8+Math.sqrt(s.n)*0.55));
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}"/>
-    <circle class="lbl-dot-organ" cx="${ox}" cy="${oy}" r="1.5" fill="${col}"/>
-    <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="2" fill="${col}" transform="translate(${isL?6:-6},0)"/>
+    <circle class="lbl-dot-organ" cx="${ox}" cy="${oy}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.35)" stroke-width=".4"/>
+    <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="${dotR+0.5}" fill="${badge}" stroke="rgba(255,255,255,.35)" stroke-width=".4" transform="translate(${isL?6:-6},0)"/>
     <text class="lbl-name" x="${labelX+(isL?14:-14)}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
     <text class="lbl-count" x="${labelX+(isL?14:-14)}" y="${labelY+8}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N</text>
   </g>`;
@@ -1183,9 +1210,10 @@ function bindMapClicks(){
 function st(ev,o){
   const tip=document.getElementById('tip');
   const s=organStats(o);
+  const pelvis=PELVIC_ORGANS.has(o)?`<div class="td">${t('pelvisTip')}</div>`:'';
   tip.innerHTML=`<div class="tn">${organDisplayName(o)}</div>
     <div class="tc">${s.n} ${t('projects')} · ${s.nC}C · ${s.nN}N</div>
-    ${s.topDis?`<div class="td">${esc(s.topDis)}</div>`:''}`;
+    ${s.topDis?`<div class="td">${esc(s.topDis)}</div>`:''}${pelvis}`;
   tip.style.display='block';
   const r=document.getElementById('bw').getBoundingClientRect();
   tip.style.left=(ev.clientX-r.left+12)+'px';
