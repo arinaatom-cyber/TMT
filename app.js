@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-bodyfix5';
+const MAP_BUILD='20260620-bodyfix6';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -1095,21 +1095,21 @@ const ANATOMY={
     'M 214 296 Q 206 306 206 320 Q 210 332 226 336 Q 240 338 254 336 Q 270 332 274 320 Q 274 306 266 296 Q 254 292 240 292 Q 226 292 214 296 Z '+
     'M 220 300 Q 214 308 214 318 Q 218 326 240 328 Q 262 326 266 318 Q 266 308 260 300 Q 250 296 240 296 Q 230 296 220 300 Z'},
 
-  /* PELVIS — midline bladder/uterus; bilateral ovaries; prostate/testis in groin (unisex overlay) */
-  Bladder:         {pos:{x:240, y:334}, side:'R', size:0,  z:4, d:
-    'M 232 330 Q 240 326 248 330 Q 250 338 240 340 Q 230 338 232 330 Z'},
-  Uterus:          {pos:{x:236, y:338}, side:'L', size:0,  z:3, d:
-    'M 228 330 Q 240 326 252 330 L 254 346 Q 240 352 226 346 Z'},
-  Ovary:           {pos:{x:240, y:322}, side:'L', size:0,  z:3, d:
-    'M 198 318 Q 194 322 196 328 Q 202 330 204 324 Q 202 318 198 318 Z '+
-    'M 282 318 Q 286 322 284 328 Q 278 330 276 324 Q 278 318 282 318 Z'},
-  Cervix:          {pos:{x:236, y:350}, side:'L', size:0,  z:3, d:
-    'M 232 348 L 244 348 L 242 354 L 234 354 Z'},
-  Prostate:        {pos:{x:248, y:346}, side:'R', size:0,  z:3, d:
-    'M 242 342 Q 248 338 254 342 Q 256 348 248 350 Q 240 348 242 342 Z'},
-  Testis:          {pos:{x:240, y:378}, side:'R', size:0,  z:3, d:
-    'M 228 374 Q 222 382 226 390 Q 232 392 236 386 Q 234 378 228 374 Z '+
-    'M 252 374 Q 258 382 254 390 Q 248 392 244 386 Q 246 378 252 374 Z'},
+  /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
+  Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
+    'M 232 340 Q 240 337 248 340 Q 249 344 240 345 Q 231 344 232 340 Z'},
+  Uterus:          {pos:{x:218, y:334}, side:'L', size:0,  z:3, d:
+    'M 206 328 Q 218 322 230 328 L 232 346 Q 218 352 204 346 Z'},
+  Ovary:           {pos:{x:206, y:322}, side:'L', size:0,  z:3, d:
+    'M 198 320 Q 194 321 195 325 Q 199 326 201 323 Z '+
+    'M 214 318 Q 218 319 217 323 Q 213 324 211 321 Z '+
+    'M 201 322 L 208 320'},
+  Cervix:          {pos:{x:218, y:352}, side:'L', size:0,  z:3, d:
+    'M 213 350 L 223 350 L 221 356 L 215 356 Z'},
+  Prostate:        {pos:{x:262, y:346}, side:'R', size:0,  z:3, d:
+    'M 254 342 Q 262 338 270 342 Q 272 348 262 350 Q 252 348 254 342 Z'},
+  Testis:          {pos:{x:254, y:384}, side:'R', size:0,  z:3, d:
+    'M 246 378 Q 238 390 248 396 Q 254 396 256 390 Q 258 396 262 396 Q 270 390 262 378 Q 258 376 254 384 Q 250 376 246 378 Z'},
 
   Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
     'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
