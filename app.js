@@ -43,8 +43,9 @@ const I18N={
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
-    legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ',legMixed:'Mixed C+N',
-    legHint:'Заливка SVG — анатомический цвет ткани',
+    legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
+    legHint:'Цвет точки у подписи = C/N/Pan. Размер ∝ √N. Заливка SVG — анатомия.',
+    legSize:'размер ∝ √N',
     pelvisTip:'Unisex-схема: ♂ и ♀ органы в одной области таза',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
     projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet',dataFromBundle:'копия на сайте',
@@ -89,8 +90,9 @@ const I18N={
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
-    legNormal:'Normal',legCancer:'Cancer',legPan:'Pan-organ',legMixed:'Mixed C+N',
-    legHint:'SVG fill = anatomical tissue hue',
+    legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
+    legHint:'Dot color at label = C/N/Pan mix. Size ∝ √N. SVG fill = anatomy.',
+    legSize:'size ∝ √N',
     pelvisTip:'Unisex map: male & female organs share the pelvic region',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
     projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet',dataFromBundle:'site bundle',
@@ -296,10 +298,11 @@ function formatUpdated(){
 function legendBlock(){
   return `<div class="map-legend">
     <span class="leg-title">${t('legend')}</span>
-    <span class="leg-item"><i style="background:${PASTEL_NORMAL}"></i>${t('legNormal')}</span>
     <span class="leg-item"><i style="background:${PASTEL_CANCER}"></i>${t('legCancer')}</span>
+    <span class="leg-item"><i style="background:${PASTEL_NORMAL}"></i>${t('legNormal')}</span>
     <span class="leg-item"><i style="background:${PASTEL_MIXED}"></i>${t('legMixed')}</span>
     <span class="leg-item"><i style="background:${PASTEL_PAN}"></i>${t('legPan')}</span>
+    <span class="leg-item leg-size-demo"><i style="width:10px;height:10px;background:var(--t3);border-radius:50%"></i>${t('legSize')}</span>
     <span class="leg-hint">${t('legHint')}</span>
   </div>`;
 }
@@ -459,16 +462,23 @@ function organDotSize(n){
   return Math.round(Math.max(10, Math.min(20, 8+Math.sqrt(n||1)*2.2)));
 }
 
-function organBadgeColor(o){
-  const rows=uniqProjects(getOrganRows(o));
-  const core=rows.filter(r=>!r.isPan);
-  if(!core.length){
-    return rows.some(r=>r.isPan)?PASTEL_PAN:'#9498a0';
-  }
+function organProjectBreakdown(o){
+  const uniq=uniqProjects(getOrganRows(o));
+  const pan=uniq.filter(r=>r.isPan);
+  const core=uniq.filter(r=>!r.isPan);
+  /* Color/count from non-pan projects; pan-only organs use pan rows */
+  const base=core.length?core:(pan.length?pan:uniq);
   let nC=0,nN=0;
-  core.forEach(r=>{if(r.healthy) nN++; else nC++;});
-  if(nC>0&&nN===0) return PASTEL_CANCER;
-  if(nN>0&&nC===0) return PASTEL_NORMAL;
+  base.forEach(r=>{if(r.healthy)nN++; else nC++;});
+  return {uniq, pan, core, base, n:uniq.length, nPan:pan.length, nCore:core.length, nC, nN};
+}
+
+function organBadgeColor(o){
+  const b=organProjectBreakdown(o);
+  if(!b.uniq.length) return '#9498a0';
+  if(b.nPan===b.n) return PASTEL_PAN;
+  if(b.nC>0&&b.nN===0) return PASTEL_CANCER;
+  if(b.nN>0&&b.nC===0) return PASTEL_NORMAL;
   return PASTEL_MIXED;
 }
 
@@ -1070,11 +1080,9 @@ function projectCard(r){
 }
 
 function organStats(o){
-  const uniq=uniqProjects(getOrganRows(o));
-  let nC=0,nN=0;
+  const b=organProjectBreakdown(o);
   const dis={},dbs={},tmts={};
-  uniq.forEach(r=>{
-    if(r.healthy) nN++; else nC++;
+  b.uniq.forEach(r=>{
     const dk=r.disCanon||r.dis;
     if(dk) dis[dk]=(dis[dk]||0)+1;
     if(r.db) dbs[r.db]=(dbs[r.db]||0)+1;
@@ -1083,7 +1091,7 @@ function organStats(o){
   const topDis=Object.entries(dis).sort((a,b)=>b[1]-a[1])[0];
   const topTmt=Object.entries(tmts).sort((a,b)=>b[1]-a[1])[0];
   const topDb=Object.entries(dbs).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,3).join(', ');
-  return {n:uniq.length,nC,nN,topDis:topDis?topDis[0]:'',topTmt:topTmt?topTmt[0]:'',topDb};
+  return {n:b.n,nC:b.nC,nN:b.nN,nPan:b.nPan,topDis:topDis?topDis[0]:'',topTmt:topTmt?topTmt[0]:'',topDb};
 }
 
 /* assign label Y positions with no overlap, separately for each side */
@@ -1122,14 +1130,14 @@ function organLabel(o, labelY){
   const turnX=isL?156:324;
   const lineEnd=isL?labelX+2:labelX-2;
   const badge=organBadgeColor(o);
-  const dotR=Math.max(2.5, Math.min(7, 1.8+Math.sqrt(s.n)*0.55));
+  const dotR=Math.max(3, Math.min(8, 2.2+Math.sqrt(s.n)*0.6));
+  const panTag=s.nPan?` · ${s.nPan} pan`:'';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   return `<g class="lbl-g" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="M ${ox} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}"/>
-    <circle class="lbl-dot-organ" cx="${ox}" cy="${oy}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.35)" stroke-width=".4"/>
-    <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="${dotR+0.5}" fill="${badge}" stroke="rgba(255,255,255,.35)" stroke-width=".4" transform="translate(${isL?6:-6},0)"/>
+    <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.45)" stroke-width=".5" transform="translate(${isL?6:-6},0)"/>
     <text class="lbl-name" x="${labelX+(isL?14:-14)}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${labelX+(isL?14:-14)}" y="${labelY+8}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N</text>
+    <text class="lbl-count" x="${labelX+(isL?14:-14)}" y="${labelY+8}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
   </g>`;
 }
 

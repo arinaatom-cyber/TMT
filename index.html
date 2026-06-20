@@ -103,7 +103,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .body-wrap{position:relative;width:100%;max-width:520px}
 .body-wrap svg{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 18px rgba(0,0,0,.35))}
 .body-caption{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;max-width:360px}
-.map-legend{display:flex;flex-wrap:wrap;gap:10px 14px;justify-content:center;align-items:center;margin-top:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);max-width:520px;font-size:10px;color:var(--t2)}
+.map-legend{display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:flex-start;align-items:center;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);font-size:10px;color:var(--t2)}
+.map-legend-bar{flex:1 1 100%;max-width:100%;margin-top:4px}
 .leg-title{font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);margin-right:4px}
 .leg-item{display:inline-flex;align-items:center;gap:5px}
 .leg-item i{display:inline-block;width:8px;height:8px;border-radius:50%}
@@ -265,6 +266,7 @@ footer a{color:var(--accent);text-decoration:none}
   </select>
   <button type="button" class="tbtn" onclick="reloadData()" data-i18n="refresh">Refresh</button>
   <button type="button" class="tbtn primary" onclick="exportAllCSV()" data-i18n="exportAll">Export all CSV</button>
+  <div id="mapLegend" class="map-legend map-legend-bar"></div>
 </div>
 
 <div class="app">
@@ -272,7 +274,6 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="body-col">
     <div class="body-wrap" id="bw"></div>
     <p class="body-caption" id="bodyCaption" data-i18n="bodyCap">Anterior view · organs with projects only</p>
-    <div id="mapLegend"></div>
     <div class="tip" id="tip"></div>
   </div>
   <div class="detail" id="dc">
@@ -329,6 +330,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260620-mapdots"></script>
+<script src="app.js?v=20260620-legend"></script>
 </body>
 </html>
