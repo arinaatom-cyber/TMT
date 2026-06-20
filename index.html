@@ -213,6 +213,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .modal code{background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--t1)}
 .modal-close{float:right;background:var(--bg2);border:1px solid var(--border);color:var(--t1);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px}
 .cite-box{background:var(--bg2);border:1px solid var(--border);padding:12px;border-radius:8px;font-size:12px;color:var(--t2);margin-top:8px}
+.sys-ref-wrap{margin:8px 0 16px;max-height:220px;overflow:auto}
+.sys-ref{width:100%;border-collapse:collapse;font-size:11px}
+.sys-ref th,.sys-ref td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
+.sys-ref th{background:var(--bg2);font-weight:600;white-space:nowrap}
+.sys-ref td{color:var(--t2);line-height:1.45}
 
 .prot-hint{font-size:11px;color:var(--t3);line-height:1.5;margin-bottom:10px}
 .prot-mini{margin-bottom:12px}
@@ -308,6 +313,9 @@ footer a{color:var(--accent);text-decoration:none}
     <button type="button" class="modal-close" onclick="closeAbout()" data-i18n="close">Close</button>
     <h2 data-i18n="aboutTitle">About the Atlas</h2>
     <p data-i18n="aboutP1">Interactive map of TMT multiplex proteomics projects grouped by organ. Data is loaded from Google Sheets (PRIDE, CPTAC, PDC, ProteomeXchange).</p>
+    <p data-i18n="aboutP2">Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.</p>
+    <h3 data-i18n="sysRefTitle">Major organ systems (MSD Manual)</h3>
+    <div id="sysRefTable" class="sys-ref-wrap"></div>
     <h3 data-i18n="methods">Methods</h3>
     <ul>
       <li data-i18n="m1">One project ID = one unique project (PXD preferred when dual-listed).</li>
@@ -344,6 +352,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260620-pro3"></script>
+<script src="app.js?v=20260620-pro4"></script>
 </body>
 </html>
