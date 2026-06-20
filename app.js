@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-bodyfix7';
+const MAP_BUILD='20260620-pro1';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -1074,17 +1074,17 @@ const ANATOMY={
   /* ABDOMEN — liver left; stomach right-upper (anchor ≠ kidney) */
   Liver:           {pos:{x:214, y:248}, anchor:{x:206, y:246}, side:'L', size:48, icon:'game-icons:liver', z:2},
   Stomach:         {pos:{x:268, y:242}, anchor:{x:274, y:246}, side:'R', size:36, icon:'game-icons:stomach', z:3},
-  Spleen:          {pos:{x:282, y:242}, anchor:{x:286, y:248}, side:'R', size:0,  z:2, d:
-    'M 280 234 Q 292 238 292 252 Q 288 266 280 266 Q 274 254 278 240 Z'},
+  Spleen:          {pos:{x:276, y:242}, anchor:{x:280, y:248}, side:'R', size:0,  z:2, d:
+    'M 274 234 Q 284 238 284 252 Q 280 264 274 262 Q 270 252 274 234 Z'},
   Pancreas:        {pos:{x:258, y:268}, anchor:{x:256, y:266}, side:'R', size:0,  z:3, d:
     'M 264 262 Q 258 258 252 262 Q 248 268 252 274 Q 258 272 264 268 Q 266 264 264 262 Z'},
 
   Adrenal_Gland:   {pos:{x:240, y:250}, anchor:{x:228, y:248}, side:'R', size:0,  z:1, d:
     'M 220 246 Q 224 242 230 246 Q 228 252 222 252 Q 218 250 220 246 Z '+
     'M 250 246 Q 256 242 260 246 Q 262 250 258 252 Q 252 252 250 246 Z'},
-  Kidney:          {pos:{x:240, y:268}, anchor:{x:194, y:270}, side:'L', size:0,  z:2, d:
-    'M 188 258 Q 182 266 184 278 Q 190 286 196 284 Q 200 274 198 264 Q 194 256 188 258 Z '+
-    'M 292 258 Q 298 266 296 278 Q 290 286 284 284 Q 280 274 282 264 Q 286 256 292 258 Z'},
+  Kidney:          {pos:{x:240, y:268}, anchor:{x:200, y:270}, side:'L', size:0,  z:2, d:
+    'M 202 258 Q 198 264 200 274 Q 204 282 208 280 Q 210 270 208 262 Q 205 256 202 258 Z '+
+    'M 278 258 Q 282 264 280 274 Q 276 282 272 280 Q 270 270 272 262 Q 275 256 278 258 Z'},
 
   /* INTESTINES — duodenum from stomach; coiled small + colon frame */
   Small_Intestine: {pos:{x:244, y:308}, side:'L', size:0,  z:3, d:
@@ -1092,8 +1092,7 @@ const ANATOMY={
     'M 238 304 Q 232 306 230 312 Q 232 318 240 320 Q 248 318 250 312 Q 248 306 238 304 Z '+
     'M 242 318 Q 236 320 234 326 Q 236 332 244 334 Q 252 332 254 326 Q 252 320 242 318 Z'},
   Colon:           {pos:{x:240, y:312}, side:'R', size:0,  z:2, d:
-    'M 214 296 Q 206 306 206 320 Q 210 332 226 336 Q 240 338 254 336 Q 270 332 274 320 Q 274 306 266 296 Q 254 292 240 292 Q 226 292 214 296 Z '+
-    'M 220 300 Q 214 308 214 318 Q 218 326 240 328 Q 262 326 266 318 Q 266 308 260 300 Q 250 296 240 296 Q 230 296 220 300 Z'},
+    'M 218 298 Q 208 308 208 322 Q 212 334 228 338 Q 240 340 252 338 Q 268 334 272 322 Q 272 308 262 298 Q 252 294 240 294 Q 228 294 218 298 Z'},
 
   /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
   Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
@@ -1108,9 +1107,9 @@ const ANATOMY={
     'M 213 350 L 223 350 L 221 356 L 215 356 Z'},
   Prostate:        {pos:{x:262, y:346}, side:'R', size:0,  z:3, d:
     'M 254 342 Q 262 338 270 342 Q 272 348 262 350 Q 252 348 254 342 Z'},
-  Testis:          {pos:{x:248, y:382}, side:'R', size:0,  z:3, d:
-    'M 236 376 Q 232 384 236 392 Q 242 394 246 388 Q 244 380 236 376 Z '+
-    'M 260 376 Q 264 384 260 392 Q 254 394 250 388 Q 252 380 260 376 Z'},
+  Testis:          {pos:{x:240, y:378}, side:'R', size:0,  z:3, d:
+    'M 228 374 Q 224 382 228 390 Q 234 392 238 386 Q 236 378 228 374 Z '+
+    'M 252 374 Q 256 382 252 390 Q 246 392 242 386 Q 244 378 252 374 Z'},
 
   Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
     'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
@@ -1165,7 +1164,7 @@ function organGroup(o){
       ?`fill:none;stroke:rgba(255,255,255,.55);stroke-width:1;stroke-linejoin:round`
       :a.systemic
         ?`fill:${fill};fill-opacity:.4;stroke:${fill};stroke-width:1.2`
-        :`fill:${fill};fill-rule:evenodd`;
+        :`fill:${fill};fill-opacity:.9;stroke:rgba(16,10,8,.32);stroke-width:.6;stroke-linejoin:round;fill-rule:evenodd`;
     const clsExtra=a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'';
     const pe=a.skeleton?' pointer-events="none"':'';
     return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}${a.skeleton?' style="pointer-events:none"':''}>
@@ -1326,27 +1325,27 @@ function bodySilhouette(){
   const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
               L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
               L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
-  /* Legs: filled like arms; narrow (~26px) but one crotch gap — not two inner stick lines */
-  const legL=`M 216 370
-              Q 206 378 202 418 L 196 498 Q 192 548 196 598
-              L 200 638 Q 206 652 216 648 L 224 642
-              Q 226 560 228 480 Q 230 408 232 382
-              L 234 370 L 216 370 Z`;
-  const legR=`M 264 370
-              Q 274 378 278 418 L 284 498 Q 288 548 284 598
-              L 280 638 Q 274 652 264 648 L 256 642
-              Q 254 560 252 480 Q 250 408 248 382
-              L 246 370 L 264 370 Z`;
-  const stroke='#d89a9a', fill='rgba(216,154,154,.05)';
+  /* Legs: same closed topology as arms; attach at hip corners 212/268; ~30px wide */
+  const legL=`M 212 370
+              Q 200 376 196 396 L 192 468 Q 190 528 194 578
+              L 200 624 Q 206 640 214 638 L 222 630
+              Q 224 556 227 482 L 230 412 Q 232 382 236 372
+              L 238 370 L 212 370 Z`;
+  const legR=`M 268 370
+              Q 280 376 284 396 L 288 468 Q 290 528 286 578
+              L 280 624 Q 274 640 266 638 L 258 630
+              Q 256 556 253 482 L 250 412 Q 248 382 244 372
+              L 242 370 L 268 370 Z`;
+  const stroke='#c88888', fill='rgba(200,136,136,.09)';
   return `
     <g class="body-silhouette" pointer-events="none">
-      <path d="${head}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
-      <path d="${neck}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
-      <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
-      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
+      <path d="${head}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${neck}" fill="${fill}" stroke="${stroke}" stroke-width="1.15"/>
+      <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
       <text x="240" y="10" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="8" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
     </g>`;
 }
