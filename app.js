@@ -923,29 +923,18 @@ const ANATOMY={
   Testis:          {pos:{x:240, y:384}, side:'L', size:0,  z:3, d:
     'M 232 378 Q 224 390 234 396 Q 240 396 242 390 Q 244 396 248 396 Q 256 390 248 378 Q 244 376 240 384 Q 236 376 232 378 Z'},
 
-  Bone:            {pos:{x:240, y:320}, side:'R', size:0,  z:0, skeleton:true, d:
-    /* clavicles */
+  Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
     'M 198 132 Q 218 126 240 128 Q 262 126 282 132 '+
-    /* rib cage (6 pairs per side) */
     'M 240 142 Q 200 146 188 158 M 240 152 Q 196 158 186 172 '+
     'M 240 162 Q 194 170 184 186 M 240 172 Q 192 182 182 200 '+
     'M 240 182 Q 194 194 184 212 M 240 192 Q 196 206 188 222 '+
     'M 240 142 Q 280 146 292 158 M 240 152 Q 284 158 294 172 '+
     'M 240 162 Q 286 170 296 186 M 240 172 Q 288 182 298 200 '+
     'M 240 182 Q 286 194 296 212 M 240 192 Q 284 206 292 222 '+
-    /* sternum */
     'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
-    /* spine */
     'M 238 128 L 242 128 L 241 368 L 239 368 Z '+
-    /* pelvis */
     'M 208 318 Q 196 328 196 348 Q 206 362 240 366 Q 274 362 284 348 Q 284 328 272 318 '+
-    'M 220 358 L 260 358 '+
-    /* femurs (thigh) */
-    'M 204 366 Q 198 368 196 378 L 192 460 Q 190 520 188 568 L 186 598 Q 184 608 190 612 Q 198 612 202 606 L 206 568 Q 210 500 214 420 L 218 378 Q 216 368 210 366 Z '+
-    'M 276 366 Q 282 368 284 378 L 288 460 Q 290 520 292 568 L 294 598 Q 296 608 290 612 Q 282 612 278 606 L 274 568 Q 270 500 266 420 L 262 378 Q 264 368 270 366 Z '+
-    /* tibias (shin) */
-    'M 192 612 L 190 680 Q 188 698 194 702 L 200 702 Q 206 698 208 680 L 210 612 Z '+
-    'M 288 612 L 290 680 Q 292 698 286 702 L 280 702 Q 274 698 272 680 L 270 612 Z'},
+    'M 220 358 L 260 358'},
 
   /* Systemic tissues — shown on limbs / surface */
   Blood:           {pos:{x:168, y:268}, side:'L', size:0,  z:2, systemic:true, d:
@@ -1146,10 +1135,8 @@ function bodySilhouette(){
   const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
               L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
               L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
-  const legL=`M 212 370 L 206 410 Q 200 500 198 580 Q 196 650 194 700
-              L 172 700 Q 168 650 172 580 Q 178 500 196 410 L 212 370 Z`;
-  const legR=`M 268 370 L 274 410 Q 280 500 282 580 Q 284 650 286 700
-              L 308 700 Q 312 650 308 580 Q 302 500 284 410 L 268 370 Z`;
+  const legL=`M 214 370 Q 210 480 206 580 Q 204 640 200 700`;
+  const legR=`M 266 370 Q 270 480 274 580 Q 276 640 280 700`;
   const stroke='#d89a9a', fill='rgba(216,154,154,.03)';
   return `
     <g class="body-silhouette" pointer-events="none">
@@ -1158,8 +1145,8 @@ function bodySilhouette(){
       <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.1" stroke-linejoin="round"/>
       <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
       <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
-      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.1"/>
+      <path d="${legL}" fill="none" stroke="${stroke}" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="${legR}" fill="none" stroke="${stroke}" stroke-width="1.1" stroke-linecap="round"/>
       <text x="240" y="10" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="8" letter-spacing="4" font-weight="600">ANATOMICAL ATLAS · ANTERIOR VIEW</text>
     </g>`;
 }
