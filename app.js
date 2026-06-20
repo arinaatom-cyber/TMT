@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro2';
+const MAP_BUILD='20260620-pro3';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -32,7 +32,8 @@ const I18N={
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · органы с проектами · таз unisex (♂+♀)',
+    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · полная анатомия · подписи — органы с проектами · таз unisex (♂+♀)',
+    noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
@@ -45,7 +46,7 @@ const I18N={
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
     legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
-    legHint:'Цвет точки у подписи = C/N/Pan. Размер ∝ √N. Заливка SVG — анатомия.',
+    legHint:'Цвет точки у подписи = C/N/Pan. Размер ∝ √N. Все органы на карте; яркие — с проектами, бледные — без данных.',
     legSize:'размер ∝ √N',
     matChartTitle:'Материал образца по органам',
     matChartHint:'Уникальные Project ID на орган. «Ткань normal» — здоровые образцы, в т.ч. GTEx (PXD016999, 32 ткани).',
@@ -84,7 +85,8 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Anterior view · organs with projects · unisex pelvis (M+F)',
+    about:'About',close:'Close',bodyCap:'Anterior view · full anatomy · labels = organs with projects · unisex pelvis (M+F)',
+    noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
@@ -97,7 +99,7 @@ const I18N={
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
     legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
-    legHint:'Dot color at label = C/N/Pan mix. Size ∝ √N. SVG fill = anatomy.',
+    legHint:'Dot color at label = C/N/Pan mix. Size ∝ √N. All organs shown; bright = has projects, faded = none.',
     legSize:'size ∝ √N',
     matChartTitle:'Sample material by organ',
     matChartHint:'Unique project IDs per organ. “Tissue normal” includes healthy samples, e.g. GTEx (PXD016999, 32 tissues).',
@@ -1071,32 +1073,33 @@ const ANATOMY={
     'M 208 206 A 3.2 3.2 0 1 0 214.4 206 A 3.2 3.2 0 1 0 208 206 Z '+
     'M 265.6 206 A 3.2 3.2 0 1 0 272 206 A 3.2 3.2 0 1 0 265.6 206 Z'},
 
-  /* ABDOMEN — contiguous viscera block (no icon gaps); liver L, stomach R */
-  Liver:           {pos:{x:222, y:252}, anchor:{x:208, y:252}, side:'L', size:0,  z:2, d:
-    'M 232 226 Q 250 228 264 236 Q 274 246 272 262 Q 266 278 246 282 Q 216 284 198 272 Q 188 258 192 242 Q 200 226 218 224 Q 226 224 232 226 Z'},
-  Stomach:         {pos:{x:258, y:252}, anchor:{x:270, y:252}, side:'R', size:0,  z:3, d:
-    'M 248 226 Q 266 228 276 240 Q 282 254 276 268 Q 266 278 252 276 Q 242 264 244 248 Q 246 232 248 226 Z'},
-  Spleen:          {pos:{x:274, y:248}, anchor:{x:278, y:248}, side:'R', size:0,  z:2, d:
-    'M 270 232 Q 282 236 284 250 Q 280 262 274 260 Q 268 248 270 232 Z'},
+  /* ABDOMEN — textbook proportions (liver largest; stomach J-shaped; intestines fill lower cavity) */
+  Liver:           {pos:{x:212, y:254}, anchor:{x:196, y:252}, side:'L', size:0,  z:2, d:
+    'M 216 218 Q 242 214 262 224 Q 274 236 272 254 Q 268 276 248 286 Q 208 290 190 272 Q 182 252 186 234 Q 194 218 212 216 Q 216 216 216 218 Z'},
+  Stomach:         {pos:{x:270, y:252}, anchor:{x:284, y:250}, side:'R', size:0,  z:3, d:
+    'M 258 214 Q 280 212 290 224 Q 294 242 288 260 Q 278 278 262 280 Q 248 276 244 258 L 242 240 Q 246 224 254 216 Q 256 212 258 214 Z'},
+  Spleen:          {pos:{x:278, y:242}, anchor:{x:284, y:240}, side:'R', size:0,  z:2, d:
+    'M 272 226 Q 286 230 288 246 Q 284 260 276 258 Q 270 244 272 226 Z'},
   Pancreas:        {pos:{x:252, y:262}, anchor:{x:252, y:262}, side:'R', size:0,  z:3, d:
-    'M 234 256 L 268 258 Q 276 262 270 266 L 236 264 Q 230 260 234 256 Z'},
+    'M 232 256 L 272 258 Q 282 262 276 268 L 234 266 Q 226 262 232 256 Z'},
   Adrenal_Gland:   {pos:{x:240, y:252}, anchor:{x:228, y:250}, side:'R', size:0,  z:1, d:
-    'M 212 252 Q 216 248 220 252 Q 218 256 214 256 Q 212 254 212 252 Z '+
-    'M 260 252 Q 264 248 268 252 Q 266 256 262 256 Q 260 254 260 252 Z'},
-  Kidney:          {pos:{x:240, y:268}, anchor:{x:212, y:268}, side:'L', size:0,  z:2, d:
-    'M 210 256 Q 202 262 204 272 Q 210 280 216 276 Q 218 266 214 260 Q 212 256 210 256 Z '+
-    'M 270 256 Q 278 262 276 272 Q 270 280 264 276 Q 262 266 266 260 Q 268 256 270 256 Z'},
+    'M 208 254 Q 212 248 216 254 Q 214 258 210 258 Q 208 256 208 254 Z '+
+    'M 262 254 Q 266 248 270 254 Q 268 258 264 258 Q 262 256 262 254 Z'},
+  Kidney:          {pos:{x:240, y:272}, anchor:{x:208, y:270}, side:'L', size:0,  z:2, d:
+    'M 206 258 Q 196 266 198 278 Q 206 286 214 282 Q 216 270 210 262 Q 208 258 206 258 Z '+
+    'M 274 258 Q 284 266 282 278 Q 274 286 266 282 Q 264 270 270 262 Q 272 258 274 258 Z'},
 
-  /* INTESTINES — colon ring + packed small-bowel coils (fills cavity) */
-  Small_Intestine: {pos:{x:240, y:310}, side:'L', size:0,  z:3, d:
-    'M 228 296 Q 234 292 240 296 Q 246 300 242 306 Q 236 308 230 304 Q 226 300 228 296 Z '+
-    'M 244 298 Q 250 294 256 298 Q 260 304 256 310 Q 250 312 244 308 Q 240 302 244 298 Z '+
-    'M 232 308 Q 238 304 244 308 Q 248 314 244 320 Q 238 322 232 318 Q 228 312 232 308 Z '+
-    'M 248 312 Q 254 308 260 312 Q 264 318 260 324 Q 254 326 248 322 Q 244 316 248 312 Z '+
-    'M 236 318 Q 242 314 248 318 Q 252 324 248 330 Q 242 332 236 328 Q 232 322 236 318 Z'},
-  Colon:           {pos:{x:240, y:318}, side:'R', size:0,  z:2, d:
-    'M 214 290 Q 202 300 202 316 Q 206 332 222 338 Q 240 342 258 338 Q 274 332 278 316 Q 278 300 266 290 Q 254 286 240 286 Q 226 286 214 290 Z '+
-    'M 222 298 Q 214 306 214 316 Q 218 326 234 330 Q 240 332 246 330 Q 262 326 266 316 Q 266 306 258 298 Q 250 294 240 294 Q 230 294 222 298 Z'},
+  /* INTESTINES — colon frames lower abdomen; small bowel coils fill the center */
+  Small_Intestine: {pos:{x:240, y:318}, anchor:{x:240, y:318}, side:'L', size:0,  z:3, d:
+    'M 214 298 Q 232 288 252 294 Q 268 302 270 316 Q 272 330 258 338 Q 240 342 224 334 Q 210 322 208 308 Q 208 298 214 298 Z '+
+    'M 222 304 Q 238 298 254 306 Q 264 316 260 328 Q 248 336 232 330 Q 218 322 216 310 Q 218 304 222 304 Z '+
+    'M 230 312 Q 244 306 258 314 Q 268 324 262 334 Q 250 340 236 334 Q 224 326 224 316 Q 226 312 230 312 Z '+
+    'M 218 318 Q 230 322 238 332 Q 238 342 226 346 Q 214 344 208 334 Q 206 324 212 318 Q 214 316 218 318 Z '+
+    'M 242 318 Q 254 322 260 332 Q 258 342 246 346 Q 234 342 232 332 Q 236 322 242 318 Z '+
+    'M 226 328 Q 238 332 246 340 Q 244 348 234 348 Q 222 344 220 336 Q 222 328 226 328 Z'},
+  Colon:           {pos:{x:240, y:328}, anchor:{x:284, y:326}, side:'R', size:0,  z:2, d:
+    'M 204 282 Q 190 298 192 320 Q 198 342 220 350 Q 240 354 260 350 Q 282 342 288 320 Q 290 298 276 282 Q 260 272 240 272 Q 220 272 204 282 Z '+
+    'M 214 290 Q 202 304 204 318 Q 210 334 228 338 Q 240 340 252 338 Q 270 332 274 318 Q 276 304 264 290 Q 252 282 240 282 Q 228 282 214 290 Z'},
 
   /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
   Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
@@ -1138,28 +1141,36 @@ function twemojiUrl(code){
   return `https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/${code}.svg`;
 }
 
+function mapAnatomyOrgans(){
+  return Object.keys(ANATOMY).filter(mapOrganVisible);
+}
+
 function organGroup(o){
-  if(!organCount(o)||!mapOrganVisible(o)) return '';
+  if(!mapOrganVisible(o)) return '';
   const a=ANATOMY[o];
-  const fill=organColor(o);
-  const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
+  const n=organCount(o);
+  const ghost=n===0;
+  const fill=ghost?'#9a9088':organColor(o);
+  const eh=ghost?'':`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
 
   if(a.emoji){
     const sz=a.size||28;
     const url=twemojiUrl(a.emoji);
     const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
-    return `<g class="organ-g organ-img" data-o="${o}" ${eh}>
-      <image href="${url}" pointer-events="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
-      <rect class="organ-hit" fill="transparent" pointer-events="all" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+    const ghostCls=ghost?' organ-ghost':'';
+    return `<g class="organ-g organ-img${ghostCls}" data-o="${o}" ${eh}${ghost?' style="pointer-events:none"':''}>
+      <image href="${url}" pointer-events="none" opacity="${ghost?'0.32':'0.95'}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
+      <rect class="organ-hit" fill="transparent" pointer-events="${ghost?'none':'all'}" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
     </g>`;
   }
   if(a.icon){
     const sz=a.size||32;
     const url=iconUrl(a.icon,fill);
     const cx=a.pos.x-sz/2, cy=a.pos.y-sz/2;
-    return `<g class="organ-g organ-img" data-o="${o}" ${eh}>
-      <image href="${url}" pointer-events="none" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
-      <rect class="organ-hit" fill="transparent" pointer-events="all" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
+    const ghostCls=ghost?' organ-ghost':'';
+    return `<g class="organ-g organ-img${ghostCls}" data-o="${o}" ${eh}${ghost?' style="pointer-events:none"':''}>
+      <image href="${url}" pointer-events="none" opacity="${ghost?'0.32':'0.95'}" x="${cx}" y="${cy}" width="${sz}" height="${sz}" preserveAspectRatio="xMidYMid meet"/>
+      <rect class="organ-hit" fill="transparent" pointer-events="${ghost?'none':'all'}" x="${cx}" y="${cy}" width="${sz}" height="${sz}"/>
     </g>`;
   }
   if(a.d){
@@ -1168,10 +1179,12 @@ function organGroup(o){
       ?`fill:none;stroke:rgba(255,255,255,.55);stroke-width:1;stroke-linejoin:round`
       :a.systemic
         ?`fill:${fill};fill-opacity:.4;stroke:${fill};stroke-width:1.2`
-        :`fill:${fill};fill-opacity:.94;stroke:rgba(12,8,6,.38);stroke-width:.55;stroke-linejoin:round;fill-rule:evenodd`;
-    const clsExtra=a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'';
-    const pe=a.skeleton?' pointer-events="none"':'';
-    return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}${a.skeleton?' style="pointer-events:none"':''}>
+        :ghost
+          ?`fill:${fill};fill-opacity:.28;stroke:rgba(70,60,55,.42);stroke-width:.65;stroke-linejoin:round;fill-rule:evenodd`
+          :`fill:${fill};fill-opacity:.94;stroke:rgba(12,8,6,.38);stroke-width:.55;stroke-linejoin:round;fill-rule:evenodd`;
+    const clsExtra=(a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'')+(ghost?' organ-ghost':'');
+    const pe=(a.skeleton||ghost)?' pointer-events="none"':'';
+    return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}${(a.skeleton||ghost)?' style="pointer-events:none"':''}>
       <path class="${pcls}" d="${a.d}" style="${psty}"${pe}/>
     </g>`;
   }
@@ -1365,9 +1378,10 @@ function bodySilhouette(){
 }
 
 function renderBody(){
-  const active=Object.keys(ANATOMY).filter(o=>organCount(o)>0&&mapOrganVisible(o));
-  /* Render organs in z-order (lower z = drawn first, on bottom) */
-  const drawOrder=[...active].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
+  const allMap=mapAnatomyOrgans();
+  const active=allMap.filter(o=>organCount(o)>0);
+  /* Render all anatomy; ghost fill when no projects match filters */
+  const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
   const labelY=assignLabelPositions(active);
   const orderedY=o=>{
     const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;

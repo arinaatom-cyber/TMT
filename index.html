@@ -133,6 +133,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .organ-g:hover .anatomy-part,.organ-g.hi .anatomy-part{stroke:#fff;filter:brightness(1.15)}
 .organ-g:hover .skeleton-part,.organ-g.hi .skeleton-part{stroke:#fff;stroke-width:2;filter:brightness(1.12)}
 .organ-g:hover .systemic-part,.organ-g.hi .systemic-part{fill:rgba(200,140,120,.5)}
+.organ-g.organ-ghost{cursor:default;pointer-events:none}
+.organ-g.organ-ghost .anatomy-part{fill-opacity:.28}
 
 /* Labels sit above organs — must not block clicks on the body map */
 .lbl-g{pointer-events:none;cursor:default;opacity:.2;transition:opacity .18s ease}
@@ -342,6 +344,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260620-pro2"></script>
+<script src="app.js?v=20260620-pro3"></script>
 </body>
 </html>
