@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro3';
+const MAP_BUILD='20260620-pro4';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -36,6 +36,8 @@ const I18N={
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
+    aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
+    sysRefTitle:'Основные системы органов (MSD Manual)',
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
     m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
@@ -79,7 +81,10 @@ const I18N={
     excelSheets:'листы Excel',multiSheetHint:'В xlsx несколько листов — парсер берёт все листы с колонками Gene/UniProt (не summary).',
     protCompareHint:'Венн: уникальные наборы белков органов (UniProt или ген). Списки белков не показываются.',
     protTableTitle:'Белки по проектам',protTableHint:'Таблица: Sheet (Google), File (Result File), Index (индекс), UniProt (после маппинга), гены без UniProt.',
-    organUnique:'уник. в органе',sumIndexProjects:'Σ индекс по проектам',countDiff:'расхождение',countDiffHint:'Число в таблице и в файле отличается более чем на 5% — проверьте Result File или пересоберите индекс (REBUILD.md).'
+    organUnique:'уник. в органе',sumIndexProjects:'Σ индекс по проектам',countDiff:'расхождение',countDiffHint:'Число в таблице и в файле отличается более чем на 5% — проверьте Result File или пересоберите индекс (REBUILD.md).',
+    sysNervous:'Нервная',sysCardio:'Сердечно-сосудистая',sysResp:'Дыхательная',sysDigest:'Пищеварительная',
+    sysEndocrine:'Эндокринная',sysUrinary:'Мочевыводящая',sysFemale:'Женская репродуктивная',
+    sysMale:'Мужская репродуктивная',sysImmune:'Кровь и иммунная',sysMSK:'Опора и покровы',sysOther:'Прочее'
   },
   en:{
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
@@ -89,6 +94,8 @@ const I18N={
     noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
+    aboutP2:'Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.',
+    sysRefTitle:'Major organ systems (MSD Manual)',
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
     m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
@@ -132,7 +139,10 @@ const I18N={
     excelSheets:'Excel sheets',multiSheetHint:'Multi-sheet xlsx: all sheets with Gene/UniProt columns are merged (not summary).',
     protCompareHint:'Venn shows unique protein sets per organ (UniProt or gene). Protein lists are hidden.',
     protTableTitle:'Proteins per project',protTableHint:'Sheet (Google), File (parsed), Index, UniProt (mapped), genes without UniProt.',
-    organUnique:'unique in organ',sumIndexProjects:'Σ index per projects',countDiff:'mismatch',countDiffHint:'Sheet count differs from file/index by >5% — check Result File or rebuild index (REBUILD.md).'
+    organUnique:'unique in organ',sumIndexProjects:'Σ index per projects',countDiff:'mismatch',countDiffHint:'Sheet count differs from file/index by >5% — check Result File or rebuild index (REBUILD.md).',
+    sysNervous:'Nervous',sysCardio:'Cardiovascular',sysResp:'Respiratory',sysDigest:'Digestive',
+    sysEndocrine:'Endocrine',sysUrinary:'Urinary',sysFemale:'Female reproductive',
+    sysMale:'Male reproductive',sysImmune:'Blood & immune',sysMSK:'Support & integument',sysOther:'Other'
   }
 };
 let lang=localStorage.getItem('hpa-lang')||'ru';
@@ -141,6 +151,7 @@ const ORGAN_LABELS={
   ru:{
     Liver:'Печень',Lung:'Лёгкие',Heart:'Сердце',Brain:'Мозг',Kidney:'Почки',
     Stomach:'Желудок',Pancreas:'Поджелудочная',Spleen:'Селезёнка',Colon:'Толстая кишка',
+    Gallbladder:'Желчный пузырь',Appendix:'Аппендикс',Thymus:'Тимус',
     Breast:'Молочная железа',Prostate:'Предстательная',Ovary:'Яичники',Uterus:'Матка',
     Testis:'Яички',Small_Intestine:'Тонкая кишка',
     Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз',Thyroid:'Щитовидная',
@@ -151,6 +162,7 @@ const ORGAN_LABELS={
   },
   en:{
     Testis:'Testicles',Colon:'Large intestine',Small_Intestine:'Small intestine',
+    Gallbladder:'Gallbladder',Appendix:'Appendix',Thymus:'Thymus',
     Salivary_Gland:'Salivary glands',Pituitary:'Pituitary'
   }
 };
@@ -183,7 +195,7 @@ function i18nApply(){
   const lb=document.getElementById('langBtn');if(lb) lb.textContent=lang==='ru'?'EN':'RU';
   document.documentElement.lang=lang;
 }
-function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();refreshAll();}
+function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();refreshAll();if(document.getElementById('aboutModal')?.classList.contains('open'))renderSysRef();}
 
 const F={q:'',tmt:'',health:'',db:''};
 let META={rawRows:0,uniqPids:0,loadedAt:null,dataSource:''},selOrgan=null;
@@ -272,7 +284,17 @@ function parseUrlOrgan(){
   const o=new URLSearchParams(location.search).get('organ');
   if(o&&C[o]) sel(o);
 }
-function openAbout(){document.getElementById('aboutModal').classList.add('open');}
+function openAbout(){
+  document.getElementById('aboutModal').classList.add('open');
+  renderSysRef();
+}
+function renderSysRef(){
+  const el=document.getElementById('sysRefTable');
+  if(!el) return;
+  el.innerHTML=`<table class="sys-ref"><thead><tr><th>${lang==='ru'?'Система':'System'}</th><th>${lang==='ru'?'Органы на карте':'Organs on map'}</th></tr></thead><tbody>`+
+    GRP.map(g=>`<tr><td>${esc(grpTitle(g))}</td><td>${g.o.map(organDisplayName).join(' · ')}</td></tr>`).join('')+
+    `</tbody></table>`;
+}
 function closeAbout(){document.getElementById('aboutModal').classList.remove('open');}
 function csvEscape(s){const x=String(s??'');return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
 function downloadCSV(filename,rows){
@@ -409,7 +431,7 @@ function buildSidebar(){
   GRP.forEach(g=>{
     const items=g.o.filter(o=>(C[o]||0)>0&&rowMatchesSidebar(o));
     if(!items.length) return;
-    h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${g.t}</h3></div><div class="olist">`;
+    h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${grpTitle(g)}</h3></div><div class="olist">`;
     items.forEach(o=>{
       const n=C[o],c=organBadgeColor(o),sz=organDotSize(n);
       h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c};width:${sz}px;height:${sz}px"></div><span class="nm">${organDisplayName(o)}</span><span class="ct">${n}</span></div>`;
@@ -478,7 +500,9 @@ const ANATOMY_COL={
   Lung:'#c08080',            Heart:'#a84848',
   Breast:'#d4a0a0',          Liver:'#8b5c48',
   Stomach:'#c8a878',         Spleen:'#8b5868',
+  Gallbladder:'#7a9868',     Appendix:'#b89878',
   Pancreas:'#c4a860',        Adrenal_Gland:'#a89058',
+  Thymus:'#c4b878',
   Kidney:'#9a6860',          Small_Intestine:'#d4b888',
   Colon:'#a07868',           Bladder:'#c8b070',
   Uterus:'#c08890',          Ovary:'#d4a090',
@@ -625,13 +649,19 @@ function organMaterialCounts(rows){
 }
 
 const GRP=[
-  {t:'Head & Neck',i:'🧠',o:['Brain','Pituitary','Eye','Thyroid','Salivary_Gland','Esophagus']},
-  {t:'Thorax',i:'❤️',o:['Lung','Heart','Breast']},
-  {t:'Abdomen',i:'🫁',o:['Liver','Stomach','Pancreas','Spleen','Adrenal_Gland','Kidney','Small_Intestine','Colon']},
-  {t:'Pelvic & Urinary',i:'🩺',o:['Bladder','Ovary','Uterus','Cervix','Prostate','Testis']},
-  {t:'Blood & Immune',i:'🩸',o:['Blood','Bone_Marrow','Lymph_Node']},
-  {t:'Structural & Other',i:'🦴',o:['Bone','Muscle','Skin','Adipose_Tissue','Soft_Tissue','Nerve','Multiple_Organs','Other']}
+  {tKey:'sysNervous', i:'🧠', o:['Brain','Pituitary','Eye','Nerve']},
+  {tKey:'sysCardio', i:'❤️', o:['Heart','Blood']},
+  {tKey:'sysResp', i:'🫁', o:['Lung','Thymus','Esophagus']},
+  {tKey:'sysDigest', i:'🍽', o:['Salivary_Gland','Stomach','Liver','Gallbladder','Pancreas','Spleen','Small_Intestine','Colon','Appendix']},
+  {tKey:'sysEndocrine', i:'⚗️', o:['Thyroid','Adrenal_Gland']},
+  {tKey:'sysUrinary', i:'💧', o:['Kidney','Bladder']},
+  {tKey:'sysFemale', i:'♀', o:['Ovary','Uterus','Cervix']},
+  {tKey:'sysMale', i:'♂', o:['Prostate','Testis']},
+  {tKey:'sysImmune', i:'🩸', o:['Bone_Marrow','Lymph_Node']},
+  {tKey:'sysMSK', i:'🦴', o:['Bone','Muscle','Skin','Breast','Adipose_Tissue','Soft_Tissue']},
+  {tKey:'sysOther', i:'📦', o:['Multiple_Organs','Other']}
 ];
+function grpTitle(g){return t(g.tKey)||g.tKey;}
 const COL={};
 GRP.forEach(g=>g.o.forEach(o=>{COL[o]=organColor(o);}));
 
@@ -652,7 +682,9 @@ const MAP={
   heart:'Heart',cardiac:'Heart',coronary:'Heart',aorta:'Heart',atrial:'Heart',ventricle:'Heart',
   breast:'Breast',mammary:'Breast',
   liver:'Liver',hepat:'Liver',
+  gallbladder:'Gallbladder','biliary':'Gallbladder',
   stomach:'Stomach',gastric:'Stomach',gastroesophageal:'Stomach',
+  appendix:'Appendix',appendiceal:'Appendix',
   pancrea:'Pancreas',
   spleen:'Spleen',splenic:'Spleen',
   adrenal:'Adrenal_Gland',
@@ -669,7 +701,8 @@ const MAP={
   testis:'Testis',testic:'Testis',
   'bone marrow':'Bone_Marrow',marrow:'Bone_Marrow',myeloma:'Bone_Marrow',
   'plasma cell':'Bone_Marrow',plasmacells:'Bone_Marrow',
-  'lymph node':'Lymph_Node','lymph nodes':'Lymph_Node',tonsil:'Lymph_Node',thymus:'Lymph_Node',
+  'lymph node':'Lymph_Node','lymph nodes':'Lymph_Node',tonsil:'Lymph_Node',
+  thymus:'Thymus',thymic:'Thymus',
   'peripheral blood':'Blood',
   't cell':'Blood','t-cell':'Blood','t cells':'Blood',
   'b cell':'Blood','b-cell':'Blood','b cells':'Blood',
@@ -1067,6 +1100,8 @@ const ANATOMY={
   Lung:            {pos:{x:240, y:178}, side:'L', size:0,  z:2, d:
     'M 222 136 Q 198 142 192 160 Q 184 194 190 214 Q 202 222 226 218 L 232 198 Q 234 168 230 144 Q 228 136 222 136 Z '+
     'M 258 136 Q 282 142 288 160 Q 296 194 290 214 Q 278 222 254 218 L 248 198 Q 246 168 250 144 Q 252 136 258 136 Z'},
+  Thymus:          {pos:{x:240, y:158}, anchor:{x:208, y:156}, side:'L', size:0,  z:2, d:
+    'M 226 150 Q 240 146 254 150 Q 256 160 250 166 Q 240 168 230 164 Q 224 158 226 150 Z'},
   Heart:           {pos:{x:246, y:192}, side:'R', size:0,  z:3, d:
     'M 248 176 Q 238 174 236 188 Q 236 200 244 210 L 252 218 Q 262 204 262 190 Q 260 178 248 176 Z'},
   Breast:          {pos:{x:240, y:208}, side:'L', size:0,  z:4, d:
@@ -1076,6 +1111,8 @@ const ANATOMY={
   /* ABDOMEN — textbook proportions (liver largest; stomach J-shaped; intestines fill lower cavity) */
   Liver:           {pos:{x:212, y:254}, anchor:{x:196, y:252}, side:'L', size:0,  z:2, d:
     'M 216 218 Q 242 214 262 224 Q 274 236 272 254 Q 268 276 248 286 Q 208 290 190 272 Q 182 252 186 234 Q 194 218 212 216 Q 216 216 216 218 Z'},
+  Gallbladder:     {pos:{x:248, y:272}, anchor:{x:258, y:270}, side:'R', size:0,  z:3, d:
+    'M 242 260 Q 252 256 258 266 Q 260 276 254 284 Q 246 286 240 278 Q 238 268 242 260 Z'},
   Stomach:         {pos:{x:270, y:252}, anchor:{x:284, y:250}, side:'R', size:0,  z:3, d:
     'M 258 214 Q 280 212 290 224 Q 294 242 288 260 Q 278 278 262 280 Q 248 276 244 258 L 242 240 Q 246 224 254 216 Q 256 212 258 214 Z'},
   Spleen:          {pos:{x:278, y:242}, anchor:{x:284, y:240}, side:'R', size:0,  z:2, d:
@@ -1100,6 +1137,8 @@ const ANATOMY={
   Colon:           {pos:{x:240, y:328}, anchor:{x:284, y:326}, side:'R', size:0,  z:2, d:
     'M 204 282 Q 190 298 192 320 Q 198 342 220 350 Q 240 354 260 350 Q 282 342 288 320 Q 290 298 276 282 Q 260 272 240 272 Q 220 272 204 282 Z '+
     'M 214 290 Q 202 304 204 318 Q 210 334 228 338 Q 240 340 252 338 Q 270 332 274 318 Q 276 304 264 290 Q 252 282 240 282 Q 228 282 214 290 Z'},
+  Appendix:        {pos:{x:276, y:344}, anchor:{x:292, y:342}, side:'R', size:0,  z:4, d:
+    'M 266 328 Q 276 326 280 336 Q 284 350 276 360 Q 268 356 266 344 Q 264 334 266 328 Z'},
 
   /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
   Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
