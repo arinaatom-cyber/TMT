@@ -10,6 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
+const MAP_BUILD='20260620-bodyfix3';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -304,6 +305,8 @@ function getOrganRows(o){return filteredRows().filter(r=>r.organs.includes(o));}
 function refreshAll(){
   buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();
   renderAtlasMaterialChart();
+  const cap=document.getElementById('bodyCaption');
+  if(cap) cap.textContent=`${t('bodyCap')} · map ${MAP_BUILD}`;
   if(selOrgan&&C[selOrgan]) sel(selOrgan);
 }
 function fillFilterSelects(){
