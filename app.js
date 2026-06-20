@@ -1010,7 +1010,7 @@ function projectCard(r){
   const pan=r.isPan?`<span class="status pan">${t('panBadge')}</span>`:'';
   const organs=r.organs.map(x=>organDisplayName(x)).join(', ');
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
-  const proteins=window.ProteinAtlas?ProteinAtlas.proteinBadgesHtml(r):'';
+  const proteins=window.ProteinAtlas?.proteinBadgesHtml?.(r)||'';
   const platform=r.platform?`<span class="meta-pill">${esc(r.platform.slice(0,28))}</span>`:'';
   const linkProj=projHref
     ? `<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener" title="Open in ${esc(r.db||'database')}">
