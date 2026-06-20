@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-bodyfix3';
+const MAP_BUILD='20260620-bodyfix4';
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -1101,8 +1101,8 @@ const ANATOMY={
   Uterus:          {pos:{x:236, y:338}, side:'L', size:0,  z:3, d:
     'M 228 330 Q 240 326 252 330 L 254 346 Q 240 352 226 346 Z'},
   Ovary:           {pos:{x:240, y:322}, side:'L', size:0,  z:3, d:
-    'M 214 318 Q 210 322 212 328 Q 218 330 220 324 Q 218 318 214 318 Z '+
-    'M 266 318 Q 270 322 268 328 Q 262 330 260 324 Q 262 318 266 318 Z'},
+    'M 198 318 Q 194 322 196 328 Q 202 330 204 324 Q 202 318 198 318 Z '+
+    'M 282 318 Q 286 322 284 328 Q 278 330 276 324 Q 278 318 282 318 Z'},
   Cervix:          {pos:{x:236, y:350}, side:'L', size:0,  z:3, d:
     'M 232 348 L 244 348 L 242 354 L 234 354 Z'},
   Prostate:        {pos:{x:248, y:346}, side:'R', size:0,  z:3, d:
@@ -1242,7 +1242,7 @@ function organStats(o){
 function organAnchor(a){return a.anchor||a.pos;}
 
 function assignLabelPositions(active){
-  const MIN_GAP=40, TOP=40, BOTTOM=620;
+  const MIN_GAP=40, TOP=40, BOTTOM=540;
   const L=[],R=[];
   active.forEach(o=>{
     const a=ANATOMY[o];
@@ -1325,18 +1325,18 @@ function bodySilhouette(){
   const armR=`M 296 144 Q 318 154 328 188 L 336 260 Q 340 310 332 350
               L 322 384 Q 316 396 306 392 L 296 388 Q 296 366 302 348
               L 310 280 Q 310 240 302 200 Q 296 168 284 152 Z`;
-  /* Legs: same filled taper as arms (~40px thigh width), not single-pixel strokes */
+  /* Legs: ~half length/width of prior version; filled like arms */
   const legFill='rgba(216,154,154,.07)', legStroke='#d89a9a';
-  const legL=`M 208 370
-              Q 188 378 180 408 L 170 478 Q 164 518 168 558
-              L 170 612 Q 174 628 186 632 L 206 628
-              Q 214 572 220 508 L 226 438 Q 230 392 228 382
-              L 232 370 Q 222 366 208 370 Z`;
-  const legR=`M 272 370
-              Q 292 378 300 408 L 310 478 Q 316 518 312 558
-              L 310 612 Q 306 628 294 632 L 274 628
-              Q 266 572 260 508 L 254 438 Q 250 392 252 382
-              L 248 370 Q 258 366 272 370 Z`;
+  const legL=`M 218 370
+              Q 210 374 206 386 L 202 410 Q 200 428 202 442
+              L 204 458 Q 206 468 212 470 L 220 468
+              Q 222 452 224 430 L 226 408 Q 228 388 226 382
+              L 230 370 Q 224 368 218 370 Z`;
+  const legR=`M 262 370
+              Q 270 374 274 386 L 278 410 Q 280 428 278 442
+              L 276 458 Q 274 468 268 470 L 260 468
+              Q 258 452 256 430 L 254 408 Q 252 388 254 382
+              L 250 370 Q 256 368 262 370 Z`;
   const stroke='#d89a9a', fill='rgba(216,154,154,.05)';
   return `
     <g class="body-silhouette" pointer-events="none">
@@ -1360,7 +1360,7 @@ function renderBody(){
     const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;
   };
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="-16 0 512 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="-16 0 512 580" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
     ${bodySilhouette()}
     <g class="organs-layer">${drawOrder.map(organGroup).join('')}</g>
     <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
