@@ -252,6 +252,34 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 .modal code{background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--t1)}
 .modal-close{float:right;background:var(--bg2);border:1px solid var(--border);color:var(--t1);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px}
 .cite-box{background:var(--bg2);border:1px solid var(--border);padding:12px;border-radius:8px;font-size:12px;color:var(--t2);margin-top:8px}
+
+/* Project dossier modal */
+.proj-id-btn{background:none;border:none;padding:0;font:inherit;cursor:pointer;color:var(--accent);font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.proj-id-btn:hover{color:var(--t1)}
+.plink-dossier{cursor:pointer;background:var(--accent-dim);border-color:var(--accent)}
+.plink-dossier .li{background:var(--accent);color:var(--bg)}
+.plink-dossier .lt{color:var(--accent);font-weight:600}
+.modal.dossier{max-width:760px}
+.dos-top{border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:4px}
+.dos-id{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px;font-weight:700;color:var(--t1)}
+.dos-title{font-size:14px;font-weight:600;color:var(--t1);margin-top:8px;line-height:1.45}
+.dos-sub{font-size:12px;color:var(--t2);margin-top:4px}
+.dos-section{margin-top:16px}
+.dos-section h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);border-left:3px solid var(--accent);padding-left:9px;margin-bottom:8px}
+.dos-text{font-size:12.5px;line-height:1.6;color:var(--t2)}
+.dos-note{font-size:11px;line-height:1.55;color:var(--t3);margin-top:8px}
+.dos-note a,.dos-find a{color:var(--accent);text-decoration:none}
+.dos-find{font-size:12.5px;line-height:1.6;color:var(--t1);background:rgba(157,201,176,.10);border-left:3px solid var(--green);padding:10px 12px;border-radius:0 6px 6px 0}
+.dos-caveat{font-size:12px;line-height:1.55;color:var(--t1);background:rgba(212,196,138,.12);border-left:3px solid var(--amber);padding:10px 12px;border-radius:0 6px 6px 0}
+.dos-chips{display:flex;flex-wrap:wrap;gap:6px}
+.dos-chip{font-size:11px;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent);border-radius:14px;padding:3px 10px}
+.dos-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+@media(max-width:600px){.dos-grid{grid-template-columns:1fr}}
+.dos-row{display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:1px solid var(--border)}
+.dos-k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3)}
+.dos-v{font-size:12.5px;color:var(--t1);line-height:1.5}
+.dos-links{display:flex;flex-wrap:wrap;gap:8px}
+.dos-links .plink{flex:0 1 auto;min-width:120px}
 .sys-ref-wrap{margin:8px 0 16px;max-height:220px;overflow:auto}
 .sys-ref{width:100%;border-collapse:collapse;font-size:11px}
 .sys-ref th,.sys-ref td{border:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
@@ -401,6 +429,13 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </div>
 
+<div class="modal-overlay" id="projModal" onclick="if(event.target===this)closeProject()">
+  <div class="modal dossier">
+    <button type="button" class="modal-close" onclick="closeProject()" data-i18n="close">Close</button>
+    <div id="projModalBody"></div>
+  </div>
+</div>
+
 <script src="proteins.js?v=20260620-badges"></script>
 <script>
 const THEME_KEY = 'tmt-theme';
@@ -424,6 +459,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260620-pro11"></script>
+<script src="app.js?v=20260620-pro12"></script>
 </body>
 </html>

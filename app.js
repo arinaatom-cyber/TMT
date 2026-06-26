@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro11';
+const MAP_BUILD='20260620-pro12';
 
 /* Pin all Chart.js text to the site font (Inter) for typographic consistency */
 if(typeof window!=='undefined'&&window.Chart&&Chart.defaults){
@@ -249,8 +249,9 @@ const I18N={
     sysMale:'Male reproductive',sysImmune:'Blood & immune',sysMSK:'Support & integument',sysOther:'Other'
   }
 };
-let lang=localStorage.getItem('hpa-lang')||'ru';
+let lang=localStorage.getItem('hpa-lang')||'en';
 function t(k){return (I18N[lang]||I18N.ru)[k]||k;}
+function L(ru,en){return lang==='ru'?ru:en;}
 const ORGAN_LABELS={
   ru:{
     Liver:'Печень',Lung:'Лёгкие',Heart:'Сердце',Brain:'Головной мозг',Kidney:'Почки',
@@ -1478,7 +1479,7 @@ function projectCard(r){
   return `<div class="proj-card">
     <div class="proj-head">
       <div class="proj-id-block">
-        ${projHref?`<a class="proj-id" href="${esc(projHref)}" target="_blank" rel="noopener">${esc(r.pid)}</a>`:`<span class="proj-id">${esc(r.pid)}</span>`}
+        <button type="button" class="proj-id proj-id-btn" onclick="openProject('${esc(r.pid)}')" title="${L('Открыть досье проекта','Open project dossier')}">${esc(r.pid)}</button>
         ${tag}${pan}
       </div>
       <div class="proj-organs">${esc(organs)}</div>
@@ -1489,11 +1490,96 @@ function projectCard(r){
       ${cohort}${tmt}${platform}${proteins}
     </div>
     <div class="proj-links">
+      <button type="button" class="plink plink-dossier" onclick="openProject('${esc(r.pid)}')" title="${L('Полное досье: критерии отбора, дизайн, выводы, методы, источники','Full dossier: selection criteria, design, findings, methods, sources')}">
+        <span class="li">ℹ</span><span class="lt">${L('Досье','Dossier')}</span></button>
       ${linkProj}${linkArt}${linkGh}
     </div>
     ${window.ProteinAtlas?ProteinAtlas.projectProteinBlock(r):''}
   </div>`;
 }
+
+/* Per-project scientific dossier: provenance, selection rationale, design, findings,
+   caveats, methods, cohort and all source links. Surfaces CSV columns that the
+   compact card hides so a reader can fully trace why a project is in the atlas. */
+function projDossier(r){
+  const L2=L;
+  const v=k=>{const s=(r[k]??'').toString().trim();return (!s||/^(not specified|not_specified|n\/a|na|—|-|unknown)$/i.test(s))?'':s;};
+  const isPxd=/^PXD\d+/i.test(r.pid);
+  const projHref=r.link||(isPxd?prideUrl(r.pid):'');
+  const pmHref=r.pmid?pubmedUrl(r.pmid):'';
+  const ghHref=ghResultsUrl(r.pid);
+  const organs=r.organs.map(organDisplayName).join(', ');
+  const fld=(label,val)=>val?`<div class="dos-row"><span class="dos-k">${label}</span><span class="dos-v">${esc(val)}</span></div>`:'';
+  /* Selection rationale (mirrors the formal inclusion criteria in METHODS.md) */
+  const crit=[L2('Человек','Human')];
+  if(r.tmt) crit.push('TMT: '+r.tmt);
+  if(r.proteinCount) crit.push(`${r.proteinCount.toLocaleString()} ${L2('белков','proteins')}`);
+  crit.push(`${L2('орган','organ')}: ${organs}`);
+  if(r.st) crit.push(r.st);
+  const critChips=crit.map(c=>`<span class="dos-chip">${esc(c)}</span>`).join('');
+  /* Cohort composition */
+  const cohort=[
+    fld(L2('Всего образцов','Total samples'),v('Total Samples')),
+    fld(L2('Пациенты / доноры','Patients / donors'),v('Patients / donors')),
+    fld(L2('Образцов использовано','Samples used'),v('Samples Used N')),
+    fld(L2('Случаи: рак (без лечения)','Cases: cancer (untreated)'),v('Case Cancer Untreated')),
+    fld(L2('Случаи: рак (после лечения)','Cases: cancer (treated)'),v('Case Cancer Treated')),
+    fld(L2('Контроль: здоровые','Controls: healthy'),v('Control Healthy'))
+  ].join('');
+  /* Methods / acquisition & quantification */
+  const methods=[
+    fld(L2('MS-платформа','MS platform'),v('Platform MS (Unified)')),
+    fld(L2('TMT-метка','TMT label'),v('TMT Label (Unified)')),
+    fld(L2('Формат количественной оценки','Quantification format'),v('Quantification_Format')),
+    fld(L2('Каналы TMT','TMT channels used'),v('TMT Channels Used')),
+    fld(L2('Нормализация','Normalization'),v('Normalization Strategy')),
+    fld('FDR (%)',v('FDR (Unified %)')),
+    fld(L2('База FASTA','FASTA database'),[v('FASTA (Unified)'),v('FASTA Year')].filter(Boolean).join(' · ')),
+    fld(L2('Модификации','Modifications'),v('Modifications')),
+    fld(L2('Белков количественно','Proteins quantified'),v('Proteins Quantified'))
+  ].join('');
+  const sec=(title,html)=>html?`<div class="dos-section"><h4>${title}</h4>${html}</div>`:'';
+  const findings=v('Main_Finding');
+  const caveats=v('Data_Caveats');
+  const design=v('Experimental Design');
+  const summary=v('Short Description');
+  return `
+    <div class="dos-top">
+      <div class="dos-id">${esc(r.pid)}
+        ${r.healthy?'<span class="status normal">NORMAL</span>':'<span class="status cancer">CANCER</span>'}
+        ${r.isPan?`<span class="status pan">${t('panBadge')}</span>`:''}
+        <span class="meta-pill">${esc(r.db||'—')}</span>
+      </div>
+      <div class="dos-title">${esc(v('Title')||r.cl||r.pid)}</div>
+      <div class="dos-sub">${esc(organs)} · ${esc(diseaseDisplayName(r.disCanon)||r.dis||'—')}</div>
+    </div>
+    ${sec(L('Почему включён в атлас · критерии отбора','Why it is in the atlas · selection criteria'),
+      `<div class="dos-chips">${critChips}</div>
+       <p class="dos-note">${L('Включается, если это человеческий датасет TMT-мультиплексной протеомики с количественной оценкой протеома и привязкой к органу/ткани. Полные критерии — см.','Included when it is a human TMT multiplex proteomics dataset with a quantified proteome and an organ/tissue assignment. Full criteria:')}
+       <a href="https://github.com/arinaatom-cyber/TMT/blob/main/METHODS.md" target="_blank" rel="noopener">METHODS.md</a>.</p>`)}
+    ${sec(L('Дизайн исследования','Study design'),design?`<p class="dos-text">${esc(design)}</p>`:'')}
+    ${sec(L('Что собрано · когорта','What was collected · cohort'),cohort?`<div class="dos-grid">${cohort}</div>`:'')}
+    ${sec(L('Ключевой вывод статьи','Main finding of the article'),findings?`<p class="dos-find">${esc(findings)}</p>`:'')}
+    ${sec(L('Аннотация','Summary'),summary?`<p class="dos-text">${esc(summary)}</p>`:'')}
+    ${sec(L('Методы · получение и количественная оценка','Methods · acquisition & quantification'),methods?`<div class="dos-grid">${methods}</div>`:'')}
+    ${caveats?sec(L('Ограничения данных','Data caveats'),`<p class="dos-caveat">⚠ ${esc(caveats)}</p>`):''}
+    ${sec(L('Источники · откуда данные','Sources · provenance'),
+      `<div class="dos-links">
+        ${projHref?`<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener"><span class="li">DB</span><span class="lt">${esc(r.db||'Database')}</span></a>`:''}
+        ${pmHref?`<a class="plink plink-art" href="${esc(pmHref)}" target="_blank" rel="noopener"><span class="li">PMID</span><span class="lt">${esc(r.pmid)}</span></a>`:''}
+        <a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener"><span class="li">GH</span><span class="lt">Result files</span></a>
+        <a class="plink" href="${esc(SHEET_VIEW)}" target="_blank" rel="noopener"><span class="li">CSV</span><span class="lt">${L('Строка таблицы','Sheet row')}</span></a>
+      </div>`)}`;
+}
+function openProject(pid){
+  const r=D.find(x=>x.pid===pid);
+  if(!r) return;
+  const body=document.getElementById('projModalBody');
+  if(body) body.innerHTML=projDossier(r);
+  const m=document.getElementById('projModal');
+  if(m){m.classList.add('open');m.scrollTop=0;}
+}
+function closeProject(){const m=document.getElementById('projModal');if(m)m.classList.remove('open');}
 
 function organStats(o){
   const b=organProjectBreakdown(o);
@@ -1851,6 +1937,8 @@ window.organColor=organColor;
 window.filtSidebar=filtSidebar;
 window.openAbout=openAbout;
 window.closeAbout=closeAbout;
+window.openProject=openProject;
+window.closeProject=closeProject;
 window.toggleLang=toggleLang;
 window.reloadData=reloadData;
 window.setOrganSort=setOrganSort;
