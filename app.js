@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro7';
+const MAP_BUILD='20260620-pro8';
 
 /* Fixed atlas reference subjects — two central-reference models (NOT clinical norms).
    Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes),
@@ -1135,7 +1135,11 @@ window.addEventListener('DOMContentLoaded',()=>{
    icon = iconify name (https://icon-sets.iconify.design/);
    size = pixel size of icon in SVG;
    d = fallback SVG path (used if no icon defined) */
-/* Anatomically-correct organ atlas matched to the 8-head canon body silhouette.
+/* Organ atlas drawn TO SCALE from the reference female (165 cm).
+   Scale ≈ 4.1 px/cm (vertex y=20 → pubic symphysis y=355 ≈ 335 px ≈ 82.5 cm).
+   Organ bounding boxes match ORGAN_REF: liver CC 11.5cm≈47px / transv 21.5cm≈88px,
+   lung H 24cm≈98px, heart 12×8.5cm≈49×35px, kidney 11×4cm≈45×16px, spleen 12cm≈49px,
+   uterus 7.2×4cm≈30×16px, testis 4×3cm≈16×12px. Sides: patient-right = viewer-left (low x).
    Body viewBox 0 0 480 720, midline x=240.  Vertebral / canonical landmarks:
      y= 20  vertex
      y= 62  eye line
@@ -1164,72 +1168,71 @@ const ANATOMY={
     'M 222 80 Q 216 76 220 72 Q 228 70 232 76 Q 230 84 224 85 Z '+
     'M 258 80 Q 264 76 260 72 Q 252 70 248 76 Q 250 84 256 85 Z'},
 
-  Thyroid:         {pos:{x:240, y:118}, side:'L', size:0,  z:2, d:
-    'M 228 114 Q 222 118 226 126 Q 234 128 240 126 Q 246 128 254 126 Q 258 118 252 114 Q 244 112 240 118 Q 236 112 228 114 Z'},
+  Thyroid:         {pos:{x:240, y:120}, anchor:{x:208, y:120}, side:'L', size:0,  z:2, d:
+    'M 230 112 Q 224 116 226 126 L 229 130 Q 235 132 237 124 L 237 116 Q 235 112 230 112 Z '+
+    'M 250 112 Q 256 116 254 126 L 251 130 Q 245 132 243 124 L 243 116 Q 245 112 250 112 Z '+
+    'M 237 120 L 243 120 L 243 124 L 237 124 Z'},
 
-  /* THORAX — lungs meet at mediastinum; heart in cardiac notch */
+  /* THORAX — scaled: lung H 24cm≈98px, heart 12×8.5cm≈49×35px */
   Esophagus:       {pos:{x:240, y:178}, side:'L', size:0,  z:1, d:
-    'M 238 132 L 242 132 L 243 218 Q 244 228 248 234 L 250 240'},
-  Lung:            {pos:{x:240, y:178}, side:'L', size:0,  z:2, d:
-    'M 220 134 Q 194 140 188 162 Q 180 198 186 220 Q 198 228 226 224 L 232 200 Q 234 166 230 140 Q 228 134 220 134 Z '+
-    'M 260 134 Q 286 140 292 162 Q 300 198 294 220 Q 282 228 254 224 L 248 200 Q 246 166 250 140 Q 252 134 260 134 Z'},
+    'M 238 130 L 242 130 L 246 210 Q 247 216 252 220 L 248 222 Q 242 216 241 210 L 238 130 Z'},
+  Lung:            {pos:{x:240, y:182}, side:'L', size:0,  z:2, d:
+    'M 228 136 Q 204 138 195 156 Q 186 188 190 216 Q 196 230 218 230 L 230 224 Q 232 194 232 158 Q 231 140 228 136 Z '+
+    'M 252 136 Q 276 138 285 156 Q 294 188 290 216 Q 284 230 262 230 L 256 224 Q 252 218 256 210 Q 250 206 250 196 Q 250 162 250 140 Q 250 138 252 136 Z'},
   Thymus:          {pos:{x:240, y:156}, anchor:{x:208, y:154}, side:'L', size:0,  z:2, d:
-    'M 224 148 Q 240 144 256 148 Q 258 158 252 166 Q 240 170 228 166 Q 222 158 224 148 Z'},
-  Heart:           {pos:{x:246, y:192}, side:'R', size:0,  z:3, d:
-    'M 248 176 Q 238 174 236 188 Q 236 200 244 210 L 252 218 Q 262 204 262 190 Q 260 178 248 176 Z'},
-  Breast:          {pos:{x:240, y:208}, side:'L', size:0,  z:4, d:
-    'M 208 206 A 3.2 3.2 0 1 0 214.4 206 A 3.2 3.2 0 1 0 208 206 Z '+
-    'M 265.6 206 A 3.2 3.2 0 1 0 272 206 A 3.2 3.2 0 1 0 265.6 206 Z'},
+    'M 230 146 Q 240 143 250 146 Q 252 156 248 166 Q 240 170 232 166 Q 228 156 230 146 Z'},
+  Heart:           {pos:{x:244, y:190}, side:'R', size:0,  z:3, d:
+    'M 240 166 Q 226 168 223 184 Q 223 202 238 214 L 256 220 Q 266 206 265 188 Q 263 170 247 166 Q 244 165 240 166 Z'},
+  Breast:          {pos:{x:240, y:210}, side:'L', size:0,  z:4, d:
+    'M 210 208 A 3.4 3.4 0 1 0 216.8 208 A 3.4 3.4 0 1 0 210 208 Z '+
+    'M 263.2 208 A 3.4 3.4 0 1 0 270 208 A 3.4 3.4 0 1 0 263.2 208 Z'},
 
-  /* ABDOMEN — MSD/textbook: liver RUQ largest; stomach J LUQ; bowel fills lower cavity */
-  Liver:           {pos:{x:206, y:258}, anchor:{x:188, y:254}, side:'L', size:0,  z:2, d:
-    'M 186 220 Q 214 214 244 218 Q 276 226 280 252 Q 278 288 254 300 Q 206 306 184 284 Q 174 260 178 236 Q 180 224 186 220 Z'},
-  Gallbladder:     {pos:{x:252, y:278}, anchor:{x:262, y:276}, side:'R', size:0,  z:3, d:
-    'M 244 264 Q 256 260 262 272 Q 264 284 256 292 Q 246 294 240 282 Q 238 272 244 264 Z'},
-  Stomach:         {pos:{x:272, y:256}, anchor:{x:288, y:252}, side:'R', size:0,  z:3, d:
-    'M 248 216 Q 276 212 290 228 Q 298 252 292 276 Q 282 300 262 304 Q 244 300 238 278 L 234 252 Q 238 228 248 216 Z'},
-  Spleen:          {pos:{x:284, y:244}, anchor:{x:292, y:240}, side:'R', size:0,  z:2, d:
-    'M 276 224 Q 292 228 294 246 Q 290 264 280 262 Q 272 248 276 224 Z'},
-  Pancreas:        {pos:{x:254, y:268}, anchor:{x:254, y:268}, side:'R', size:0,  z:3, d:
-    'M 228 262 L 278 264 Q 288 268 282 274 L 230 272 Q 222 268 228 262 Z'},
-  Adrenal_Gland:   {pos:{x:240, y:256}, anchor:{x:226, y:254}, side:'R', size:0,  z:1, d:
-    'M 204 256 Q 208 250 212 256 Q 210 260 206 260 Q 204 258 204 256 Z '+
-    'M 266 256 Q 270 250 274 256 Q 272 260 268 260 Q 266 258 266 256 Z'},
-  Kidney:          {pos:{x:240, y:276}, anchor:{x:204, y:274}, side:'L', size:0,  z:2, d:
-    'M 202 262 Q 192 270 194 284 Q 202 292 212 288 Q 214 274 208 266 Q 204 262 202 262 Z '+
-    'M 278 262 Q 288 270 286 284 Q 278 292 268 288 Q 266 274 272 266 Q 276 262 278 262 Z'},
+  /* ABDOMEN — scaled (~4.1 px/cm): liver CC 11.5cm≈47, transv 21.5cm≈88; spleen 12cm≈49; kidney 11×4cm≈45×16 */
+  Liver:           {pos:{x:208, y:244}, anchor:{x:188, y:242}, side:'L', size:0,  z:2, d:
+    'M 186 224 Q 214 216 246 219 Q 268 223 274 236 Q 273 252 258 261 Q 224 269 198 264 Q 186 259 183 244 Q 182 230 186 224 Z'},
+  Gallbladder:     {pos:{x:210, y:276}, anchor:{x:182, y:276}, side:'L', size:0,  z:3, d:
+    'M 206 262 Q 216 260 218 270 Q 219 282 212 290 Q 204 292 202 282 Q 201 270 206 262 Z'},
+  Stomach:         {pos:{x:270, y:248}, anchor:{x:290, y:246}, side:'R', size:0,  z:3, d:
+    'M 250 218 Q 268 211 284 222 Q 294 238 290 260 Q 284 276 266 280 Q 252 280 248 268 Q 246 254 250 244 Q 248 230 250 218 Z'},
+  Spleen:          {pos:{x:288, y:244}, anchor:{x:296, y:242}, side:'R', size:0,  z:2, d:
+    'M 282 226 Q 296 230 298 246 Q 295 262 285 263 Q 277 250 277 236 Q 277 228 282 226 Z'},
+  Pancreas:        {pos:{x:250, y:262}, anchor:{x:254, y:262}, side:'R', size:0,  z:3, d:
+    'M 210 258 Q 226 252 238 256 L 280 261 Q 288 263 284 269 L 238 266 Q 224 268 216 267 Q 208 265 210 258 Z'},
+  Adrenal_Gland:   {pos:{x:240, y:242}, anchor:{x:226, y:240}, side:'R', size:0,  z:4, d:
+    'M 200 240 Q 208 235 215 241 Q 213 250 204 250 Q 199 246 200 240 Z '+
+    'M 266 238 Q 274 233 281 239 Q 279 248 270 248 Q 265 244 266 238 Z'},
+  Kidney:          {pos:{x:240, y:268}, anchor:{x:204, y:268}, side:'L', size:0,  z:2, d:
+    'M 202 250 Q 190 257 192 274 Q 197 290 209 289 Q 216 280 213 268 L 211 258 Q 209 250 202 250 Z '+
+    'M 278 244 Q 290 251 288 268 Q 283 284 271 283 Q 264 274 267 262 L 269 252 Q 271 244 278 244 Z'},
 
-  /* INTESTINES — textbook: colon U-frame; jejunum-ileum coils fill center (largest abdominal mass) */
-  Small_Intestine: {pos:{x:240, y:318}, anchor:{x:240, y:316}, side:'L', size:0,  z:3, d:
-    'M 208 278 Q 240 270 272 278 Q 284 296 282 318 Q 278 340 258 350 Q 232 354 210 342 Q 196 322 198 300 Q 202 284 208 278 Z '+
-    'M 218 286 Q 240 282 262 288 Q 272 302 268 318 Q 260 334 240 338 Q 220 334 212 318 Q 210 300 218 286 Z '+
-    'M 224 296 Q 240 292 256 298 Q 264 310 258 324 Q 246 332 230 326 Q 218 316 218 304 Q 220 298 224 296 Z '+
-    'M 228 308 Q 242 304 256 312 Q 262 322 254 332 Q 242 336 230 328 Q 224 318 228 308 Z '+
-    'M 232 318 Q 244 314 256 322 Q 260 332 250 338 Q 238 338 230 330 Q 228 324 232 318 Z '+
-    'M 220 322 Q 232 328 244 334 Q 242 344 230 346 Q 218 340 216 330 Q 216 324 220 322 Z '+
-    'M 248 326 Q 260 322 268 332 Q 266 342 254 344 Q 242 338 244 328 Q 246 326 248 326 Z'},
-  Colon:           {pos:{x:240, y:330}, anchor:{x:290, y:328}, side:'R', size:0,  z:2, d:
-    'M 190 266 L 190 328 Q 192 350 216 358 L 264 358 Q 288 350 290 328 L 290 266 Q 280 252 240 248 Q 200 252 190 266 Z '+
-    'M 202 274 L 202 320 Q 206 338 240 342 Q 274 338 278 320 L 278 274 Q 268 262 240 258 Q 212 262 202 274 Z'},
-  Appendix:        {pos:{x:198, y:348}, anchor:{x:182, y:346}, side:'L', size:0,  z:4, d:
-    'M 194 336 Q 186 340 184 350 Q 186 360 192 364 Q 198 358 196 348 Q 194 340 194 336 Z'},
+  /* INTESTINES — colon frame (asc. patient-right=viewer-left); small bowel central mass */
+  Small_Intestine: {pos:{x:240, y:312}, anchor:{x:240, y:312}, side:'L', size:0,  z:3, d:
+    'M 206 280 Q 240 272 274 280 Q 286 298 284 320 Q 280 342 258 352 Q 230 356 208 344 Q 194 324 196 302 Q 200 286 206 280 Z '+
+    'M 216 288 Q 240 283 264 290 Q 274 304 270 320 Q 262 336 240 340 Q 218 336 210 320 Q 208 300 216 288 Z '+
+    'M 224 298 Q 240 294 256 300 Q 264 312 258 326 Q 246 334 230 328 Q 218 318 218 306 Q 220 300 224 298 Z '+
+    'M 226 310 Q 240 306 254 314 Q 260 324 252 334 Q 240 338 228 330 Q 222 320 226 310 Z '+
+    'M 232 320 Q 244 316 256 324 Q 260 334 250 340 Q 238 340 230 332 Q 228 326 232 320 Z'},
+  Colon:           {pos:{x:240, y:300}, anchor:{x:296, y:298}, side:'R', size:0,  z:2, d:
+    'M 190 262 Q 190 252 210 250 L 270 250 Q 290 252 290 262 L 290 326 Q 290 340 276 342 L 264 342 L 264 330 Q 276 328 276 318 L 276 274 Q 266 266 240 266 Q 214 266 204 274 L 204 318 Q 204 328 216 330 L 216 342 L 204 342 Q 190 340 190 326 Z '+
+    'M 264 338 Q 252 350 240 350 Q 230 350 228 358 L 246 358 Q 260 356 270 346 Q 272 342 264 338 Z'},
+  Appendix:        {pos:{x:198, y:348}, anchor:{x:178, y:348}, side:'L', size:0,  z:5, d:
+    'M 200 332 Q 192 336 190 346 Q 192 356 198 359 Q 203 353 201 344 Q 200 336 200 332 Z'},
 
-  /* PELVIS — uterus/bladder/ovary left; prostate/testis right (unisex overlay) */
-  Bladder:         {pos:{x:240, y:342}, side:'R', size:0,  z:4, d:
-    'M 232 340 Q 240 337 248 340 Q 249 344 240 345 Q 231 344 232 340 Z'},
-  Uterus:          {pos:{x:218, y:334}, side:'L', size:0,  z:3, d:
-    'M 206 328 Q 218 322 230 328 L 232 346 Q 218 352 204 346 Z'},
-  Ovary:           {pos:{x:206, y:322}, side:'L', size:0,  z:3, d:
-    'M 198 320 Q 194 321 195 325 Q 199 326 201 323 Z '+
-    'M 214 318 Q 218 319 217 323 Q 213 324 211 321 Z '+
-    'M 201 322 L 208 320'},
-  Cervix:          {pos:{x:218, y:352}, side:'L', size:0,  z:3, d:
-    'M 213 350 L 223 350 L 221 356 L 215 356 Z'},
-  Prostate:        {pos:{x:262, y:346}, side:'R', size:0,  z:3, d:
-    'M 254 342 Q 262 338 270 342 Q 272 348 262 350 Q 252 348 254 342 Z'},
-  Testis:          {pos:{x:240, y:378}, side:'R', size:0,  z:3, d:
-    'M 228 374 Q 224 382 228 390 Q 234 392 238 386 Q 236 378 228 374 Z '+
-    'M 252 374 Q 256 382 252 390 Q 246 392 242 386 Q 244 378 252 374 Z'},
+  /* PELVIS — scaled: uterus 7.2×4cm≈30×16; ovary 3.5×2.5cm≈14×10; testis 4×3cm≈16×12 (unisex overlay) */
+  Bladder:         {pos:{x:240, y:350}, side:'R', size:0,  z:4, d:
+    'M 228 344 Q 240 340 252 344 Q 254 354 248 359 Q 240 362 232 359 Q 226 354 228 344 Z'},
+  Uterus:          {pos:{x:238, y:330}, anchor:{x:208, y:330}, side:'L', size:0,  z:3, d:
+    'M 232 318 Q 246 314 250 326 Q 251 338 244 346 L 240 346 Q 232 340 230 330 Q 229 322 232 318 Z'},
+  Ovary:           {pos:{x:222, y:338}, anchor:{x:200, y:338}, side:'L', size:0,  z:5, d:
+    'M 212 334 Q 206 336 207 342 Q 213 344 216 339 Q 215 335 212 334 Z '+
+    'M 264 334 Q 270 336 269 342 Q 263 344 260 339 Q 261 335 264 334 Z'},
+  Cervix:          {pos:{x:238, y:352}, anchor:{x:212, y:352}, side:'L', size:0,  z:4, d:
+    'M 235 346 L 245 346 L 243 358 L 237 358 Z'},
+  Prostate:        {pos:{x:241, y:363}, side:'R', size:0,  z:4, d:
+    'M 232 358 Q 241 354 250 358 Q 252 366 241 369 Q 230 366 232 358 Z'},
+  Testis:          {pos:{x:240, y:384}, side:'R', size:0,  z:3, d:
+    'M 230 376 Q 225 384 229 392 Q 235 395 239 388 Q 238 380 230 376 Z '+
+    'M 250 376 Q 255 384 251 392 Q 245 395 241 388 Q 242 380 250 376 Z'},
 
   Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
     'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
