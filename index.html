@@ -58,15 +58,42 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 
 .header{position:sticky;top:0;z-index:100;background:var(--header-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 16px}
 .header-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;min-height:56px;padding:8px 0;gap:12px;flex-wrap:wrap}
+.header-brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
 .logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.logo-icon{width:36px;height:36px;border-radius:8px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-icon{width:36px;height:36px;border-radius:8px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--accent)}
 .logo h1{font-size:14px;font-weight:700;letter-spacing:.04em;color:var(--t1)}
 .logo span{font-size:9px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;display:block;font-weight:500}
-.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hstats{display:flex;gap:12px;flex-wrap:wrap;overflow-x:auto;max-width:100%;padding-bottom:2px;-webkit-overflow-scrolling:touch}
-.hstat{text-align:center;min-width:48px;flex-shrink:0}
-.hstat .v{font-size:16px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
-.hstat .l{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.top-nav{display:flex;align-items:center;gap:4px;margin-left:8px}
+.top-nav a{font-size:11px;font-weight:600;color:var(--t3);text-decoration:none;padding:6px 10px;border-radius:6px;letter-spacing:.03em;transition:color .15s,background .15s}
+.top-nav a:hover{color:var(--t1);background:var(--hover)}
+.top-nav a.active{color:var(--accent);background:var(--accent-dim)}
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+.hstats{display:flex;gap:10px;flex-wrap:wrap;overflow-x:auto;max-width:100%;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.hstat{text-align:center;min-width:52px;flex-shrink:0;padding:4px 6px;border-radius:8px;background:var(--bg2);border:1px solid var(--border)}
+.hstat-ico{display:flex;justify-content:center;margin-bottom:2px;color:var(--t3);opacity:.85}
+.hstat .v{font-size:15px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.2}
+.hstat .l{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.ico{display:block;flex-shrink:0}
+.ico-btn{width:18px;height:18px}
+.ico-stat{width:14px;height:14px}
+.ico-sys{width:16px;height:16px;color:var(--accent)}
+.ico-search{width:15px;height:15px;color:var(--t3)}
+.ico-banner{width:14px;height:14px;flex-shrink:0;margin-top:1px}
+.valid-banner{display:flex;align-items:flex-start;gap:8px}
+.valid-banner.ok .ico-banner{color:var(--green)}
+.valid-banner.warn .ico-banner{color:var(--amber)}
+.card-head .sys-ico{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--accent-dim);border:1px solid var(--border);flex-shrink:0}
+.card-head h3{flex:1;border-left:none;padding-left:0}
+.card-head{gap:10px}
+.search .si{display:flex;align-items:center;justify-content:center;pointer-events:none}
+.placeholder-icon{width:56px;height:56px;margin:0 auto 8px;color:var(--t3);opacity:.45}
+.site-footer{border-top:1px solid var(--border);padding:20px 24px;background:var(--bg2)}
+.footer-inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;font-size:11px;color:var(--t3)}
+.footer-nav{display:flex;flex-wrap:wrap;gap:12px 16px}
+.footer-nav a{color:var(--t2);text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.footer-nav a:hover{color:var(--accent)}
+.footer-nav .ico{width:14px;height:14px;opacity:.7}
+@media(max-width:900px){.top-nav{display:none}}
 @media(max-width:640px){
   .hstats{gap:8px}
   .hstat .v{font-size:14px}
@@ -81,8 +108,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 }
 
 .valid-banner{max-width:1500px;margin:0 auto;padding:6px 16px 0;font-size:11px;color:var(--t2)}
-.valid-banner.ok{color:var(--green)}
-.valid-banner.warn{color:var(--amber)}
+.valid-banner.ok span{color:var(--green)}
+.valid-banner.warn span{color:var(--amber)}
 .valid-banner a{color:var(--accent);text-decoration:none}
 .valid-banner a:hover{text-decoration:underline}
 
@@ -333,15 +360,23 @@ footer a{color:var(--accent);text-decoration:none}
 
 <div class="header">
   <div class="header-inner">
+    <div class="header-brand">
     <div class="logo">
-      <div class="logo-icon">◉</div>
+      <div class="logo-icon" id="logoIco"></div>
       <div>
         <h1>HUMAN PROTEOME ATLAS</h1>
         <span data-i18n="subtitle">Interactive Tissue Expression Map</span>
       </div>
     </div>
+    <nav class="top-nav" aria-label="Site">
+      <a href="./" class="active" data-i18n="navMap">Map</a>
+      <a href="#" onclick="openAbout();return false" data-i18n="navAbout">About</a>
+      <a href="https://github.com/arinaatom-cyber/TMT" target="_blank" rel="noopener" data-i18n="navGithub">GitHub</a>
+      <a href="https://github.com/arinaatom-cyber/TMT/blob/main/METHODS.md" target="_blank" rel="noopener" data-i18n="navMethods">Methods</a>
+    </nav>
+    </div>
     <div class="header-actions">
-      <button type="button" class="tbtn" id="themeBtn" onclick="toggleTheme()" title="Theme">☀️</button>
+      <button type="button" class="tbtn" id="themeBtn" onclick="toggleTheme()" title="Theme" aria-label="Toggle theme"></button>
       <button type="button" class="tbtn lang" id="langBtn" onclick="toggleLang()" title="RU / EN">RU</button>
       <button type="button" class="tbtn" onclick="openAbout()" data-i18n="about">About</button>
       <div class="hstats" id="hs"></div>
@@ -351,7 +386,7 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <div class="toolbar" id="toolbar">
-  <div class="search"><span class="si">🔍</span>
+  <div class="search"><span class="si" id="globalSearchIco"></span>
     <input id="globalSearch" data-i18n-ph="searchPh" placeholder="Organ, PXD, PMID…" oninput="onGlobalSearch(this.value)">
   </div>
   <select id="fTmt" onchange="setFilter('tmt',this.value)"><option value="" data-i18n="allTmt">All TMT</option></select>
@@ -382,7 +417,7 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
   <div class="detail" id="dc">
     <div class="placeholder" id="placeholder">
-      <div style="font-size:48px;opacity:.4">🫁</div>
+      <div class="placeholder-icon" id="placeholderIco"></div>
       <p data-i18n="pickOrgan">Click an organ on the map or list</p>
     </div>
   </div>
@@ -401,9 +436,15 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </section>
 
-<footer>
-  <span data-i18n="footer">Human Proteome Atlas · TMT proteomics</span> ·
-  <a href="https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314" target="_blank" rel="noopener">Google Sheets</a>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span data-i18n="footer">Human Proteome Atlas · TMT proteomics</span>
+    <nav class="footer-nav" aria-label="Links">
+      <a href="https://github.com/arinaatom-cyber/TMT" target="_blank" rel="noopener"><span id="footerGhIco"></span><span data-i18n="footerGithub">GitHub</span></a>
+      <a href="https://github.com/arinaatom-cyber/TMT/blob/main/METHODS.md" target="_blank" rel="noopener" data-i18n="footerMethods">Methods</a>
+      <a href="https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314" target="_blank" rel="noopener" data-i18n="footerSheet">Catalog</a>
+    </nav>
+  </div>
 </footer>
 
 <div class="modal-overlay" id="aboutModal" onclick="if(event.target===this)closeAbout()">
@@ -443,8 +484,7 @@ const THEME_KEY = 'tmt-theme';
 function applyTheme(theme){
   const useTheme = theme === 'light' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', useTheme);
-  const themeBtn = document.getElementById('themeBtn');
-  if (themeBtn) themeBtn.textContent = useTheme === 'light' ? '🌙' : '☀️';
+  if(typeof applyThemeBtn==='function') applyThemeBtn(useTheme);
 }
 
 function toggleTheme(){
@@ -459,6 +499,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260620-pro12"></script>
+<script src="app.js?v=20260620-pro13"></script>
 </body>
 </html>
