@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro10';
+const MAP_BUILD='20260620-pro11';
 
 /* Pin all Chart.js text to the site font (Inter) for typographic consistency */
 if(typeof window!=='undefined'&&window.Chart&&Chart.defaults){
@@ -131,6 +131,7 @@ const I18N={
     compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
     panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
+    uvpTitle:'Атлас TMT-протеомики человека',
     patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
     sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
     patSampHint:'Пациенты/доноры и Total Samples — из таблицы (Patients / donors, Total Samples). Для клеточных линий пациенты = 0. Часть значений Total Samples отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
@@ -202,6 +203,7 @@ const I18N={
     compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
     panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
+    uvpTitle:'Human TMT proteomics atlas',
     patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
     sumPatients:'Σ patients',sumSamples:'Σ samples',
     patSampHint:'Patients/donors and Total Samples come from the sheet (Patients / donors, Total Samples). Cell-line studies have 0 patients. Some Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
@@ -517,9 +519,20 @@ function uniqProjects(rows){
   return u;
 }
 function getOrganRows(o){return filteredRows().filter(r=>r.organs.includes(o));}
+function renderUvp(){
+  const el=document.getElementById('uvp');
+  if(!el) return;
+  const proj=META.uniqPids||D.length;
+  const org=Object.keys(C).filter(o=>!['Multiple_Organs','Other'].includes(o)).length;
+  let pat=0;const seen=new Set();
+  D.forEach(r=>{if(seen.has(r.pid))return;seen.add(r.pid);if(r.patients!=null)pat+=r.patients;});
+  el.innerHTML=`<h2>${t('uvpTitle')}</h2>`+
+    `<span class="uvp-sub"><b>${proj}</b> ${t('projects')} · <b>${pat.toLocaleString()}</b> ${t('patients')} · `+
+    `<b>${org}</b> ${t('organs')} · PRIDE · CPTAC/PDC · iProX</span>`;
+}
 function refreshAll(){
   buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();
-  renderAtlasMaterialChart();renderSiteSections();
+  renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
   if(cap) cap.textContent=`${t('bodyCap')} · map ${MAP_BUILD}`;
   if(selOrgan&&C[selOrgan]) sel(selOrgan);
