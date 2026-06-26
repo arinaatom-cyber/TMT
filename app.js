@@ -10,7 +10,43 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro12';
+const MAP_BUILD='20260620-pro13';
+
+/* Minimal stroke icons (24×24) — no emoji, consistent professional UI */
+const ICO={
+  search:'<circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>',
+  atlas:'<circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="4" ry="10"/><line x1="2" y1="12" x2="22" y2="12"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>',
+  moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+  brain:'<path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>',
+  heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  lung:'<path d="M12 4c-2 0-4 2-4 5v9c0 1.1.9 2 2 2h1v-7H8V9c0-2.2 1.8-4 4-4s4 1.8 4 4v4h-3v7h1c1.1 0 2-.9 2-2V9c0-3-2-5-4-5Z"/>',
+  digest:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+  flask:'<path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>',
+  droplet:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+  female:'<circle cx="12" cy="9" r="5"/><line x1="12" y1="14" x2="12" y2="22"/><line x1="9" y1="18" x2="15" y2="18"/>',
+  male:'<circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="13.5" y2="10.5"/><polyline points="15 5 19 5 19 9"/>',
+  immune:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  bone:'<path d="M17 10c.7-.7 1.69 0 2.5 0a2.5 2.5 0 1 0 0-5 .5.5 0 0 1-.5-.5 2.5 2.5 0 1 0-5 0c0 .81.7 1.8 0 2.5l-7 7c-.7.7-1.69 0-2.5 0a2.5 2.5 0 1 0 0 5 .5.5 0 0 1 .5.5 2.5 2.5 0 1 0 5 0c0-.81-.7-1.8 0-2.5Z"/>',
+  box:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+  body:'<circle cx="12" cy="5" r="2"/><path d="M12 7v3M9 20v-8l-2-4h10l-2 4v8"/><path d="M9 12h6"/>',
+  projects:'<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+  organs:'<circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>',
+  db:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>',
+  tmt:'<path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>',
+  sample:'<path d="M14 2v6a2 2 0 0 0 2 2h4"/><path d="M4 7V4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  warn:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  github:'<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-.88.28-1.85 0-2.73 0 0-1 0-3 1.5A10.35 10.35 0 0 0 12 6c-1.09 0-2.16.1-3.19.32-2-1.5-3-1.5-3-1.5-.28.88-.28 1.85 0 2.73-.73 1.02-1.08 2.25-1 3.5C4 16 7 18 10 18.5a4.8 4.8 0 0 0-1 3.5v4"/>'
+};
+function iconSvg(n,c='ico'){
+  const p=ICO[n]||ICO.box;
+  return `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+}
+function applyThemeBtn(theme){
+  const b=document.getElementById('themeBtn');
+  if(b) b.innerHTML=iconSvg(theme==='light'?'moon':'sun','ico ico-btn');
+}
 
 /* Pin all Chart.js text to the site font (Inter) for typographic consistency */
 if(typeof window!=='undefined'&&window.Chart&&Chart.defaults){
@@ -131,6 +167,8 @@ const I18N={
     compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
     panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
+    navMap:'Карта',navAbout:'О проекте',navGithub:'GitHub',navMethods:'Методы',
+    footerGithub:'GitHub',footerMethods:'Методы',footerSheet:'Каталог',
     uvpTitle:'Атлас TMT-протеомики человека',
     patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
     sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
@@ -203,6 +241,8 @@ const I18N={
     compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
     panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
+    navMap:'Map',navAbout:'About',navGithub:'GitHub',navMethods:'Methods',
+    footerGithub:'GitHub',footerMethods:'Methods',footerSheet:'Catalog',
     uvpTitle:'Human TMT proteomics atlas',
     patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
     sumPatients:'Σ patients',sumSamples:'Σ samples',
@@ -531,7 +571,16 @@ function renderUvp(){
     `<span class="uvp-sub"><b>${proj}</b> ${t('projects')} · <b>${pat.toLocaleString()}</b> ${t('patients')} · `+
     `<b>${org}</b> ${t('organs')} · PRIDE · CPTAC/PDC · iProX</span>`;
 }
+function initStaticIcons(){
+  const set=(id,n,c)=>{const e=document.getElementById(id);if(e)e.innerHTML=iconSvg(n,c);};
+  set('logoIco','atlas','ico');
+  set('globalSearchIco','search','ico ico-search');
+  set('placeholderIco','body','ico');
+  set('footerGhIco','github','ico');
+  applyThemeBtn(document.documentElement.getAttribute('data-theme')||'dark');
+}
 function refreshAll(){
+  initStaticIcons();
   buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();
   renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
@@ -613,30 +662,30 @@ function buildHeader(){
   const types=new Set(rows.map(x=>x.st)).size;
   const tmt=new Set(rows.map(x=>x.tmt).filter(Boolean)).size;
   const uniqPid=new Set(rows.map(x=>x.pid)).size;
-  document.getElementById('hs').innerHTML=
-    `<div class="hstat"><div class="v">${uniqPid}</div><div class="l">${t('projects')}</div></div>`+
-    `<div class="hstat"><div class="v">${rows.length}</div><div class="l">${t('rows')}</div></div>`+
-    `<div class="hstat"><div class="v">${tis}</div><div class="l">${t('organs')}</div></div>`+
-    `<div class="hstat"><div class="v">${dbs}</div><div class="l">${t('databases')}</div></div>`+
-    `<div class="hstat"><div class="v">${tmt}</div><div class="l">${t('tmtFormats')}</div></div>`+
-    `<div class="hstat"><div class="v">${types}</div><div class="l">${t('sampleTypes')}</div></div>`;
+  const statIco={projects:'projects',rows:'sample',organs:'organs',databases:'db',tmtFormats:'tmt',sampleTypes:'sample'};
+  const statKeys=['projects','rows','organs','databases','tmtFormats','sampleTypes'];
+  const statVals=[uniqPid,rows.length,tis,dbs,tmt,types];
+  document.getElementById('hs').innerHTML=statKeys.map((k,i)=>
+    `<div class="hstat"><div class="hstat-ico">${iconSvg(statIco[k],'ico ico-stat')}</div><div class="v">${statVals[i]}</div><div class="l">${t(k)}</div></div>`
+  ).join('');
   const vb=document.getElementById('validBanner');
   if(vb){
     const ok=META.uniqPids===uniqPid&&!F.q&&!F.tmt&&!F.health&&!F.db;
     const src=META.dataSource==='sheet'?t('dataFromSheet'):t('dataFromBundle');
     const when=formatUpdated();
     vb.className='valid-banner '+(ok?'ok':'warn');
-    vb.innerHTML=ok
-      ? `✓ ${t('validOk')}: ${META.rawRows} ${t('rows')}, ${META.uniqPids} ID · ${uniqPid} ${t('projects')} · ${t('updated')} ${when} (${src}) · <a href="${SHEET_VIEW}" target="_blank" rel="noopener">${t('openSheet')}</a>`
-      : `⚠ ${t('validWarn')}: ${uniqPid}/${META.uniqPids} · ${t('updated')} ${when}`;
+    vb.innerHTML=(ok?iconSvg('check','ico ico-banner'):iconSvg('warn','ico ico-banner'))+
+      `<span>${ok
+      ? `${t('validOk')}: ${META.rawRows} ${t('rows')}, ${META.uniqPids} ID · ${uniqPid} ${t('projects')} · ${t('updated')} ${when} (${src}) · <a href="${SHEET_VIEW}" target="_blank" rel="noopener">${t('openSheet')}</a>`
+      : `${t('validWarn')}: ${uniqPid}/${META.uniqPids} · ${t('updated')} ${when}`}</span>`;
   }
 }
 function buildSidebar(){
-  let h=`<div class="search"><span class="si">🔍</span><input placeholder="${esc(t('searchOrgan'))}" oninput="filtSidebar(this.value)"></div>`;
+  let h=`<div class="search"><span class="si">${iconSvg('search','ico ico-search')}</span><input placeholder="${esc(t('searchOrgan'))}" oninput="filtSidebar(this.value)"></div>`;
   GRP.forEach(g=>{
     const items=g.o.filter(o=>(C[o]||0)>0&&rowMatchesSidebar(o));
     if(!items.length) return;
-    h+=`<div class="card"><div class="card-head"><span>${g.i}</span><h3>${grpTitle(g)}</h3></div><div class="olist">`;
+    h+=`<div class="card"><div class="card-head"><span class="sys-ico">${iconSvg(g.ico,'ico ico-sys')}</span><h3>${grpTitle(g)}</h3></div><div class="olist">`;
     items.forEach(o=>{
       const n=C[o],c=organBadgeColor(o),sz=organDotSize(n);
       h+=`<div class="oitem${selOrgan===o?' on':''}" data-o="${o}" onclick="sel('${o}')"><div class="odot" style="background:${c};width:${sz}px;height:${sz}px"></div><span class="nm">${organDisplayName(o)}</span><span class="ct">${n}</span></div>`;
@@ -854,17 +903,17 @@ function organMaterialCounts(rows){
 }
 
 const GRP=[
-  {tKey:'sysNervous', i:'🧠', o:['Brain','Pituitary','Eye','Nerve']},
-  {tKey:'sysCardio', i:'❤️', o:['Heart','Blood']},
-  {tKey:'sysResp', i:'🫁', o:['Lung','Thymus','Esophagus']},
-  {tKey:'sysDigest', i:'🍽', o:['Salivary_Gland','Stomach','Liver','Gallbladder','Pancreas','Spleen','Small_Intestine','Colon','Appendix']},
-  {tKey:'sysEndocrine', i:'⚗️', o:['Thyroid','Adrenal_Gland']},
-  {tKey:'sysUrinary', i:'💧', o:['Kidney','Bladder']},
-  {tKey:'sysFemale', i:'♀', o:['Ovary','Uterus','Cervix']},
-  {tKey:'sysMale', i:'♂', o:['Prostate','Testis']},
-  {tKey:'sysImmune', i:'🩸', o:['Bone_Marrow','Lymph_Node']},
-  {tKey:'sysMSK', i:'🦴', o:['Bone','Muscle','Skin','Breast','Adipose_Tissue','Soft_Tissue']},
-  {tKey:'sysOther', i:'📦', o:['Multiple_Organs','Other']}
+  {tKey:'sysNervous', ico:'brain', o:['Brain','Pituitary','Eye','Nerve']},
+  {tKey:'sysCardio',  ico:'heart', o:['Heart','Blood']},
+  {tKey:'sysResp',    ico:'lung', o:['Lung','Thymus','Esophagus']},
+  {tKey:'sysDigest',  ico:'digest', o:['Salivary_Gland','Stomach','Liver','Gallbladder','Pancreas','Spleen','Small_Intestine','Colon','Appendix']},
+  {tKey:'sysEndocrine',ico:'flask', o:['Thyroid','Adrenal_Gland']},
+  {tKey:'sysUrinary', ico:'droplet', o:['Kidney','Bladder']},
+  {tKey:'sysFemale',  ico:'female', o:['Ovary','Uterus','Cervix']},
+  {tKey:'sysMale',    ico:'male', o:['Prostate','Testis']},
+  {tKey:'sysImmune',  ico:'immune', o:['Bone_Marrow','Lymph_Node']},
+  {tKey:'sysMSK',     ico:'bone', o:['Bone','Muscle','Skin','Breast','Adipose_Tissue','Soft_Tissue']},
+  {tKey:'sysOther',   ico:'box', o:['Multiple_Organs','Other']}
 ];
 function grpTitle(g){return t(g.tKey)||g.tKey;}
 const COL={};
@@ -1935,6 +1984,7 @@ window.exportOrganCSV=exportOrganCSV;
 window.runCompare=runCompare;
 window.organColor=organColor;
 window.filtSidebar=filtSidebar;
+window.applyThemeBtn=applyThemeBtn;
 window.openAbout=openAbout;
 window.closeAbout=closeAbout;
 window.openProject=openProject;
