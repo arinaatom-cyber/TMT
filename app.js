@@ -10,7 +10,35 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro5';
+const MAP_BUILD='20260620-pro6';
+
+/* Fixed atlas reference subject — adult nulliparous, non-pregnant female.
+   Central reference values (NOT clinical diagnostic norms). Sources cited in About modal:
+   Radiology Key (uterus/ovary), CAP organ-weight tables, Radiopaedia, PMC bladder consensus,
+   Cleveland Clinic (GI lengths), NLM Visible Human Project (3D anatomy basis). */
+const REFERENCE_SUBJECT={subject:'adult_nulliparous_female', age:30, height_cm:165, weight_kg:65,
+  value_type:'atlas_central_reference', clinical_use:'not_for_diagnosis'};
+/* [organKey, sizeRu, massRu, sizeEn, massEn] */
+const ORGAN_REF=[
+  ['Brain','форма по 3D-срезам','1300 г','shape from 3D slices','1300 g'],
+  ['Heart','12 × 8,5 × 6 см','300 г','12 × 8.5 × 6 cm','300 g'],
+  ['Lung','высота 24 см (R+L)','400 + 340 г','height 24 cm (R+L)','400 + 340 g'],
+  ['Liver','CC по MCL 11,5 см; попереч. 21,5 см','1500 г','CC at MCL 11.5 cm; transverse 21.5 cm','1500 g'],
+  ['Spleen','длина 11 см','130 г','length 11 cm','130 g'],
+  ['Kidney','11 × 4 × 3 см (каждая)','130 г каждая','11 × 4 × 3 cm (each)','130 g each'],
+  ['Adrenal_Gland','5 × 3 × 1 см (каждый)','—','5 × 3 × 1 cm (each)','—'],
+  ['Thyroid','доля 5 × 1,7 × 1,5 см; перешеек 0,3 см','12 мл','lobe 5 × 1.7 × 1.5 cm; isthmus 0.3 cm','12 mL'],
+  ['Pancreas','длина 16 см (головка 2,5 / тело 1,6 / хвост 1,4 см AP)','—','length 16 cm (head 2.5 / body 1.6 / tail 1.4 cm AP)','—'],
+  ['Gallbladder','8,5 × 3,5 см; стенка 2 мм','—','8.5 × 3.5 cm; wall 2 mm','—'],
+  ['Esophagus','длина 29 см; диаметр 1,9 см','—','length 29 cm; diameter 1.9 cm','—'],
+  ['Stomach','22,5 × 14,5 см (зависит от наполнения)','—','22.5 × 14.5 cm (varies with filling)','—'],
+  ['Small_Intestine','длина 670 см; диаметр 2,5 см','—','length 670 cm; diameter 2.5 cm','—'],
+  ['Colon','длина 155 см','—','length 155 cm','—'],
+  ['Bladder','линейный размер не фиксируется','350 мл (емкость)','linear size not fixed','350 mL (capacity)'],
+  ['Uterus','7,2 × 4,0 × 3,0 см (нерожавшая)','45 мл','7.2 × 4.0 × 3.0 cm (nulliparous)','45 mL'],
+  ['Cervix','длина 3 см','—','length 3 cm','—'],
+  ['Ovary','3,5 × 2,5 × 1,5 см (каждый)','6,5 мл каждый','3.5 × 2.5 × 1.5 cm (each)','6.5 mL each']
+];
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
 const PASTEL=[
@@ -32,12 +60,17 @@ const I18N={
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · полная анатомия · подписи — органы с проектами · таз unisex (♂+♀)',
+    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · эталон: нерожавшая женщина (30 л, 165 см, 65 кг) · подписи — органы с проектами · таз unisex (♂+♀)',
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
     aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
     sysRefTitle:'Основные системы органов (MSD Manual)',
+    refTitle:'Референс-размеры органов (эталон атласа)',
+    refSubject:'Эталон: взрослая нерожавшая небеременная женщина · 30 лет · 165 см · 65 кг',
+    refClinical:'value_type = atlas_central_reference · clinical_use = not_for_diagnosis. Одно центральное значение для единообразия карты, не клиническая норма (без поправки на рост, вес, возраст, метод измерения).',
+    refColOrgan:'Орган',refColSize:'Размер',refColMass:'Масса / объём',
+    refSources:'Источники: Radiology Key (матка, яичник), CAP organ-weight tables, Radiopaedia, консенсус по мочевому пузырю (PMC), Cleveland Clinic (длины ЖКТ), NLM Visible Human Project (основа 3D-анатомии).',
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
     m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
@@ -90,12 +123,17 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Anterior view · full anatomy · labels = organs with projects · unisex pelvis (M+F)',
+    about:'About',close:'Close',bodyCap:'Anterior view · reference: nulliparous female (30 y, 165 cm, 65 kg) · labels = organs with projects · unisex pelvis (M+F)',
     noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
     aboutP2:'Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.',
     sysRefTitle:'Major organ systems (MSD Manual)',
+    refTitle:'Reference organ sizes (atlas central reference)',
+    refSubject:'Reference: adult nulliparous non-pregnant female · 30 y · 165 cm · 65 kg',
+    refClinical:'value_type = atlas_central_reference · clinical_use = not_for_diagnosis. A single central value for map consistency, not a clinical norm (no adjustment for height, weight, age, or measurement method).',
+    refColOrgan:'Organ',refColSize:'Size',refColMass:'Mass / volume',
+    refSources:'Sources: Radiology Key (uterus, ovary), CAP organ-weight tables, Radiopaedia, bladder consensus (PMC), Cleveland Clinic (GI lengths), NLM Visible Human Project (3D anatomy basis).',
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
     m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
@@ -195,7 +233,7 @@ function i18nApply(){
   const lb=document.getElementById('langBtn');if(lb) lb.textContent=lang==='ru'?'EN':'RU';
   document.documentElement.lang=lang;
 }
-function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();refreshAll();if(document.getElementById('aboutModal')?.classList.contains('open'))renderSysRef();}
+function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();refreshAll();if(document.getElementById('aboutModal')?.classList.contains('open')){renderSysRef();renderOrganRef();}}
 
 const F={q:'',tmt:'',health:'',db:''};
 let META={rawRows:0,uniqPids:0,loadedAt:null,dataSource:''},selOrgan=null;
@@ -287,6 +325,7 @@ function parseUrlOrgan(){
 function openAbout(){
   document.getElementById('aboutModal').classList.add('open');
   renderSysRef();
+  renderOrganRef();
 }
 function renderSysRef(){
   const el=document.getElementById('sysRefTable');
@@ -295,6 +334,18 @@ function renderSysRef(){
     GRP.map(g=>`<tr><td>${esc(grpTitle(g))}</td><td>${g.o.map(organDisplayName).join(' · ')}</td></tr>`).join('')+
     `</tbody></table>`;
 }
+function renderOrganRef(){
+  const el=document.getElementById('organRefTable');
+  if(!el) return;
+  const isRu=lang==='ru';
+  const rows=ORGAN_REF.map(([k,sRu,mRu,sEn,mEn])=>
+    `<tr><td>${esc(organDisplayName(k))}</td><td>${esc(isRu?sRu:sEn)}</td><td>${esc(isRu?mRu:mEn)}</td></tr>`).join('');
+  el.innerHTML=`<p class="ref-subject">${esc(t('refSubject'))}</p>`+
+    `<table class="sys-ref"><thead><tr><th>${t('refColOrgan')}</th><th>${t('refColSize')}</th><th>${t('refColMass')}</th></tr></thead><tbody>${rows}</tbody></table>`+
+    `<p class="ref-clinical">${esc(t('refClinical'))}</p>`+
+    `<p class="ref-sources">${esc(t('refSources'))}</p>`;
+}
+function closeAboutNoop(){}
 function closeAbout(){document.getElementById('aboutModal').classList.remove('open');}
 function csvEscape(s){const x=String(s??'');return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
 function downloadCSV(filename,rows){
