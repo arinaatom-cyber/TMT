@@ -223,6 +223,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 .sys-ref th{background:var(--bg2);font-weight:600;white-space:nowrap}
 .sys-ref td{color:var(--t2);line-height:1.45}
 
+/* Visible bottom sections: full organ list + references */
+.site-sections{max-width:1100px;margin:0 auto;padding:8px 24px 8px}
+.site-sections .ccard{padding:18px 20px}
+.site-sections h3{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--t1);margin-bottom:6px}
+.site-sections .hint{font-size:11px;color:var(--t3);line-height:1.5;margin-bottom:12px}
+.organ-chips{display:flex;flex-wrap:wrap;gap:6px}
+.organ-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:3px 9px}
+.organ-chip.drawn{color:var(--t1);border-color:var(--accent);background:var(--accent-dim)}
+.oc-tag{font-size:8px;text-transform:uppercase;letter-spacing:.04em;padding:1px 5px;border-radius:8px}
+.oc-tag.on{color:var(--green);background:rgba(157,201,176,.14)}
+.oc-tag.off{color:var(--t3);background:rgba(148,163,184,.12)}
+.lit-list{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+.lit-list li{font-size:11.5px;line-height:1.5;color:var(--t2)}
+.lit-list a{color:var(--accent);text-decoration:none}
+.lit-list a:hover{text-decoration:underline}
+
 .prot-hint{font-size:11px;color:var(--t3);line-height:1.5;margin-bottom:10px}
 .prot-mini{margin-bottom:12px}
 .prot-card-foot{margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
@@ -291,7 +307,7 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="panel" id="lp"></div>
   <div class="body-col">
     <div class="body-wrap" id="bw"></div>
-    <p class="body-caption" id="bodyCaption" data-i18n="bodyCap">Anterior view · organs with projects only</p>
+    <p class="body-caption" id="bodyCaption" data-i18n="bodyCap">Anterior view · F/M reference · unisex pelvis</p>
     <div class="material-chart-wrap" id="materialChartWrap">
       <h4 class="sec-h" data-i18n="matChartTitle">Sample material by organ</h4>
       <p class="mat-chart-hint" id="matChartHint" data-i18n="matChartHint"></p>
@@ -306,6 +322,19 @@ footer a{color:var(--accent);text-decoration:none}
     </div>
   </div>
 </div>
+
+<section class="site-sections" id="siteSections">
+  <div class="ccard">
+    <h3 data-i18n="allOrgansTitle">All organs by system</h3>
+    <p class="hint" id="allOrgansHint"></p>
+    <div id="allOrgansList" class="sys-ref-wrap" style="max-height:none"></div>
+  </div>
+  <div class="ccard">
+    <h3 data-i18n="litTitle">Literature &amp; sources</h3>
+    <p class="hint" id="litHint"></p>
+    <ol id="litList" class="lit-list"></ol>
+  </div>
+</section>
 
 <footer>
   <span data-i18n="footer">Human Proteome Atlas · TMT proteomics</span> ·
@@ -358,6 +387,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260620-pro8"></script>
+<script src="app.js?v=20260620-pro9"></script>
 </body>
 </html>

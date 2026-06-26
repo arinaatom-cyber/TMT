@@ -10,7 +10,33 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro8';
+const MAP_BUILD='20260620-pro9';
+
+/* Pin all Chart.js text to the site font (Inter) for typographic consistency */
+if(typeof window!=='undefined'&&window.Chart&&Chart.defaults){
+  Chart.defaults.font.family="'Inter',system-ui,-apple-system,sans-serif";
+  Chart.defaults.color='#94a3b8';
+}
+
+/* Literature / data sources shown in the visible References section and About modal */
+const LITERATURE=[
+  {t:'MSD Manual (Merck Manual). Основные системы органов / Major organ systems.', u:'https://www.msdmanuals.com/ru/home/multimedia/table/основные-системы-органов'},
+  {t:'CAP. Reference Organ Weight Tables (массы органов по полу и массе тела).', u:'https://documents.cap.org/documents/cap-organ-weight-tables.pdf'},
+  {t:'Radiopaedia — radiology reference values (печень, селезёнка, почки, щитовидная, поджелудочная, таз, простата, яички).', u:'https://radiopaedia.org/'},
+  {t:'Radiology Key — The Normal Uterus / The Normal Ovary.', u:'https://radiologykey.com/the-normal-uterus/'},
+  {t:'Cleveland Clinic — Esophagus, Trachea, Lungs anatomy.', u:'https://my.clevelandclinic.org/health/body/21728-esophagus'},
+  {t:'NLM Visible Human Project (3D-координаты и положение органов).', u:'https://www.nlm.nih.gov/research/visible/visible_human.html'},
+  {t:'Strul H. et al. Why is colonoscopy more difficult in women? (длина толстой кишки).', u:'https://pubmed.ncbi.nlm.nih.gov/8635705/'},
+  {t:'Barnhart KT. et al. Baseline dimensions of the human vagina.', u:'https://pubmed.ncbi.nlm.nih.gov/16478763/'},
+  {t:'Lukacz ES. et al. A healthy bladder: a consensus statement (функциональная ёмкость).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC3206217/'},
+  {t:'Ultrasound of the prostate (TRUS reference, объём ~25 мл).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC2842183/'},
+  {t:'Normal heart size study (масса/размеры сердца).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC5075360/'},
+  {t:'Normal adrenal gland thickness on CT.', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC6319091/'},
+  {t:'Variations of the stomach in adults (морфометрия желудка).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC9515405/'},
+  {t:'StatPearls / NCBI — Anatomy, Abdomen and Pelvis: Duodenum.', u:'https://www.ncbi.nlm.nih.gov/books/NBK482390/'},
+  {t:'MRI of the penis (морфология вместо популяционной длины).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC3746407/'},
+  {t:'Данные проектов: PRIDE, CPTAC / PDC, ProteomeXchange, iProX, MassIVE, GTEx (PXD016999).', u:'https://www.ebi.ac.uk/pride/'}
+];
 
 /* Fixed atlas reference subjects — two central-reference models (NOT clinical norms).
    Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes),
@@ -93,6 +119,11 @@ const I18N={
     refClinical:'value_type = central_atlas_reference · clinical_use = false. Одно центральное значение на орган для единообразия карты, не клиническая норма (без поправки на рост, вес, возраст, метод измерения).',
     refColOrgan:'Орган',refColFemale:'Женщина',refColMale:'Мужчина',
     refSources:'Источники: CAP organ-weight tables (массы), Radiopaedia / Radiology Key (линейные размеры), Cleveland Clinic / StatPearls (ЖКТ и мочевыделение), PubMed-радиология, NLM Visible Human Project (3D-координаты).',
+    allOrgansTitle:'Все органы по системам',
+    allOrgansHint:'Полный перечень органов (классификация MSD Manual). На карте показаны органы, которые можно изобразить на силуэте; остальные перечислены и подписаны здесь и в таблице референс-размеров («О проекте»).',
+    litTitle:'Литература и источники',
+    litHint:'Размеры и массы органов — радиологические и патологоанатомические референсы; координаты — атласы 3D-анатомии. Не для клинической диагностики.',
+    mapOnly:'на карте',offMap:'вне карты (подпись)',
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
     m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
@@ -156,6 +187,11 @@ const I18N={
     refClinical:'value_type = central_atlas_reference · clinical_use = false. One central value per organ for map consistency, not a clinical norm (no adjustment for height, weight, age, or measurement method).',
     refColOrgan:'Organ',refColFemale:'Female',refColMale:'Male',
     refSources:'Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes), Cleveland Clinic / StatPearls (GI & urinary), PubMed radiology, NLM Visible Human Project (3D coords).',
+    allOrgansTitle:'All organs by system',
+    allOrgansHint:'Full organ list (MSD Manual classification). Organs that can be drawn are shown on the silhouette; the rest are listed and labeled here and in the reference-size table (About).',
+    litTitle:'Literature & sources',
+    litHint:'Organ sizes and masses are radiology / autopsy reference values; coordinates come from 3D anatomy atlases. Not for clinical diagnosis.',
+    mapOnly:'on map',offMap:'off-map (label)',
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
     m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
@@ -209,21 +245,30 @@ let lang=localStorage.getItem('hpa-lang')||'ru';
 function t(k){return (I18N[lang]||I18N.ru)[k]||k;}
 const ORGAN_LABELS={
   ru:{
-    Liver:'Печень',Lung:'Лёгкие',Heart:'Сердце',Brain:'Мозг',Kidney:'Почки',
-    Stomach:'Желудок',Pancreas:'Поджелудочная',Spleen:'Селезёнка',Colon:'Толстая кишка',
-    Gallbladder:'Желчный пузырь',Appendix:'Аппендикс',Thymus:'Тимус',
-    Breast:'Молочная железа',Prostate:'Предстательная',Ovary:'Яичники',Uterus:'Матка',
+    Liver:'Печень',Lung:'Лёгкие',Heart:'Сердце',Brain:'Головной мозг',Kidney:'Почки',
+    Stomach:'Желудок',Pancreas:'Поджелудочная железа',Spleen:'Селезёнка',Colon:'Толстая кишка',
+    Gallbladder:'Жёлчный пузырь',Appendix:'Аппендикс',Thymus:'Тимус',
+    Breast:'Молочная железа',Prostate:'Предстательная железа',Ovary:'Яичники',Uterus:'Матка',
     Cervix:'Шейка матки',Testis:'Яички',Small_Intestine:'Тонкая кишка',
-    Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз',Thyroid:'Щитовидная',
-    Bladder:'Мочевой пузырь',Skin:'Кожа',Muscle:'Мышцы',Bone:'Кость',
+    Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз',Thyroid:'Щитовидная железа',
+    Bladder:'Мочевой пузырь',Skin:'Кожа',Muscle:'Мышцы',Bone:'Кости',
     Blood:'Кровь',Bone_Marrow:'Костный мозг',Lymph_Node:'Лимфоузлы',
     Esophagus:'Пищевод',Adrenal_Gland:'Надпочечники',Eye:'Глаза',Nerve:'Нервы',
+    Adipose_Tissue:'Жировая ткань',Soft_Tissue:'Мягкие ткани',
     Multiple_Organs:'Несколько органов',Other:'Другое'
   },
   en:{
-    Testis:'Testicles',Colon:'Large intestine',Small_Intestine:'Small intestine',
+    Liver:'Liver',Lung:'Lungs',Heart:'Heart',Brain:'Brain',Kidney:'Kidneys',
+    Stomach:'Stomach',Pancreas:'Pancreas',Spleen:'Spleen',Colon:'Large intestine',
     Gallbladder:'Gallbladder',Appendix:'Appendix',Thymus:'Thymus',
-    Salivary_Gland:'Salivary glands',Pituitary:'Pituitary'
+    Breast:'Breast',Prostate:'Prostate',Ovary:'Ovaries',Uterus:'Uterus',
+    Cervix:'Cervix',Testis:'Testicles',Small_Intestine:'Small intestine',
+    Salivary_Gland:'Salivary glands',Pituitary:'Pituitary',Thyroid:'Thyroid',
+    Bladder:'Bladder',Skin:'Skin',Muscle:'Muscle',Bone:'Bones',
+    Blood:'Blood',Bone_Marrow:'Bone marrow',Lymph_Node:'Lymph nodes',
+    Esophagus:'Esophagus',Adrenal_Gland:'Adrenal glands',Eye:'Eyes',Nerve:'Nerves',
+    Adipose_Tissue:'Adipose tissue',Soft_Tissue:'Soft tissue',
+    Multiple_Organs:'Multiple organs',Other:'Other'
   }
 };
 const DIS_LABELS={
@@ -356,6 +401,73 @@ function renderSysRef(){
     GRP.map(g=>`<tr><td>${esc(grpTitle(g))}</td><td>${g.o.map(organDisplayName).join(' · ')}</td></tr>`).join('')+
     `</tbody></table>`;
 }
+/* Full organ inventory by MSD system. map = ANATOMY key when drawn on the silhouette;
+   entries without map are "taken out" and only labeled (off-map). */
+const ORGAN_SYSTEMS=[
+  {tKey:'sysNervous', items:[
+    {ru:'Головной мозг',en:'Brain',map:'Brain'},{ru:'Спинной мозг',en:'Spinal cord'},
+    {ru:'Нервы',en:'Nerves'},{ru:'Гипофиз',en:'Pituitary',map:'Pituitary'},
+    {ru:'Эпифиз',en:'Pineal gland'},{ru:'Глаза',en:'Eyes',map:'Eye'}]},
+  {tKey:'sysEndocrine', items:[
+    {ru:'Щитовидная железа',en:'Thyroid',map:'Thyroid'},{ru:'Паращитовидные железы',en:'Parathyroid glands'},
+    {ru:'Надпочечники',en:'Adrenal glands',map:'Adrenal_Gland'},{ru:'Тимус',en:'Thymus',map:'Thymus'}]},
+  {tKey:'sysCardio', items:[
+    {ru:'Сердце',en:'Heart',map:'Heart'},{ru:'Кровеносные сосуды',en:'Blood vessels'},
+    {ru:'Кровь',en:'Blood'}]},
+  {tKey:'sysResp', items:[
+    {ru:'Нос / глотка / гортань',en:'Nose / pharynx / larynx'},{ru:'Трахея',en:'Trachea'},
+    {ru:'Бронхи',en:'Bronchi'},{ru:'Лёгкие',en:'Lungs',map:'Lung'}]},
+  {tKey:'sysDigest', items:[
+    {ru:'Слюнные железы',en:'Salivary glands',map:'Salivary_Gland'},{ru:'Пищевод',en:'Esophagus',map:'Esophagus'},
+    {ru:'Желудок',en:'Stomach',map:'Stomach'},{ru:'Двенадцатиперстная кишка',en:'Duodenum'},
+    {ru:'Тонкая кишка',en:'Small intestine',map:'Small_Intestine'},{ru:'Толстая кишка',en:'Large intestine',map:'Colon'},
+    {ru:'Аппендикс',en:'Appendix',map:'Appendix'},{ru:'Прямая кишка',en:'Rectum'},
+    {ru:'Печень',en:'Liver',map:'Liver'},{ru:'Жёлчный пузырь',en:'Gallbladder',map:'Gallbladder'},
+    {ru:'Поджелудочная железа',en:'Pancreas',map:'Pancreas'},{ru:'Селезёнка',en:'Spleen',map:'Spleen'}]},
+  {tKey:'sysUrinary', items:[
+    {ru:'Почки',en:'Kidneys',map:'Kidney'},{ru:'Мочеточники',en:'Ureters'},
+    {ru:'Мочевой пузырь',en:'Bladder',map:'Bladder'},{ru:'Мочеиспускательный канал',en:'Urethra'}]},
+  {tKey:'sysFemale', items:[
+    {ru:'Яичники',en:'Ovaries',map:'Ovary'},{ru:'Маточные трубы',en:'Fallopian tubes'},
+    {ru:'Матка',en:'Uterus',map:'Uterus'},{ru:'Шейка матки',en:'Cervix',map:'Cervix'},
+    {ru:'Влагалище',en:'Vagina'}]},
+  {tKey:'sysMale', items:[
+    {ru:'Яички',en:'Testes',map:'Testis'},{ru:'Придаток яичка',en:'Epididymis'},
+    {ru:'Семенные пузырьки',en:'Seminal vesicles'},{ru:'Предстательная железа',en:'Prostate',map:'Prostate'},
+    {ru:'Половой член',en:'Penis'}]},
+  {tKey:'sysImmune', items:[
+    {ru:'Костный мозг',en:'Bone marrow'},{ru:'Лимфоузлы',en:'Lymph nodes'},
+    {ru:'Тимус',en:'Thymus'},{ru:'Селезёнка',en:'Spleen'}]},
+  {tKey:'sysMSK', items:[
+    {ru:'Кожа',en:'Skin'},{ru:'Кости',en:'Bones'},{ru:'Мышцы',en:'Muscles'},
+    {ru:'Молочная железа',en:'Breast',map:'Breast'},{ru:'Жировая ткань',en:'Adipose tissue'},
+    {ru:'Мягкие ткани',en:'Soft tissue'}]}
+];
+function renderAllOrgans(){
+  const el=document.getElementById('allOrgansList');
+  if(!el) return;
+  const isRu=lang==='ru';
+  const rows=ORGAN_SYSTEMS.map(g=>{
+    const chips=g.items.map(it=>{
+      const drawn=it.map&&ANATOMY[it.map]&&mapOrganVisible(it.map);
+      const tag=drawn?`<span class="oc-tag on">${t('mapOnly')}</span>`:`<span class="oc-tag off">${t('offMap')}</span>`;
+      return `<span class="organ-chip${drawn?' drawn':''}">${esc(isRu?it.ru:it.en)} ${tag}</span>`;
+    }).join('');
+    return `<tr><td>${esc(t(g.tKey))}</td><td><div class="organ-chips">${chips}</div></td></tr>`;
+  }).join('');
+  el.innerHTML=`<table class="sys-ref"><thead><tr><th>${isRu?'Система':'System'}</th><th>${isRu?'Органы':'Organs'}</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function renderLiterature(){
+  const el=document.getElementById('litList');
+  if(!el) return;
+  el.innerHTML=LITERATURE.map(r=>`<li><a href="${r.u}" target="_blank" rel="noopener">${esc(r.t)}</a></li>`).join('');
+}
+function renderSiteSections(){
+  const hA=document.getElementById('allOrgansHint'); if(hA) hA.textContent=t('allOrgansHint');
+  const hL=document.getElementById('litHint'); if(hL) hL.textContent=t('litHint');
+  renderAllOrgans();renderLiterature();
+}
+
 function renderOrganRef(){
   const el=document.getElementById('organRefTable');
   if(!el) return;
@@ -401,7 +513,7 @@ function uniqProjects(rows){
 function getOrganRows(o){return filteredRows().filter(r=>r.organs.includes(o));}
 function refreshAll(){
   buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();
-  renderAtlasMaterialChart();
+  renderAtlasMaterialChart();renderSiteSections();
   const cap=document.getElementById('bodyCaption');
   if(cap) cap.textContent=`${t('bodyCap')} · map ${MAP_BUILD}`;
   if(selOrgan&&C[selOrgan]) sel(selOrgan);
