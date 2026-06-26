@@ -10,7 +10,7 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro9';
+const MAP_BUILD='20260620-pro10';
 
 /* Pin all Chart.js text to the site font (Inter) for typographic consistency */
 if(typeof window!=='undefined'&&window.Chart&&Chart.defaults){
@@ -131,6 +131,9 @@ const I18N={
     compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
     panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
+    patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
+    sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
+    patSampHint:'Пациенты/доноры и Total Samples — из таблицы (Patients / donors, Total Samples). Для клеточных линий пациенты = 0. Часть значений Total Samples отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
     legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
@@ -199,6 +202,9 @@ const I18N={
     compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
     panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
+    patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
+    sumPatients:'Σ patients',sumSamples:'Σ samples',
+    patSampHint:'Patients/donors and Total Samples come from the sheet (Patients / donors, Total Samples). Cell-line studies have 0 patients. Some Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
     legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
@@ -1141,9 +1147,13 @@ function normalizeRow(x){
   const resultFiles=window.ProteinAtlas?ProteinAtlas.parseResultFiles(x['Result Files']):[];
   const resultFile=resultFiles[0]||'';
   const proteinCount=window.ProteinAtlas?ProteinAtlas.parseProteinCount(x['Proteins Quantified']):null;
+  const numField=v=>{const n=parseFloat(String(v??'').replace(/,/g,'').trim());return isFinite(n)?n:null;};
   return {
     ...x,
     organs:organList,om:organList[0],isMulti:organList.length>1,isPan,
+    patients:numField(x['Patients / donors']),
+    totalSamples:numField(x['Total Samples']),
+    samplesUsed:numField(x['Samples Used N']),
     dis:tumorType,
     healthy:isHealthy(tumorType,sampleType,title,x['Disease']),
     st:sampleType,
@@ -1437,6 +1447,10 @@ function projectCard(r){
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
   const proteins=window.ProteinAtlas?.proteinBadgesHtml?.(r)||'';
   const platform=r.platform?`<span class="meta-pill">${esc(r.platform.slice(0,28))}</span>`:'';
+  const cohort=[
+    r.patients!=null?`<span class="meta-pill cohort" title="Patients / donors">👥 ${r.patients} ${t('patientsShort')}</span>`:'',
+    r.totalSamples!=null?`<span class="meta-pill cohort" title="Total Samples">🧪 ${r.totalSamples} ${t('samplesShort')}</span>`:''
+  ].join('');
   const linkProj=projHref
     ? `<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener" title="Open in ${esc(r.db||'database')}">
          <span class="li">DB</span><span class="lt">${esc(r.db||'Database')}</span></a>`
@@ -1459,7 +1473,7 @@ function projectCard(r){
     <div class="proj-disease" title="${esc(r.dis)}">${esc(diseaseDisplayName(r.disCanon)||'—')}<span style="color:var(--t3);font-size:10px"> · ${esc((r.dis||'').slice(0,40))}</span></div>
     <div class="proj-meta">
       <span class="meta-pill subtle">${esc(r.st||'—')}</span>
-      ${tmt}${platform}${proteins}
+      ${cohort}${tmt}${platform}${proteins}
     </div>
     <div class="proj-links">
       ${linkProj}${linkArt}${linkGh}
@@ -1686,13 +1700,15 @@ function sel(o){
   charts.forEach(x=>x.destroy()); charts=[];
 
   const dis={}, sam={}, dbs={};
-  let nHealthy=0,nCancer=0;
+  let nHealthy=0,nCancer=0,sumPat=0,nPat=0,sumSamp=0,nSamp=0;
   uniqRows.forEach(r=>{
     const dk=r.disCanon||r.dis;
     dis[dk]=(dis[dk]||0)+1;
     sam[r.st]=(sam[r.st]||0)+1;
     if(r.db) dbs[r.db]=(dbs[r.db]||0)+1;
     if(r.healthy) nHealthy++; else nCancer++;
+    if(r.patients!=null){sumPat+=r.patients;nPat++;}
+    if(r.totalSamples!=null){sumSamp+=r.totalSamples;nSamp++;}
   });
   const ds=Object.entries(dis).sort((a,b)=>b[1]-a[1]);
   const ss=Object.entries(sam).sort((a,b)=>b[1]-a[1]);
@@ -1722,6 +1738,8 @@ function sel(o){
     <div class="ms"><div class="v" style="color:${PASTEL_CANCER}">${nCancer}</div><div class="l">Cancer</div></div>
     <div class="ms"><div class="v" style="color:${PASTEL_NORMAL}">${nHealthy}</div><div class="l">Normal</div></div>
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
+    <div class="ms" title="${esc(t('patSampHint'))}"><div class="v">${nPat?sumPat.toLocaleString():'—'}</div><div class="l">${t('sumPatients')}</div></div>
+    <div class="ms" title="${esc(t('patSampHint'))}"><div class="v">${nSamp?sumSamp.toLocaleString():'—'}</div><div class="l">${t('sumSamples')}</div></div>
   </div>
   ${compareBlock(o)}
   ${window.ProteinAtlas?ProteinAtlas.organProteinsSummaryHtml(o,uniqRows):''}
