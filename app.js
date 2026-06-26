@@ -10,34 +10,56 @@ const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComp
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
-const MAP_BUILD='20260620-pro6';
+const MAP_BUILD='20260620-pro7';
 
-/* Fixed atlas reference subject — adult nulliparous, non-pregnant female.
-   Central reference values (NOT clinical diagnostic norms). Sources cited in About modal:
-   Radiology Key (uterus/ovary), CAP organ-weight tables, Radiopaedia, PMC bladder consensus,
-   Cleveland Clinic (GI lengths), NLM Visible Human Project (3D anatomy basis). */
-const REFERENCE_SUBJECT={subject:'adult_nulliparous_female', age:30, height_cm:165, weight_kg:65,
-  value_type:'atlas_central_reference', clinical_use:'not_for_diagnosis'};
-/* [organKey, sizeRu, massRu, sizeEn, massEn] */
+/* Fixed atlas reference subjects — two central-reference models (NOT clinical norms).
+   Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes),
+   Cleveland Clinic / StatPearls (GI & urinary), PubMed radiology, NLM Visible Human (3D coords). */
+const REFERENCE_MODELS={
+  female:{id:'adult_nulliparous_nonpregnant_female_30y_165cm_65kg', age:30, height_cm:165, weight_kg:65},
+  male:{id:'adult_male_30y_175cm_80kg', age:30, height_cm:175, weight_kg:80},
+  value_type:'central_atlas_reference', clinical_use:false
+};
+/* [ruName, enName, femaleRu, maleRu, femaleEn, maleEn]  ('—' = not applicable for that sex) */
 const ORGAN_REF=[
-  ['Brain','форма по 3D-срезам','1300 г','shape from 3D slices','1300 g'],
-  ['Heart','12 × 8,5 × 6 см','300 г','12 × 8.5 × 6 cm','300 g'],
-  ['Lung','высота 24 см (R+L)','400 + 340 г','height 24 cm (R+L)','400 + 340 g'],
-  ['Liver','CC по MCL 11,5 см; попереч. 21,5 см','1500 г','CC at MCL 11.5 cm; transverse 21.5 cm','1500 g'],
-  ['Spleen','длина 11 см','130 г','length 11 cm','130 g'],
-  ['Kidney','11 × 4 × 3 см (каждая)','130 г каждая','11 × 4 × 3 cm (each)','130 g each'],
-  ['Adrenal_Gland','5 × 3 × 1 см (каждый)','—','5 × 3 × 1 cm (each)','—'],
-  ['Thyroid','доля 5 × 1,7 × 1,5 см; перешеек 0,3 см','12 мл','lobe 5 × 1.7 × 1.5 cm; isthmus 0.3 cm','12 mL'],
-  ['Pancreas','длина 16 см (головка 2,5 / тело 1,6 / хвост 1,4 см AP)','—','length 16 cm (head 2.5 / body 1.6 / tail 1.4 cm AP)','—'],
-  ['Gallbladder','8,5 × 3,5 см; стенка 2 мм','—','8.5 × 3.5 cm; wall 2 mm','—'],
-  ['Esophagus','длина 29 см; диаметр 1,9 см','—','length 29 cm; diameter 1.9 cm','—'],
-  ['Stomach','22,5 × 14,5 см (зависит от наполнения)','—','22.5 × 14.5 cm (varies with filling)','—'],
-  ['Small_Intestine','длина 670 см; диаметр 2,5 см','—','length 670 cm; diameter 2.5 cm','—'],
-  ['Colon','длина 155 см','—','length 155 cm','—'],
-  ['Bladder','линейный размер не фиксируется','350 мл (емкость)','linear size not fixed','350 mL (capacity)'],
-  ['Uterus','7,2 × 4,0 × 3,0 см (нерожавшая)','45 мл','7.2 × 4.0 × 3.0 cm (nulliparous)','45 mL'],
-  ['Cervix','длина 3 см','—','length 3 cm','—'],
-  ['Ovary','3,5 × 2,5 × 1,5 см (каждый)','6,5 мл каждый','3.5 × 2.5 × 1.5 cm (each)','6.5 mL each']
+  ['Головной мозг','Brain','1300 г','1440 г','1300 g','1440 g'],
+  ['Сердце','Heart','12 × 8,5 × 6 см · 300 г','12 × 8,5 × 6 см · 380 г','12 × 8.5 × 6 cm · 300 g','12 × 8.5 × 6 cm · 380 g'],
+  ['Правое лёгкое','Right lung','высота 24 см · 400 г','высота 24 см · 525 г','height 24 cm · 400 g','height 24 cm · 525 g'],
+  ['Левое лёгкое','Left lung','высота 24 см · 340 г','высота 24 см · 460 г','height 24 cm · 340 g','height 24 cm · 460 g'],
+  ['Трахея','Trachea','11 × 1,8 см','11 × 1,8 см','11 × 1.8 cm','11 × 1.8 cm'],
+  ['Пищевод','Esophagus','длина 29 см · ⌀ 1,9 см','длина 29 см · ⌀ 1,9 см','length 29 cm · ⌀ 1.9 cm','length 29 cm · ⌀ 1.9 cm'],
+  ['Печень','Liver','CC 11,5 см; попереч. 21,5 см · 1500 г','CC 11,5 см; попереч. 21,5 см · 1754 г','CC 11.5 cm; transv. 21.5 cm · 1500 g','CC 11.5 cm; transv. 21.5 cm · 1754 g'],
+  ['Жёлчный пузырь','Gallbladder','8,5 × 3,5 см · 50 мл · стенка 2 мм','8,5 × 3,5 см · 50 мл · стенка 2 мм','8.5 × 3.5 cm · 50 mL · wall 2 mm','8.5 × 3.5 cm · 50 mL · wall 2 mm'],
+  ['Селезёнка','Spleen','12 × 7,5 × 2,5 см · 130 г','12 × 7,5 × 2,5 см · 170 г','12 × 7.5 × 2.5 cm · 130 g','12 × 7.5 × 2.5 cm · 170 g'],
+  ['Поджелудочная железа','Pancreas','длина 16 см (головка 2,2 / тело 1,1 / хвост 2,1 см AP)','то же','length 16 cm (head 2.2 / body 1.1 / tail 2.1 cm AP)','same'],
+  ['Правая почка','Right kidney','11 × 4 × 3 см · 130 г','12 × 4,5 × 3 см · 160 г','11 × 4 × 3 cm · 130 g','12 × 4.5 × 3 cm · 160 g'],
+  ['Левая почка','Left kidney','11,2 × 4 × 3 см · 130 г','12,2 × 4,5 × 3 см · 170 г','11.2 × 4 × 3 cm · 130 g','12.2 × 4.5 × 3 cm · 170 g'],
+  ['Надпочечник (каждый)','Adrenal gland (each)','4,5 × 3 × 0,8 см','4,5 × 3 × 0,8 см','4.5 × 3 × 0.8 cm','4.5 × 3 × 0.8 cm'],
+  ['Щитовидная, доля','Thyroid lobe','5 × 1,6 × 1,5 см','5 × 1,6 × 1,5 см','5 × 1.6 × 1.5 cm','5 × 1.6 × 1.5 cm'],
+  ['Щитовидная, объём','Thyroid volume','12 мл','15 мл','12 mL','15 mL'],
+  ['Перешеек щитовидной','Thyroid isthmus','толщина 0,3 см','толщина 0,3 см','thickness 0.3 cm','thickness 0.3 cm'],
+  ['Гипофиз','Pituitary','высота 9 мм','высота 8 мм','height 9 mm','height 8 mm'],
+  ['Эпифиз','Pineal gland','7 × 6 × 3 мм','7 × 6 × 3 мм','7 × 6 × 3 mm','7 × 6 × 3 mm'],
+  ['Паращитовидная (одна)','Parathyroid (one)','6,5 × 5 × 3,5 мм','6,5 × 5 × 3,5 мм','6.5 × 5 × 3.5 mm','6.5 × 5 × 3.5 mm'],
+  ['Тимус (взрослый)','Thymus (adult)','толщина 1,0 см','толщина 1,0 см','thickness 1.0 cm','thickness 1.0 cm'],
+  ['Желудок, пустой','Stomach (empty)','45 мл · стенка 2–3 мм','45 мл · стенка 2–3 мм','45 mL · wall 2–3 mm','45 mL · wall 2–3 mm'],
+  ['Желудок, наполненный','Stomach (filled)','290 мл','290 мл','290 mL','290 mL'],
+  ['Двенадцатиперстная кишка','Duodenum','длина 27 см','длина 27 см','length 27 cm','length 27 cm'],
+  ['Тонкая кишка','Small intestine','длина 670 см · ⌀ 2,5 см','длина 670 см · ⌀ 2,5 см','length 670 cm · ⌀ 2.5 cm','length 670 cm · ⌀ 2.5 cm'],
+  ['Толстая кишка','Colon','длина 155 см','длина 145 см','length 155 cm','length 145 cm'],
+  ['Мочеточник (каждый)','Ureter (each)','длина 26 см','длина 26 см','length 26 cm','length 26 cm'],
+  ['Мочевой пузырь','Bladder','350 мл (емкость)','350 мл (емкость)','350 mL (capacity)','350 mL (capacity)'],
+  ['Матка (нерожавшая)','Uterus (nulliparous)','7,2 × 4,0 × 3,0 см · 50 мл','—','7.2 × 4.0 × 3.0 cm · 50 mL','—'],
+  ['Шейка матки','Cervix','длина 3 см','—','length 3 cm','—'],
+  ['Яичник (каждый)','Ovary (each)','3,5 × 2,5 × 1,5 см · 6,5 мл','—','3.5 × 2.5 × 1.5 cm · 6.5 mL','—'],
+  ['Маточная труба (каждая)','Fallopian tube (each)','длина 11 см · ⌀ 2 мм','—','length 11 cm · ⌀ 2 mm','—'],
+  ['Влагалище','Vagina','длина 6,3 см · ширина 3,25 см','—','length 6.3 cm · width 3.25 cm','—'],
+  ['Женская уретра','Female urethra','длина 4 см','—','length 4 cm','—'],
+  ['Предстательная железа','Prostate','—','3 × 4 × 2 см · 25 мл','—','3 × 4 × 2 cm · 25 mL'],
+  ['Яичко (каждое)','Testis (each)','—','4 × 3 × 2,5 см · 20 мл','—','4 × 3 × 2.5 cm · 20 mL'],
+  ['Придаток яичка','Epididymis','—','длина 6,5 см','—','length 6.5 cm'],
+  ['Семенной пузырёк (каждый)','Seminal vesicle (each)','—','длина 4,5 см · ⌀ 1,5 см','—','length 4.5 cm · ⌀ 1.5 cm'],
+  ['Мужская уретра','Male urethra','—','длина 19 см','—','length 19 cm']
 ];
 
 /* Muted pastel palette — distinct hues, not bright on dark UI */
@@ -60,17 +82,17 @@ const I18N={
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · эталон: нерожавшая женщина (30 л, 165 см, 65 кг) · подписи — органы с проектами · таз unisex (♂+♀)',
+    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · эталон Ж/М (см. «О проекте») · подписи — органы с проектами · таз unisex (♂+♀)',
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
     aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
     sysRefTitle:'Основные системы органов (MSD Manual)',
     refTitle:'Референс-размеры органов (эталон атласа)',
-    refSubject:'Эталон: взрослая нерожавшая небеременная женщина · 30 лет · 165 см · 65 кг',
-    refClinical:'value_type = atlas_central_reference · clinical_use = not_for_diagnosis. Одно центральное значение для единообразия карты, не клиническая норма (без поправки на рост, вес, возраст, метод измерения).',
-    refColOrgan:'Орган',refColSize:'Размер',refColMass:'Масса / объём',
-    refSources:'Источники: Radiology Key (матка, яичник), CAP organ-weight tables, Radiopaedia, консенсус по мочевому пузырю (PMC), Cleveland Clinic (длины ЖКТ), NLM Visible Human Project (основа 3D-анатомии).',
+    refSubject:'Модели: Ж — нерожавшая небеременная, 30 л, 165 см, 65 кг · М — 30 л, 175 см, 80 кг',
+    refClinical:'value_type = central_atlas_reference · clinical_use = false. Одно центральное значение на орган для единообразия карты, не клиническая норма (без поправки на рост, вес, возраст, метод измерения).',
+    refColOrgan:'Орган',refColFemale:'Женщина',refColMale:'Мужчина',
+    refSources:'Источники: CAP organ-weight tables (массы), Radiopaedia / Radiology Key (линейные размеры), Cleveland Clinic / StatPearls (ЖКТ и мочевыделение), PubMed-радиология, NLM Visible Human Project (3D-координаты).',
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
     m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
@@ -123,17 +145,17 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Anterior view · reference: nulliparous female (30 y, 165 cm, 65 kg) · labels = organs with projects · unisex pelvis (M+F)',
+    about:'About',close:'Close',bodyCap:'Anterior view · F/M reference (see About) · labels = organs with projects · unisex pelvis (M+F)',
     noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
     aboutP2:'Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.',
     sysRefTitle:'Major organ systems (MSD Manual)',
     refTitle:'Reference organ sizes (atlas central reference)',
-    refSubject:'Reference: adult nulliparous non-pregnant female · 30 y · 165 cm · 65 kg',
-    refClinical:'value_type = atlas_central_reference · clinical_use = not_for_diagnosis. A single central value for map consistency, not a clinical norm (no adjustment for height, weight, age, or measurement method).',
-    refColOrgan:'Organ',refColSize:'Size',refColMass:'Mass / volume',
-    refSources:'Sources: Radiology Key (uterus, ovary), CAP organ-weight tables, Radiopaedia, bladder consensus (PMC), Cleveland Clinic (GI lengths), NLM Visible Human Project (3D anatomy basis).',
+    refSubject:'Models: F — nulliparous non-pregnant, 30 y, 165 cm, 65 kg · M — 30 y, 175 cm, 80 kg',
+    refClinical:'value_type = central_atlas_reference · clinical_use = false. One central value per organ for map consistency, not a clinical norm (no adjustment for height, weight, age, or measurement method).',
+    refColOrgan:'Organ',refColFemale:'Female',refColMale:'Male',
+    refSources:'Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes), Cleveland Clinic / StatPearls (GI & urinary), PubMed radiology, NLM Visible Human Project (3D coords).',
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
     m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
@@ -338,10 +360,10 @@ function renderOrganRef(){
   const el=document.getElementById('organRefTable');
   if(!el) return;
   const isRu=lang==='ru';
-  const rows=ORGAN_REF.map(([k,sRu,mRu,sEn,mEn])=>
-    `<tr><td>${esc(organDisplayName(k))}</td><td>${esc(isRu?sRu:sEn)}</td><td>${esc(isRu?mRu:mEn)}</td></tr>`).join('');
+  const rows=ORGAN_REF.map(([ruN,enN,fRu,mRu,fEn,mEn])=>
+    `<tr><td>${esc(isRu?ruN:enN)}</td><td>${esc(isRu?fRu:fEn)}</td><td>${esc(isRu?mRu:mEn)}</td></tr>`).join('');
   el.innerHTML=`<p class="ref-subject">${esc(t('refSubject'))}</p>`+
-    `<table class="sys-ref"><thead><tr><th>${t('refColOrgan')}</th><th>${t('refColSize')}</th><th>${t('refColMass')}</th></tr></thead><tbody>${rows}</tbody></table>`+
+    `<table class="sys-ref"><thead><tr><th>${t('refColOrgan')}</th><th>${t('refColFemale')}</th><th>${t('refColMale')}</th></tr></thead><tbody>${rows}</tbody></table>`+
     `<p class="ref-clinical">${esc(t('refClinical'))}</p>`+
     `<p class="ref-sources">${esc(t('refSources'))}</p>`;
 }
