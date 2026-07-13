@@ -141,15 +141,21 @@ const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
 const FEMALE_ONLY=new Set(['Uterus','Ovary','Cervix','Breast']);
 const MALE_ONLY=new Set(['Prostate','Testis']);
 const MAP_MODE='dual'; /* 'dual' | 'single' — set 'single' to restore one combined body */
+const MAP_CLEAN_DUAL=true; /* dual: two bodies only — click organ → detail panel (no side list / map labels) */
+/* Dual-map layout (used when MAP_CLEAN_DUAL is false) */
+const DUAL_VIEW_L=-110, DUAL_VIEW_W=1070;
+const DUAL_FEMALE_X=12, DUAL_MALE_X=502, DUAL_DIVIDER_X=502;
+const DUAL_LABEL_L_X=-78, DUAL_LABEL_R_X=462;
+const DUAL_TURN_L_X=118, DUAL_TURN_R_X=358;
 
 const I18N={
   ru:{
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · вид спереди',
+    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) — клик по органу на теле',
     noMapProjects:'Нет проектов при текущем фильтре',
-    pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
+    pickOrgan:'Кликни по цветному органу на теле',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
     aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
     sysRefTitle:'Основные системы органов (MSD Manual)',
@@ -221,9 +227,9 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · anterior view',
+    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) — click an organ on the body',
     noMapProjects:'No projects with current filters',
-    pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
+    pickOrgan:'Click a colored organ on the body',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
     aboutP2:'Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.',
     sysRefTitle:'Major organ systems (MSD Manual)',
@@ -584,10 +590,16 @@ function initStaticIcons(){
 }
 function refreshAll(){
   initStaticIcons();
-  buildHeader();buildSidebar();renderBody();fillFilterSelects();renderLegend();
+  buildHeader();
+  const cleanDual=MAP_MODE==='dual'&&MAP_CLEAN_DUAL;
+  const app=document.querySelector('.app');
+  if(app) app.classList.toggle('map-click-only',cleanDual);
+  if(cleanDual) document.getElementById('lp').innerHTML='';
+  else buildSidebar();
+  renderBody();fillFilterSelects();renderLegend();
   renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
-  if(cap) cap.textContent=`${t('bodyCap')} · map ${MAP_BUILD}`;
+  if(cap) cap.textContent=cleanDual?t('bodyCap'):`${t('bodyCap')} · map ${MAP_BUILD}`;
   if(selOrgan&&C[selOrgan]) sel(selOrgan);
 }
 function fillFilterSelects(){
@@ -1695,13 +1707,13 @@ function organLabel(o, labelY, forceSide){
   const a=ANATOMY[o];
   const dualSide=forceSide==='L'||forceSide==='R';
   const isL=forceSide==='L'?true:forceSide==='R'?false:a.side==='L';
-  const labelX=isL?30:450;
+  const labelX=dualSide?(isL?DUAL_LABEL_L_X:DUAL_LABEL_R_X):(isL?30:450);
   const anchor=isL?'start':'end';
   const name=organDisplayName(o).toUpperCase();
   const s=organStats(o);
   const ap=organAnchor(a);
   const ox=ap.x, oy=ap.y;
-  const turnX=isL?168:312;
+  const turnX=dualSide?(isL?DUAL_TURN_L_X:DUAL_TURN_R_X):(isL?168:312);
   const lineEnd=isL?labelX+4:labelX-4;
   const badge=organBadgeColor(o);
   const dotR=Math.max(3, Math.min(8, 2.2+Math.sqrt(s.n)*0.6));
@@ -1855,16 +1867,22 @@ function mapOrgansForSex(sex){
 function buildFigurePanel(sex,offsetX){
   const allMap=mapOrgansForSex(sex);
   const active=allMap.filter(o=>organCount(o)>0);
+  const cleanDual=MAP_MODE==='dual'&&MAP_CLEAN_DUAL;
   const labelSide=sex==='female'?'L':'R';
   const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
-  const labelY=assignLabelPositions(active,labelSide);
-  const ymap=labelY[labelSide];
-  const orderedY=o=>ymap[o]||organAnchor(ANATOMY[o]).y;
+  let labelsSvg='';
+  if(!cleanDual){
+    const labelY=assignLabelPositions(active,labelSide);
+    const ymap=labelY[labelSide];
+    const orderedY=o=>ymap[o]||organAnchor(ANATOMY[o]).y;
+    labelsSvg=`<g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o),labelSide)).join('')}</g>`;
+  }
+  const ghostSvg=cleanDual?'':allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('');
   return `<g class="figure-panel figure-${sex}" transform="translate(${offsetX},0)">
     ${bodySilhouetteSex(sex)}
     ${bodyCavities()}
-    <g class="organs-layer">${drawOrder.map(organGroup).join('')}${allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('')}</g>
-    <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o),labelSide)).join('')}</g>
+    <g class="organs-layer">${drawOrder.map(organGroup).join('')}${ghostSvg}</g>
+    ${labelsSvg}
   </g>`;
 }
 
@@ -1887,12 +1905,18 @@ function renderBodySingle(){
 }
 
 function renderBodyDual(){
-  const divider=`<line x1="480" y1="16" x2="480" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
+  const cleanDual=MAP_CLEAN_DUAL;
+  const viewL=cleanDual?0:DUAL_VIEW_L;
+  const viewW=cleanDual?960:DUAL_VIEW_W;
+  const femX=cleanDual?0:DUAL_FEMALE_X;
+  const maleX=cleanDual?480:DUAL_MALE_X;
+  const divX=cleanDual?480:DUAL_DIVIDER_X;
+  const divider=`<line x1="${divX}" y1="16" x2="${divX}" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="${viewL} 0 ${viewW} 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
     ${divider}
-    ${buildFigurePanel('female',0)}
-    ${buildFigurePanel('male',480)}
+    ${buildFigurePanel('female',femX)}
+    ${buildFigurePanel('male',maleX)}
   </svg>`;
   bindMapClicks();
 }
