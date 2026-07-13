@@ -122,19 +122,14 @@ const FEMALE_ONLY=new Set(['Uterus','Ovary','Cervix','Breast']);
 const MALE_ONLY=new Set(['Prostate','Testis']);
 const MAP_MODE='dual'; /* 'dual' | 'single' — set 'single' to restore one combined body */
 const MAP_HIDE_SIDEBAR=true; /* dual: hide left organ list (Nervous, Digestive, …) */
-const MAP_DUAL_LABELS=true; /* dual: organ labels with leader lines (female ← left, male → right) */
-/* Dual-map layout — room for outer labels */
-const DUAL_VIEW_L=-110, DUAL_VIEW_W=1070;
-const DUAL_FEMALE_X=12, DUAL_MALE_X=502, DUAL_DIVIDER_X=502;
-const DUAL_LABEL_L_X=-78, DUAL_LABEL_R_X=462;
-const DUAL_TURN_L_X=118, DUAL_TURN_R_X=358;
+const MAP_DUAL_LABELS=true; /* dual: organ labels L+R per figure (white, full size) */
 
 const I18N={
   ru:{
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи снаружи · клик по органу',
+    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи слева и справа',
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в подписи',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
@@ -1664,33 +1659,29 @@ function organInlineGhostLabel(o){
   return `<text x="${ap.x}" y="${ap.y+3}" text-anchor="middle" class="ghost-inline" pointer-events="none">${organDisplayName(o)}</text>`;
 }
 
-function organLabel(o, labelY, forceSide){
+function organLabel(o, labelY){
   if(!organCount(o)||!mapOrganVisible(o)) return '';
   const a=ANATOMY[o];
-  const dualSide=forceSide==='L'||forceSide==='R';
-  const isL=forceSide==='L'?true:forceSide==='R'?false:a.side==='L';
-  const labelX=dualSide?(isL?DUAL_LABEL_L_X:DUAL_LABEL_R_X):(isL?30:450);
+  const isL=a.side==='L';
+  const labelX=isL?22:458;
   const anchor=isL?'start':'end';
   const name=organDisplayName(o).toUpperCase();
   const s=organStats(o);
   const ap=organAnchor(a);
   const ox=ap.x, oy=ap.y;
-  const turnX=dualSide?(isL?DUAL_TURN_L_X:DUAL_TURN_R_X):(isL?168:312);
+  const turnX=isL?162:318;
   const lineEnd=isL?labelX+4:labelX-4;
   const badge=organBadgeColor(o);
-  const dotR=Math.max(3, Math.min(8, 2.2+Math.sqrt(s.n)*0.6));
-  const panTag=s.nPan?` · ${s.nPan}p`:'';
-  const countTxt=dualSide
-    ?`${s.n} · ${s.nC}C/${s.nN}N${panTag}`
-    :`${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}`;
+  const dotR=Math.max(3.5, Math.min(9, 2.4+Math.sqrt(s.n)*0.65));
+  const panTag=s.nPan?` · ${s.nPan} pan`:'';
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   const lead=`M ${ox} ${oy} L ${turnX} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}`;
-  const tx=labelX+(isL?12:-12);
-  return `<g class="lbl-g${dualSide?' lbl-compact':''}" data-cb="${o}" ${eh}>
+  const tx=labelX+(isL?14:-14);
+  return `<g class="lbl-g" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="${lead}"/>
-    <circle class="lbl-dot-label" cx="${labelX}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.45)" stroke-width=".5" transform="translate(${isL?5:-5},0)"/>
+    <circle class="lbl-dot-label" cx="${labelX}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.55)" stroke-width=".6" transform="translate(${isL?6:-6},0)"/>
     <text class="lbl-name" x="${tx}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${tx}" y="${labelY+7}" text-anchor="${anchor}">${countTxt}</text>
+    <text class="lbl-count" x="${tx}" y="${labelY+9}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
   </g>`;
 }
 
@@ -1829,17 +1820,18 @@ function mapOrgansForSex(sex){
 function buildFigurePanel(sex,offsetX){
   const allMap=mapOrgansForSex(sex);
   const active=allMap.filter(o=>organCount(o)>0);
-  const showLabels=MAP_MODE==='dual'&&MAP_DUAL_LABELS;
-  const labelSide=sex==='female'?'L':'R';
   const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
   let labelsSvg='';
-  if(showLabels){
-    const labelY=assignLabelPositions(active,labelSide);
-    const ymap=labelY[labelSide];
-    const orderedY=o=>ymap[o]||organAnchor(ANATOMY[o]).y;
-    labelsSvg=`<g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o),labelSide)).join('')}</g>`;
+  if(MAP_MODE==='dual'&&MAP_DUAL_LABELS){
+    const labelY=assignLabelPositions(active);
+    const orderedY=o=>{
+      const a=ANATOMY[o];
+      const ymap=a.side==='L'?labelY.L:labelY.R;
+      return ymap[o]||organAnchor(a).y;
+    };
+    labelsSvg=`<g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>`;
   }
-  const ghostSvg=showLabels?'':allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('');
+  const ghostSvg=MAP_DUAL_LABELS?'':allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('');
   return `<g class="figure-panel figure-${sex}" transform="translate(${offsetX},0)">
     ${bodySilhouetteSex(sex)}
     ${bodyCavities()}
@@ -1867,18 +1859,12 @@ function renderBodySingle(){
 }
 
 function renderBodyDual(){
-  const showLabels=MAP_DUAL_LABELS;
-  const viewL=showLabels?DUAL_VIEW_L:0;
-  const viewW=showLabels?DUAL_VIEW_W:960;
-  const femX=showLabels?DUAL_FEMALE_X:0;
-  const maleX=showLabels?DUAL_MALE_X:480;
-  const divX=showLabels?DUAL_DIVIDER_X:480;
-  const divider=`<line x1="${divX}" y1="16" x2="${divX}" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
+  const divider=`<line x1="480" y1="16" x2="480" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="${viewL} 0 ${viewW} 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
     ${divider}
-    ${buildFigurePanel('female',femX)}
-    ${buildFigurePanel('male',maleX)}
+    ${buildFigurePanel('female',0)}
+    ${buildFigurePanel('male',480)}
   </svg>`;
   bindMapClicks();
 }
