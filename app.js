@@ -552,6 +552,7 @@ function refreshAll(){
   const uvp=document.getElementById('uvp');
   if(uvp) uvp.style.display=hideSide?'none':'';
   if(app) app.classList.toggle('map-click-only',hideSide);
+  document.body.classList.toggle('map-layout',hideSide);
   const lp=document.getElementById('lp');
   if(lp){
     if(hideSide){ lp.innerHTML=''; lp.setAttribute('aria-hidden','true'); }
@@ -2015,7 +2016,6 @@ function sel(o){
   const dc=document.getElementById('dc');
   dc.innerHTML=h;
   dc.scrollTo({top:0,behavior:'smooth'});
-  dc.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   requestAnimationFrame(()=>{
     try{
