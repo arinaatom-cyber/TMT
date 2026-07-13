@@ -133,7 +133,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 .app.map-click-only .body-col{flex:1 1 auto;min-width:0;max-width:calc(100% - 288px)}
 .app.map-click-only .detail{flex:0 0 280px;width:280px;max-width:280px;position:sticky;top:72px;transition:flex .2s,width .2s}
 .app.map-click-only .detail:has(.placeholder){flex:0 0 0;width:0;max-width:0;padding:0;border:0;overflow:hidden;opacity:0;pointer-events:none}
-.app.map-click-only:has(.detail .placeholder) .body-col{max-width:100%}
+.app.map-click-only:has(.detail .placeholder) .body-col{max-width:100%;align-items:center}
+.app.map-click-only:has(.detail .placeholder) .body-wrap{width:100%;max-width:min(1040px,100%)}
 .panel,.body-col,.detail{min-width:0}
 @media(max-width:1100px){
   .app.map-click-only{flex-direction:column}
