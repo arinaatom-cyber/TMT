@@ -123,6 +123,8 @@ const MALE_ONLY=new Set(['Prostate','Testis']);
 const MAP_MODE='dual'; /* 'dual' | 'single' — set 'single' to restore one combined body */
 const MAP_HIDE_SIDEBAR=true; /* dual: hide left organ list (Nervous, Digestive, …) */
 const MAP_DUAL_LABELS=true; /* dual: organ labels L+R per figure (white, full size) */
+const MAP_DUAL_PAD_L=36;
+const MAP_DUAL_GAP=24;
 
 const I18N={
   ru:{
@@ -553,6 +555,8 @@ function refreshAll(){
     if(hideSide){ lp.innerHTML=''; lp.setAttribute('aria-hidden','true'); }
     else{ lp.removeAttribute('aria-hidden'); buildSidebar(); }
   }
+  const uvp=document.getElementById('uvp');
+  if(uvp) uvp.style.display=hideSide?'none':'';
   renderBody();fillFilterSelects();renderLegend();
   renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
@@ -653,6 +657,8 @@ function buildHeader(){
   }
 }
 function buildSidebar(){
+  const lp=document.getElementById('lp');
+  if(!lp) return;
   let h=`<div class="search"><span class="si">${iconSvg('search','ico ico-search')}</span><input placeholder="${esc(t('searchOrgan'))}" oninput="filtSidebar(this.value)"></div>`;
   GRP.forEach(g=>{
     const items=g.o.filter(o=>(C[o]||0)>0&&rowMatchesSidebar(o));
@@ -664,7 +670,7 @@ function buildSidebar(){
     });
     h+=`</div></div>`;
   });
-  document.getElementById('lp').innerHTML=h;
+  lp.innerHTML=h;
 }
 function filtSidebar(q){
   const s=(q||'').toLowerCase();
@@ -1859,12 +1865,16 @@ function renderBodySingle(){
 }
 
 function renderBodyDual(){
-  const divider=`<line x1="480" y1="16" x2="480" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
+  const pad=MAP_DUAL_PAD_L;
+  const gap=MAP_DUAL_GAP;
+  const maleX=pad+480+gap;
+  const totalW=maleX+480;
+  const divider=`<line x1="${pad+480+gap/2}" y1="16" x2="${pad+480+gap/2}" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 ${totalW} 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMinYMid meet">
     ${divider}
-    ${buildFigurePanel('female',0)}
-    ${buildFigurePanel('male',480)}
+    ${buildFigurePanel('female',pad)}
+    ${buildFigurePanel('male',maleX)}
   </svg>`;
   bindMapClicks();
 }
