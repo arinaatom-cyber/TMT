@@ -203,7 +203,7 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · outer labels · click an organ',
+    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · labels on both sides',
     noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or its label',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
@@ -1677,11 +1677,11 @@ function organLabel(o, labelY){
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
   const lead=`M ${ox} ${oy} L ${turnX} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}`;
   const tx=labelX+(isL?14:-14);
-  return `<g class="lbl-g" data-cb="${o}" ${eh}>
+  return `<g class="lbl-g" data-cb="${o}" opacity="0.95" ${eh}>
     <path class="lbl-lead" d="${lead}"/>
     <circle class="lbl-dot-label" cx="${labelX}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.55)" stroke-width=".6" transform="translate(${isL?6:-6},0)"/>
-    <text class="lbl-name" x="${tx}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${tx}" y="${labelY+9}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
+    <text class="lbl-name" fill="#e8ecf4" font-size="11" font-weight="700" font-family="Inter,sans-serif" x="${tx}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
+    <text class="lbl-count" fill="#c5cdd8" font-size="8.5" font-family="Inter,sans-serif" x="${tx}" y="${labelY+9}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
   </g>`;
 }
 
