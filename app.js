@@ -1651,15 +1651,8 @@ function organStats(o){
 /* assign label Y positions with no overlap, separately for each side */
 function organAnchor(a){return a.anchor||a.pos;}
 
-function assignLabelPositions(active){
-  const MIN_GAP=40, TOP=40, BOTTOM=620;
-  const L=[],R=[];
-  active.forEach(o=>{
-    const a=ANATOMY[o];
-    const p=organAnchor(a);
-    const targetY=p.y;
-    (a.side==='L'?L:R).push({o,y:targetY});
-  });
+function assignLabelPositions(active, forceSide){
+  const MIN_GAP=forceSide?34:40, TOP=40, BOTTOM=620;
   function layout(arr){
     arr.sort((a,b)=>a.y-b.y);
     let prev=TOP-MIN_GAP;
@@ -1667,11 +1660,21 @@ function assignLabelPositions(active){
       it.y=Math.max(it.y,prev+MIN_GAP);
       prev=it.y;
     });
-    /* push down past bottom if needed */
     const excess=arr.length?arr[arr.length-1].y-BOTTOM:0;
     if(excess>0) arr.forEach(it=>it.y-=excess);
     return Object.fromEntries(arr.map(it=>[it.o,it.y]));
   }
+  if(forceSide==='L'||forceSide==='R'){
+    const arr=active.map(o=>{const p=organAnchor(ANATOMY[o]); return {o,y:p.y};});
+    const laid=layout(arr);
+    return forceSide==='L'?{L:laid,R:{}}:{L:{},R:laid};
+  }
+  const L=[],R=[];
+  active.forEach(o=>{
+    const a=ANATOMY[o];
+    const p=organAnchor(a);
+    (a.side==='L'?L:R).push({o,y:p.y});
+  });
   return {L:layout(L),R:layout(R)};
 }
 
@@ -1687,29 +1690,33 @@ function organInlineGhostLabel(o){
   return `<text x="${ap.x}" y="${ap.y+3}" text-anchor="middle" class="ghost-inline" pointer-events="none">${organDisplayName(o)}</text>`;
 }
 
-function organLabel(o, labelY){
+function organLabel(o, labelY, forceSide){
   if(!organCount(o)||!mapOrganVisible(o)) return '';
   const a=ANATOMY[o];
-  const isL=a.side==='L';
-  const labelX=isL?22:458;
+  const dualSide=forceSide==='L'||forceSide==='R';
+  const isL=forceSide==='L'?true:forceSide==='R'?false:a.side==='L';
+  const labelX=isL?30:450;
   const anchor=isL?'start':'end';
   const name=organDisplayName(o).toUpperCase();
   const s=organStats(o);
   const ap=organAnchor(a);
   const ox=ap.x, oy=ap.y;
-  const turnX=isL?162:318;
+  const turnX=isL?168:312;
   const lineEnd=isL?labelX+4:labelX-4;
   const badge=organBadgeColor(o);
   const dotR=Math.max(3, Math.min(8, 2.2+Math.sqrt(s.n)*0.6));
-  const panTag=s.nPan?` · ${s.nPan} pan`:'';
+  const panTag=s.nPan?` · ${s.nPan}p`:'';
+  const countTxt=dualSide
+    ?`${s.n} · ${s.nC}C/${s.nN}N${panTag}`
+    :`${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}`;
   const eh=`onclick="sel('${o}')" onmouseenter="st(event,'${o}')" onmouseleave="ht()"`;
-  /* elbow at organ Y first — avoids diagonal lines into wrong organs when labelY is stacked */
   const lead=`M ${ox} ${oy} L ${turnX} ${oy} L ${turnX} ${labelY} L ${lineEnd} ${labelY}`;
-  return `<g class="lbl-g" data-cb="${o}" ${eh}>
+  const tx=labelX+(isL?12:-12);
+  return `<g class="lbl-g${dualSide?' lbl-compact':''}" data-cb="${o}" ${eh}>
     <path class="lbl-lead" d="${lead}"/>
-    <circle class="lbl-dot-label" cx="${labelX+(isL?0:0)}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.45)" stroke-width=".5" transform="translate(${isL?6:-6},0)"/>
-    <text class="lbl-name" x="${labelX+(isL?14:-14)}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" x="${labelX+(isL?14:-14)}" y="${labelY+8}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
+    <circle class="lbl-dot-label" cx="${labelX}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.45)" stroke-width=".5" transform="translate(${isL?5:-5},0)"/>
+    <text class="lbl-name" x="${tx}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
+    <text class="lbl-count" x="${tx}" y="${labelY+7}" text-anchor="${anchor}">${countTxt}</text>
   </g>`;
 }
 
@@ -1792,8 +1799,16 @@ function bodySilhouetteSex(sex){
     armR=`M 296 144 Q 320 152 332 188 L 340 260 Q 344 310 336 350 L 326 384
           Q 320 396 310 392 L 300 388 Q 300 366 306 348 L 314 280 Q 314 240
           306 200 Q 300 168 288 152 Z`;
-    legL=`M 214 370 Q 208 410 Q 202 500 200 580 Q 198 650 196 700 L 176 700 Q 172 650 176 580 Q 182 500 198 410 L 214 370 Z`;
-    legR=`M 266 370 L 272 410 Q 278 500 280 580 Q 282 650 284 700 L 304 700 Q 308 650 304 580 Q 298 500 282 410 L 266 370 Z`;
+    legL=`M 214 370
+          Q 202 376 198 396 L 194 468 Q 192 528 196 578
+          L 202 624 Q 208 640 216 638 L 224 630
+          Q 226 556 229 482 L 232 412 Q 234 382 238 372
+          L 240 370 L 214 370 Z`;
+    legR=`M 266 370
+          Q 278 376 282 396 L 286 468 Q 288 528 284 578
+          L 278 624 Q 272 640 264 638 L 256 630
+          Q 254 556 251 482 L 248 412 Q 246 382 242 372
+          L 240 370 L 266 370 Z`;
     title='MALE · ANTERIOR VIEW';
   }else{
     torso=`M 218 130 Q 192 136 180 146 L 174 188 Q 176 230 180 270
@@ -1806,8 +1821,16 @@ function bodySilhouetteSex(sex){
     armR=`M 294 144 Q 314 154 324 188 L 332 260 Q 336 310 328 350 L 318 384
           Q 312 396 302 392 L 292 388 Q 292 366 298 348 L 306 280 Q 306 240
           298 200 Q 292 168 280 152 Z`;
-    legL=`M 206 370 L 200 410 Q 194 500 192 580 Q 190 650 188 700 L 168 700 Q 164 650 168 580 Q 174 500 192 410 L 206 370 Z`;
-    legR=`M 274 370 L 280 410 Q 286 500 288 580 Q 290 650 292 700 L 312 700 Q 316 650 312 580 Q 306 500 290 410 L 274 370 Z`;
+    legL=`M 206 370
+          Q 194 376 190 396 L 186 468 Q 184 528 188 578
+          L 194 624 Q 200 640 208 638 L 216 630
+          Q 218 556 221 482 L 224 412 Q 226 382 230 372
+          L 232 370 L 206 370 Z`;
+    legR=`M 274 370
+          Q 286 376 290 396 L 294 468 Q 296 528 292 578
+          L 286 624 Q 280 640 272 638 L 264 630
+          Q 262 556 259 482 L 256 412 Q 254 382 250 372
+          L 248 370 L 274 370 Z`;
     title='FEMALE · ANTERIOR VIEW';
   }
   const stroke='#c88888', fill='rgba(200,136,136,.09)';
@@ -1832,16 +1855,16 @@ function mapOrgansForSex(sex){
 function buildFigurePanel(sex,offsetX){
   const allMap=mapOrgansForSex(sex);
   const active=allMap.filter(o=>organCount(o)>0);
+  const labelSide=sex==='female'?'L':'R';
   const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
-  const labelY=assignLabelPositions(active);
-  const orderedY=o=>{
-    const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;
-  };
+  const labelY=assignLabelPositions(active,labelSide);
+  const ymap=labelY[labelSide];
+  const orderedY=o=>ymap[o]||organAnchor(ANATOMY[o]).y;
   return `<g class="figure-panel figure-${sex}" transform="translate(${offsetX},0)">
     ${bodySilhouetteSex(sex)}
     ${bodyCavities()}
     <g class="organs-layer">${drawOrder.map(organGroup).join('')}${allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('')}</g>
-    <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
+    <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o),labelSide)).join('')}</g>
   </g>`;
 }
 
@@ -1864,9 +1887,9 @@ function renderBodySingle(){
 }
 
 function renderBodyDual(){
-  const divider=`<line x1="480" y1="16" x2="480" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.65"/>`;
+  const divider=`<line x1="480" y1="16" x2="480" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="-16 0 976 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
+  <svg viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
     ${divider}
     ${buildFigurePanel('female',0)}
     ${buildFigurePanel('male',480)}
