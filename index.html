@@ -129,12 +129,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 @media(max-width:640px){.uvp{padding:8px 16px 0}.uvp h2{font-size:16px}}
 
 .app{max-width:100%;margin:0 auto;padding:12px 24px 20px;display:grid;grid-template-columns:minmax(220px,260px) minmax(360px,1fr) minmax(340px,1.15fr);gap:20px;align-items:start;min-height:calc(100vh - 120px)}
-.app.map-click-only{grid-template-columns:minmax(0,1fr) minmax(260px,320px);max-width:100%;gap:10px;padding:12px 16px 20px}
-.app.map-click-only #lp{display:none!important}
-.app.map-click-only .body-col{grid-column:1;align-items:flex-start;width:100%}
-.app.map-click-only .detail{grid-column:2;padding:8px 10px}
+.app.map-click-only{display:flex;flex-direction:row;align-items:flex-start;gap:8px;padding:8px 12px 16px;max-width:100%}
+.app.map-click-only .body-col{flex:1 1 auto;min-width:0;max-width:calc(100% - 288px)}
+.app.map-click-only .detail{flex:0 0 280px;width:280px;max-width:280px;position:sticky;top:72px;transition:flex .2s,width .2s}
+.app.map-click-only .detail:has(.placeholder){flex:0 0 0;width:0;max-width:0;padding:0;border:0;overflow:hidden;opacity:0;pointer-events:none}
+.app.map-click-only:has(.detail .placeholder) .body-col{max-width:100%}
 .panel,.body-col,.detail{min-width:0}
-@media(max-width:1200px){.app{grid-template-columns:1fr;max-width:820px;padding:16px}.body-col{order:-1}.toolbar{padding:10px 16px 0}.detail{scroll-margin-top:80px}.app.map-click-only #lp{display:none!important}}
+@media(max-width:1100px){
+  .app.map-click-only{flex-direction:column}
+  .app.map-click-only .body-col{max-width:100%}
+  .app.map-click-only .detail{flex:1 1 auto;width:100%;max-width:100%;position:static}
+}
 @media(min-width:1201px){
   .detail{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:8px 4px}
 }
@@ -160,7 +165,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 
 .body-col{display:flex;flex-direction:column;align-items:flex-start}
 .body-wrap{position:relative;width:100%;max-width:100%;overflow:visible}
-.body-wrap svg{width:100%;max-width:min(1040px,100%);height:auto;max-height:min(78vh,720px);display:block;margin:0;overflow:visible}
+.body-wrap svg{width:100%;max-width:100%;height:auto;max-height:min(82vh,740px);display:block;margin:0;overflow:visible}
+.app.map-click-only .material-chart-wrap{display:none}
+.app.map-click-only .body-caption{margin-top:6px}
 .anatomy-svg{overflow:visible}
 .anatomy-svg.anatomy-dual .lbl-g{opacity:.95!important}
 .anatomy-svg.anatomy-dual .lbl-name{font-size:11px!important;fill:#e8ecf4!important;font-weight:700;letter-spacing:.1em}
@@ -412,7 +419,6 @@ footer a{color:var(--accent);text-decoration:none}
 <div class="uvp" id="uvp"></div>
 
 <div class="app">
-  <div class="panel" id="lp"></div>
   <div class="body-col">
     <div class="body-wrap" id="bw"></div>
     <p class="body-caption" id="bodyCaption" data-i18n="bodyCap">Female (left) · Male (right) · labels on both sides</p>
