@@ -138,13 +138,16 @@ const PASTEL_PAN='#d4c48a';
 const PASTEL_MIXED='#c4a8d4';
 const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
   'Adipose_Tissue','Soft_Tissue','Multiple_Organs','Other','Muscle']);
+const FEMALE_ONLY=new Set(['Uterus','Ovary','Cervix','Breast']);
+const MALE_ONLY=new Set(['Prostate','Testis']);
+const MAP_MODE='dual'; /* 'dual' | 'single' — set 'single' to restore one combined body */
 
 const I18N={
   ru:{
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Вид спереди · эталон Ж/М (см. «О проекте») · подписи — органы с проектами · таз unisex (♂+♀)',
+    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · вид спереди',
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в списке',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
@@ -218,7 +221,7 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Anterior view · F/M reference (see About) · labels = organs with projects · unisex pelvis (M+F)',
+    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · anterior view',
     noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or list',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
@@ -1774,10 +1777,77 @@ function bodySilhouette(){
     </g>`;
 }
 
-function renderBody(){
+function bodySilhouetteSex(sex){
+  const head=`M 240 20 Q 272 20 274 50 Q 274 80 258 94 L 222 94 Q 206 80 206 50 Q 208 20 240 20 Z`;
+  const neck=`M 224 94 L 256 94 L 260 130 L 220 130 Z`;
+  let torso,armL,armR,legL,legR,title;
+  if(sex==='male'){
+    torso=`M 222 130 Q 196 132 184 142 L 178 186 Q 180 228 184 268
+           Q 186 300 192 332 Q 198 350 206 362 L 212 370 L 268 370 L 274 362
+           Q 282 350 288 332 Q 294 300 296 268 Q 300 228 302 188 L 296 144
+           Q 286 136 260 130 Z`;
+    armL=`M 184 144 Q 160 152 148 188 L 140 260 Q 136 310 144 350 L 154 384
+          Q 160 396 170 392 L 180 388 Q 180 366 174 348 L 166 280 Q 166 240
+          174 200 Q 180 168 192 152 Z`;
+    armR=`M 296 144 Q 320 152 332 188 L 340 260 Q 344 310 336 350 L 326 384
+          Q 320 396 310 392 L 300 388 Q 300 366 306 348 L 314 280 Q 314 240
+          306 200 Q 300 168 288 152 Z`;
+    legL=`M 214 370 Q 208 410 Q 202 500 200 580 Q 198 650 196 700 L 176 700 Q 172 650 176 580 Q 182 500 198 410 L 214 370 Z`;
+    legR=`M 266 370 L 272 410 Q 278 500 280 580 Q 282 650 284 700 L 304 700 Q 308 650 304 580 Q 298 500 282 410 L 266 370 Z`;
+    title='MALE · ANTERIOR VIEW';
+  }else{
+    torso=`M 218 130 Q 192 136 180 146 L 174 188 Q 176 230 180 270
+           Q 184 304 192 336 Q 200 352 206 362 L 210 370 L 270 370 L 276 362
+           Q 284 348 290 330 Q 296 300 300 270 Q 304 230 306 188 L 300 144
+           Q 288 132 262 130 Z`;
+    armL=`M 186 144 Q 166 154 156 188 L 148 260 Q 144 310 152 350 L 162 384
+          Q 168 396 178 392 L 188 388 Q 188 366 182 348 L 174 280 Q 174 240
+          182 200 Q 188 168 200 152 Z`;
+    armR=`M 294 144 Q 314 154 324 188 L 332 260 Q 336 310 328 350 L 318 384
+          Q 312 396 302 392 L 292 388 Q 292 366 298 348 L 306 280 Q 306 240
+          298 200 Q 292 168 280 152 Z`;
+    legL=`M 206 370 L 200 410 Q 194 500 192 580 Q 190 650 188 700 L 168 700 Q 164 650 168 580 Q 174 500 192 410 L 206 370 Z`;
+    legR=`M 274 370 L 280 410 Q 286 500 288 580 Q 290 650 292 700 L 312 700 Q 316 650 312 580 Q 306 500 290 410 L 274 370 Z`;
+    title='FEMALE · ANTERIOR VIEW';
+  }
+  const stroke='#c88888', fill='rgba(200,136,136,.09)';
+  return `
+    <g class="body-silhouette body-${sex}" pointer-events="none">
+      <path d="${head}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${neck}" fill="${fill}" stroke="${stroke}" stroke-width="1.15"/>
+      <path d="${torso}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${armL}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${armR}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${legL}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <path d="${legR}" fill="${fill}" stroke="${stroke}" stroke-width="1.15" stroke-linejoin="round"/>
+      <text x="240" y="10" text-anchor="middle" fill="#94a3b8" font-family="Inter,sans-serif" font-size="8" letter-spacing="3" font-weight="600">${title}</text>
+    </g>`;
+}
+
+function mapOrgansForSex(sex){
+  const exclude=sex==='female'?MALE_ONLY:FEMALE_ONLY;
+  return mapAnatomyOrgans().filter(o=>!exclude.has(o));
+}
+
+function buildFigurePanel(sex,offsetX){
+  const allMap=mapOrgansForSex(sex);
+  const active=allMap.filter(o=>organCount(o)>0);
+  const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
+  const labelY=assignLabelPositions(active);
+  const orderedY=o=>{
+    const a=ANATOMY[o]; const ymap=a.side==='L'?labelY.L:labelY.R; return ymap[o]||a.pos.y;
+  };
+  return `<g class="figure-panel figure-${sex}" transform="translate(${offsetX},0)">
+    ${bodySilhouetteSex(sex)}
+    ${bodyCavities()}
+    <g class="organs-layer">${drawOrder.map(organGroup).join('')}${allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('')}</g>
+    <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
+  </g>`;
+}
+
+function renderBodySingle(){
   const allMap=mapAnatomyOrgans();
   const active=allMap.filter(o=>organCount(o)>0);
-  /* Render all anatomy; ghost fill when no projects match filters */
   const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
   const labelY=assignLabelPositions(active);
   const orderedY=o=>{
@@ -1791,6 +1861,22 @@ function renderBody(){
     <g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o))).join('')}</g>
   </svg>`;
   bindMapClicks();
+}
+
+function renderBodyDual(){
+  const divider=`<line x1="480" y1="16" x2="480" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.65"/>`;
+  document.getElementById('bw').innerHTML=`
+  <svg viewBox="-16 0 976 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg" preserveAspectRatio="xMidYMid meet">
+    ${divider}
+    ${buildFigurePanel('female',0)}
+    ${buildFigurePanel('male',480)}
+  </svg>`;
+  bindMapClicks();
+}
+
+function renderBody(){
+  if(MAP_MODE==='dual') renderBodyDual();
+  else renderBodySingle();
 }
 
 function bindMapClicks(){
