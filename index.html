@@ -130,44 +130,40 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 
 .app{max-width:100%;margin:0 auto;padding:12px 24px 20px;display:grid;grid-template-columns:minmax(220px,260px) minmax(360px,1fr) minmax(340px,1.15fr);gap:20px;align-items:start;min-height:calc(100vh - 120px)}
 .app.map-click-only{
-  display:flex;
-  flex-direction:row;
-  flex-wrap:nowrap;
-  justify-content:center;
-  align-items:flex-start;
-  gap:12px;
-  max-width:100%;
-  margin:0 auto;
-  padding:4px 12px 12px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(300px,28vw,420px);
+  gap:10px;
+  align-items:start;
   width:100%;
+  max-width:100%;
+  margin:0;
+  padding:4px 0 12px 12px;
   min-height:0;
+  box-sizing:border-box;
 }
 .app.map-click-only .body-col{
-  flex:0 1 auto;
   min-width:0;
-  width:auto;
-  max-width:calc(100% - clamp(300px, 32vw, 420px) - 12px);
+  width:100%;
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:stretch;
   justify-content:flex-start;
 }
 .app.map-click-only .body-wrap{
-  width:fit-content;
+  width:100%;
   max-width:100%;
   margin:0;
 }
 .app.map-click-only .body-wrap svg{
-  width:auto;
+  width:100%;
   height:min(88vh,860px);
   max-width:100%;
   margin:0;
   display:block;
 }
 .app.map-click-only .detail{
-  flex:0 0 clamp(300px, 30vw, 400px);
-  width:clamp(300px, 30vw, 400px);
-  max-width:400px;
+  width:100%;
+  max-width:none;
   position:sticky;
   top:64px;
   padding:12px;
@@ -175,7 +171,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
   max-height:calc(100vh - 72px);
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:var(--radius);
+  border-right:none;
+  border-radius:var(--radius) 0 0 var(--radius);
   box-sizing:border-box;
   overflow-y:auto;
 }
@@ -195,13 +192,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 .panel,.body-col,.detail{min-width:0}
 body.map-layout .toolbar{max-width:none;padding:6px 12px 0}
 body.map-layout .valid-banner{max-width:none;padding:2px 12px 0}
-body.map-layout .header-inner{max-width:none}
+body.map-layout .header-inner{max-width:none;padding-right:0}
 body.map-layout .map-legend-bar{margin-top:2px;padding:6px 10px}
-body.map-layout .app{min-height:0}
+body.map-layout .app{min-height:0;padding-right:0}
 @media(max-width:1100px){
-  .app.map-click-only{flex-direction:column;align-items:stretch;padding:4px 10px 10px}
-  .app.map-click-only .body-col{max-width:100%}
-  .app.map-click-only .detail{position:static;flex:1 1 auto;width:100%;max-width:100%;max-height:none}
+  .app.map-click-only{grid-template-columns:1fr;padding:4px 10px 10px}
+  .app.map-click-only .detail{position:static;max-height:none;border-right:1px solid var(--border);border-radius:var(--radius)}
   .app.map-click-only .mstats{grid-template-columns:repeat(2,1fr)}
 }
 @media(min-width:1201px){
@@ -564,6 +560,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20260713-flex"></script>
+<script src="app.js?v=20260713-fullwidth"></script>
 </body>
 </html>
