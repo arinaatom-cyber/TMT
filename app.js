@@ -549,14 +549,14 @@ function refreshAll(){
   const dualMap=MAP_MODE==='dual';
   const hideSide=dualMap&&MAP_HIDE_SIDEBAR;
   const app=document.querySelector('.app');
+  const uvp=document.getElementById('uvp');
+  if(uvp) uvp.style.display=hideSide?'none':'';
   if(app) app.classList.toggle('map-click-only',hideSide);
   const lp=document.getElementById('lp');
   if(lp){
     if(hideSide){ lp.innerHTML=''; lp.setAttribute('aria-hidden','true'); }
     else{ lp.removeAttribute('aria-hidden'); buildSidebar(); }
   }
-  const uvp=document.getElementById('uvp');
-  if(uvp) uvp.style.display=hideSide?'none':'';
   renderBody();fillFilterSelects();renderLegend();
   renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
@@ -1871,7 +1871,7 @@ function renderBodyDual(){
   const totalW=maleX+480;
   const divider=`<line x1="${pad+480+gap/2}" y1="16" x2="${pad+480+gap/2}" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
   document.getElementById('bw').innerHTML=`
-  <svg viewBox="0 0 ${totalW} 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMinYMid meet">
+  <svg viewBox="0 0 ${totalW} 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
     ${divider}
     ${buildFigurePanel('female',pad)}
     ${buildFigurePanel('male',maleX)}
