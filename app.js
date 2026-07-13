@@ -54,26 +54,6 @@ if(typeof window!=='undefined'&&window.Chart&&Chart.defaults){
   Chart.defaults.color='#94a3b8';
 }
 
-/* Literature / data sources shown in the visible References section and About modal */
-const LITERATURE=[
-  {t:'MSD Manual (Merck Manual). Основные системы органов / Major organ systems.', u:'https://www.msdmanuals.com/ru/home/multimedia/table/основные-системы-органов'},
-  {t:'CAP. Reference Organ Weight Tables (массы органов по полу и массе тела).', u:'https://documents.cap.org/documents/cap-organ-weight-tables.pdf'},
-  {t:'Radiopaedia — radiology reference values (печень, селезёнка, почки, щитовидная, поджелудочная, таз, простата, яички).', u:'https://radiopaedia.org/'},
-  {t:'Radiology Key — The Normal Uterus / The Normal Ovary.', u:'https://radiologykey.com/the-normal-uterus/'},
-  {t:'Cleveland Clinic — Esophagus, Trachea, Lungs anatomy.', u:'https://my.clevelandclinic.org/health/body/21728-esophagus'},
-  {t:'NLM Visible Human Project (3D-координаты и положение органов).', u:'https://www.nlm.nih.gov/research/visible/visible_human.html'},
-  {t:'Strul H. et al. Why is colonoscopy more difficult in women? (длина толстой кишки).', u:'https://pubmed.ncbi.nlm.nih.gov/8635705/'},
-  {t:'Barnhart KT. et al. Baseline dimensions of the human vagina.', u:'https://pubmed.ncbi.nlm.nih.gov/16478763/'},
-  {t:'Lukacz ES. et al. A healthy bladder: a consensus statement (функциональная ёмкость).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC3206217/'},
-  {t:'Ultrasound of the prostate (TRUS reference, объём ~25 мл).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC2842183/'},
-  {t:'Normal heart size study (масса/размеры сердца).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC5075360/'},
-  {t:'Normal adrenal gland thickness on CT.', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC6319091/'},
-  {t:'Variations of the stomach in adults (морфометрия желудка).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC9515405/'},
-  {t:'StatPearls / NCBI — Anatomy, Abdomen and Pelvis: Duodenum.', u:'https://www.ncbi.nlm.nih.gov/books/NBK482390/'},
-  {t:'MRI of the penis (морфология вместо популяционной длины).', u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC3746407/'},
-  {t:'Данные проектов: PRIDE, CPTAC / PDC, ProteomeXchange, iProX, MassIVE, GTEx (PXD016999).', u:'https://www.ebi.ac.uk/pride/'}
-];
-
 /* Fixed atlas reference subjects — two central-reference models (NOT clinical norms).
    Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes),
    Cleveland Clinic / StatPearls (GI & urinary), PubMed radiology, NLM Visible Human (3D coords). */
@@ -163,7 +143,7 @@ const I18N={
     refSubject:'Модели: Ж — нерожавшая небеременная, 30 л, 165 см, 65 кг · М — 30 л, 175 см, 80 кг',
     refClinical:'value_type = central_atlas_reference · clinical_use = false. Одно центральное значение на орган для единообразия карты, не клиническая норма (без поправки на рост, вес, возраст, метод измерения).',
     refColOrgan:'Орган',refColFemale:'Женщина',refColMale:'Мужчина',
-    refSources:'Источники: CAP organ-weight tables (массы), Radiopaedia / Radiology Key (линейные размеры), Cleveland Clinic / StatPearls (ЖКТ и мочевыделение), PubMed-радиология, NLM Visible Human Project (3D-координаты).',
+    refSources:'Пропорции: CAP (массы), Radiopaedia / Radiology Key (размеры), Visible Human (3D). См. таблицу выше.',
     allOrgansTitle:'Все органы по системам',
     allOrgansHint:'Полный перечень органов (классификация MSD Manual). На карте показаны органы, которые можно изобразить на силуэте; остальные перечислены и подписаны здесь и в таблице референс-размеров («О проекте»).',
     litTitle:'Литература и источники',
@@ -237,7 +217,7 @@ const I18N={
     refSubject:'Models: F — nulliparous non-pregnant, 30 y, 165 cm, 65 kg · M — 30 y, 175 cm, 80 kg',
     refClinical:'value_type = central_atlas_reference · clinical_use = false. One central value per organ for map consistency, not a clinical norm (no adjustment for height, weight, age, or measurement method).',
     refColOrgan:'Organ',refColFemale:'Female',refColMale:'Male',
-    refSources:'Sources: CAP organ-weight tables (masses), Radiopaedia / Radiology Key (linear sizes), Cleveland Clinic / StatPearls (GI & urinary), PubMed radiology, NLM Visible Human Project (3D coords).',
+    refSources:'Proportions: CAP (masses), Radiopaedia / Radiology Key (sizes), Visible Human (3D). See table above.',
     allOrgansTitle:'All organs by system',
     allOrgansHint:'Full organ list (MSD Manual classification). Organs that can be drawn are shown on the silhouette; the rest are listed and labeled here and in the reference-size table (About).',
     litTitle:'Literature & sources',
@@ -501,30 +481,7 @@ const ORGAN_SYSTEMS=[
     {ru:'Молочная железа',en:'Breast',map:'Breast'},{ru:'Жировая ткань',en:'Adipose tissue'},
     {ru:'Мягкие ткани',en:'Soft tissue'}]}
 ];
-function renderAllOrgans(){
-  const el=document.getElementById('allOrgansList');
-  if(!el) return;
-  const isRu=lang==='ru';
-  const rows=ORGAN_SYSTEMS.map(g=>{
-    const chips=g.items.map(it=>{
-      const drawn=it.map&&ANATOMY[it.map]&&mapOrganVisible(it.map);
-      const tag=drawn?`<span class="oc-tag on">${t('mapOnly')}</span>`:`<span class="oc-tag off">${t('offMap')}</span>`;
-      return `<span class="organ-chip${drawn?' drawn':''}">${esc(isRu?it.ru:it.en)} ${tag}</span>`;
-    }).join('');
-    return `<tr><td>${esc(t(g.tKey))}</td><td><div class="organ-chips">${chips}</div></td></tr>`;
-  }).join('');
-  el.innerHTML=`<table class="sys-ref"><thead><tr><th>${isRu?'Система':'System'}</th><th>${isRu?'Органы':'Organs'}</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-function renderLiterature(){
-  const el=document.getElementById('litList');
-  if(!el) return;
-  el.innerHTML=LITERATURE.map(r=>`<li><a href="${r.u}" target="_blank" rel="noopener">${esc(r.t)}</a></li>`).join('');
-}
-function renderSiteSections(){
-  const hA=document.getElementById('allOrgansHint'); if(hA) hA.textContent=t('allOrgansHint');
-  const hL=document.getElementById('litHint'); if(hL) hL.textContent=t('litHint');
-  renderAllOrgans();renderLiterature();
-}
+function renderSiteSections(){ /* bottom sections removed — map-only UI */ }
 
 function renderOrganRef(){
   const el=document.getElementById('organRefTable');
