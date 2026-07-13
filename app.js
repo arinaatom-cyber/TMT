@@ -121,8 +121,9 @@ const SYSTEMIC=new Set(['Bone_Marrow','Lymph_Node','Nerve',
 const FEMALE_ONLY=new Set(['Uterus','Ovary','Cervix','Breast']);
 const MALE_ONLY=new Set(['Prostate','Testis']);
 const MAP_MODE='dual'; /* 'dual' | 'single' — set 'single' to restore one combined body */
-const MAP_CLEAN_DUAL=true; /* dual: two bodies only — click organ → detail panel (no side list / map labels) */
-/* Dual-map layout (used when MAP_CLEAN_DUAL is false) */
+const MAP_HIDE_SIDEBAR=true; /* dual: hide left organ list (Nervous, Digestive, …) */
+const MAP_DUAL_LABELS=true; /* dual: organ labels with leader lines (female ← left, male → right) */
+/* Dual-map layout — room for outer labels */
 const DUAL_VIEW_L=-110, DUAL_VIEW_W=1070;
 const DUAL_FEMALE_X=12, DUAL_MALE_X=502, DUAL_DIVIDER_X=502;
 const DUAL_LABEL_L_X=-78, DUAL_LABEL_R_X=462;
@@ -133,9 +134,9 @@ const I18N={
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
-    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) — клик по органу на теле',
+    about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи снаружи · клик по органу',
     noMapProjects:'Нет проектов при текущем фильтре',
-    pickOrgan:'Кликни по цветному органу на теле',footer:'Human Proteome Atlas · TMT протеомика',
+    pickOrgan:'Клик по органу на карте или в подписи',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
     aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
     sysRefTitle:'Основные системы органов (MSD Manual)',
@@ -207,9 +208,9 @@ const I18N={
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
-    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) — click an organ on the body',
+    about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · outer labels · click an organ',
     noMapProjects:'No projects with current filters',
-    pickOrgan:'Click a colored organ on the body',footer:'Human Proteome Atlas · TMT proteomics',
+    pickOrgan:'Click an organ on the map or its label',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
     aboutP2:'Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.',
     sysRefTitle:'Major organ systems (MSD Manual)',
@@ -548,15 +549,19 @@ function initStaticIcons(){
 function refreshAll(){
   initStaticIcons();
   buildHeader();
-  const cleanDual=MAP_MODE==='dual'&&MAP_CLEAN_DUAL;
+  const dualMap=MAP_MODE==='dual';
+  const hideSide=dualMap&&MAP_HIDE_SIDEBAR;
   const app=document.querySelector('.app');
-  if(app) app.classList.toggle('map-click-only',cleanDual);
-  if(cleanDual) document.getElementById('lp').innerHTML='';
-  else buildSidebar();
+  if(app) app.classList.toggle('map-click-only',hideSide);
+  const lp=document.getElementById('lp');
+  if(lp){
+    if(hideSide){ lp.innerHTML=''; lp.setAttribute('aria-hidden','true'); }
+    else{ lp.removeAttribute('aria-hidden'); buildSidebar(); }
+  }
   renderBody();fillFilterSelects();renderLegend();
   renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
-  if(cap) cap.textContent=cleanDual?t('bodyCap'):`${t('bodyCap')} · map ${MAP_BUILD}`;
+  if(cap) cap.textContent=dualMap?t('bodyCap'):`${t('bodyCap')} · map ${MAP_BUILD}`;
   if(selOrgan&&C[selOrgan]) sel(selOrgan);
 }
 function fillFilterSelects(){
@@ -1824,17 +1829,17 @@ function mapOrgansForSex(sex){
 function buildFigurePanel(sex,offsetX){
   const allMap=mapOrgansForSex(sex);
   const active=allMap.filter(o=>organCount(o)>0);
-  const cleanDual=MAP_MODE==='dual'&&MAP_CLEAN_DUAL;
+  const showLabels=MAP_MODE==='dual'&&MAP_DUAL_LABELS;
   const labelSide=sex==='female'?'L':'R';
   const drawOrder=[...allMap].sort((a,b)=>(ANATOMY[a].z||1)-(ANATOMY[b].z||1));
   let labelsSvg='';
-  if(!cleanDual){
+  if(showLabels){
     const labelY=assignLabelPositions(active,labelSide);
     const ymap=labelY[labelSide];
     const orderedY=o=>ymap[o]||organAnchor(ANATOMY[o]).y;
     labelsSvg=`<g class="labels-layer">${active.map(o=>organLabel(o,orderedY(o),labelSide)).join('')}</g>`;
   }
-  const ghostSvg=cleanDual?'':allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('');
+  const ghostSvg=showLabels?'':allMap.filter(o=>!organCount(o)).map(organInlineGhostLabel).join('');
   return `<g class="figure-panel figure-${sex}" transform="translate(${offsetX},0)">
     ${bodySilhouetteSex(sex)}
     ${bodyCavities()}
@@ -1862,12 +1867,12 @@ function renderBodySingle(){
 }
 
 function renderBodyDual(){
-  const cleanDual=MAP_CLEAN_DUAL;
-  const viewL=cleanDual?0:DUAL_VIEW_L;
-  const viewW=cleanDual?960:DUAL_VIEW_W;
-  const femX=cleanDual?0:DUAL_FEMALE_X;
-  const maleX=cleanDual?480:DUAL_MALE_X;
-  const divX=cleanDual?480:DUAL_DIVIDER_X;
+  const showLabels=MAP_DUAL_LABELS;
+  const viewL=showLabels?DUAL_VIEW_L:0;
+  const viewW=showLabels?DUAL_VIEW_W:960;
+  const femX=showLabels?DUAL_FEMALE_X:0;
+  const maleX=showLabels?DUAL_MALE_X:480;
+  const divX=showLabels?DUAL_DIVIDER_X:480;
   const divider=`<line x1="${divX}" y1="16" x2="${divX}" y2="704" stroke="#2a3650" stroke-width="1" opacity="0.4"/>`;
   document.getElementById('bw').innerHTML=`
   <svg viewBox="${viewL} 0 ${viewW} 720" xmlns="http://www.w3.org/2000/svg" class="anatomy-svg anatomy-dual" preserveAspectRatio="xMidYMid meet">
