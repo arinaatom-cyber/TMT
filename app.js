@@ -132,6 +132,7 @@ const I18N={
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
     cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
     about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи слева и справа',
+    anatomyNote:'Схематический вид спереди. Органы не в масштабе. Забрюшинные органы показаны в передней проекции.',
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в подписи',footer:'Human Proteome Atlas · TMT протеомика',
     aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
@@ -206,6 +207,7 @@ const I18N={
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
     cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
     about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · labels on both sides',
+    anatomyNote:'Schematic anterior view. Organs are not shown to scale. Retroperitoneal organs are projected onto the anterior view.',
     noMapProjects:'No projects with current filters',
     pickOrgan:'Click an organ on the map or its label',footer:'Human Proteome Atlas · TMT proteomics',
     aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
@@ -285,7 +287,7 @@ const ORGAN_LABELS={
     Stomach:'Желудок',Pancreas:'Поджелудочная железа',Spleen:'Селезёнка',Colon:'Толстая кишка',
     Gallbladder:'Жёлчный пузырь',Appendix:'Аппендикс',Thymus:'Тимус',
     Breast:'Молочная железа',Prostate:'Предстательная железа',Ovary:'Яичники',Uterus:'Матка',
-    Cervix:'Шейка матки',Testis:'Яички',Small_Intestine:'Тонкая кишка',
+    Cervix:'Шейка матки',Testis:'Семенники',Small_Intestine:'Тонкая кишка',
     Salivary_Gland:'Слюнные железы',Pituitary:'Гипофиз',Thyroid:'Щитовидная железа',
     Bladder:'Мочевой пузырь',Skin:'Кожа',Muscle:'Мышцы',Bone:'Кости',
     Blood:'Кровь',Bone_Marrow:'Костный мозг',Lymph_Node:'Лимфоузлы',
@@ -297,9 +299,9 @@ const ORGAN_LABELS={
     Liver:'Liver',Lung:'Lungs',Heart:'Heart',Brain:'Brain',Kidney:'Kidneys',
     Stomach:'Stomach',Pancreas:'Pancreas',Spleen:'Spleen',Colon:'Large intestine',
     Gallbladder:'Gallbladder',Appendix:'Appendix',Thymus:'Thymus',
-    Breast:'Breast',Prostate:'Prostate',Ovary:'Ovaries',Uterus:'Uterus',
-    Cervix:'Cervix',Testis:'Testicles',Small_Intestine:'Small intestine',
-    Salivary_Gland:'Salivary glands',Pituitary:'Pituitary',Thyroid:'Thyroid',
+    Breast:'Breast tissue',Prostate:'Prostate',Ovary:'Ovaries',Uterus:'Uterus',
+    Cervix:'Uterine cervix',Testis:'Testes',Small_Intestine:'Small intestine',
+    Salivary_Gland:'Salivary glands',Pituitary:'Pituitary gland',Thyroid:'Thyroid gland',
     Bladder:'Bladder',Skin:'Skin',Muscle:'Muscle',Bone:'Bones',
     Blood:'Blood',Bone_Marrow:'Bone marrow',Lymph_Node:'Lymph nodes',
     Esophagus:'Esophagus',Adrenal_Gland:'Adrenal glands',Eye:'Eyes',Nerve:'Nerves',
@@ -562,6 +564,8 @@ function refreshAll(){
   renderAtlasMaterialChart();renderSiteSections();renderUvp();
   const cap=document.getElementById('bodyCaption');
   if(cap) cap.textContent=dualMap?t('bodyCap'):`${t('bodyCap')} · map ${MAP_BUILD}`;
+  const anNote=document.getElementById('bodyAnatomyNote');
+  if(anNote) anNote.textContent=t('anatomyNote');
   if(selOrgan&&C[selOrgan]) sel(selOrgan);
 }
 function fillFilterSelects(){
@@ -1347,9 +1351,9 @@ const ANATOMY={
     'M 230 146 Q 240 143 250 146 Q 252 156 248 166 Q 240 170 232 166 Q 228 156 230 146 Z'},
   Heart:           {pos:{x:244, y:190}, side:'R', size:0,  z:3, d:
     'M 240 166 Q 226 168 223 184 Q 223 202 238 214 L 256 220 Q 266 206 265 188 Q 263 170 247 166 Q 244 165 240 166 Z'},
-  Breast:          {pos:{x:240, y:210}, side:'L', size:0,  z:4, d:
-    'M 210 208 A 3.4 3.4 0 1 0 216.8 208 A 3.4 3.4 0 1 0 210 208 Z '+
-    'M 263.2 208 A 3.4 3.4 0 1 0 270 208 A 3.4 3.4 0 1 0 263.2 208 Z'},
+  Breast:          {pos:{x:240, y:210}, anchor:{x:218, y:210}, side:'L', size:0,  z:4, breast:true, d:
+    'M 202 196 Q 202 184 218 182 Q 234 184 236 198 Q 238 214 222 220 Q 206 216 202 196 Z '+
+    'M 244 198 Q 244 184 260 182 Q 276 184 278 198 Q 280 214 264 220 Q 248 216 244 198 Z'},
 
   /* ABDOMEN — scaled (~4.1 px/cm): liver CC 11.5cm≈47, transv 21.5cm≈88; spleen 12cm≈49; kidney 11×4cm≈45×16 */
   Liver:           {pos:{x:208, y:244}, anchor:{x:188, y:242}, side:'L', size:0,  z:2, d:
@@ -1461,7 +1465,9 @@ function organGroup(o){
         ?`fill:${fill};fill-opacity:.4;stroke:${fill};stroke-width:1.2`
         :ghost
           ?`fill:${fill};fill-opacity:.28;stroke:rgba(70,60,55,.42);stroke-width:.65;stroke-linejoin:round;fill-rule:evenodd`
-          :`fill:${fill};fill-opacity:.94;stroke:rgba(12,8,6,.38);stroke-width:.55;stroke-linejoin:round;fill-rule:evenodd`;
+          :a.breast
+            ?`fill:${fill};fill-opacity:.42;stroke:rgba(255,255,255,.55);stroke-width:.9;stroke-linejoin:round;fill-rule:evenodd`
+            :`fill:${fill};fill-opacity:.94;stroke:rgba(12,8,6,.38);stroke-width:.55;stroke-linejoin:round;fill-rule:evenodd`;
     const clsExtra=(a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'')+(ghost?' organ-ghost':'');
     const pe=(a.skeleton||ghost)?' pointer-events="none"':'';
     return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}${(a.skeleton||ghost)?' style="pointer-events:none"':''}>
