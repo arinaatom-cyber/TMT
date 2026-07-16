@@ -1341,71 +1341,69 @@ const ANATOMY={
     'M 250 112 Q 256 116 254 126 L 251 130 Q 245 132 243 124 L 243 116 Q 245 112 250 112 Z '+
     'M 237 120 L 243 120 L 243 124 L 237 124 Z'},
 
-  /* THORAX — scaled: lung H 24cm≈98px, heart 12×8.5cm≈49×35px */
-  Esophagus:       {pos:{x:240, y:178}, side:'L', size:0,  z:1, d:
-    'M 238 130 L 242 130 L 246 210 Q 247 216 252 220 L 248 222 Q 242 216 241 210 L 238 130 Z'},
-  Lung:            {pos:{x:240, y:182}, side:'L', size:0,  z:2, d:
+  /* THORAX */
+  Esophagus:       {pos:{x:240, y:175}, anchor:{x:241, y:178}, side:'L', size:0, z:1, d:
+    'M 239 128 L 241 128 L 241 206 L 246 220 L 252 218 L 248 212 L 242 206 L 239 128 Z'},
+  Lung:            {pos:{x:240, y:182}, anchor:{x:240, y:182}, side:'L', size:0, z:2, d:
     'M 228 136 Q 204 138 195 156 Q 186 188 190 216 Q 196 230 218 230 L 230 224 Q 232 194 232 158 Q 231 140 228 136 Z '+
     'M 252 136 Q 276 138 285 156 Q 294 188 290 216 Q 284 230 262 230 L 256 224 Q 252 218 256 210 Q 250 206 250 196 Q 250 162 250 140 Q 250 138 252 136 Z'},
-  Thymus:          {pos:{x:240, y:156}, anchor:{x:208, y:154}, side:'L', size:0,  z:2, d:
+  Thymus:          {pos:{x:240, y:156}, anchor:{x:208, y:154}, side:'L', size:0, mapHidden:true, z:2, d:
     'M 230 146 Q 240 143 250 146 Q 252 156 248 166 Q 240 170 232 166 Q 228 156 230 146 Z'},
-  Heart:           {pos:{x:244, y:190}, side:'R', size:0,  z:3, d:
+  Heart:           {pos:{x:244, y:190}, anchor:{x:244, y:190}, side:'R', size:0, z:3, d:
     'M 240 166 Q 226 168 223 184 Q 223 202 238 214 L 256 220 Q 266 206 265 188 Q 263 170 247 166 Q 244 165 240 166 Z'},
-  Breast:          {pos:{x:240, y:210}, anchor:{x:218, y:210}, side:'L', size:0,  z:4, breast:true, d:
-    'M 202 196 Q 202 184 218 182 Q 234 184 236 198 Q 238 214 222 220 Q 206 216 202 196 Z '+
-    'M 244 198 Q 244 184 260 182 Q 276 184 278 198 Q 280 214 264 220 Q 248 216 244 198 Z'},
+  Breast:          {pos:{x:240, y:208}, anchor:{x:214, y:208}, side:'L', size:0, z:4, breast:true, d:
+    'M 196 198 Q 188 206 190 218 Q 198 226 210 222 Q 216 212 212 200 Q 204 194 196 198 Z '+
+    'M 264 200 Q 272 208 270 220 Q 262 226 250 222 Q 244 212 248 200 Q 256 194 264 200 Z'},
 
-  /* ABDOMEN — scaled (~4.1 px/cm): liver CC 11.5cm≈47, transv 21.5cm≈88; spleen 12cm≈49; kidney 11×4cm≈45×16 */
-  Liver:           {pos:{x:208, y:244}, anchor:{x:188, y:242}, side:'L', size:0,  z:2, d:
+  /* ABDOMEN — anterior view: liver left, stomach/spleen right */
+  Liver:           {pos:{x:208, y:244}, anchor:{x:188, y:242}, side:'L', size:0, z:2, d:
     'M 186 224 Q 214 216 246 219 Q 268 223 274 236 Q 273 252 258 261 Q 224 269 198 264 Q 186 259 183 244 Q 182 230 186 224 Z'},
-  Gallbladder:     {pos:{x:210, y:276}, anchor:{x:182, y:276}, side:'L', size:0,  z:3, d:
+  Gallbladder:     {pos:{x:210, y:276}, anchor:{x:182, y:276}, side:'L', size:0, mapHidden:true, z:3, d:
     'M 206 262 Q 216 260 218 270 Q 219 282 212 290 Q 204 292 202 282 Q 201 270 206 262 Z'},
-  Stomach:         {pos:{x:270, y:248}, anchor:{x:290, y:246}, side:'R', size:0,  z:3, d:
-    'M 250 218 Q 268 211 284 222 Q 294 238 290 260 Q 284 276 266 280 Q 252 280 248 268 Q 246 254 250 244 Q 248 230 250 218 Z'},
-  Spleen:          {pos:{x:288, y:244}, anchor:{x:296, y:242}, side:'R', size:0,  z:2, d:
-    'M 282 226 Q 296 230 298 246 Q 295 262 285 263 Q 277 250 277 236 Q 277 228 282 226 Z'},
-  Pancreas:        {pos:{x:250, y:262}, anchor:{x:254, y:262}, side:'R', size:0,  z:3, d:
-    'M 210 258 Q 226 252 238 256 L 280 261 Q 288 263 284 269 L 238 266 Q 224 268 216 267 Q 208 265 210 258 Z'},
-  Adrenal_Gland:   {pos:{x:240, y:242}, anchor:{x:226, y:240}, side:'R', size:0,  z:4, d:
-    'M 200 240 Q 208 235 215 241 Q 213 250 204 250 Q 199 246 200 240 Z '+
-    'M 266 238 Q 274 233 281 239 Q 279 248 270 248 Q 265 244 266 238 Z'},
-  Kidney:          {pos:{x:240, y:268}, anchor:{x:204, y:268}, side:'L', size:0,  z:2, d:
-    'M 202 250 Q 190 257 192 274 Q 197 290 209 289 Q 216 280 213 268 L 211 258 Q 209 250 202 250 Z '+
-    'M 278 244 Q 290 251 288 268 Q 283 284 271 283 Q 264 274 267 262 L 269 252 Q 271 244 278 244 Z'},
+  Stomach:         {pos:{x:262, y:248}, anchor:{x:298, y:246}, side:'R', size:0, z:3, d:
+    'M 248 222 L 252 218 Q 264 212 276 218 Q 286 228 288 244 Q 286 260 274 268 Q 258 272 248 262 Q 242 252 244 240 Q 246 230 248 222 Z'},
+  Spleen:          {pos:{x:292, y:238}, anchor:{x:290, y:244}, side:'R', size:0, z:4, d:
+    'M 284 224 Q 298 228 302 244 Q 298 260 288 262 Q 276 248 278 234 Q 280 226 284 224 Z'},
+  Pancreas:        {pos:{x:248, y:258}, anchor:{x:254, y:256}, side:'R', size:0, z:3, d:
+    'M 198 256 Q 210 250 226 252 Q 246 254 266 256 Q 284 258 288 264 Q 280 268 262 266 Q 242 264 222 266 Q 206 266 198 260 Q 196 258 198 256 Z'},
+  Kidney:          {pos:{x:238, y:262}, anchor:{x:198, y:268}, side:'L', size:0, z:2, d:
+    'M 190 254 Q 184 262 186 274 Q 190 284 200 284 Q 208 278 208 268 Q 206 258 198 254 Q 192 252 190 254 Z '+
+    'M 274 248 Q 280 256 278 268 Q 274 278 264 278 Q 256 272 256 262 Q 258 252 266 248 Q 272 246 274 248 Z'},
+  Adrenal_Gland:   {pos:{x:238, y:250}, anchor:{x:202, y:248}, side:'R', size:0, z:6, adrenal:true, d:
+    'M 196 252 L 202 246 L 208 252 L 202 256 Z '+
+    'M 262 246 Q 270 244 276 248 Q 270 252 264 250 Z'},
 
-  /* INTESTINES — colon frame (asc. patient-right=viewer-left); small bowel central mass */
-  Small_Intestine: {pos:{x:240, y:312}, anchor:{x:240, y:312}, side:'L', size:0,  z:3, d:
-    'M 206 280 Q 240 272 274 280 Q 286 298 284 320 Q 280 342 258 352 Q 230 356 208 344 Q 194 324 196 302 Q 200 286 206 280 Z '+
-    'M 216 288 Q 240 283 264 290 Q 274 304 270 320 Q 262 336 240 340 Q 218 336 210 320 Q 208 300 216 288 Z '+
-    'M 224 298 Q 240 294 256 300 Q 264 312 258 326 Q 246 334 230 328 Q 218 318 218 306 Q 220 300 224 298 Z '+
-    'M 226 310 Q 240 306 254 314 Q 260 324 252 334 Q 240 338 228 330 Q 222 320 226 310 Z '+
-    'M 232 320 Q 244 316 256 324 Q 260 334 250 340 Q 238 340 230 332 Q 228 326 232 320 Z'},
-  Colon:           {pos:{x:240, y:300}, anchor:{x:296, y:298}, side:'R', size:0,  z:2, d:
-    'M 190 262 Q 190 252 210 250 L 270 250 Q 290 252 290 262 L 290 326 Q 290 340 276 342 L 264 342 L 264 330 Q 276 328 276 318 L 276 274 Q 266 266 240 266 Q 214 266 204 274 L 204 318 Q 204 328 216 330 L 216 342 L 204 342 Q 190 340 190 326 Z '+
-    'M 264 338 Q 252 350 240 350 Q 230 350 228 358 L 246 358 Q 260 356 270 346 Q 272 342 264 338 Z'},
-  Appendix:        {pos:{x:198, y:348}, anchor:{x:178, y:348}, side:'L', size:0,  z:5, d:
+  /* INTESTINES — colon frame (evenodd band); irregular small-bowel loops inside */
+  Colon:           {pos:{x:240, y:298}, anchor:{x:300, y:296}, side:'R', size:0, z:2, colon:true, d:
+    'M 188 266 L 188 326 Q 190 338 206 344 L 240 348 Q 274 344 290 326 L 290 266 Z '+
+    'M 206 276 L 272 276 L 272 316 Q 268 326 240 330 Q 212 326 206 316 Z'},
+  Small_Intestine: {pos:{x:240, y:304}, anchor:{x:240, y:304}, side:'L', size:0, z:3, d:
+    'M 214 286 Q 232 282 252 288 Q 268 296 264 310 Q 252 320 234 318 Q 218 312 214 300 Z '+
+    'M 222 294 Q 240 292 256 298 Q 262 306 254 314 Q 242 318 228 314 Q 220 306 222 294 Z '+
+    'M 228 304 Q 244 302 258 308 Q 264 316 248 322 Q 234 322 226 316 Q 224 310 228 304 Z '+
+    'M 236 312 Q 248 310 258 316 Q 252 324 240 326 Q 230 324 236 312 Z'},
+  Appendix:        {pos:{x:198, y:348}, anchor:{x:178, y:348}, side:'L', size:0, mapHidden:true, z:5, d:
     'M 200 332 Q 192 336 190 346 Q 192 356 198 359 Q 203 353 201 344 Q 200 336 200 332 Z'},
 
-  /* PELVIS — scaled: uterus 7.2×4cm≈30×16; ovary 3.5×2.5cm≈14×10; testis 4×3cm≈16×12 (unisex overlay) */
-  Bladder:         {pos:{x:240, y:350}, side:'R', size:0,  z:4, d:
-    'M 228 344 Q 240 340 252 344 Q 254 354 248 359 Q 240 362 232 359 Q 226 354 228 344 Z'},
-  Uterus:          {pos:{x:238, y:330}, anchor:{x:208, y:330}, side:'L', size:0,  z:3, d:
-    'M 232 318 Q 246 314 250 326 Q 251 338 244 346 L 240 346 Q 232 340 230 330 Q 229 322 232 318 Z'},
-  Ovary:           {pos:{x:222, y:338}, anchor:{x:200, y:338}, side:'L', size:0,  z:5, d:
-    'M 212 334 Q 206 336 207 342 Q 213 344 216 339 Q 215 335 212 334 Z '+
-    'M 264 334 Q 270 336 269 342 Q 263 344 260 339 Q 261 335 264 334 Z'},
-  Cervix:          {pos:{x:238, y:352}, anchor:{x:212, y:352}, side:'L', size:0,  z:4, d:
-    'M 235 346 L 245 346 L 243 358 L 237 358 Z'},
-  Prostate:        {pos:{x:241, y:363}, side:'R', size:0,  z:4, d:
-    'M 232 358 Q 241 354 250 358 Q 252 366 241 369 Q 230 366 232 358 Z'},
-  Testis:          {pos:{x:240, y:384}, side:'R', size:0,  z:3, d:
-    'M 230 376 Q 225 384 229 392 Q 235 395 239 388 Q 238 380 230 376 Z '+
-    'M 250 376 Q 255 384 251 392 Q 245 395 241 388 Q 242 380 250 376 Z'},
+  /* PELVIS */
+  Bladder:         {pos:{x:240, y:346}, anchor:{x:240, y:348}, side:'R', size:0, z:5, d:
+    'M 228 340 Q 240 336 252 340 Q 254 350 248 354 Q 240 356 232 354 Q 226 350 228 340 Z'},
+  Uterus:          {pos:{x:240, y:322}, anchor:{x:243, y:322}, side:'L', size:0, z:3, d:
+    'M 234 312 Q 246 306 252 316 Q 254 326 248 332 Q 240 334 234 326 Q 230 318 234 312 Z'},
+  Ovary:           {pos:{x:240, y:318}, anchor:{x:212, y:316}, side:'L', size:0, z:5, d:
+    'M 216 314 Q 210 316 210 322 Q 216 324 220 320 Q 220 316 216 314 Z '+
+    'M 264 314 Q 270 316 270 322 Q 264 324 260 320 Q 260 316 264 314 Z'},
+  Cervix:          {pos:{x:240, y:332}, anchor:{x:240, y:331}, side:'L', size:0, z:4, d:
+    'M 237 328 L 243 328 L 242 334 L 238 334 Z'},
+  Prostate:        {pos:{x:241, y:358}, anchor:{x:241, y:356}, side:'R', size:0, z:5, d:
+    'M 232 352 Q 241 348 250 352 Q 252 360 241 364 Q 230 360 232 352 Z'},
+  Testis:          {pos:{x:240, y:384}, anchor:{x:240, y:384}, side:'R', size:0, z:3, d:
+    'M 216 376 Q 240 368 264 376 Q 266 392 240 396 Q 214 392 216 376 Z '+
+    'M 228 380 Q 224 386 228 392 Q 234 394 238 388 Q 236 382 228 380 Z '+
+    'M 252 380 Q 256 386 252 392 Q 246 394 242 388 Q 244 382 252 380 Z'},
 
-  Bone:            {pos:{x:240, y:280}, side:'R', size:0,  z:0, skeleton:true, d:
-    'M 237 132 L 243 132 L 242 228 L 238 228 Z '+
-    'M 238 128 L 242 128 L 241 368 L 239 368 Z '+
-    'M 214 358 L 266 358'},
+  Bone:            {pos:{x:240, y:165}, side:'R', size:0, z:0, skeleton:true, d:
+    'M 237 132 L 243 132 L 242 198 L 238 198 Z'},
 
   /* Systemic markers — chest, inside torso (not drawn on map; sidebar only) */
   Blood:           {pos:{x:228, y:218}, anchor:{x:228, y:218}, side:'L', size:0,  z:2, systemic:true, d:
@@ -1466,8 +1464,12 @@ function organGroup(o){
         :ghost
           ?`fill:${fill};fill-opacity:.28;stroke:rgba(70,60,55,.42);stroke-width:.65;stroke-linejoin:round;fill-rule:evenodd`
           :a.breast
-            ?`fill:${fill};fill-opacity:.42;stroke:rgba(255,255,255,.55);stroke-width:.9;stroke-linejoin:round;fill-rule:evenodd`
-            :`fill:${fill};fill-opacity:.94;stroke:rgba(12,8,6,.38);stroke-width:.55;stroke-linejoin:round;fill-rule:evenodd`;
+            ?`fill:${fill};fill-opacity:.38;stroke:rgba(255,255,255,.5);stroke-width:.85;stroke-linejoin:round;fill-rule:evenodd`
+            :a.adrenal
+              ?`fill:${fill};fill-opacity:.95;stroke:rgba(255,255,255,.65);stroke-width:.7;stroke-linejoin:round;fill-rule:evenodd`
+              :a.colon
+                ?`fill:${fill};fill-opacity:.88;fill-rule:evenodd;stroke:rgba(255,255,255,.5);stroke-width:.75;stroke-linejoin:round`
+                :`fill:${fill};fill-opacity:.94;stroke:rgba(12,8,6,.38);stroke-width:.55;stroke-linejoin:round;fill-rule:evenodd`;
     const clsExtra=(a.skeleton?' organ-skeleton':a.systemic?' organ-systemic':'')+(ghost?' organ-ghost':'');
     const pe=(a.skeleton||ghost)?' pointer-events="none"':'';
     return `<g class="organ-g${clsExtra}" data-o="${o}" ${eh}${(a.skeleton||ghost)?' style="pointer-events:none"':''}>
@@ -1660,9 +1662,17 @@ function assignLabelPositions(active, forceSide){
   return {L:layout(L),R:layout(R)};
 }
 
+function formatProjectCount(n){
+  return n===1?'1 project':`${n} projects`;
+}
+function formatMapOrganStats(s){
+  const pan=s.nPan?` · Pan: ${s.nPan}`:'';
+  return `${formatProjectCount(s.n)} · C: ${s.nC} · N: ${s.nN}${pan}`;
+}
+
 function mapOrganVisible(o){
   const a=ANATOMY[o];
-  return a&&!SYSTEMIC.has(o)&&!a.systemic&&!a.skeleton;
+  return a&&!SYSTEMIC.has(o)&&!a.systemic&&!a.skeleton&&!a.mapHidden;
 }
 
 function organInlineGhostLabel(o){
@@ -1694,7 +1704,7 @@ function organLabel(o, labelY){
     <path class="lbl-lead" d="${lead}"/>
     <circle class="lbl-dot-label" cx="${labelX}" cy="${labelY}" r="${dotR}" fill="${badge}" stroke="rgba(255,255,255,.55)" stroke-width=".6" transform="translate(${isL?6:-6},0)"/>
     <text class="lbl-name" fill="#e8ecf4" font-size="11" font-weight="700" font-family="Inter,sans-serif" x="${tx}" y="${labelY-3}" text-anchor="${anchor}">${name}</text>
-    <text class="lbl-count" fill="#c5cdd8" font-size="8.5" font-family="Inter,sans-serif" x="${tx}" y="${labelY+9}" text-anchor="${anchor}">${s.n} projects · ${s.nC}C · ${s.nN}N${panTag}</text>
+    <text class="lbl-count" fill="#c5cdd8" font-size="8.5" font-family="Inter,sans-serif" x="${tx}" y="${labelY+9}" text-anchor="${anchor}">${formatMapOrganStats(s)}</text>
   </g>`;
 }
 
@@ -1915,7 +1925,7 @@ function st(ev,o){
   const s=organStats(o);
   const pelvis=PELVIC_ORGANS.has(o)?`<div class="td">${t('pelvisTip')}</div>`:'';
   tip.innerHTML=`<div class="tn">${organDisplayName(o)}</div>
-    <div class="tc">${s.n} ${t('projects')} · ${s.nC}C · ${s.nN}N</div>
+    <div class="tc">${formatMapOrganStats(s)}</div>
     ${s.topDis?`<div class="td">${esc(diseaseDisplayName(s.topDis))}</div>`:''}${pelvis}`;
   tip.style.display='block';
   const r=document.getElementById('bw').getBoundingClientRect();
