@@ -1,4 +1,4 @@
-/* Sirius Human TMT Proteome Atlas — Discovery UI */
+/* Human Cancser Assosiated TMT Proteome Atlas — Discovery UI */
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
 
 :root {
@@ -283,16 +283,29 @@ code {
 }
 
 .table-unified table.data-table {
-  table-layout: auto;
-  min-width: 1520px;
-  border-collapse: separate;
-  border-spacing: 0;
+  table-layout: fixed;
+  width: 100%;
+  min-width: 1680px;
+  border-collapse: collapse;
 }
 
 .table-unified .data-table th,
 .table-unified .data-table td {
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  padding: 10px 8px;
+}
+
+.table-unified .data-table th {
+  max-width: none;
+}
+
+.table-unified .data-table td {
+  max-width: 0;
 }
 
 .table-unified .data-table th:last-child,
@@ -383,6 +396,102 @@ code {
   gap: 6px;
 }
 
+.badge-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+}
+
+.badge-stack .badge {
+  white-space: normal;
+  text-align: left;
+  line-height: 1.35;
+  max-width: 100%;
+}
+
+.cell-data .file-name,
+.cell-links .link-chip {
+  font-size: 0.78rem;
+}
+
+.cell-links .link-stack {
+  gap: 5px;
+}
+
+.cell-links .link-chip {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 5px 8px;
+}
+
+.cell-data .file-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.cell-analysis .cell-bullets {
+  font-size: 0.82rem;
+}
+
+.cell-stack.cell-analysis,
+.cell-stack.cell-data,
+.cell-stack.cell-links {
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.table-unified .cell-stack.cell-analysis,
+.table-unified .cell-stack.cell-data,
+.table-unified .cell-stack.cell-links {
+  overflow: hidden;
+}
+
+.table-unified td.col-analysis,
+.table-unified td.col-data,
+.table-unified td.col-links {
+  overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.table-unified .analysis-cell {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.table-unified .cell-analysis .cell-summary,
+.table-unified .cell-analysis .cell-bullets,
+.table-unified .cell-analysis .cell-bullets li {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.table-unified .cell-analysis .cell-bullets {
+  max-height: 11em;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+.table-unified .cell-data .file-hint,
+.table-unified .cell-data .muted {
+  display: block;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
 .link-chip {
   display: inline-block;
   padding: 6px 10px;
@@ -393,7 +502,9 @@ code {
   font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .link-chip:hover {
@@ -438,18 +549,71 @@ a.id-no-acc:hover {
   color: var(--muted);
 }
 
-.table-unified .col-id { min-width: 128px; }
-.table-unified .col-year { min-width: 56px; }
-.table-unified .col-title { min-width: 220px; }
-.table-unified .col-src { min-width: 90px; }
-.table-unified .col-design { min-width: 100px; }
-.table-unified .col-omics { min-width: 130px; }
-.table-unified .col-pat { min-width: 72px; }
-.table-unified .col-n { min-width: 48px; }
-.table-unified .col-weight { min-width: 120px; }
-.table-unified .col-analysis { min-width: 280px; }
-.table-unified .col-data { min-width: 120px; }
-.table-unified .col-links { min-width: 100px; }
+.cell-clip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  line-height: 1.45;
+  max-height: 6.2em;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.table-cohort {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+
+.table-cohort table.data-table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: collapse;
+}
+
+.table-cohort .data-table th,
+.table-cohort .data-table td {
+  border: 1px solid var(--border);
+  overflow: hidden;
+  vertical-align: top;
+  padding: 10px 8px;
+  word-wrap: break-word;
+}
+
+.table-unified .col-type { width: 4%; }
+.table-unified .col-id { width: 8%; }
+.table-unified .col-year { width: 4%; }
+.table-unified .col-title { width: 13%; }
+.table-unified .col-src { width: 5%; }
+.table-unified .col-design { width: 6%; }
+.table-unified .col-omics { width: 6%; }
+.table-unified .col-pat { width: 4%; }
+.table-unified .col-n { width: 3%; }
+.table-unified .col-verdict { width: 5%; }
+.table-unified .col-confidence { width: 4%; }
+.table-unified .col-weight { width: 5%; }
+.table-unified .col-analysis { width: 20%; }
+.table-unified .col-data { width: 10%; }
+.table-unified .col-links { width: 8%; }
+.table-unified .col-title { width: 12%; }
+
+.table-unified .col-id { min-width: 0; }
+.table-unified .col-year { min-width: 0; }
+.table-unified .col-title { min-width: 0; }
+.table-unified .col-src { min-width: 0; }
+.table-unified .col-design { min-width: 0; }
+.table-unified .col-omics { min-width: 0; }
+.table-unified .col-pat { min-width: 0; }
+.table-unified .col-n { min-width: 0; }
+.table-unified .col-weight { min-width: 0; }
+.table-unified .col-analysis { min-width: 0; }
+.table-unified .col-data { min-width: 0; }
+.table-unified .col-links { min-width: 0; }
 
 .table-standard .col-year { width: 5%; }
 .table-standard .col-journal { width: 8%; }
@@ -735,10 +899,14 @@ td b, .cell-title {
 }
 
 .analysis-cell {
-  min-width: 300px;
   line-height: 1.55;
   color: var(--text-secondary);
   font-size: var(--text-base);
+  min-width: 0;
+}
+
+.table-standard .analysis-cell {
+  min-width: 300px;
 }
 
 .table-standard table.data-table {
@@ -835,6 +1003,31 @@ a.cell-mono:hover {
 .fit-maybe { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(251, 191, 36, 0.25); }
 .fit-no { background: var(--bad-soft); color: var(--bad); border: 1px solid rgba(248, 113, 113, 0.25); }
 .fit-unk { background: var(--bg-elevated); color: var(--muted); border: 1px solid var(--border); }
+
+.tier-badge { min-width: 1.6rem; text-align: center; font-family: var(--font-mono, monospace); }
+.tier-a { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.35); }
+.tier-b { background: rgba(96, 165, 250, 0.12); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); }
+.tier-c { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(251, 191, 36, 0.25); }
+.tier-d { background: var(--bad-soft); color: var(--bad); border: 1px solid rgba(248, 113, 113, 0.25); }
+.tier-bullets { margin-top: 4px; font-size: var(--text-xs); color: var(--muted); }
+.evidence-bullets { margin-top: 6px; }
+
+.methods-panel { margin-bottom: 1.5rem; }
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.methods-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.methods-card h3, .methods-card h4 { font-size: var(--text-sm); margin: 0 0 8px; color: var(--text-secondary); }
+.methods-stats { margin: 0; padding-left: 1.1rem; font-size: var(--text-sm); }
+.methods-stats li { margin-bottom: 4px; }
 
 .muted {
   color: var(--muted);
@@ -941,6 +1134,124 @@ a.cell-mono:hover {
 
 .footer a { color: var(--text-secondary); }
 .footer a:hover { color: var(--accent); }
+
+/* Embedded map / Streamlit (Pf-HaploAtlas-style interactive panel) */
+.embed-shell {
+  margin: 0 28px 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.embed-shell-compact { margin-top: 1.5rem; }
+
+.embed-frame {
+  display: block;
+  width: 100%;
+  height: min(78vh, 820px);
+  border: 0;
+  background: var(--bg-elevated);
+}
+
+.embed-frame-tall { height: min(70vh, 720px); }
+
+.embed-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+.embed-hint { font-size: var(--text-sm); }
+
+.embed-fallback-note {
+  padding: 10px 16px 14px;
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.how-to-panel {
+  margin: 0 28px 1.25rem;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+
+.how-to-panel h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.how-to-steps {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.how-to-steps li { margin-bottom: 4px; }
+
+.organ-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.organ-chip {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.organ-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.ai-launch-card { margin: 0 28px 1.5rem; }
+
+.btn-lg {
+  padding: 12px 22px;
+  font-size: 1rem;
+}
+
+.code-block {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  max-height: 160px;
+  overflow: auto;
+}
+
+.section-block {
+  margin: 0 28px 2rem;
+}
+
+.section-block h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
 
 @media (max-width: 768px) {
   .site-header-inner { padding: 14px 18px; }
