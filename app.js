@@ -160,7 +160,7 @@ const I18N={
     uvpTitle:'Атлас TMT-протеомики человека',
     patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
     sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
-    patSampHint:'Пациенты/доноры и Total Samples — из таблицы (Patients / donors, Total Samples). Для клеточных линий пациенты = 0. Часть значений Total Samples отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
+    patSampHint:'Пациенты/доноры и Total Samples — из таблицы; для PDC — из Atlas summary (*_summary.csv). Для клеточных линий пациенты = 0. Часть значений Total Samples (не PDC) отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
     validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
     legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
@@ -176,7 +176,7 @@ const I18N={
     projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet',dataFromBundle:'копия на сайте',
     linkCopied:'Ссылка скопирована',openSheet:'Таблица',
     protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — Google Sheets.',
-    sheetCountHint:'Proteins Quantified — только из таблицы Google.',
+    sheetCountHint:'Proteins Quantified — из таблицы; для PDC — уникальные UniProt из Atlas summary.',
     resultFile:'Result Files',geneIds:'гены',compareBy:'UniProt или ген',
     fromIndex:'в индексе',inIndex:'в индексе',showOrganProt:'Показать белки органа',
     geneOnly:'только ген',built:'сборка',rebuildHint:'Нет в индексе — запустите scripts/build-organ-proteome.py',
@@ -235,7 +235,7 @@ const I18N={
     uvpTitle:'Human TMT proteomics atlas',
     patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
     sumPatients:'Σ patients',sumSamples:'Σ samples',
-    patSampHint:'Patients/donors and Total Samples come from the sheet (Patients / donors, Total Samples). Cell-line studies have 0 patients. Some Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
+    patSampHint:'Patients/donors and Total Samples come from the sheet; for PDC they come from each Atlas summary (*_summary.csv). Cell-line studies have 0 patients. Some non-PDC Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
     validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
     legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
@@ -251,7 +251,7 @@ const I18N={
     projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet',dataFromBundle:'site bundle',
     linkCopied:'Link copied',openSheet:'Spreadsheet',
     protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from Google Sheets.',
-    sheetCountHint:'Proteins Quantified — from Google Sheet only.',
+    sheetCountHint:'Proteins Quantified — from the sheet; for PDC — unique UniProt from Atlas summary.',
     resultFile:'Result Files',geneIds:'genes',compareBy:'UniProt or gene',
     fromIndex:'in index',inIndex:'in index',showOrganProt:'Show organ proteins',
     geneOnly:'gene only',built:'built',rebuildHint:'Not in index — run scripts/build-organ-proteome.py',
@@ -1180,6 +1180,39 @@ function normalizeSampleType(raw){
    organ bucket so users can find them by browsing any organ. */
 const PAN_ORGAN_THRESHOLD=8;
 
+/* PDC counts from disk Atlas *_summary.csv (data/pdc-summary-overrides.json).
+   Prefer these over the Google sheet / projects.csv for matching Project ID. */
+const PDC_OVERRIDES_URL='data/pdc-summary-overrides.json';
+const PDC_OVERRIDE_FIELDS=[
+  'Patients / donors','Total Samples','Samples Used N','Proteins Quantified',
+  'Organ','Disease','Sample Type','Control Healthy','Case Cancer Untreated','PMID',
+  'Male','Female','Sex unknown','Male_patients','Female_patients','Sex_unknown'
+];
+let pdcOverrides={};
+
+function applyPdcOverride(row){
+  const pid=(row['Project ID']||'').trim();
+  const ov=pdcOverrides[pid];
+  if(!ov) return row;
+  const out={...row};
+  for(const f of PDC_OVERRIDE_FIELDS){
+    if(ov[f]!=null&&String(ov[f]).trim()!=='') out[f]=ov[f];
+  }
+  return out;
+}
+
+async function loadPdcOverrides(){
+  try{
+    const res=await fetch(PDC_OVERRIDES_URL,{cache:'no-store'});
+    if(!res.ok) return {};
+    const j=await res.json();
+    return j.projects||{};
+  }catch(e){
+    console.warn('PDC overrides not loaded:',e);
+    return {};
+  }
+}
+
 function normalizeRow(x){
   const organRaw=pickOrganRaw(x);
   const tumorType=x['Tumor Type']||x['Disease Subtype']||x['Disease']||'Not specified';
@@ -1194,12 +1227,18 @@ function normalizeRow(x){
   const resultFile=resultFiles[0]||'';
   const proteinCount=window.ProteinAtlas?ProteinAtlas.parseProteinCount(x['Proteins Quantified']):null;
   const numField=v=>{const n=parseFloat(String(v??'').replace(/,/g,'').trim());return isFinite(n)?n:null;};
+  const male=numField(x['Male']??x['Male_patients']);
+  const female=numField(x['Female']??x['Female_patients']);
+  const sexUnknown=numField(x['Sex unknown']??x['Sex_unknown']);
   return {
     ...x,
     organs:organList,om:organList[0],isMulti:organList.length>1,isPan,
     patients:numField(x['Patients / donors']),
+    male,female,sexUnknown,
     totalSamples:numField(x['Total Samples']),
     samplesUsed:numField(x['Samples Used N']),
+    caseCancer:numField(x['Case Cancer Untreated']),
+    controlHealthy:numField(x['Control Healthy']),
     dis:tumorType,
     healthy:isHealthy(tumorType,sampleType,title,x['Disease']),
     st:sampleType,
@@ -1224,6 +1263,7 @@ function normalizeRow(x){
 function onDataLoaded(rows,sourceName){
   D=rows
     .filter(x=>(x['Project ID']||'').trim())
+    .map(applyPdcOverride)
     .map(normalizeRow);
   C={};
   const byOrgan={};
@@ -1248,6 +1288,37 @@ function onDataLoaded(rows,sourceName){
 
 const LOCAL_CSV='data/projects.csv';
 const RAW_CSV='https://raw.githubusercontent.com/arinaatom-cyber/TMT/main/data/projects.csv';
+const LOCAL_PROTEOMICS='data/proteomics_stats.json';
+const RAW_PROTEOMICS='https://raw.githubusercontent.com/arinaatom-cyber/TMT/main/data/proteomics_stats.json';
+
+/** Optional proteomics-derived overrides (PDC from *_summary.csv). */
+let PROTEOMICS_STATS=null;
+
+function applyProteomicsOverrides(rows){
+  if(!PROTEOMICS_STATS||!PROTEOMICS_STATS.projects) return rows;
+  return rows.map(x=>{
+    const pid=(x['Project ID']||'').trim();
+    const o=PROTEOMICS_STATS.projects[pid];
+    if(!o) return x;
+    const y={...x};
+    if(o.Patients!=null) y['Patients / donors']=String(o.Patients);
+    if(o.Samples!=null){
+      y['Total Samples']=String(o.Samples);
+      y['Samples Used N']=String(o.Samples);
+    }
+    if(o.UniProt_proteins!=null) y['Proteins Quantified']=String(o.UniProt_proteins);
+    if(o.Organ) y['Organ']=o.Organ;
+    if(o.Disease) y['Disease']=o.Disease;
+    if(o.Biospecimen_type) y['Sample Type']=o.Biospecimen_type;
+    if(o.Healthy_or_control!=null) y['Control Healthy']=String(o.Healthy_or_control);
+    if(o.Disease_patients!=null) y['Case Cancer Untreated']=String(o.Disease_patients);
+    if(o.Male!=null) y['Male']=String(o.Male);
+    if(o.Female!=null) y['Female']=String(o.Female);
+    if(o.Sex_unknown!=null) y['Sex unknown']=String(o.Sex_unknown);
+    y._proteomicsSource=o.Source||'proteomics_stats.json';
+    return y;
+  });
+}
 
 function parseCsvText(text,msg,sourceName){
   if(typeof Papa==='undefined') throw new Error('PapaParse not loaded');
@@ -1256,7 +1327,7 @@ function parseCsvText(text,msg,sourceName){
     header:true,
     skipEmptyLines:true,
     complete(r){
-      try{onDataLoaded(r.data,sourceName);}
+      try{onDataLoaded(applyProteomicsOverrides(r.data),sourceName);}
       catch(e){
         console.error(e);
         msg.textContent=(lang==='ru'?'Ошибка обработки: ':'Parse error: ')+e.message;
@@ -1268,9 +1339,26 @@ function parseCsvText(text,msg,sourceName){
   });
 }
 
+async function loadProteomicsStats(){
+  for(const url of [LOCAL_PROTEOMICS, RAW_PROTEOMICS]){
+    try{
+      const res=await fetch(url,{cache:'no-store'});
+      if(!res.ok) continue;
+      const data=await res.json();
+      if(data&&data.projects){
+        PROTEOMICS_STATS=data;
+        return;
+      }
+    }catch(e){
+      console.warn('proteomics_stats failed:',url,e);
+    }
+  }
+}
+
 async function loadSheetData(){
   const msg=document.querySelector('#loader p');
   msg.textContent=t('loading');
+  pdcOverrides=await loadPdcOverrides();
   const sources=[
     {name:'local',url:LOCAL_CSV},
     {name:'raw',url:RAW_CSV},
@@ -1282,7 +1370,7 @@ async function loadSheetData(){
       if(!res.ok) continue;
       const text=await res.text();
       if(!text.includes('Project ID')) continue;
-      parseCsvText(text,msg,src.name);
+      parseCsvText(text,msg,src.name+(Object.keys(pdcOverrides).length?`+pdc-summary(${Object.keys(pdcOverrides).length})`:''));
       return;
     }catch(e){
       console.warn('CSV source failed:',src.name,e);
@@ -1295,7 +1383,7 @@ async function loadSheetData(){
 
 window.addEventListener('DOMContentLoaded',()=>{
   const boot=window.ProteinAtlas?ProteinAtlas.initIdMap():Promise.resolve();
-  boot.then(loadSheetData);
+  boot.then(()=>loadProteomicsStats()).then(loadSheetData);
 });
 
 /* Anatomical organs.
@@ -1506,8 +1594,13 @@ function projectCard(r){
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
   const proteins=window.ProteinAtlas?.proteinBadgesHtml?.(r)||'';
   const platform=r.platform?`<span class="meta-pill">${esc(r.platform.slice(0,28))}</span>`:'';
+  const sexBits=[
+    r.male!=null?`M ${r.male}`:'',
+    r.female!=null?`F ${r.female}`:''
+  ].filter(Boolean).join(' · ');
   const cohort=[
     r.patients!=null?`<span class="meta-pill cohort" title="Patients / donors">👥 ${r.patients} ${t('patientsShort')}</span>`:'',
+    sexBits?`<span class="meta-pill cohort" title="Male / Female from patients">${esc(sexBits)}</span>`:'',
     r.totalSamples!=null?`<span class="meta-pill cohort" title="Total Samples">🧪 ${r.totalSamples} ${t('samplesShort')}</span>`:''
   ].join('');
   const linkProj=projHref
@@ -1566,6 +1659,9 @@ function projDossier(r){
   const cohort=[
     fld(L2('Всего образцов','Total samples'),v('Total Samples')),
     fld(L2('Пациенты / доноры','Patients / donors'),v('Patients / donors')),
+    fld(L2('Мужчины','Male'), (r.male!=null?String(r.male):v('Male')) || ''),
+    fld(L2('Женщины','Female'), (r.female!=null?String(r.female):v('Female')) || ''),
+    fld(L2('Пол не указан','Sex unknown'), (r.sexUnknown!=null?String(r.sexUnknown):v('Sex unknown')) || ''),
     fld(L2('Образцов использовано','Samples used'),v('Samples Used N')),
     fld(L2('Случаи: рак (без лечения)','Cases: cancer (untreated)'),v('Case Cancer Untreated')),
     fld(L2('Случаи: рак (после лечения)','Cases: cancer (treated)'),v('Case Cancer Treated')),
@@ -1965,7 +2061,7 @@ function sel(o){
   charts.forEach(x=>x.destroy()); charts=[];
 
   const dis={}, sam={}, dbs={};
-  let nHealthy=0,nCancer=0,sumPat=0,nPat=0,sumSamp=0,nSamp=0;
+  let nHealthy=0,nCancer=0,sumPat=0,nPat=0,sumSamp=0,nSamp=0,sumMale=0,sumFemale=0,nSex=0;
   uniqRows.forEach(r=>{
     const dk=r.disCanon||r.dis;
     dis[dk]=(dis[dk]||0)+1;
@@ -1974,6 +2070,9 @@ function sel(o){
     if(r.healthy) nHealthy++; else nCancer++;
     if(r.patients!=null){sumPat+=r.patients;nPat++;}
     if(r.totalSamples!=null){sumSamp+=r.totalSamples;nSamp++;}
+    if(r.male!=null||r.female!=null){
+      sumMale+=(r.male||0); sumFemale+=(r.female||0); nSex++;
+    }
   });
   const ds=Object.entries(dis).sort((a,b)=>b[1]-a[1]);
   const ss=Object.entries(sam).sort((a,b)=>b[1]-a[1]);
@@ -2004,6 +2103,7 @@ function sel(o){
     <div class="ms"><div class="v" style="color:${PASTEL_NORMAL}">${nHealthy}</div><div class="l">Normal</div></div>
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
     <div class="ms" title="${esc(t('patSampHint'))}"><div class="v">${nPat?sumPat.toLocaleString():'—'}</div><div class="l">${t('sumPatients')}</div></div>
+    <div class="ms" title="Male / Female from patients"><div class="v">${nSex?`${sumMale.toLocaleString()} / ${sumFemale.toLocaleString()}`:'—'}</div><div class="l">M / F</div></div>
     <div class="ms" title="${esc(t('patSampHint'))}"><div class="v">${nSamp?sumSamp.toLocaleString():'—'}</div><div class="l">${t('sumSamples')}</div></div>
   </div>
   ${compareBlock(o)}
