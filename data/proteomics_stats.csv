@@ -1,0 +1,44 @@
+﻿Project_ID,Repository,Organ,Disease,Biospecimen_type,Patients_total,Male,Female,Sex_unknown,Disease_patients,Healthy_or_control,Total_Samples,preCancer,Case_Cancer_Untreated,Case_Cancer_Treated,Control_Healthy,Healthy_treated,Cell_line_samples,Tissue_samples,UniProt_proteins,Ensembl_proteins,PMID,Source
+PDC000110,PDC,Ovary; Fallopian tube,HGSOC,Tissue,95,0,87,8,85,23,108,0,0,0,0,0,0,108,8499,8510,32529193,PDC000110_summary.csv
+PDC000116,PDC,Colon,COAD,Tissue,101,42,58,1,97,100,197,0,0,0,0,0,0,197,7401,7414,31031003,PDC000116_summary.csv
+PDC000118,PDC,Ovary; Fallopian tube,HGSC,Tissue,93,0,87,6,84,19,103,0,0,0,0,0,0,103,8802,8811,32529193,PDC000118_summary.csv
+PDC000120,PDC,Breast,Breast invasive carcinoma (BRCA),Tissue,126,0,112,14,125,18,153,0,0,0,0,0,0,153,10465,10486,33212010,PDC000120_summary.csv
+PDC000125,PDC,Uterus,Endometrial carcinoma (EC),Tissue,122,0,104,18,103,49,153,0,0,0,0,0,0,153,10740,10760,32059776,PDC000125_summary.csv
+PDC000127,PDC,Kidney,ccRCC,Tissue,110,80,30,0,110,84,194,0,0,0,0,0,5,194,9940,9960,31675502,PDC000127_summary.csv
+PDC000153,PDC,Lung,Lung adenocarcinoma,Tissue,111,73,38,0,111,102,215,0,0,0,0,0,0,215,11000,11022,40749670,PDC000153_summary.csv
+PDC000180,PDC,Brain,Pediatric/AYA Brain Tumors,Tissue,205,115,83,7,205,0,230,0,0,0,0,0,0,230,7144,7152,33242424,PDC000180_summary.csv
+PDC000198,PDC,Liver,Hepatocellular carcinoma,Tissue,170,128,32,10,165,165,330,0,0,0,0,0,0,330,10224,10242,31585088,PDC000198_summary.csv
+PDC000204,PDC,Brain,Glioblastoma multiforme (GBM),Tissue,110,61,49,0,100,10,110,0,0,0,0,0,0,110,10943,10968,33577785,PDC000204_summary.csv
+PDC000219,PDC,Lung,Lung adenocarcinoma,Tissue,108,45,59,4,108,108,432,0,0,0,0,0,0,432,11183,11200,40749670,PDC000219_summary.csv
+PDC000221,PDC,Head and neck,Head and Neck Squamous Cell Carcinoma,Tissue,115,97,15,3,110,70,189,0,0,0,0,0,0,189,10227,10244,33417831,PDC000221_summary.csv
+PDC000234,PDC,Lung,Lung squamous cell carcinoma,Tissue,110,88,22,0,110,102,212,0,0,0,0,0,0,212,11453,11476,34358469,PDC000234_summary.csv
+PDC000248,PDC,Pancreas,Pancreatic ductal adenocarcinoma,Tissue,153,86,67,0,153,0,153,0,0,0,0,0,0,153,10476,10496,36550235,PDC000248_summary.csv
+PDC000270,PDC,Pancreas,Pancreatic ductal adenocarcinoma,Tissue,158,85,68,5,149,91,242,0,0,0,0,0,0,242,10088,10109,34534465,PDC000270_summary.csv
+PDC000295,PDC,Lung; Breast; Colon; Blood,Multiple cancer cell lines,Cell Lines,0,0,0,0,0,0,9,0,0,0,0,0,9,0,5704,5712,29718670,PDC000295_summary.csv
+PDC000315,PDC,Hematopoietic system,Acute myeloid leukemia,Cell Lines,0,0,0,0,0,0,40,0,0,0,0,0,40,40,6549,6557,34171263,PDC000315_summary.csv
+PDC000316,PDC,Hematopoietic system,Acute Myeloid Leukemia,Cell Lines,0,0,0,0,0,0,30,0,0,0,0,0,30,30,6919,6927,34171263,PDC000316_summary.csv
+PDC000317,PDC,Hematopoietic system,Acute Myeloid Leukemia,Cell Lines,0,0,0,0,0,0,20,0,0,0,0,0,20,20,6187,6194,34171263,PDC000317_summary.csv
+PDC000325,PDC,Breast,Breast invasive carcinoma,Tissue,14,0,14,0,14,0,35,0,20,15,0,0,0,35,8824,8838,31988290,PDC000325_summary.csv
+PDC000342,PDC,Cervix,Cervical cancer,Tissue,150,0,150,0,150,0,150,0,150,0,0,0,0,150,11358,11396,40087745,PDC000342_summary.csv
+PDC000356,PDC,Liver,Cholangiocarcinoma,Tissue,104,67,37,0,104,101,208,0,104,0,104,0,0,208,8251,8275,36898552,PDC000356_summary.csv
+PDC000358,PDC,Ovary,High-Grade Serous Ovarian Carcinoma,Tissue,20,0,20,0,20,0,20,0,20,0,0,0,0,20,6727,6735,37541199,PDC000358_summary.csv
+PDC000360,PDC,Ovary,High-Grade Serous Ovarian Carcinoma,Tissue,158,0,160,0,158,0,168,0,168,0,0,0,0,168,9213,9230,37541199,PDC000360_summary.csv
+PDC000362,PDC,Ovary,High-Grade Serous Ovarian Carcinoma,Tissue,64,0,65,0,64,0,72,0,72,0,0,0,0,72,8064,8078,37541199,PDC000362_summary.csv
+PDC000393,PDC,Pancreas,Pancreatic ductal adenocarcinoma,Tissue,6,1,5,0,6,3,27,0,18,0,9,0,0,27,7392,7409,36266629,PDC000393_summary.csv
+PDC000398,PDC,Hematopoietic and reticuloendothelial systems,Acute myeloid leukemia,Primary cells,16,10,6,0,16,0,16,0,10,6,0,0,0,16,7002,7010,35896960,PDC000398_summary.csv
+PDC000400,PDC,Hematopoietic and reticuloendothelial systems,Acute myeloid leukemia,Primary cells,4,1,3,0,4,0,16,0,8,8,0,0,0,16,6472,6481,35896960,PDC000400_summary.csv
+PDC000402,PDC,Hematopoietic and reticuloendothelial systems,Acute myeloid leukemia,Primary cells,19,7,12,0,19,0,20,0,15,5,0,0,0,20,6325,6333,35896960,PDC000402_summary.csv
+PDC000408,PDC,Breast,Breast invasive carcinoma,Tissue,56,0,56,0,56,0,72,0,56,16,0,0,0,72,8826,8841,36001024,PDC000408_summary.csv
+PDC000434,PDC,Lung,Lung adenocarcinoma,Tissue,100,45,42,13,100,0,100,0,100,0,0,0,0,100,8991,9005,36384096,PDC000434_summary.csv
+PDC000439,PDC,Uterus,Endometrial carcinoma,Tissue,158,0,138,20,138,20,160,0,140,0,20,0,0,160,10906,10924,37567170,PDC000439_summary.csv
+PDC000446,PDC,Brain,Glioblastoma; Gliomas; Astrocytoma; Gliosarcoma; Meningioma; brain metastases,Tissue,117,74,43,0,110,8,149,0,116,25,8,0,0,149,11126,11150,38981438,PDC000446_summary.csv
+PDC000464,PDC,Kidney,Kidney cancer,Tissue,41,24,17,0,41,19,68,0,49,0,19,0,0,68,8298,8314,38703764,PDC000464_summary.csv
+PDC000477,PDC,Hematopoietic and reticuloendothelial system,Acute myeloid leukemia,Primary cells,210,92,94,3,186,0,186,0,128,58,0,0,0,186,9112,9138,38232702,PDC000477_summary.csv
+PDC000489,PDC,Lung,Lung adenocarcinoma,Tissue,120,73,47,0,120,113,235,0,122,0,113,0,0,235,11371,11407,40749670,PDC000489_summary.csv
+PDC000514,PDC,Brain,Glioblastoma,Tissue,109,70,39,1,109,0,221,0,112,109,0,0,0,221,11276,11313,38215747,PDC000514_summary.csv
+PDC000519,PDC,Oral cavity,Oral squamous cell carcinoma,Tissue,105,98,7,0,105,105,448,0,224,1,224,0,0,448,11824,11867,39842500,PDC000519_summary.csv
+PDC000563,PDC,Lung,Lung adenocarcinoma,Tissue,124,53,71,0,124,124,248,0,124,0,124,0,0,248,11677,11712,40749670,PDC000563_summary.csv
+PDC000582,PDC,Breast,Breast invasive carcinoma,Tissue,54,0,54,0,54,0,75,0,75,0,0,0,0,75,9157,9180,40480221,PDC000582_summary.csv
+PDC000585,PDC,Ovary,Ovarian cancer,Tissue,70,0,70,1,70,0,70,0,70,0,0,0,0,70,9502,9527,38480868,PDC000585_summary.csv
+PDC000588,PDC,Pancreas,Neuroendocrine Neoplasms,Tissue,37,18,19,10,37,37,74,0,37,0,37,0,0,74,10016,10047,40185092,PDC000588_summary.csv
+PDC000590,PDC,Pancreas,Neuroendocrine Neoplasms,Tissue,115,54,61,0,115,115,230,0,115,0,115,0,0,230,10776,10812,40185092,PDC000590_summary.csv
