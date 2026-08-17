@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated_at": "2026-08-17T15:01:55Z",
+  "updated_at": "2026-08-17T15:07:16Z",
   "description": "Canonical PDC cohort stats for TMT Atlas map. Patients/Male/Female/Disease/Healthy/Samples/Cell lines/Organ from each project's Atlas *_summary.csv (proteomics annotation rules).",
   "columns": {
     "Patients": "unique patients with proteomics (cell-line-only projects = 0)",
@@ -997,7 +997,7 @@
       "Total_Samples": 448,
       "preCancer": 0,
       "Case_Cancer_Untreated": 224,
-      "Case_Cancer_Treated": 1,
+      "Case_Cancer_Treated": 0,
       "Control_Healthy": 224,
       "Healthy_treated": 0,
       "Samples": 448,
