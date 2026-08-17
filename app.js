@@ -1302,19 +1302,25 @@ function applyProteomicsOverrides(rows){
     if(!o) return x;
     const y={...x};
     if(o.Patients!=null) y['Patients / donors']=String(o.Patients);
-    if(o.Samples!=null){
-      y['Total Samples']=String(o.Samples);
-      y['Samples Used N']=String(o.Samples);
+    if(o.Total_Samples!=null||o.Samples!=null){
+      const n=o.Total_Samples!=null?o.Total_Samples:o.Samples;
+      y['Total Samples']=String(n);
+      y['Samples Used N']=String(n);
     }
+    if(o.preCancer!=null) y['preCancer']=String(o.preCancer);
+    if(o.Case_Cancer_Untreated!=null) y['Case Cancer Untreated']=String(o.Case_Cancer_Untreated);
+    if(o.Case_Cancer_Treated!=null) y['Case Cancer Treated']=String(o.Case_Cancer_Treated);
+    if(o.Control_Healthy!=null) y['Control Healthy']=String(o.Control_Healthy);
+    if(o.Healthy_treated!=null) y['Healthy treated']=String(o.Healthy_treated);
     if(o.UniProt_proteins!=null) y['Proteins Quantified']=String(o.UniProt_proteins);
     if(o.Organ) y['Organ']=o.Organ;
     if(o.Disease) y['Disease']=o.Disease;
     if(o.Biospecimen_type) y['Sample Type']=o.Biospecimen_type;
-    if(o.Healthy_or_control!=null) y['Control Healthy']=String(o.Healthy_or_control);
-    if(o.Disease_patients!=null) y['Case Cancer Untreated']=String(o.Disease_patients);
     if(o.Male!=null) y['Male']=String(o.Male);
     if(o.Female!=null) y['Female']=String(o.Female);
     if(o.Sex_unknown!=null) y['Sex unknown']=String(o.Sex_unknown);
+    if(o.Tissue_samples!=null) y['Tissue samples']=String(o.Tissue_samples);
+    if(o.Cell_line_samples!=null) y['Cell line samples']=String(o.Cell_line_samples);
     y._proteomicsSource=o.Source||'proteomics_stats.json';
     return y;
   });
