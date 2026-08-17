@@ -13,7 +13,7 @@ PDC000219,PDC,Lung,Lung adenocarcinoma,Tissue,108,45,59,4,108,108,432,0,0,0,0,0,
 PDC000221,PDC,Head and neck,Head and Neck Squamous Cell Carcinoma,Tissue,115,97,15,3,110,70,189,0,0,0,0,0,0,189,10227,10244,33417831,PDC000221_summary.csv
 PDC000234,PDC,Lung,Lung squamous cell carcinoma,Tissue,110,88,22,0,110,102,212,0,0,0,0,0,0,212,11453,11476,34358469,PDC000234_summary.csv
 PDC000248,PDC,Pancreas,Pancreatic ductal adenocarcinoma,Tissue,153,86,67,0,153,0,153,0,0,0,0,0,0,153,10476,10496,36550235,PDC000248_summary.csv
-PDC000270,PDC,Pancreas,Pancreatic ductal adenocarcinoma,Tissue,158,85,68,5,149,91,242,0,0,0,0,0,0,242,10088,10109,34534465,PDC000270_summary.csv
+PDC000270,PDC,Pancreas,Pancreatic ductal adenocarcinoma,Tissue,140,85,68,5,140,91,231,0,140,0,91,0,0,231,10088,10109,34534465,PDC000270_summary.csv
 PDC000295,PDC,Lung; Breast; Colon; Blood,Multiple cancer cell lines,Cell Lines,0,0,0,0,0,0,9,0,9,0,0,0,9,0,5704,5712,29718670,PDC000295_summary.csv
 PDC000315,PDC,Hematopoietic system,Acute myeloid leukemia,Cell Lines,0,0,0,0,0,0,40,0,9,31,0,0,40,0,6549,6557,34171263,PDC000315_summary.csv
 PDC000316,PDC,Hematopoietic system,Acute Myeloid Leukemia,Cell Lines,0,0,0,0,0,0,30,0,10,20,0,0,30,0,6919,6927,34171263,PDC000316_summary.csv
