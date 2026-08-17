@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-08-17T15:02:06Z",
+  "generated_at": "2026-08-17T15:12:46Z",
   "description": "PDC overrides for atlas map from *_summary.csv (mismatch rows excluded from samples).",
   "n_projects": 43,
   "projects": {
@@ -278,7 +278,8 @@
       "Ensembl_proteins": "10244",
       "UniProt_proteins": "10227",
       "Protein_rows_result": "10250",
-      "Verification_notes": "UniProt=10227 vs rows=10250; samples fixed 192->189 (excluded 3 biospecimen mismatch)"
+      "Verification_notes": "UniProt=10227 vs rows=10250; samples fixed 192->189 (excluded 3 biospecimen mismatch); verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000234": {
       "source": "summary_csv",
@@ -301,7 +302,8 @@
       "Ensembl_proteins": "11476",
       "UniProt_proteins": "11453",
       "Protein_rows_result": "11485",
-      "Verification_notes": "UniProt=11453 vs rows=11485; samples fixed 220->212 (excluded 8 biospecimen mismatch)"
+      "Verification_notes": "UniProt=11453 vs rows=11485; samples fixed 220->212 (excluded 8 biospecimen mismatch); verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000248": {
       "source": "summary_csv",
@@ -324,7 +326,8 @@
       "Ensembl_proteins": "10496",
       "UniProt_proteins": "10476",
       "Protein_rows_result": "10518",
-      "Verification_notes": "UniProt=10476 vs rows=10518"
+      "Verification_notes": "UniProt=10476 vs rows=10518; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000270": {
       "source": "summary_csv",
@@ -347,7 +350,8 @@
       "Ensembl_proteins": "10109",
       "UniProt_proteins": "10088",
       "Protein_rows_result": "10116",
-      "Verification_notes": "UniProt=10088 vs rows=10116; samples fixed 244->242 (excluded 2 biospecimen mismatch)"
+      "Verification_notes": "UniProt=10088 vs rows=10116; samples fixed 244->242 (excluded 2 biospecimen mismatch); verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000295": {
       "source": "summary_csv",
@@ -370,7 +374,8 @@
       "Ensembl_proteins": "5712",
       "UniProt_proteins": "5704",
       "Protein_rows_result": "5714",
-      "Verification_notes": "NCI-7 cell line reference panel; 9 Log Ratio TMT channels; pool is reference denominator only; pool donors are not patients"
+      "Verification_notes": "NCI-7 cell line reference panel; 9 Log Ratio TMT channels; pool is reference denominator only; pool donors are not patients; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000315": {
       "source": "summary_csv",
@@ -393,7 +398,7 @@
       "Ensembl_proteins": "6557",
       "UniProt_proteins": "6549",
       "Protein_rows_result": "6561",
-      "Verification_notes": "UniProt=6549 vs rows=6561",
+      "Verification_notes": "UniProt=6549 vs rows=6561; verified cohort counts 2026-08-17",
       "Case Cancer Treated": "31"
     },
     "PDC000316": {
@@ -417,7 +422,7 @@
       "Ensembl_proteins": "6927",
       "UniProt_proteins": "6919",
       "Protein_rows_result": "6931",
-      "Verification_notes": "UniProt=6919 vs rows=6931",
+      "Verification_notes": "UniProt=6919 vs rows=6931; verified cohort counts 2026-08-17",
       "Case Cancer Treated": "20"
     },
     "PDC000317": {
@@ -441,7 +446,7 @@
       "Ensembl_proteins": "6194",
       "UniProt_proteins": "6187",
       "Protein_rows_result": "6198",
-      "Verification_notes": "UniProt=6187 vs rows=6198",
+      "Verification_notes": "UniProt=6187 vs rows=6198; verified cohort counts 2026-08-17",
       "Case Cancer Treated": "16"
     },
     "PDC000325": {
@@ -456,7 +461,7 @@
       "Samples Used N": "35",
       "Proteins Quantified": "8824",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "14",
+      "Case Cancer Untreated": "20",
       "Male_patients": "0",
       "Female_patients": "14",
       "Sex_unknown": "0",
@@ -465,7 +470,8 @@
       "Ensembl_proteins": "8838",
       "UniProt_proteins": "8824",
       "Protein_rows_result": "8842",
-      "Verification_notes": "UniProt=8824 vs rows=8842"
+      "Verification_notes": "UniProt=8824 vs rows=8842; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "15"
     },
     "PDC000342": {
       "source": "summary_csv",
@@ -488,7 +494,8 @@
       "Ensembl_proteins": "11396",
       "UniProt_proteins": "11358",
       "Protein_rows_result": "11406",
-      "Verification_notes": "UniProt=11358 vs rows=11406"
+      "Verification_notes": "UniProt=11358 vs rows=11406; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000356": {
       "source": "summary_csv",
@@ -501,7 +508,7 @@
       "Total Samples": "208",
       "Samples Used N": "208",
       "Proteins Quantified": "8251",
-      "Control Healthy": "101",
+      "Control Healthy": "104",
       "Case Cancer Untreated": "104",
       "Male_patients": "67",
       "Female_patients": "37",
@@ -511,7 +518,8 @@
       "Ensembl_proteins": "8275",
       "UniProt_proteins": "8251",
       "Protein_rows_result": "8282",
-      "Verification_notes": "annotation patients=104; publication may differ; UniProt=8251 vs rows=8282"
+      "Verification_notes": "annotation patients=104; publication may differ; UniProt=8251 vs rows=8282; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000358": {
       "source": "summary_csv",
@@ -534,7 +542,8 @@
       "Ensembl_proteins": "6735",
       "UniProt_proteins": "6727",
       "Protein_rows_result": "6738",
-      "Verification_notes": "UniProt=6727 vs rows=6738"
+      "Verification_notes": "UniProt=6727 vs rows=6738; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000360": {
       "source": "summary_csv",
@@ -543,12 +552,12 @@
       "Organ": "Ovary",
       "Disease": "High-Grade Serous Ovarian Carcinoma",
       "Sample Type": "Tissue",
-      "Patients / donors": "160",
-      "Total Samples": "210",
-      "Samples Used N": "210",
+      "Patients / donors": "158",
+      "Total Samples": "168",
+      "Samples Used N": "168",
       "Proteins Quantified": "9213",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "158",
+      "Case Cancer Untreated": "168",
       "Male_patients": "0",
       "Female_patients": "160",
       "Sex_unknown": "0",
@@ -557,7 +566,8 @@
       "Ensembl_proteins": "9230",
       "UniProt_proteins": "9213",
       "Protein_rows_result": "9235",
-      "Verification_notes": "UniProt=9213 vs rows=9235"
+      "Verification_notes": "UniProt=9213 vs rows=9235; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000362": {
       "source": "summary_csv",
@@ -566,12 +576,12 @@
       "Organ": "Ovary",
       "Disease": "High-Grade Serous Ovarian Carcinoma",
       "Sample Type": "Tissue",
-      "Patients / donors": "65",
-      "Total Samples": "80",
-      "Samples Used N": "80",
+      "Patients / donors": "64",
+      "Total Samples": "72",
+      "Samples Used N": "72",
       "Proteins Quantified": "8064",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "64",
+      "Case Cancer Untreated": "72",
       "Male_patients": "0",
       "Female_patients": "65",
       "Sex_unknown": "0",
@@ -580,7 +590,8 @@
       "Ensembl_proteins": "8078",
       "UniProt_proteins": "8064",
       "Protein_rows_result": "8081",
-      "Verification_notes": "UniProt=8064 vs rows=8081"
+      "Verification_notes": "UniProt=8064 vs rows=8081; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000393": {
       "source": "summary_csv",
@@ -593,8 +604,8 @@
       "Total Samples": "27",
       "Samples Used N": "27",
       "Proteins Quantified": "7392",
-      "Control Healthy": "3",
-      "Case Cancer Untreated": "6",
+      "Control Healthy": "9",
+      "Case Cancer Untreated": "18",
       "Male_patients": "1",
       "Female_patients": "5",
       "Sex_unknown": "0",
@@ -603,7 +614,8 @@
       "Ensembl_proteins": "7409",
       "UniProt_proteins": "7392",
       "Protein_rows_result": "7411",
-      "Verification_notes": "UniProt=7392 vs rows=7411"
+      "Verification_notes": "UniProt=7392 vs rows=7411; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000398": {
       "source": "summary_csv",
@@ -617,7 +629,7 @@
       "Samples Used N": "16",
       "Proteins Quantified": "7002",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "16",
+      "Case Cancer Untreated": "10",
       "Male_patients": "10",
       "Female_patients": "6",
       "Sex_unknown": "0",
@@ -626,7 +638,8 @@
       "Ensembl_proteins": "7010",
       "UniProt_proteins": "7002",
       "Protein_rows_result": "7015",
-      "Verification_notes": "UniProt=7002 vs rows=7015"
+      "Verification_notes": "UniProt=7002 vs rows=7015; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "6"
     },
     "PDC000400": {
       "source": "summary_csv",
@@ -640,7 +653,7 @@
       "Samples Used N": "16",
       "Proteins Quantified": "6472",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "4",
+      "Case Cancer Untreated": "8",
       "Male_patients": "1",
       "Female_patients": "3",
       "Sex_unknown": "0",
@@ -649,7 +662,8 @@
       "Ensembl_proteins": "6481",
       "UniProt_proteins": "6472",
       "Protein_rows_result": "6483",
-      "Verification_notes": "UniProt=6472 vs rows=6483"
+      "Verification_notes": "UniProt=6472 vs rows=6483; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "8"
     },
     "PDC000402": {
       "source": "summary_csv",
@@ -663,7 +677,7 @@
       "Samples Used N": "20",
       "Proteins Quantified": "6325",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "19",
+      "Case Cancer Untreated": "15",
       "Male_patients": "7",
       "Female_patients": "12",
       "Sex_unknown": "0",
@@ -672,7 +686,8 @@
       "Ensembl_proteins": "6333",
       "UniProt_proteins": "6325",
       "Protein_rows_result": "6338",
-      "Verification_notes": "UniProt=6325 vs rows=6338"
+      "Verification_notes": "UniProt=6325 vs rows=6338; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "5"
     },
     "PDC000408": {
       "source": "summary_csv",
@@ -695,7 +710,8 @@
       "Ensembl_proteins": "8841",
       "UniProt_proteins": "8826",
       "Protein_rows_result": "8844",
-      "Verification_notes": "UniProt=8826 vs rows=8844; samples fixed 80->72 (excluded 8 biospecimen mismatch)"
+      "Verification_notes": "UniProt=8826 vs rows=8844; samples fixed 80->72 (excluded 8 biospecimen mismatch); verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "16"
     },
     "PDC000434": {
       "source": "summary_csv",
@@ -718,7 +734,8 @@
       "Ensembl_proteins": "9005",
       "UniProt_proteins": "8991",
       "Protein_rows_result": "9009",
-      "Verification_notes": "UniProt=8991 vs rows=9009"
+      "Verification_notes": "UniProt=8991 vs rows=9009; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000439": {
       "source": "summary_csv",
@@ -732,7 +749,7 @@
       "Samples Used N": "160",
       "Proteins Quantified": "10906",
       "Control Healthy": "20",
-      "Case Cancer Untreated": "138",
+      "Case Cancer Untreated": "140",
       "Male_patients": "0",
       "Female_patients": "138",
       "Sex_unknown": "20",
@@ -741,7 +758,8 @@
       "Ensembl_proteins": "10924",
       "UniProt_proteins": "10906",
       "Protein_rows_result": "10934",
-      "Verification_notes": "UniProt=10906 vs rows=10934"
+      "Verification_notes": "UniProt=10906 vs rows=10934; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000446": {
       "source": "summary_csv",
@@ -764,7 +782,7 @@
       "Ensembl_proteins": "11150",
       "UniProt_proteins": "11126",
       "Protein_rows_result": "11159",
-      "Verification_notes": "UniProt=11126 vs rows=11159",
+      "Verification_notes": "UniProt=11126 vs rows=11159; patients Disease=110 Healthy=8; samples 149 (116 primary+metastatic + 25 recurrent + 8 normal); verified cohort counts 2026-08-14",
       "Case Cancer Treated": "25"
     },
     "PDC000464": {
@@ -779,7 +797,7 @@
       "Samples Used N": "68",
       "Proteins Quantified": "8298",
       "Control Healthy": "19",
-      "Case Cancer Untreated": "41",
+      "Case Cancer Untreated": "49",
       "Male_patients": "24",
       "Female_patients": "17",
       "Sex_unknown": "0",
@@ -788,7 +806,8 @@
       "Ensembl_proteins": "8314",
       "UniProt_proteins": "8298",
       "Protein_rows_result": "8317",
-      "Verification_notes": "UniProt=8298 vs rows=8317; samples fixed 70->68 (excluded 2 biospecimen mismatch)"
+      "Verification_notes": "UniProt=8298 vs rows=8317; samples fixed 70->68 (excluded 2 biospecimen mismatch); verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000477": {
       "source": "summary_csv",
@@ -797,12 +816,12 @@
       "Organ": "Hematopoietic and reticuloendothelial system",
       "Disease": "Acute myeloid leukemia",
       "Sample Type": "Primary cells",
-      "Patients / donors": "189",
-      "Total Samples": "189",
-      "Samples Used N": "189",
+      "Patients / donors": "210",
+      "Total Samples": "186",
+      "Samples Used N": "186",
       "Proteins Quantified": "9112",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "186",
+      "Case Cancer Untreated": "128",
       "Male_patients": "92",
       "Female_patients": "94",
       "Sex_unknown": "3",
@@ -811,7 +830,8 @@
       "Ensembl_proteins": "9138",
       "UniProt_proteins": "9112",
       "Protein_rows_result": "9149",
-      "Verification_notes": "UniProt=9112 vs rows=9149"
+      "Verification_notes": "UniProt=9112 vs rows=9149; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "58"
     },
     "PDC000489": {
       "source": "summary_csv",
@@ -825,7 +845,7 @@
       "Samples Used N": "235",
       "Proteins Quantified": "11371",
       "Control Healthy": "113",
-      "Case Cancer Untreated": "120",
+      "Case Cancer Untreated": "122",
       "Male_patients": "73",
       "Female_patients": "47",
       "Sex_unknown": "0",
@@ -834,7 +854,8 @@
       "Ensembl_proteins": "11407",
       "UniProt_proteins": "11371",
       "Protein_rows_result": "11418",
-      "Verification_notes": "UniProt=11371 vs rows=11418"
+      "Verification_notes": "UniProt=11371 vs rows=11418; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000514": {
       "source": "summary_csv",
@@ -843,12 +864,12 @@
       "Organ": "Brain",
       "Disease": "Glioblastoma",
       "Sample Type": "Tissue",
-      "Patients / donors": "110",
-      "Total Samples": "259",
-      "Samples Used N": "259",
+      "Patients / donors": "109",
+      "Total Samples": "221",
+      "Samples Used N": "221",
       "Proteins Quantified": "11276",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "109",
+      "Case Cancer Untreated": "112",
       "Male_patients": "70",
       "Female_patients": "39",
       "Sex_unknown": "1",
@@ -857,7 +878,8 @@
       "Ensembl_proteins": "11313",
       "UniProt_proteins": "11276",
       "Protein_rows_result": "11320",
-      "Verification_notes": "annotation patients=110; publication may differ; UniProt=11276 vs rows=11320"
+      "Verification_notes": "annotation patients=110; publication may differ; UniProt=11276 vs rows=11320; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "109"
     },
     "PDC000519": {
       "source": "summary_csv",
@@ -870,8 +892,8 @@
       "Total Samples": "448",
       "Samples Used N": "448",
       "Proteins Quantified": "11824",
-      "Control Healthy": "105",
-      "Case Cancer Untreated": "105",
+      "Control Healthy": "224",
+      "Case Cancer Untreated": "224",
       "Male_patients": "98",
       "Female_patients": "7",
       "Sex_unknown": "0",
@@ -880,7 +902,8 @@
       "Ensembl_proteins": "11867",
       "UniProt_proteins": "11824",
       "Protein_rows_result": "11877",
-      "Verification_notes": "excluded 56 pooledcellsIR mismatch channels from samples; UniProt=11824 vs rows=11877"
+      "Verification_notes": "excluded 56 pooledcellsIR mismatch channels from samples; UniProt=11824 vs rows=11877; verified cohort counts 2026-08-14; verified cohort counts 2026-08-17",
+      "Case Cancer Treated": "0"
     },
     "PDC000563": {
       "source": "summary_csv",
@@ -903,7 +926,8 @@
       "Ensembl_proteins": "11712",
       "UniProt_proteins": "11677",
       "Protein_rows_result": "11724",
-      "Verification_notes": "UniProt=11677 vs rows=11724"
+      "Verification_notes": "UniProt=11677 vs rows=11724; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000582": {
       "source": "summary_csv",
@@ -917,7 +941,7 @@
       "Samples Used N": "75",
       "Proteins Quantified": "9157",
       "Control Healthy": "0",
-      "Case Cancer Untreated": "54",
+      "Case Cancer Untreated": "75",
       "Male_patients": "0",
       "Female_patients": "54",
       "Sex_unknown": "0",
@@ -926,7 +950,8 @@
       "Ensembl_proteins": "9180",
       "UniProt_proteins": "9157",
       "Protein_rows_result": "9186",
-      "Verification_notes": "UniProt=9157 vs rows=9186"
+      "Verification_notes": "UniProt=9157 vs rows=9186; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000585": {
       "source": "summary_csv",
@@ -935,9 +960,9 @@
       "Organ": "Ovary",
       "Disease": "Ovarian cancer",
       "Sample Type": "Tissue",
-      "Patients / donors": "71",
-      "Total Samples": "120",
-      "Samples Used N": "120",
+      "Patients / donors": "70",
+      "Total Samples": "70",
+      "Samples Used N": "70",
       "Proteins Quantified": "9502",
       "Control Healthy": "0",
       "Case Cancer Untreated": "70",
@@ -949,7 +974,8 @@
       "Ensembl_proteins": "9527",
       "UniProt_proteins": "9502",
       "Protein_rows_result": "9533",
-      "Verification_notes": "UniProt=9502 vs rows=9533"
+      "Verification_notes": "UniProt=9502 vs rows=9533; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000588": {
       "source": "summary_csv",
@@ -958,9 +984,9 @@
       "Organ": "Pancreas",
       "Disease": "Neuroendocrine Neoplasms",
       "Sample Type": "Tissue",
-      "Patients / donors": "47",
-      "Total Samples": "88",
-      "Samples Used N": "88",
+      "Patients / donors": "37",
+      "Total Samples": "74",
+      "Samples Used N": "74",
       "Proteins Quantified": "10016",
       "Control Healthy": "37",
       "Case Cancer Untreated": "37",
@@ -972,7 +998,8 @@
       "Ensembl_proteins": "10047",
       "UniProt_proteins": "10016",
       "Protein_rows_result": "10057",
-      "Verification_notes": "UniProt=10016 vs rows=10057"
+      "Verification_notes": "UniProt=10016 vs rows=10057; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     },
     "PDC000590": {
       "source": "summary_csv",
@@ -995,7 +1022,8 @@
       "Ensembl_proteins": "10812",
       "UniProt_proteins": "10776",
       "Protein_rows_result": "10826",
-      "Verification_notes": "UniProt=10776 vs rows=10826"
+      "Verification_notes": "UniProt=10776 vs rows=10826; verified cohort counts 2026-08-14",
+      "Case Cancer Treated": "0"
     }
   }
 }
