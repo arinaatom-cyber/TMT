@@ -28,7 +28,7 @@ IPX_FIX = {
     "FDR (Unified %)": "1%",
     "Result Files": "result_IPX0002532001",
     "preCancer": "0",
-    "Healty trraeted": "0",
+    "Healthy_treated": "0",
 }
 
 
@@ -69,7 +69,7 @@ def summary_to_override(pid: str, s: dict[str, str]) -> dict[str, str]:
         "Case_Cancer_Untreated": "Case Cancer Untreated",
         "Case_Cancer_Treated": "Case Cancer Treated",
         "Control_Healthy": "Control Healthy",
-        "Healthy_treated": "Healty trraeted",
+        "Healthy_treated": "Healthy_treated",
         "Total_unique_patients": "Patients / donors",
         "UniProt_proteins": "Proteins Quantified",
         "Male_patients": "Male_patients",

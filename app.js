@@ -1192,7 +1192,7 @@ const PDC_OVERRIDES_URL='data/pdc-summary-overrides.json';
 const PDC_OVERRIDE_FIELDS=[
   'Patients / donors','Total Samples','Samples Used N','Proteins Quantified',
   'Organ','Disease','Sample Type','Control Healthy','Case Cancer Untreated',
-  'Case Cancer Treated','preCancer','Healty trraeted','PMID',
+  'Case Cancer Treated','preCancer','Healthy_treated','PMID',
   'Male','Female','Sex unknown','Male_patients','Female_patients','Sex_unknown'
 ];
 let pdcOverrides={};
@@ -1321,7 +1321,7 @@ function applyProteomicsOverrides(rows){
     if(o.Case_Cancer_Untreated!=null) y['Case Cancer Untreated']=String(o.Case_Cancer_Untreated);
     if(o.Case_Cancer_Treated!=null) y['Case Cancer Treated']=String(o.Case_Cancer_Treated);
     if(o.Control_Healthy!=null) y['Control Healthy']=String(o.Control_Healthy);
-    if(o.Healthy_treated!=null) y['Healthy treated']=String(o.Healthy_treated);
+    if(o.Healthy_treated!=null) y['Healthy_treated']=String(o.Healthy_treated);
     if(o.UniProt_proteins!=null) y['Proteins Quantified']=String(o.UniProt_proteins);
     if(o.Organ) y['Organ']=o.Organ;
     if(o.Disease) y['Disease']=o.Disease;
