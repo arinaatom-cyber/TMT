@@ -96,9 +96,9 @@
 "files": []
 },
 "MSV000085836": {
-"sheet_result": "sn_non_normalized_v1.1",
+"sheet_result": "result_MSV000085836",
 "fasta": "UniProt",
-"sheet_count": 12755,
+"sheet_count": 12638,
 "files": []
 },
 "PXD017025": {
@@ -198,9 +198,9 @@
 "files": []
 },
 "PXD022714": {
-"sheet_result": "mmc4.xlsx",
+"sheet_result": "result_IPX0002532001",
 "fasta": "UniProt",
-"sheet_count": 10288,
+"sheet_count": 8854,
 "files": []
 },
 "PXD025052": {
@@ -258,9 +258,9 @@
 "files": []
 },
 "IPX0004253000": {
-"sheet_result": "13046_2022_2445_MOESM9_ESM",
+"sheet_result": "result_IPX0004253000",
 "fasta": "RefSeq",
-"sheet_count": 6000,
+"sheet_count": 3061,
 "files": []
 },
 "PXD032355": {
@@ -345,9 +345,9 @@
 "files": []
 },
 "MSV000090700": {
-"sheet_result": "mmc3",
+"sheet_result": "result_MSV000090700",
 "fasta": "UniProt",
-"sheet_count": 7000,
+"sheet_count": 8071,
 "files": []
 },
 "PXD040309": {
@@ -726,6 +726,12 @@
 "sheet_result": "result_PDC000590.xlsx",
 "fasta": "UniProt; RefSeq",
 "sheet_count": 10826,
+"files": []
+},
+"IPX0002532001 (PXD022714)": {
+"sheet_result": "result_IPX0002532001",
+"fasta": "UniProt",
+"sheet_count": 8854,
 "files": []
 }
 }

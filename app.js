@@ -6,7 +6,13 @@ const SHEET_VIEW=`https://docs.google.com/spreadsheets/d/${SHEET}/edit?gid=${GID
 /* Result files live in tmt-projects → Projects/<PID>/ */
 const GH_REPO='https://github.com/arinaatom-cyber/tmt-projects';
 const GH_RESULTS_PATH='Projects';
-const ghResultsUrl=pid=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComponent(pid)}`;
+const ghProjectFolder=(rowOrId)=>{
+  const raw=typeof rowOrId==='string'?rowOrId.trim():(rowOrId?.ghFolder||rowOrId?.projectId||rowOrId?.['Project ID']||rowOrId?.pid||'').trim();
+  if(!raw) return '';
+  if (/^IPX\d+\s*\(PXD\d+\)/i.test(raw)) return raw;
+  return raw;
+};
+const ghResultsUrl=(rowOrId)=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComponent(ghProjectFolder(rowOrId))}`;
 const ghSearchUrl =pid=>`${GH_REPO}/search?q=${encodeURIComponent(pid)}&type=code`;
 const pubmedUrl   =pmid=>`https://pubmed.ncbi.nlm.nih.gov/${encodeURIComponent(pmid)}/`;
 const prideUrl    =pid =>`https://www.ebi.ac.uk/pride/archive/projects/${encodeURIComponent(pid)}`;
@@ -1185,7 +1191,8 @@ const PAN_ORGAN_THRESHOLD=8;
 const PDC_OVERRIDES_URL='data/pdc-summary-overrides.json';
 const PDC_OVERRIDE_FIELDS=[
   'Patients / donors','Total Samples','Samples Used N','Proteins Quantified',
-  'Organ','Disease','Sample Type','Control Healthy','Case Cancer Untreated','PMID',
+  'Organ','Disease','Sample Type','Control Healthy','Case Cancer Untreated',
+  'Case Cancer Treated','preCancer','Healty trraeted','PMID',
   'Male','Female','Sex unknown','Male_patients','Female_patients','Sex_unknown'
 ];
 let pdcOverrides={};
@@ -1220,7 +1227,8 @@ function normalizeRow(x){
   const title=x['Title']||'';
   const organList=trimMetastasisOrgans(classifyAllOrgans(organRaw),tumorType);
   const isPan=organList.length>=PAN_ORGAN_THRESHOLD;
-  let pid=(x['Project ID']||'').trim();
+  let projectId=(x['Project ID']||'').trim();
+  let pid=projectId;
   const m=pid.match(/^(IPX\d+)\s*\((PXD\d+)\)/i);
   if(m) pid=m[2];
   const resultFiles=window.ProteinAtlas?ProteinAtlas.parseResultFiles(x['Result Files']):[];
@@ -1244,6 +1252,8 @@ function normalizeRow(x){
     st:sampleType,
     cl:title||'Not specified',
     pid,
+    projectId,
+    ghFolder:ghProjectFolder(projectId),
     db:(x['Database']||'').trim(),
     pmid:(x['PMID']||'').trim(),
     platform:(x['Platform MS (Unified)']||'').trim(),
@@ -1590,7 +1600,7 @@ function projectCard(r){
   const isPxd=/^PXD\d+/i.test(r.pid);
   const projHref=r.link||(isPxd?prideUrl(r.pid):'');
   const pmHref=r.pmid?pubmedUrl(r.pmid):'';
-  const ghHref=ghResultsUrl(r.pid);
+  const ghHref=ghResultsUrl(r.ghFolder||r.projectId||r.pid);
   const ghAlt =ghSearchUrl(r.pid);
   const tag=r.healthy
     ?`<span class="status normal">NORMAL</span>`
@@ -1651,7 +1661,7 @@ function projDossier(r){
   const isPxd=/^PXD\d+/i.test(r.pid);
   const projHref=r.link||(isPxd?prideUrl(r.pid):'');
   const pmHref=r.pmid?pubmedUrl(r.pmid):'';
-  const ghHref=ghResultsUrl(r.pid);
+  const ghHref=ghResultsUrl(r.ghFolder||r.projectId||r.pid);
   const organs=r.organs.map(organDisplayName).join(', ');
   const fld=(label,val)=>val?`<div class="dos-row"><span class="dos-k">${label}</span><span class="dos-v">${esc(val)}</span></div>`:'';
   /* Selection rationale (mirrors the formal inclusion criteria in METHODS.md) */
