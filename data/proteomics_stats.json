@@ -1140,15 +1140,15 @@
     }
   },
   "overview": {
-    "datasets": 138,
-    "unique_pmids": 100,
-    "total_samples": 22091,
-    "control_healthy": 2444,
-    "case_untreated": 18571,
-    "case_treated": 771,
-    "precancer": 40,
-    "patients_donors": 6097,
-    "updated_at": "2026-10-02T17:43:33Z",
-    "healthy_treated": 61
+    "datasets": 120,
+    "unique_pmids": 93,
+    "total_samples": 14672,
+    "control_healthy": 2389,
+    "case_untreated": 11271,
+    "case_treated": 738,
+    "precancer": 12,
+    "patients_donors": 5832,
+    "updated_at": "2026-10-02T17:49:47Z",
+    "healthy_treated": 52
   }
 }
