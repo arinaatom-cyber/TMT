@@ -140,8 +140,8 @@ const I18N={
     about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи слева и справа',
     anatomyNote:'Схематический вид спереди. Органы не в масштабе. Забрюшинные органы показаны в передней проекции.',
     noMapProjects:'Нет проектов при текущем фильтре',
-    pickOrgan:'Клик по органу на карте или в подписи',footer:'Human Proteome Atlas · TMT протеомика',
-    aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Данные из Google Sheets (PRIDE, CPTAC, PDC).',
+    pickOrgan:'Клик по органу на карте или в подписи',footer:'Human TMT Proteome Atlas · TMT протеомика',
+    aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Каталог: data/projects.csv в репозитории GitHub (PRIDE, PDC/CPTAC, MassIVE, iProX).',
     aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
     sysRefTitle:'Основные системы органов (MSD Manual)',
     refTitle:'Референс-размеры органов (эталон атласа)',
@@ -157,7 +157,7 @@ const I18N={
     methods:'Методы',m1:'Один Project ID = один проект (при двойной записи — PXD).',
     m2:'Мульти-органные строки учитываются по каждому органу; ≥3 органа → Multiple Organs.',
     m3:'Пан-органные атласы (≥8 органов) — бейдж PAN-ORGAN.',m4:'Диагнозы группируются (NSCLC → Lung cancer).',
-    m5:'Критерии включения: образцы человека, TMT-мультиплексирование ≥7 каналов (включая TMTpro 16/18-plex), целые клетки / глобальный протеом (исключены фосфопротеомика, секретом, субклеточные фракции, одноклеточные данные).',
+    m5:'Критерии включения: образцы человека, TMT-мультиплексирование ≥7 каналов (включая TMTpro 16/18-plex). Основу составляют целоклеточный / глобальный протеом; отдельные проекты с особым дизайном описаны в карточке проекта.',
     m6:'Число пациентов отражает биологических доноров; клеточные линии — 0 пациентов. Total Samples для не-PDC-проектов может отражать каналы TMT или файлы, а не биообразцы.',
     m7:'Данные из PRIDE (EBI), PDC/CPTAC (NCI), MassIVE (UCSD) и iProX (Пекин). Для PDC — количество пациентов и образцов из *_summary.csv каждого проекта.',
     m8:'Каталог ведётся вручную; Discovery-pipeline (еженедельный автоматический поиск) находит кандидатов для ревью куратора.',
@@ -170,8 +170,8 @@ const I18N={
     uvpTitle:'Атлас TMT-протеомики человека',
     patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
     sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
-    patSampHint:'Пациенты/доноры и Total Samples — из таблицы; для PDC — из Atlas summary (*_summary.csv). Для клеточных линий пациенты = 0. Часть значений Total Samples (не PDC) отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
-    validWarn:'Проверьте таблицу',searchOrgan:'Поиск органа…',
+    patSampHint:'Пациенты/доноры и Total Samples — из каталога data/projects.csv (синхронизация с Atlas *_summary.csv). Для клеточных линий пациенты = 0. Часть значений Total Samples отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
+    validWarn:'Проверьте фильтр или источник данных',validFilter:'Показано с фильтром',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
     legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
     legHint:'Цвет точки у подписи = C/N/Pan. Pan-проекты учитываются и в C, и в N — счётчики пересекаются; итого = уникальные проекты. Размер ∝ √N. Все органы на карте; яркие — с проектами, бледные — без данных.',
@@ -183,16 +183,16 @@ const I18N={
     matOrganTitle:'Материал образца',
     pelvisTip:'Unisex-схема: ♂ и ♀ органы в одной области таза',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
-    projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet',dataFromBundle:'копия на сайте',
-    linkCopied:'Ссылка скопирована',openSheet:'Таблица',
-    protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — Google Sheets.',
-    sheetCountHint:'Proteins Quantified — из таблицы; для PDC — уникальные UniProt из Atlas summary.',
+    projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet (fallback)',dataFromBundle:'копия на сайте',
+    linkCopied:'Ссылка скопирована',openSheet:'Каталог GitHub',
+    protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — из data/projects.csv.',
+    sheetCountHint:'Proteins Quantified — из каталога data/projects.csv; для большинства проектов — UniProt из Atlas summary.',
     resultFile:'Result Files',geneIds:'гены',compareBy:'UniProt или ген',
     fromIndex:'в индексе',inIndex:'в индексе',showOrganProt:'Показать белки органа',
     geneOnly:'только ген',built:'сборка',rebuildHint:'Нет в индексе — запустите scripts/build-organ-proteome.py',
     noIndexOrgan:'Для органа нет данных в индексе',indexLoading:'Загрузка индекса…',
     withCount:'с количеством',sheetTotal:'Σ из таблицы',loadOrganProt:'Загрузить белки проектов',
-    loadingProt:'Загрузка белков…',fromSheet:'из таблицы',fromFile:'из файла',showProt:'Показать белки',
+    loadingProt:'Загрузка белков…',fromSheet:'из каталога',fromFile:'из файла',showProt:'Показать белки',
     noProtFile:'Файл не найден — откройте папку в tmt-projects/Projects/PXD…',loaded:'загружено',
     compareProt:'Сравнить белки',shared:'Общие',
     vennTitle:'Сравнение белков (диаграмма Венна)',vennOnlyA:'только A',vennOnlyB:'только B',vennBoth:'оба органа',
@@ -206,7 +206,7 @@ const I18N={
     protLoadedHint:'Белки этого проекта учтены в индексе (свой Result File).',protMissingHint:'В индексе нет — откройте',
     excelSheets:'листы Excel',multiSheetHint:'В xlsx несколько листов — парсер берёт все листы с колонками Gene/UniProt (не summary).',
     protCompareHint:'Венн: уникальные наборы белков органов (UniProt или ген). Списки белков не показываются.',
-    protTableTitle:'Белки по проектам',protTableHint:'Таблица: Sheet (Google), File (Result File), Index (индекс), UniProt (после маппинга), гены без UniProt.',
+    protTableTitle:'Белки по проектам',protTableHint:'Таблица: Catalog (projects.csv), File (Result File), Index (индекс), UniProt (после маппинга), гены без UniProt.',
     organUnique:'уник. в органе',sumIndexProjects:'Σ индекс по проектам',countDiff:'расхождение',countDiffHint:'Число в таблице и в файле отличается более чем на 5% — проверьте Result File или пересоберите индекс (REBUILD.md).',
     sysNervous:'Нервная',sysCardio:'Сердечно-сосудистая',sysResp:'Дыхательная',sysDigest:'Пищеварительная',
     sysEndocrine:'Эндокринная',sysUrinary:'Мочевыводящая',sysFemale:'Женская репродуктивная',
@@ -219,8 +219,8 @@ const I18N={
     about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · labels on both sides',
     anatomyNote:'Schematic anterior view. Organs are not shown to scale. Retroperitoneal organs are projected onto the anterior view.',
     noMapProjects:'No projects with current filters',
-    pickOrgan:'Click an organ on the map or its label',footer:'Human Proteome Atlas · TMT proteomics',
-    aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Data from Google Sheets.',
+    pickOrgan:'Click an organ on the map or its label',footer:'Human TMT Proteome Atlas · TMT proteomics',
+    aboutTitle:'About the Atlas',aboutP1:'Interactive map of TMT proteomics projects by organ. Catalogue: data/projects.csv in the GitHub repository (PRIDE, PDC/CPTAC, MassIVE, iProX).',
     aboutP2:'Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.',
     sysRefTitle:'Major organ systems (MSD Manual)',
     refTitle:'Reference organ sizes (atlas central reference)',
@@ -236,7 +236,7 @@ const I18N={
     methods:'Methods',m1:'One Project ID = one project (PXD when dual-listed).',
     m2:'Multi-organ rows count per organ; ≥3 organs → Multiple Organs.',
     m3:'Pan-organ atlases (≥8 organs) show PAN-ORGAN badge.',m4:'Disease labels are grouped (e.g. NSCLC → Lung cancer).',
-    m5:'Inclusion criteria: human samples, TMT multiplexing ≥7 channels (including TMTpro 16/18-plex), whole-cell global proteome (excluding phosphoproteomics, secretome, sub-cellular fractions and single-cell datasets).',
+    m5:'Inclusion criteria: human samples, TMT multiplexing ≥7 channels (including TMTpro 16/18-plex). Most datasets are whole-cell global proteome; specialised designs are described on each project card.',
     m6:'Patient count reflects biological donors; cell-line studies have 0 patients. Non-PDC Total Samples values may reflect TMT channels or raw files rather than biological samples.',
     m7:'Data retrieved from PRIDE (EBI), PDC/CPTAC (NCI), MassIVE (UCSD) and iProX (Beijing). PDC patient and sample counts are sourced from per-project *_summary.csv files.',
     m8:'The atlas catalogue is maintained manually; the Discovery pipeline (automated weekly scan) surfaces candidate datasets for curator review.',
@@ -249,8 +249,8 @@ const I18N={
     uvpTitle:'Human TMT proteomics atlas',
     patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
     sumPatients:'Σ patients',sumSamples:'Σ samples',
-    patSampHint:'Patients/donors and Total Samples come from the sheet; for PDC they come from each Atlas summary (*_summary.csv). Cell-line studies have 0 patients. Some non-PDC Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
-    validWarn:'Check spreadsheet sync',searchOrgan:'Search organ…',
+    patSampHint:'Patients/donors and Total Samples come from data/projects.csv (aligned with Atlas *_summary.csv). Cell-line studies have 0 patients. Some Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
+    validWarn:'Check filter or data source',validFilter:'Showing filtered set',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
     legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
     legHint:'Dot color at label = C/N/Pan mix. Pan-organ projects are also counted in C or N — counters overlap; total = unique projects. Size ∝ √N. All organs shown; bright = has projects, faded = none.',
@@ -262,16 +262,16 @@ const I18N={
     matOrganTitle:'Sample material',
     pelvisTip:'Unisex map: male & female organs share the pelvic region',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
-    projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet',dataFromBundle:'site bundle',
-    linkCopied:'Link copied',openSheet:'Spreadsheet',
-    protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from Google Sheets.',
-    sheetCountHint:'Proteins Quantified — from the sheet; for PDC — unique UniProt from Atlas summary.',
+    projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet (fallback)',dataFromBundle:'site bundle',
+    linkCopied:'Link copied',openSheet:'Catalog on GitHub',
+    protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from data/projects.csv.',
+    sheetCountHint:'Proteins Quantified — from data/projects.csv; for most projects this is unique UniProt from the Atlas summary.',
     resultFile:'Result Files',geneIds:'genes',compareBy:'UniProt or gene',
     fromIndex:'in index',inIndex:'in index',showOrganProt:'Show organ proteins',
     geneOnly:'gene only',built:'built',rebuildHint:'Not in index — run scripts/build-organ-proteome.py',
     noIndexOrgan:'No index data for this organ',indexLoading:'Loading index…',
     withCount:'with count',sheetTotal:'Σ from sheet',loadOrganProt:'Load project proteins',
-    loadingProt:'Loading proteins…',fromSheet:'from sheet',fromFile:'from file',showProt:'Show proteins',
+    loadingProt:'Loading proteins…',fromSheet:'from catalog',fromFile:'from file',showProt:'Show proteins',
     noProtFile:'File not found — open folder in tmt-projects/Projects/PXD…',loaded:'loaded',
     compareProt:'Compare proteins',shared:'Shared',
     vennTitle:'Protein comparison (Venn diagram)',vennOnlyA:'A only',vennOnlyB:'B only',vennBoth:'both organs',
@@ -285,7 +285,7 @@ const I18N={
     protLoadedHint:'This project proteins are in the index (its own Result File).',protMissingHint:'Not in index — open',
     excelSheets:'Excel sheets',multiSheetHint:'Multi-sheet xlsx: all sheets with Gene/UniProt columns are merged (not summary).',
     protCompareHint:'Venn shows unique protein sets per organ (UniProt or gene). Protein lists are hidden.',
-    protTableTitle:'Proteins per project',protTableHint:'Sheet (Google), File (parsed), Index, UniProt (mapped), genes without UniProt.',
+    protTableTitle:'Proteins per project',protTableHint:'Catalog (projects.csv), File (parsed), Index, UniProt (mapped), genes without UniProt.',
     organUnique:'unique in organ',sumIndexProjects:'Σ index per projects',countDiff:'mismatch',countDiffHint:'Sheet count differs from file/index by >5% — check Result File or rebuild index (REBUILD.md).',
     sysNervous:'Nervous',sysCardio:'Cardiovascular',sysResp:'Respiratory',sysDigest:'Digestive',
     sysEndocrine:'Endocrine',sysUrinary:'Urinary',sysFemale:'Female reproductive',
@@ -665,14 +665,21 @@ function buildHeader(){
   ).join('');
   const vb=document.getElementById('validBanner');
   if(vb){
-    const ok=META.uniqPids===uniqPid&&!F.q&&!F.tmt&&!F.health&&!F.db;
-    const src=META.dataSource==='sheet'?t('dataFromSheet'):t('dataFromBundle');
+    const filtersOn=!!(F.q||F.tmt||F.health||F.db);
+    const sourceOk=META.uniqPids>0;
+    const src=(META.dataSource||'').startsWith('sheet')?t('dataFromSheet'):t('dataFromBundle');
     const when=formatUpdated();
-    vb.className='valid-banner '+(ok?'ok':'warn');
-    vb.innerHTML=(ok?iconSvg('check','ico ico-banner'):iconSvg('warn','ico ico-banner'))+
-      `<span>${ok
-      ? `${t('validOk')}: ${META.rawRows} ${t('rows')}, ${META.uniqPids} ID · ${uniqPid} ${t('projects')} · ${t('updated')} ${when} (${src}) · <a href="${SHEET_VIEW}" target="_blank" rel="noopener">${t('openSheet')}</a>`
-      : `${t('validWarn')}: ${uniqPid}/${META.uniqPids} · ${t('updated')} ${when}`}</span>`;
+    const catalog='https://github.com/arinaatom-cyber/TMT/blob/main/data/projects.csv';
+    if(!sourceOk){
+      vb.className='valid-banner warn';
+      vb.innerHTML=iconSvg('warn','ico ico-banner')+`<span>${t('validWarn')} · ${t('updated')} ${when}</span>`;
+    }else if(filtersOn||uniqPid!==META.uniqPids){
+      vb.className='valid-banner ok';
+      vb.innerHTML=iconSvg('check','ico ico-banner')+`<span>${t('validFilter')}: ${uniqPid}/${META.uniqPids} · ${t('updated')} ${when} (${src})</span>`;
+    }else{
+      vb.className='valid-banner ok';
+      vb.innerHTML=iconSvg('check','ico ico-banner')+`<span>${t('validOk')}: ${META.rawRows} ${t('rows')}, ${META.uniqPids} ID · ${t('updated')} ${when} (${src}) · <a href="${catalog}" target="_blank" rel="noopener">${t('openSheet')}</a></span>`;
+    }
   }
 }
 function buildSidebar(){
@@ -1195,7 +1202,7 @@ function normalizeSampleType(raw){
 const PAN_ORGAN_THRESHOLD=8;
 
 /* PDC counts from disk Atlas *_summary.csv (data/pdc-summary-overrides.json).
-   Prefer these over the Google sheet / projects.csv for matching Project ID. */
+   Prefer these over projects.csv when a matching Project ID exists. */
 const PDC_OVERRIDES_URL='data/pdc-summary-overrides.json';
 const PDC_OVERRIDE_FIELDS=[
   'Patients / donors','Total Samples','Samples Used N','Proteins Quantified',

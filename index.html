@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,17 @@
 <meta name="theme-color" content="#0b0e14" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="color-scheme" content="dark light">
-<title>Human Cancer-Associated TMT Proteome Atlas — Interactive Tissue Map</title>
-<meta name="description" content="Interactive map of cancer-associated TMT proteomics projects by organ and tissue. Curated catalogue of human TMT-labelled quantitative proteomics datasets from PRIDE, PDC/CPTAC, MassIVE and iProX.">
+<title>Human TMT Proteome Atlas — Interactive Tissue Map</title>
+<meta name="description" content="Interactive map of human TMT proteomics projects by organ and tissue, including cancer and control or reference datasets. Curated catalogue from PRIDE, PDC/CPTAC, MassIVE and iProX.">
 <meta name="author" content="Arina Shafranskaya">
 <link rel="canonical" href="https://arinaatom-cyber.github.io/TMT/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Human Cancer-Associated TMT Proteome Atlas">
-<meta property="og:description" content="Interactive map of cancer-associated TMT proteomics projects by organ and tissue. Curated catalogue of human TMT-labelled quantitative proteomics datasets.">
+<meta property="og:title" content="Human TMT Proteome Atlas">
+<meta property="og:description" content="Interactive map of human TMT proteomics projects by organ and tissue, including cancer and control or reference datasets.">
 <meta property="og:url" content="https://arinaatom-cyber.github.io/TMT/">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Human Cancer-Associated TMT Proteome Atlas">
-<meta name="twitter:description" content="Interactive map of cancer-associated TMT proteomics projects by organ and tissue.">
+<meta name="twitter:title" content="Human TMT Proteome Atlas">
+<meta name="twitter:description" content="Interactive map of human TMT proteomics projects by organ and tissue, including cancer and control or reference datasets.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -449,7 +449,7 @@ footer a{color:var(--accent);text-decoration:none}
     <div class="logo">
       <div class="logo-icon" id="logoIco"></div>
       <div>
-        <h1>HUMAN PROTEOME ATLAS</h1>
+        <h1>HUMAN TMT PROTEOME ATLAS</h1>
         <span data-i18n="subtitle">Interactive Tissue Expression Map</span>
       </div>
     </div>
@@ -510,11 +510,11 @@ footer a{color:var(--accent);text-decoration:none}
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <span data-i18n="footer">Human Proteome Atlas · TMT proteomics</span>
+    <span data-i18n="footer">Human TMT Proteome Atlas · TMT proteomics</span>
     <nav class="footer-nav" aria-label="Links">
       <a href="https://github.com/arinaatom-cyber/TMT" target="_blank" rel="noopener"><span id="footerGhIco"></span><span data-i18n="footerGithub">GitHub</span></a>
       <a href="https://github.com/arinaatom-cyber/TMT/blob/main/METHODS.md" target="_blank" rel="noopener" data-i18n="footerMethods">Methods</a>
-      <a href="https://docs.google.com/spreadsheets/d/1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38/edit?gid=1072380314" target="_blank" rel="noopener" data-i18n="footerSheet">Catalog</a>
+      <a href="https://github.com/arinaatom-cyber/TMT/blob/main/data/projects.csv" target="_blank" rel="noopener" data-i18n="footerSheet">Catalog</a>
     </nav>
   </div>
 </footer>
@@ -523,7 +523,7 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="modal">
     <button type="button" class="modal-close" onclick="closeAbout()" data-i18n="close">Close</button>
     <h2 data-i18n="aboutTitle">About the Atlas</h2>
-    <p data-i18n="aboutP1">Interactive map of TMT multiplex proteomics projects grouped by organ. Data is loaded from Google Sheets (PRIDE, CPTAC, PDC, ProteomeXchange).</p>
+    <p data-i18n="aboutP1">Interactive map of TMT proteomics projects by organ. Catalogue: data/projects.csv in the GitHub repository (PRIDE, PDC/CPTAC, MassIVE, iProX).</p>
     <p data-i18n="aboutP2">Organ grouping follows the MSD Manual (Merck Manual) classification of major human organ systems.</p>
     <h3 data-i18n="sysRefTitle">Major organ systems (MSD Manual)</h3>
     <div id="sysRefTable" class="sys-ref-wrap"></div>
@@ -535,13 +535,13 @@ footer a{color:var(--accent);text-decoration:none}
       <li data-i18n="m2">Multi-organ rows assign each organ; ≥3 organs also tagged Multiple Organs.</li>
       <li data-i18n="m3">Pan-organ atlases (≥8 organs) show a PAN-ORGAN badge.</li>
       <li data-i18n="m4">Disease labels are grouped (e.g. NSCLC → Lung cancer).</li>
-      <li data-i18n="m5">Inclusion criteria: human samples, TMT multiplexing ≥7 channels (including TMTpro 16/18-plex), whole-cell global proteome (excluding phosphoproteomics, secretome, sub-cellular fractions and single-cell datasets).</li>
+      <li data-i18n="m5">Inclusion criteria: human samples, TMT multiplexing ≥7 channels (including TMTpro 16/18-plex). Most datasets are whole-cell global proteome; specialised designs are described on each project card.</li>
       <li data-i18n="m6">Patient count reflects biological donors/patients; cell-line studies have 0 patients. Non-PDC Total Samples values may reflect TMT channels or raw files rather than biological samples.</li>
       <li data-i18n="m7">Data retrieved from PRIDE (EBI), PDC/CPTAC (NCI), MassIVE (UCSD) and iProX (Beijing). PDC patient and sample counts are drawn from per-project *_summary.csv files.</li>
       <li data-i18n="m8">The atlas catalogue is maintained manually; the Discovery pipeline (automated weekly scan) surfaces candidate datasets for curator review.</li>
     </ul>
     <h3 data-i18n="cite">Citation</h3>
-    <div class="cite-box" id="citeBox">Shafranskaya A. Human Cancer-Associated TMT Proteome Atlas — Interactive Tissue Map. GitHub, 2024–2026. https://arinaatom-cyber.github.io/TMT/ (accessed <span id="citeDate"></span>)</div>
+    <div class="cite-box" id="citeBox">Shafranskaya A. Human TMT Proteome Atlas — Interactive Tissue Map. GitHub, 2024–2026. https://arinaatom-cyber.github.io/TMT/ (accessed <span id="citeDate"></span>)</div>
     <script>document.getElementById('citeDate').textContent=new Date().toISOString().slice(0,10);</script>
     <p style="margin-top:12px"><a href="https://github.com/arinaatom-cyber/TMT" target="_blank" rel="noopener">GitHub repository</a> · Raw data: <code>data/projects.csv</code> · Per-project results: <code>projects/PXD…/</code></p>
   </div>
