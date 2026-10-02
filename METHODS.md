@@ -26,8 +26,8 @@ When a dual‑listed accession exists (e.g. `IPX… (PXD…)`), the **PXD** iden
 used as canonical. A small number of accessions are split into analytically distinct
 **sub‑cohorts** (suffixes such as `_adult` / `_pediatric`, `_CL` / `_PC`,
 `_BLAST` / `_LSC` …) so that each cohort’s metadata is faithful. This means the number
-of catalogue **rows** (123) is slightly higher than the number of unique **accessions**
-(121). Per‑organ counts are reported as **unique catalogue project IDs per organ**.
+of catalogue **rows** (120) can be higher than the number of unique **accessions**
+because of sub-cohorts. Per‑organ counts are reported as **unique catalogue project IDs per organ**.
 
 ## 2. Data sources
 
@@ -38,9 +38,8 @@ of catalogue **rows** (123) is slightly higher than the number of unique **acces
 | iProX | `IPX` | Often dual‑listed with PXD |
 | MassIVE | `MSV` | Additional ProteomeXchange deposits |
 
-The live catalogue is maintained in Google Sheets and exported to `data/projects.csv`,
-which the site loads (local file first, then the raw GitHub copy, then the Sheet as a
-fallback). See `DATA_DICTIONARY.md` for column definitions.
+The live catalogue is `data/projects.csv` in the GitHub repository.
+The site loads that file first (local Pages copy, then the raw GitHub copy, then a Google Sheet as a last fallback). See `DATA_DICTIONARY.md` for column definitions.
 
 ## 3. Organ classification (how matching works)
 
@@ -103,8 +102,7 @@ The catalogue is checked for:
 - **Duplicate accessions** — no duplicate canonical IDs.
 - **Field sanity** — flags `Total Samples = 0` with non‑zero patients, and
   `patients > samples` cases for manual review.
-- **Source ↔ bundle parity** — the bundled `projects.csv` is periodically diffed
-  against the live Google Sheet; known divergences are tracked.
+- **Source ↔ site parity** — the bundled `projects.csv` is aligned with curated Atlas packs (`*_summary.csv`).
 - **Result‑file parity** — `scripts/` re‑derive protein counts from result files and
   compare against the reported `Proteins Quantified`.
 
