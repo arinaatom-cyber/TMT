@@ -1138,5 +1138,17 @@
       "PMID": "40185092",
       "Source": "PDC000590_summary.csv"
     }
+  },
+  "overview": {
+    "datasets": 122,
+    "unique_pmids": 100,
+    "total_samples": 17160,
+    "control_healthy": 2413,
+    "case_untreated": 14119,
+    "case_treated": 500,
+    "precancer": 48,
+    "patients_donors": 6105,
+    "updated_at": "2026-10-02T16:24:39Z",
+    "healthy_treated": 68
   }
 }
