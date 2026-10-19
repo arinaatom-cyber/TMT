@@ -1142,13 +1142,13 @@
   "overview": {
     "datasets": 120,
     "unique_pmids": 93,
-    "total_samples": 14672,
-    "control_healthy": 2389,
-    "case_untreated": 11271,
-    "case_treated": 738,
+    "total_samples": 14213,
+    "control_healthy": 2243,
+    "case_untreated": 11130,
+    "case_treated": 719,
     "precancer": 12,
-    "patients_donors": 5832,
-    "updated_at": "2026-10-02T17:49:47Z",
+    "patients_donors": 5754,
+    "updated_at": "2026-10-19T09:16:12Z",
     "healthy_treated": 52
   }
 }

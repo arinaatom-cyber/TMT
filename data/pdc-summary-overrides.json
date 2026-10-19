@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-08-18T09:57:03Z",
+  "generated_at": "2026-10-19T09:16:03Z",
   "description": "PDC overrides for atlas map from *_summary.csv (mismatch rows excluded from samples).",
   "n_projects": 47,
   "projects": {
@@ -1323,9 +1323,9 @@
       "Female": "19",
       "Sex unknown": "26"
     },
-    "IPX0002532001 (PXD022714)": {
+    "IPX0002532001": {
       "source": "summary_csv",
-      "summary_file": "IPX0002532001 (PXD022714)_summary.csv",
+      "summary_file": "IPX0002532001_summary.csv",
       "PMID": "34129943",
       "Organ": "Not Reported",
       "Disease": "Not Reported",
