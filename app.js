@@ -9,7 +9,8 @@ const GH_RESULTS_PATH='Projects';
 const ghProjectFolder=(rowOrId)=>{
   const raw=typeof rowOrId==='string'?rowOrId.trim():(rowOrId?.ghFolder||rowOrId?.projectId||rowOrId?.['Project ID']||rowOrId?.pid||'').trim();
   if(!raw) return '';
-  if (/^IPX\d+\s*\(PXD\d+\)/i.test(raw)) return raw;
+  const ipx=raw.match(/^(IPX\d+)\s*\(PXD\d+\)/i);
+  if(ipx) return ipx[1];
   return raw;
 };
 const ghResultsUrl=(rowOrId)=>`${GH_REPO}/tree/main/${GH_RESULTS_PATH}/${encodeURIComponent(ghProjectFolder(rowOrId))}`;
