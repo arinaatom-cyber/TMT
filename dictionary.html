@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data dictionary — Human TMT Proteome Atlas</title>
+<meta name="description" content="Column and cell-value definitions for Atlas project files, projects.csv, and result workbooks.">
+<link rel="canonical" href="https://arinaatom-cyber.github.io/TMT/dictionary.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+:root{--bg:#0b0e14;--card:#171f2e;--border:#2a3650;--accent:#9cb8d9;--t1:#e8ecf4;--t2:#94a3b8;--t3:#64748b;--font:'Inter',system-ui,sans-serif}
+[data-theme="light"]{--bg:#fff;--card:#f8fafc;--border:#d0d7de;--accent:#111;--t1:#0f172a;--t2:#334155;--t3:#64748b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);font-size:14px;line-height:1.55;padding:0 16px 48px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+header{max-width:1100px;margin:0 auto;padding:20px 0 12px;border-bottom:1px solid var(--border)}
+header h1{font-size:18px;font-weight:700;letter-spacing:.03em}
+header p{color:var(--t2);margin-top:8px;max-width:720px}
+.nav{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;font-size:13px}
+.toolbar{max-width:1100px;margin:16px auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar input,.toolbar select{padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--t1);font:inherit;min-width:200px}
+.toolbar .meta{color:var(--t3);font-size:12px;margin-left:auto}
+main{max-width:1100px;margin:0 auto}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+th,td{border:1px solid var(--border);padding:10px 12px;vertical-align:top;text-align:left}
+th{background:var(--card);font-weight:600;position:sticky;top:0;z-index:1}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.col-hdr{font-weight:600;white-space:nowrap}
+.col-def{max-width:520px}
+#status{padding:24px;color:var(--t2)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Atlas data dictionary</h1>
+  <p>Definitions for <code>projects.csv</code>, pack CSV/XLSX files (<code>*_summary</code>, <code>*_annotation</code>, <code>*_result</code>, patients/samples), and common cell labels. Column headers match downloaded files exactly.</p>
+  <nav class="nav" aria-label="Downloads">
+    <a href="./">← Organ map</a>
+    <a href="data/Atlas_data_dictionary.csv" download>Download CSV</a>
+    <a href="data/Atlas_projects_catalog_values.csv" download>Catalog values (CSV)</a>
+    <a href="data/Atlas_reader_guide.md">Reader guide</a>
+    <a href="https://github.com/arinaatom-cyber/tmt-projects/tree/main/Projects" target="_blank" rel="noopener">Project files (GitHub)</a>
+  </nav>
+</header>
+<div class="toolbar">
+  <input type="search" id="q" placeholder="Search term or definition…" aria-label="Search">
+  <select id="tableFilter" aria-label="Filter by table">
+    <option value="">All tables</option>
+  </select>
+  <span class="meta" id="count"></span>
+</div>
+<main>
+  <p id="status">Loading dictionary…</p>
+  <table id="tbl" hidden>
+    <thead><tr>
+      <th>Table</th><th>Column header</th><th>Definition</th><th>Source</th><th>Example</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</main>
+<script>
+const CSV='data/Atlas_data_dictionary.csv';
+let rows=[];
+const qEl=document.getElementById('q');
+const tf=document.getElementById('tableFilter');
+const tbody=document.getElementById('tbody');
+const tbl=document.getElementById('tbl');
+const status=document.getElementById('status');
+const countEl=document.getElementById('count');
+
+function render(){
+  const q=(qEl.value||'').toLowerCase().trim();
+  const tfv=tf.value;
+  const filtered=rows.filter(r=>{
+    if(tfv&&r.Table!==tfv) return false;
+    if(!q) return true;
+    return [r.Table,r['Column header'],r.Definition,r.Source,r.Example].join(' ').toLowerCase().includes(q);
+  });
+  tbody.innerHTML=filtered.map(r=>`<tr>
+    <td>${esc(r.Table)}</td>
+    <td class="col-hdr">${esc(r['Column header'])}</td>
+    <td class="col-def">${esc(r.Definition)}</td>
+    <td>${esc(r.Source)}</td>
+    <td>${esc(r.Example)}</td>
+  </tr>`).join('');
+  countEl.textContent=filtered.length+' / '+rows.length+' rows';
+}
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+
+Papa.parse(CSV,{download:true,header:true,skipEmptyLines:true,complete(res){
+  rows=res.data.filter(r=>r.Table&&r['Column header']);
+  const tables=[...new Set(rows.map(r=>r.Table))].sort();
+  tables.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;tf.appendChild(o);});
+  status.hidden=true;tbl.hidden=false;
+  qEl.addEventListener('input',render);
+  tf.addEventListener('change',render);
+  render();
+},error(){status.textContent='Could not load '+CSV+'. Open from the deployed site or download the CSV.';}});
+if(localStorage.getItem('tmt-theme')==='light')document.documentElement.setAttribute('data-theme','light');
+</script>
+</body>
+</html>

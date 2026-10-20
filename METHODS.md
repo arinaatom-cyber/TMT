@@ -39,7 +39,9 @@ because of sub-cohorts. Per‑organ counts are reported as **unique catalogue pr
 | MassIVE | `MSV` | Additional ProteomeXchange deposits |
 
 The live catalogue is `data/projects.csv` in the GitHub repository.
-The site loads that file first (local Pages copy, then the raw GitHub copy, then a Google Sheet as a last fallback). See `DATA_DICTIONARY.md` for column definitions.
+The site loads that file first (local Pages copy, then the raw GitHub copy, then a Google Sheet as a last fallback).
+
+**Full reader dictionary (all pack columns and cell labels):** [`data/Atlas_data_dictionary.csv`](data/Atlas_data_dictionary.csv) — browsable at [dictionary.html](https://arinaatom-cyber.github.io/TMT/dictionary.html). Short catalogue notes remain in `DATA_DICTIONARY.md`.
 
 ## 3. Organ classification (how matching works)
 
