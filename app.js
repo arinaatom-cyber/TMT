@@ -166,8 +166,8 @@ const I18N={
     compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
     panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
-    navMap:'Карта',navAbout:'О проекте',navGithub:'GitHub',navMethods:'Методы',
-    footerGithub:'GitHub',footerMethods:'Методы',footerSheet:'Каталог',
+    navMap:'Карта',navAbout:'О проекте',navGithub:'GitHub',navDictionary:'Словарь',navMethods:'Методы',
+    footerGithub:'GitHub',footerDictionary:'Словарь',footerMethods:'Методы',footerSheet:'Каталог',
     uvpTitle:'Атлас TMT-протеомики человека',
     patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
     sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
@@ -245,8 +245,8 @@ const I18N={
     compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
     panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
-    navMap:'Map',navAbout:'About',navGithub:'GitHub',navMethods:'Methods',
-    footerGithub:'GitHub',footerMethods:'Methods',footerSheet:'Catalog',
+    navMap:'Map',navAbout:'About',navGithub:'GitHub',navDictionary:'Dictionary',navMethods:'Methods',
+    footerGithub:'GitHub',footerDictionary:'Dictionary',footerMethods:'Methods',footerSheet:'Catalog',
     uvpTitle:'Human TMT proteomics atlas',
     patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
     sumPatients:'Σ patients',sumSamples:'Σ samples',
@@ -1742,6 +1742,7 @@ function projDossier(r){
         ${pmHref?`<a class="plink plink-art" href="${esc(pmHref)}" target="_blank" rel="noopener"><span class="li">PMID</span><span class="lt">${esc(r.pmid)}</span></a>`:''}
         <a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener"><span class="li">GH</span><span class="lt">Result files</span></a>
         <a class="plink" href="${esc(SHEET_VIEW)}" target="_blank" rel="noopener"><span class="li">CSV</span><span class="lt">${L('Строка таблицы','Sheet row')}</span></a>
+        <a class="plink plink-dict" href="dictionary.html" target="_blank" rel="noopener"><span class="li">?</span><span class="lt">${L('Словарь полей','Data dictionary')}</span></a>
       </div>`)}`;
 }
 function openProject(pid){

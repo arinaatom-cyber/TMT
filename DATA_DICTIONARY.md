@@ -1,4 +1,6 @@
-# Data dictionary — `data/projects.csv`
+# Data dictionary — `data/projects.csv` (short index)
+
+> **Full dictionary:** [`data/Atlas_data_dictionary.csv`](Atlas_data_dictionary.csv) (English, 1:1 with file headers) · [Browse on site](../dictionary.html) · [`Atlas_reader_guide.md`](Atlas_reader_guide.md)
 
 One row = one project (or analytically distinct sub‑cohort). Columns are free‑text as
 curated from repository metadata and publications unless noted. Fields surfaced in the
