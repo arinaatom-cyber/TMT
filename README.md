@@ -1,4 +1,4 @@
-# Human Proteome Atlas — Interactive TMT Tissue Map
+# TMT Atlas — Interactive TMT Tissue Map
 
 An interactive, organ-level map of **human TMT (Tandem Mass Tag) multiplex proteomics
 projects**, curated from public repositories and rendered on an anatomically scaled
@@ -37,16 +37,13 @@ This atlas consolidates such projects into a single, queryable, reproducible res
 
 ## Data at a glance
 
-| Metric | Value |
-|---|---|
-| Catalogue rows (projects) | 123 |
-| Unique source accessions | 121 (a few are split into sub‑cohorts — see `METHODS.md`) |
-| Organs represented | 31 |
-| Patients / donors (Σ, where reported) | ~5,950 |
-| Total samples (Σ, approximate) | ~16,000 |
-| Source repositories | PRIDE · CPTAC / PDC · iProX · MassIVE |
+The article registry contains **120 dataset records linked to 93 publications**. The sum of its `Total Samples` field is **14,498**; overlapping cohorts and repeated measurements can be counted more than once, so this is not a count of unique patients or independent samples. Donor counts must be interpreted per project rather than summed without deduplication.
 
-Numbers are computed live from `data/projects.csv`; see **Reproducibility** below.
+The live web catalogue (`data/projects.csv`, 48 fields) and article Table S1 (38 fields) use different schemas. The archived release is the versioned reference for the accompanying manuscript; the live repository may change after a release.
+
+**Zenodo archive (all versions):** https://doi.org/10.5281/zenodo.24014679
+
+The archive includes project-level data and documentation. The updated article release also provides Tables S1–S3, Supporting information, figures, common reproduction code and analysis inputs. Zenodo file access remains restricted; metadata are public. See the README and manifests of the specific release for its exact contents.
 
 ---
 
@@ -150,7 +147,7 @@ site’s *Literature & sources* section and *About* panel.
 
 ## Citation
 
-> Human Proteome Atlas — Interactive TMT Tissue Map. https://arinaatom-cyber.github.io/TMT/
+> TMT Atlas: a curated cross-repository resource for human cancer-associated proteomics. Cite the specific dataset version displayed by Zenodo: https://doi.org/10.5281/zenodo.24014679 . Interactive resource: https://arinaatom-cyber.github.io/TMT/
 
 ## License
 
