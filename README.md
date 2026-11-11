@@ -43,7 +43,9 @@ The live web catalogue (`data/projects.csv`, 48 fields) and article Table S1 (38
 
 **Zenodo archive (all versions):** https://doi.org/10.5281/zenodo.24014679
 
-The archive includes project-level data and documentation. The updated article release also provides Tables S1–S3, Supporting information, figures, common reproduction code and analysis inputs. Zenodo file access remains restricted; metadata are public. See the README and manifests of the specific release for its exact contents.
+The published article deposit, https://doi.org/10.5281/zenodo.24109808, contains a CSV-only archive with 120 project folders (four CSV tables per project), shared CSV dictionaries and a registry; Tables S1–S3 as separate XLSX files; Supporting information as a PDF; Figure 1; the graphical abstract; and one general README. Common reproduction code, analysis-input bundles and a separate file manifest are not included in this deposit. Zenodo file access remains restricted; metadata are public.
+
+Project data archives are being added incrementally to https://github.com/arinaatom-cyber/tmt-projects/tree/main/Projects. The Zenodo release is the complete, versioned reference for all 120 projects; the live GitHub upload is a separate ongoing process.
 
 ---
 
@@ -147,7 +149,7 @@ site’s *Literature & sources* section and *About* panel.
 
 ## Citation
 
-> TMT Atlas: a curated cross-repository resource for human cancer-associated proteomics. Cite the specific dataset version displayed by Zenodo: https://doi.org/10.5281/zenodo.24014679 . Interactive resource: https://arinaatom-cyber.github.io/TMT/
+> TMT Atlas: a curated cross-repository resource for human cancer-associated proteomics. Dataset version accompanying the manuscript: https://doi.org/10.5281/zenodo.24109808 . Interactive resource: https://arinaatom-cyber.github.io/TMT/
 
 ## License
 
