@@ -509,6 +509,71 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </div>
 
+<section id="explore-tmt-atlas" aria-labelledby="explore-title">
+<style>
+#explore-tmt-atlas{--atlas-bg:var(--bg);--atlas-text:var(--t1);--atlas-muted:var(--t2);--atlas-border:var(--border);--atlas-link:var(--accent);max-width:1100px;margin:20px auto;font-family:Inter,Arial,sans-serif;color:var(--atlas-text);background:var(--atlas-bg);padding:28px;border-radius:16px;box-sizing:border-box}
+#explore-tmt-atlas *{box-sizing:border-box}
+#explore-tmt-atlas h2{font-size:26px;font-weight:600;margin:0 0 8px;line-height:1.2}
+#explore-tmt-atlas .intro{font-size:14px;color:var(--atlas-muted);margin:0 0 24px;line-height:1.5}
+#explore-tmt-atlas .explore-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+#explore-tmt-atlas article{border:1px solid var(--atlas-border);border-radius:12px;padding:18px;min-width:0}
+#explore-tmt-atlas h3{font-size:18px;font-weight:600;margin:0 0 10px;line-height:1.3}
+#explore-tmt-atlas p{font-size:14px;line-height:1.55;margin:0 0 16px;color:var(--atlas-muted)}
+#explore-tmt-atlas a{color:var(--atlas-link);font-size:14px;line-height:1.5;text-underline-offset:3px}
+#explore-tmt-atlas .links{display:flex;flex-direction:column;gap:10px}
+#explore-tmt-atlas details{border-top:1px solid var(--atlas-border);margin-top:18px;padding-top:14px}
+#explore-tmt-atlas summary{font-size:14px;color:var(--atlas-link);padding:4px 0}
+#explore-tmt-atlas dl{margin:16px 0 0;font-size:13px;line-height:1.5}
+#explore-tmt-atlas dt{font-weight:600;margin-top:12px;overflow-wrap:anywhere}
+#explore-tmt-atlas dd{margin:2px 0 0;color:var(--atlas-muted)}
+#explore-tmt-atlas .note{font-size:12px;margin:16px 0 0;line-height:1.5}
+@media(max-width:650px){#explore-tmt-atlas .explore-grid{grid-template-columns:1fr}#explore-tmt-atlas{padding:20px}#explore-tmt-atlas article{padding:18px}}
+@media(pointer:coarse){#explore-tmt-atlas .links a,#explore-tmt-atlas summary{min-height:44px;display:flex;align-items:center}}
+</style>
+<h2 id="explore-title">Explore TMT Atlas</h2>
+<p class="intro">Browse studies, discover candidates and access project data.</p>
+<div class="explore-grid">
+<article>
+<h3>Organ Map</h3>
+<p>Explore studies by organ. View cohorts, study design, methods and limitations.</p>
+<div class="links"><a href="#toolbar">Open Organ Map →</a></div>
+</article>
+<article>
+<h3>Discovery</h3>
+<p>Find candidate datasets and review screening results, data availability and sources.</p>
+<div class="links">
+<a href="https://arinaatom-cyber.github.io/TMT/discovery/ai_search.html" target="_blank" rel="noopener noreferrer">AI keyword search →</a>
+<a href="https://arinaatom-cyber.github.io/TMT/discovery/discovery.html" target="_blank" rel="noopener noreferrer">Discovery results →</a>
+<a href="https://arinaatom-cyber.github.io/TMT/discovery/qc.html" target="_blank" rel="noopener noreferrer">QC report →</a>
+<a href="https://arinaatom-cyber.github.io/TMT/discovery/atlas.html" target="_blank" rel="noopener noreferrer">Atlas profile →</a>
+</div>
+<p class="note">Candidates require review before inclusion.</p>
+</article>
+<article>
+<h3>Data and downloads</h3>
+<p>Project descriptions, protein data, sample annotations and archived releases.</p>
+<div class="links">
+<a href="https://github.com/arinaatom-cyber/tmt-projects/tree/main/Projects" target="_blank" rel="noopener noreferrer">GitHub Projects →</a>
+<a href="https://doi.org/10.5281/zenodo.24014679" target="_blank" rel="noopener noreferrer">Zenodo archive →</a>
+<a href="https://arinaatom-cyber.github.io/TMT/dictionary.html" target="_blank" rel="noopener noreferrer">Data Dictionary →</a>
+</div>
+<details><summary>Show details</summary>
+<dl>
+<dt>README</dt><dd>Study description, file contents and limitations.</dd>
+<dt>Summary</dt><dd>Study metadata and dataset counts.</dd>
+<dt>Annotation</dt><dd>Links between measurement columns, samples and experimental conditions.</dd>
+<dt>Result</dt><dd>Protein identifiers and quantitative values.</dd>
+<dt>Samples / Patients</dt><dd>Available sample or donor information.</dd>
+<dt>Excel workbook</dt><dd>Project tables in separate worksheets.</dd>
+</dl>
+<p class="note">Tables are provided as CSV and Excel files, often in a ZIP archive. Check the project README for the exact contents.</p>
+</details>
+<p class="note">GitHub access is required. Zenodo file access is restricted.</p>
+</article>
+</div>
+</section>
+
+
 <footer class="site-footer">
   <div class="footer-inner">
     <span data-i18n="footer">Human TMT Proteome Atlas · TMT proteomics</span>
