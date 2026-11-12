@@ -343,6 +343,16 @@ function organSearchText(o){
   const disp=organDisplayName(o).toLowerCase();
   return base+' '+disp;
 }
+Object.assign(I18N.en, {
+  noOrganMatches:'No projects for this organ match the selected filters. Clear or change the filters.',
+  wholeOrganIndex:'The protein index covers the whole organ and is not narrowed by project filters.'
+});
+Object.assign(I18N.ru, {
+  noOrganMatches:'Для этого органа нет проектов с выбранными фильтрами. Сбросьте или измените фильтры.',
+  wholeOrganIndex:'Белковый индекс относится ко всему органу и не ограничивается фильтрами проектов.'
+});
+Object.assign(I18N.en, {"explore0":"Explore TMT Atlas","explore1":"Browse studies, discover candidates and access project data.","explore2":"Organ Map","explore3":"Explore studies by organ. View cohorts, study design, methods and limitations.","explore4":"Open Organ Map →","explore5":"Discovery","explore6":"Find candidate datasets and review screening results, data availability and sources.","explore7":"AI keyword search →","explore8":"Discovery results →","explore9":"QC report →","explore10":"Atlas profile →","explore11":"Candidates require review before inclusion.","explore12":"Data and downloads","explore13":"Project descriptions, protein data, sample annotations and archived releases.","explore14":"GitHub Projects →","explore15":"Zenodo archive →","explore16":"Data Dictionary →","explore17":"Show details","explore18":"Study description, file contents and limitations.","explore19":"Study metadata and dataset counts.","explore20":"Links between measurement columns, samples and experimental conditions.","explore21":"Protein identifiers and quantitative values.","explore22":"Available sample or donor information.","explore23":"Excel workbook","explore24":"Project tables in separate worksheets.","explore25":"Tables are provided as CSV and Excel files, often in a ZIP archive. Check the project README for the exact contents.","explore26":"GitHub access is required. Zenodo file access is restricted."});
+Object.assign(I18N.ru, {"explore0":"Разделы TMT Atlas","explore1":"Исследования, поиск кандидатов и данные проектов.","explore2":"Карта органов","explore3":"Просматривайте исследования по органам: когорты, дизайн, методы и ограничения.","explore4":"Открыть карту органов →","explore5":"Поиск кандидатов","explore6":"Находите наборы данных и просматривайте результаты отбора, доступность данных и источники.","explore7":"ИИ-поиск по ключевым словам →","explore8":"Результаты поиска →","explore9":"Отчёт контроля качества →","explore10":"Профиль атласа →","explore11":"Кандидаты требуют проверки перед включением.","explore12":"Данные и загрузки","explore13":"Описания проектов, белковые данные, аннотации образцов и архивные версии.","explore14":"Проекты на GitHub →","explore15":"Архив Zenodo →","explore16":"Словарь данных →","explore17":"Показать подробности","explore18":"Описание исследования, содержимое файлов и ограничения.","explore19":"Метаданные исследования и счётчики набора данных.","explore20":"Связи между столбцами измерений, образцами и условиями эксперимента.","explore21":"Идентификаторы белков и количественные значения.","explore22":"Доступные сведения об образцах или донорах.","explore23":"Книга Excel","explore24":"Таблицы проекта на отдельных листах.","explore25":"Таблицы доступны в форматах CSV и Excel, часто в ZIP-архиве. Точный состав указан в README проекта.","explore26":"Для GitHub необходим доступ. Доступ к файлам Zenodo ограничен."});
 function i18nApply(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n');if(I18N[lang][k]) el.textContent=I18N[lang][k];
@@ -581,7 +591,7 @@ function refreshAll(){
   if(cap) cap.textContent=dualMap?t('bodyCap'):`${t('bodyCap')} · map ${MAP_BUILD}`;
   const anNote=document.getElementById('bodyAnatomyNote');
   if(anNote) anNote.textContent=t('anatomyNote');
-  if(selOrgan&&C[selOrgan]) sel(selOrgan);
+  if(selOrgan) sel(selOrgan);
 }
 function fillFilterSelects(){
   const tmtEl=document.getElementById('fTmt');
@@ -1291,15 +1301,7 @@ function onDataLoaded(rows,sourceName){
     .filter(x=>(x['Project ID']||'').trim())
     .map(applyPdcOverride)
     .map(normalizeRow);
-  C={};
-  const byOrgan={};
-  D.forEach(x=>{
-    x.organs.forEach(o=>{
-      if(!byOrgan[o]) byOrgan[o]=new Set();
-      byOrgan[o].add(x.pid);
-    });
-  });
-  Object.keys(byOrgan).forEach(o=>{C[o]=byOrgan[o].size});
+  rebuildCounts();
   META={
     rawRows:rows.filter(x=>(x['Project ID']||'').trim()).length,
     uniqPids:new Set(D.map(x=>x.pid)).size,
@@ -2076,7 +2078,12 @@ function ht(){
 }
 
 function sel(o){
-  if(!C[o]) return;
+  if(!C[o]){
+    selOrgan=o;
+    charts.forEach(x=>x.destroy()); charts=[];
+    document.getElementById('dc').innerHTML=`<div class="placeholder"><h2>${esc(organDisplayName(o))}</h2><p>${t('noOrganMatches')}</p></div>`;
+    return;
+  }
   try{
   selOrgan=o;
   updateUrl(o);

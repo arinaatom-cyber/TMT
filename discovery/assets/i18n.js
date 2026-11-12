@@ -11,7 +11,7 @@
     nav_discovery: { ru: "Discovery", en: "Discovery" },
     nav_cohorts: { ru: "Когорты", en: "Cohorts" },
     nav_qc: { ru: "QC", en: "QC" },
-    meta_updated: { ru: "Обновлено", en: "Updated" },
+    meta_updated: { ru: "Сохранённый отчёт от", en: "Scan snapshot dated" },
     badge_readonly: { ru: "только чтение", en: "read-only" },
     meta_candidates: { ru: "кандидатов", en: "candidates" },
     meta_atlas_ids: { ru: "ID в атласе", en: "atlas IDs" },
@@ -94,7 +94,7 @@
       disc_lead:
         "Новые human TMT проекты · семантический разбор абстрактов · QC материала · доступность данных",
       disc_catalog_hidden: "каталог скрыт",
-      disc_catalog_n: "проектов в атласе",
+      disc_catalog_n: "проектов в каталоге на дату отчёта",
       kpi_new: "новых проектов",
       kpi_pride: "PRIDE",
       kpi_pdc: "PDC",
@@ -117,7 +117,7 @@
       sec_unified_discovery_desc:
         "Новые PXD/PDC, статьи без accession и крупные когорты в одном списке.",
       note_kpi_new_projects:
-        "KPI «новые проекты» = только PXD/PDC вне атласа (сейчас 4). В таблице ниже — все строки: проекты + статьи + когорты. Фильтр «проекты» для PXD/PDC.",
+        "KPI «новые проекты» = только PXD/PDC вне атласа. В таблице ниже — все строки: проекты + статьи + когорты. Фильтр «проекты» для PXD/PDC.",
       sec_methods: "Методы и воронка",
       sec_methods_desc: "Воспроизводимый скрининг: API → QC → protein table gate → tier A–D. Каталог read-only.",
       methods_funnel: "Воронка скана",
@@ -221,7 +221,7 @@
       disc_lead:
         "New human TMT projects · semantic abstract screening · material QC · data availability",
       disc_catalog_hidden: "catalog hidden",
-      disc_catalog_n: "projects in atlas",
+      disc_catalog_n: "projects in catalog at scan date",
       kpi_new: "new projects",
       kpi_pride: "PRIDE",
       kpi_pdc: "PDC",
@@ -246,7 +246,7 @@
       sec_unified_discovery_desc:
         "New PXD/PDC, papers without accession, and large cohorts in a single list.",
       note_kpi_new_projects:
-        "KPI «new projects» = PXD/PDC not yet in atlas (currently 4). Table below shows all rows. Use filter «projects» for repo IDs only.",
+        "KPI «new projects» = PXD/PDC not yet in atlas. Table below shows all rows. Use filter «projects» for repo IDs only.",
       note_unified_table:
         "AI search uses TMT ATLAS profile + hard exclusions. Confidence A–D is rule-based. Verdict: Candidate / Watch / Exclude.",
       sec_methods: "Methods & funnel",

@@ -132,7 +132,7 @@
     const t=global.t||((k)=>k);
     return `<div class="ccard protein-summary">
       <h4 class="sec-h">${t('protSummary')}</h4>
-      <p class="prot-hint">${t('protIndexHint')}</p>
+      <p class="prot-hint">${t('protIndexHint')} ${t('wholeOrganIndex')}</p>
       <div class="mstats prot-mini">
         <div class="ms"><div class="v">${st.projects}</div><div class="l">${t('projects')}</div></div>
         <div class="ms"><div class="v">${od?.with_uniprot||0}</div><div class="l">UniProt</div></div>
