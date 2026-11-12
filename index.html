@@ -479,8 +479,8 @@ footer a{color:var(--accent);text-decoration:none}
   <select id="fDb" onchange="setFilter('db',this.value)"><option value="" data-i18n="allDb">All databases</option></select>
   <select id="fHealth" onchange="setFilter('health',this.value)">
     <option value="" data-i18n="allSamples">All samples</option>
-    <option value="cancer" data-i18n="cancerOnly">Cancer only</option>
-    <option value="normal" data-i18n="normalOnly">Normal only</option>
+    <option value="cancer" data-i18n="cancerOnly">Tumor only</option>
+    <option value="normal" data-i18n="normalOnly">Non-tumor only</option>
   </select>
   <button type="button" class="tbtn" onclick="reloadData()" data-i18n="refresh">Refresh</button>
   <button type="button" class="tbtn primary" onclick="exportAllCSV()" data-i18n="exportAll">Export all CSV</button>
@@ -643,6 +643,6 @@ function toggleTheme(){
   applyTheme(savedTheme || 'dark');
 })();
 </script>
-<script src="app.js?v=20261112-ui-audit"></script>
+<script src="app.js?v=20261112-ru-filters"></script>
 </body>
 </html>

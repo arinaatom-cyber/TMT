@@ -137,7 +137,7 @@ const I18N={
   ru:{
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
-    cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV с фильтрами',
+    cancerOnly:'Только опухолевые',normalOnly:'Только неопухолевые',exportAll:'Экспорт CSV с фильтрами',
     about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи слева и справа',
     anatomyNote:'Схематический вид спереди. Органы не в масштабе. Забрюшинные органы показаны в передней проекции.',
     noMapProjects:'Нет проектов при текущем фильтре',
@@ -216,7 +216,7 @@ const I18N={
   en:{
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
-    cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export filtered CSV',
+    cancerOnly:'Tumor only',normalOnly:'Non-tumor only',exportAll:'Export filtered CSV',
     about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · labels on both sides',
     anatomyNote:'Schematic anterior view. Organs are not shown to scale. Retroperitoneal organs are projected onto the anterior view.',
     noMapProjects:'No projects with current filters',
@@ -352,7 +352,7 @@ Object.assign(I18N.ru, {
   wholeOrganIndex:'Белковый индекс относится ко всему органу и не ограничивается фильтрами проектов.'
 });
 Object.assign(I18N.en, {"explore0":"Explore TMT Atlas","explore1":"Browse studies, discover candidates and access project data.","explore2":"Organ Map","explore3":"Explore studies by organ. View cohorts, study design, methods and limitations.","explore4":"Open Organ Map →","explore5":"Discovery","explore6":"Find candidate datasets and review screening results, data availability and sources.","explore7":"AI keyword search →","explore8":"Discovery results →","explore9":"QC report →","explore10":"Atlas profile →","explore11":"Candidates require review before inclusion.","explore12":"Data and downloads","explore13":"Project descriptions, protein data, sample annotations and archived releases.","explore14":"GitHub Projects →","explore15":"Zenodo archive →","explore16":"Data Dictionary →","explore17":"Show details","explore18":"Study description, file contents and limitations.","explore19":"Study metadata and dataset counts.","explore20":"Links between measurement columns, samples and experimental conditions.","explore21":"Protein identifiers and quantitative values.","explore22":"Available sample or donor information.","explore23":"Excel workbook","explore24":"Project tables in separate worksheets.","explore25":"Tables are provided as CSV and Excel files, often in a ZIP archive. Check the project README for the exact contents.","explore26":"GitHub access is required. Zenodo file access is restricted."});
-Object.assign(I18N.ru, {"explore0":"Разделы TMT Atlas","explore1":"Исследования, поиск кандидатов и данные проектов.","explore2":"Карта органов","explore3":"Просматривайте исследования по органам: когорты, дизайн, методы и ограничения.","explore4":"Открыть карту органов →","explore5":"Поиск кандидатов","explore6":"Находите наборы данных и просматривайте результаты отбора, доступность данных и источники.","explore7":"ИИ-поиск по ключевым словам →","explore8":"Результаты поиска →","explore9":"Отчёт контроля качества →","explore10":"Профиль атласа →","explore11":"Кандидаты требуют проверки перед включением.","explore12":"Данные и загрузки","explore13":"Описания проектов, белковые данные, аннотации образцов и архивные версии.","explore14":"Проекты на GitHub →","explore15":"Архив Zenodo →","explore16":"Словарь данных →","explore17":"Показать подробности","explore18":"Описание исследования, содержимое файлов и ограничения.","explore19":"Метаданные исследования и счётчики набора данных.","explore20":"Связи между столбцами измерений, образцами и условиями эксперимента.","explore21":"Идентификаторы белков и количественные значения.","explore22":"Доступные сведения об образцах или донорах.","explore23":"Книга Excel","explore24":"Таблицы проекта на отдельных листах.","explore25":"Таблицы доступны в форматах CSV и Excel, часто в ZIP-архиве. Точный состав указан в README проекта.","explore26":"Для GitHub необходим доступ. Доступ к файлам Zenodo ограничен."});
+Object.assign(I18N.ru, {"explore0":"Исследуйте TMT Atlas","explore1":"Исследования, поиск кандидатов и данные проектов.","explore2":"Карта органов","explore3":"Просматривайте исследования по органам: когорты, дизайн, методы и ограничения.","explore4":"Открыть карту органов →","explore5":"Поиск кандидатов","explore6":"Находите наборы данных и просматривайте результаты отбора, доступность данных и источники.","explore7":"ИИ-поиск по ключевым словам →","explore8":"Результаты поиска →","explore9":"Отчёт контроля качества →","explore10":"Профиль атласа →","explore11":"Кандидаты требуют проверки перед включением.","explore12":"Данные и загрузки","explore13":"Описания проектов, белковые данные, аннотации образцов и архивные версии.","explore14":"Проекты на GitHub →","explore15":"Архив Zenodo →","explore16":"Словарь данных →","explore17":"Подробнее","explore18":"Описание исследования, содержимое файлов и ограничения.","explore19":"Метаданные исследования и счётчики набора данных.","explore20":"Связи между столбцами измерений, образцами и условиями эксперимента.","explore21":"Идентификаторы белков и количественные значения.","explore22":"Доступные сведения об образцах или донорах.","explore23":"Книга Excel","explore24":"Таблицы проекта на отдельных листах.","explore25":"Таблицы доступны в форматах CSV и Excel, часто в ZIP-архиве. Точный состав указан в README проекта.","explore26":"Для GitHub необходим доступ. Доступ к файлам Zenodo ограничен."});
 function i18nApply(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n');if(I18N[lang][k]) el.textContent=I18N[lang][k];
@@ -893,7 +893,7 @@ function renderAtlasMaterialChart(){
             const o=organs[i], row=matrix[o];
             const lines=[];
             if(row.gtex) lines.push('GTEx PXD016999');
-            if(!row.clC&&!row.clN&&row.tisN&&!row.tisC) lines.push(lang==='ru'?'Только normal ткань':'Normal tissue only');
+            if(!row.clC&&!row.clN&&row.tisN&&!row.tisC) lines.push(lang==='ru'?'Только неопухолевая ткань':'Non-tumor tissue only');
             return lines;
           }
         }}
@@ -2148,7 +2148,7 @@ function sel(o){
   </div>
   ${compareBlock(o)}
   ${window.ProteinAtlas?ProteinAtlas.organProteinsSummaryHtml(o,uniqRows):''}
-  <div class="ccard"><h4 class="sec-h">Disease groups</h4><div class="dtags">`;
+  <div class="ccard"><h4 class="sec-h">${lang==='ru'?'Группы заболеваний':'Disease groups'}</h4><div class="dtags">`;
 
   ds.slice(0,15).forEach(([d,n],i)=>{
     const rowsD=uniqRows.filter(r=>(r.disCanon||r.dis)===d);
@@ -2159,7 +2159,7 @@ function sel(o){
   h+=`</div></div>`;
 
   if(dbList.length){
-    h+=`<div class="ccard"><h4 class="sec-h">Data Sources</h4><div class="dtags">`;
+    h+=`<div class="ccard"><h4 class="sec-h">${lang==='ru'?'Источники данных':'Data Sources'}</h4><div class="dtags">`;
     dbList.slice(0,8).forEach(([d,n],i)=>{
       const c=chartColor(i+6);
       h+=`<div class="dtag dtag-click" data-db="${esc(d)}" onclick="filterByDb(this.dataset.db)" title="Filter"><span class="dd" style="background:${c}"></span>${esc(d.length>28?d.slice(0,28)+'…':d)}<span class="dc" style="color:${c}">${n}</span></div>`;
@@ -2169,7 +2169,7 @@ function sel(o){
 
   h+=`<div class="charts-row">
     <div class="ccard"><h4 class="sec-h">${t('matOrganTitle')}</h4><canvas id="chMat"></canvas></div>
-    <div class="ccard"><h4 class="sec-h">Disease groups</h4><canvas id="ch2"></canvas></div>
+    <div class="ccard"><h4 class="sec-h">${lang==='ru'?'Группы заболеваний':'Disease groups'}</h4><canvas id="ch2"></canvas></div>
   </div>
   <div class="projects-section">
     <h4 class="sec-h">Projects <span class="sec-count">${nShown}</span></h4>
