@@ -57,7 +57,11 @@
     </div>`;
   }
 
+  function anatomyIndexCompatible(){
+    return !!global.ProjectAnatomySHA && PROTEOME?.anatomy_sha256===global.ProjectAnatomySHA && PROTEOME?.scope==='complete_project_matrices';
+  }
   function organData(organ){
+    if(!anatomyIndexCompatible()) return null;
     return PROTEOME?.organs?.[organ]||null;
   }
 
@@ -66,6 +70,8 @@
   }
 
   function proteinsForProject(pid){
+    const exact=projectMeta(pid)?.proteins;
+    if(Array.isArray(exact)) return exact.map(toEntry);
     if(!PROTEOME) return [];
     const seen=new Map();
     Object.values(PROTEOME.organs||{}).forEach(od=>{
@@ -78,7 +84,8 @@
     return [...seen.values()];
   }
 
-  function loadProjectProteins(r){
+  async function loadProjectProteins(r){
+    await initProteome();
     const cacheKey=r.pid;
     if(!PROTEOME){
       return Promise.resolve({status:'loading',proteins:[],file:'',sheetCount:parseProteinCount(r.proteins)});
@@ -89,7 +96,7 @@
       status:proteins.length?'ok':'missing',
       proteins,
       file:meta?.src||'',
-      sheetCount:meta?.sheet??parseProteinCount(r.proteins),
+      sheetCount:parseProteinCount(r.proteins),
       fasta:meta?.fasta||r.fastaDb||'',
       sheetResult:meta?.result||r.resultFile||'',
       fileCount:meta?.file_n||proteins.length
@@ -127,6 +134,8 @@
   }
 
   function organProteinsSummaryHtml(organ,rows){
+    if(!PROTEOME) return '<div class="ccard protein-summary"><p class="prot-hint">'+(global.t||((k)=>k))('wholeOrganIndex')+'</p><button type="button" class="tbtn" onclick="loadCategoryProteinIndex(\''+escHtml(organ)+'\')">'+(global.L?global.L('Загрузить белковое покрытие','Load protein coverage'):'Load protein coverage')+'</button><div id="proteinIndexStatus"></div></div>';
+    if(!anatomyIndexCompatible()) return '<p class="prot-hint">'+(global.L?global.L('Белковый индекс обновлённых категорий пока недоступен. Данные отдельных проектов сохранены.','The protein index for the revised categories is not yet available. Individual project data remain available.'):'Category protein index unavailable.')+'</p>';
     const od=organData(organ);
     const st=organSheetProteinStats(rows,organ);
     const t=global.t||((k)=>k);
@@ -189,10 +198,11 @@
     if(!el) return;
     if(!el.hidden&&el.innerHTML){el.hidden=true;return;}
     el.hidden=false;
-    const r=(global.D||[]).find(x=>x.pid===pid);
+    const r=global.getAtlasProject?global.getAtlasProject(pid):(global.D||[]).find(x=>x.pid===pid);
     if(!r){el.innerHTML='<p class="prot-hint">—</p>';return;}
     el.innerHTML=`<p class="prot-hint">${(global.t||(()=>''))('loadingProt')}</p>`;
-    const hit=await loadProjectProteins(r);
+    let hit;
+    try {hit=await loadProjectProteins(r);} catch(e) {el.textContent=global.L?global.L('Не удалось загрузить белковый индекс. Повторите попытку.','Could not load the protein index. Please retry.'):'Protein index unavailable.';return;}
     if(hit.proteins.length){
       el.innerHTML=`${loadSummaryHtml(r,hit)}
         <div class="prot-list">${hit.proteins.slice(0,MAX_LIST).map(proteinRowHtml).join('')}</div>
@@ -215,11 +225,13 @@
   }
 
   async function runProteinCompare(){
+    try {await initProteome();} catch(e){const out=document.getElementById('cmpProtOut');if(out) out.textContent='Protein index unavailable. Please retry.';return;}
     const a=document.getElementById('cmpA')?.value;
     const b=document.getElementById('cmpB')?.value;
     const out=document.getElementById('cmpProtOut');
     if(!a||!b||!out||a===b) return;
     const t=global.t||((k)=>k);
+    if(!anatomyIndexCompatible()){out.textContent=global.L?global.L('Индекс не соответствует текущим категориям. Сравнение недоступно.','The index does not match the current categories. Comparison is unavailable.'):'Category index unavailable.';return;}
     if(!PROTEOME){out.innerHTML=`<p class="prot-hint">${t('indexLoading')}</p>`;return;}
     const ka=organProteinKeys(a),kb=organProteinKeys(b);
     const shared=[],onlyA=[],onlyB=[];
@@ -238,6 +250,17 @@
     <div class="compare-grid">${list(t('shared'),shared)}${list(a.replace(/_/g,' '),onlyA)}${list(b.replace(/_/g,' '),onlyB)}</div>`;
   }
 
+  function renderVennCompare(a,b){
+    if(!anatomyIndexCompatible()) return '<p class="prot-hint">'+(global.L?global.L('Индекс не соответствует текущим категориям. Сравнение недоступно.','The index does not match the current categories. Comparison is unavailable.'):'Category index unavailable.')+'</p>';
+    const aa=organProteinKeys(a),bb=organProteinKeys(b);
+    const shared=[...aa.keys()].filter(k=>bb.has(k)).length;
+    const label=global.organDisplayName||((k)=>k.replace(/_/g,' '));
+    const t=global.t||((k)=>k);
+    return '<div class="prot-hint">'+escHtml(t('wholeOrganIndex'))+'</div><div class="mstats">'+
+      '<div class="ms"><div class="v">'+(aa.size-shared)+'</div><div class="l">'+escHtml(label(a))+' only</div></div>'+
+      '<div class="ms"><div class="v">'+shared+'</div><div class="l">'+escHtml(t('shared'))+'</div></div>'+
+      '<div class="ms"><div class="v">'+(bb.size-shared)+'</div><div class="l">'+escHtml(label(b))+' only</div></div></div>';
+  }
   function proteinCompareBar(){
     const t=global.t||((k)=>k);
     return `<div class="compare-bar prot-compare-bar">
@@ -245,34 +268,40 @@
     </div><div id="cmpProtOut"></div>`;
   }
 
+  let indexPromise=null;
+  async function fetchProteomeIndex(){
+    if(typeof DecompressionStream!=='undefined'){
+      try {
+        const packed=await fetch(PROTEOME_URL+'.gz',{cache:'no-store'});
+        if(packed.ok&&packed.body){
+          if((packed.headers.get('content-encoding')||'').includes('gzip')) return await packed.json();
+          return await new Response(packed.body.pipeThrough(new DecompressionStream('gzip'))).json();
+        }
+      } catch(e) {console.warn('Compressed protein index unavailable; trying JSON.',e);}
+    }
+    const response=await fetch(PROTEOME_URL,{cache:'no-store'});
+    if(!response.ok) throw new Error('Protein index unavailable');
+    return response.json();
+  }
   function initProteome(){
     if(ready) return Promise.resolve();
-    const map=fetch('data/id-map.csv',{cache:'no-store'})
-      .then(res=>res.ok?res.text():'')
-      .then(text=>{
-        if(text&&typeof Papa!=='undefined'){
-          Papa.parse(text,{header:true,skipEmptyLines:true,complete(r){
-            (r.data||[]).forEach(row=>{
-              const id=(row.input_id||'').trim();
-              if(!id) return;
-              ID_MAP[id.toUpperCase()]={gene:row.gene_symbol,uniprot:row.uniprot};
-            });
-          }});
-        }
-      }).catch(()=>{});
-    const proteome=fetch(PROTEOME_URL,{cache:'no-store'})
-      .then(res=>{
-        if(!res.ok) throw new Error('no proteome index');
-        return res.json();
-      })
-      .then(j=>{PROTEOME=j;})
-      .catch(e=>{console.warn('organ-proteome.json',e);PROTEOME={organs:{},projects:{}};});
-    return Promise.all([map,proteome]).then(()=>{ready=true;});
+    if(!indexPromise) indexPromise=fetchProteomeIndex().then(data=>{
+      if(!data||!data.organs||!data.projects) throw new Error('Invalid protein index');
+      PROTEOME=data;ready=true;
+    }).catch(error=>{indexPromise=null;throw error;});
+    return indexPromise;
   }
+  async function loadCategoryProteinIndex(category){
+    const status=document.getElementById('proteinIndexStatus');
+    if(status) status.textContent=(global.t||((k)=>k))('loadingProt');
+    try {await initProteome();if(global.sel) global.sel(category);}
+    catch(e){if(status) status.textContent=global.L?global.L('Не удалось загрузить белковый индекс. Повторите попытку.','Could not load the protein index. Please retry.'):'Protein index unavailable.';}
+  }
+  global.loadCategoryProteinIndex=loadCategoryProteinIndex;
 
   global.ProteinAtlas={
-    parseProteinCount,parseResultFiles,initIdMap:initProteome,loadProjectProteins,
-    proteinBadgesHtml,organProteinsSummaryHtml,projectProteinBlock,proteinCompareBar
+    parseProteinCount,parseResultFiles,initIdMap:()=>Promise.resolve(),ensureIndex:initProteome,loadProjectProteins,
+    proteinBadgesHtml,organProteinsSummaryHtml,projectProteinBlock,proteinCompareBar,renderVennCompare
   };
   global.loadOrganProteins=showOrganProteins;
   global.showOrganProteins=showOrganProteins;

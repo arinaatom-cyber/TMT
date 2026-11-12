@@ -177,8 +177,8 @@ const I18N={
     legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
     legHint:'Цвет точки у подписи = C/N/Pan. Pan-проекты учитываются и в C, и в N — счётчики пересекаются; итого = уникальные проекты. Размер ∝ √N. Все органы на карте; яркие — с проектами, бледные — без данных.',
     legSize:'размер ∝ √N',
-    matChartTitle:'Материал образца по органам',
-    matChartHint:'Уникальные Project ID на орган. «Ткань normal» — здоровые образцы, в т.ч. GTEx (PXD016999, 32 ткани).',
+    matChartTitle:'Материал образца по анатомическим категориям и типам материала',
+    matChartHint:'Уникальные Project ID по категории. Категории могут пересекаться и не являются независимыми когортами. «Ткань normal» — здоровые образцы, в т.ч. GTEx (PXD016999, 32 ткани).',
     matClC:'Кл. линии · cancer',matClN:'Кл. линии · normal',
     matTisC:'Ткань · cancer',matTisN:'Ткань · normal',
     matOrganTitle:'Материал образца',
@@ -189,7 +189,7 @@ const I18N={
     protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — из data/projects.csv.',
     sheetCountHint:'Proteins Quantified — из каталога data/projects.csv; для большинства проектов — UniProt из Atlas summary.',
     resultFile:'Result Files',geneIds:'гены',compareBy:'UniProt или ген',
-    fromIndex:'в индексе',inIndex:'в индексе',showOrganProt:'Показать белки органа',
+    fromIndex:'записей индекса',inIndex:'записей индекса',showOrganProt:'Показать белки органа',
     geneOnly:'только ген',built:'сборка',rebuildHint:'Нет в индексе — запустите scripts/build-organ-proteome.py',
     noIndexOrgan:'Для органа нет данных в индексе',indexLoading:'Загрузка индекса…',
     withCount:'с количеством',sheetTotal:'Σ из таблицы',loadOrganProt:'Загрузить белки проектов',
@@ -206,7 +206,7 @@ const I18N={
     verifyNoFile:'нет файла',verifyNoFolder:'нет папки',verifyMismatch:'расхождение',
     protLoadedHint:'Белки этого проекта учтены в индексе (свой Result File).',protMissingHint:'В индексе нет — откройте',
     excelSheets:'листы Excel',multiSheetHint:'В xlsx несколько листов — парсер берёт все листы с колонками Gene/UniProt (не summary).',
-    protCompareHint:'Венн: уникальные наборы белков органов (UniProt или ген). Списки белков не показываются.',
+    protCompareHint:'Сравнение белков полных наборов данных каждой категории (UniProt или ген), без отбора образцов конкретного органа.',
     protTableTitle:'Белки по проектам',protTableHint:'Таблица: Catalog (projects.csv), File (Result File), Index (индекс), UniProt (после маппинга), гены без UniProt.',
     organUnique:'уник. в органе',sumIndexProjects:'Σ индекс по проектам',countDiff:'расхождение',countDiffHint:'Число в таблице и в файле отличается более чем на 5% — проверьте Result File или пересоберите индекс (REBUILD.md).',
     sysNervous:'Нервная',sysCardio:'Сердечно-сосудистая',sysResp:'Дыхательная',sysDigest:'Пищеварительная',
@@ -256,8 +256,8 @@ const I18N={
     legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
     legHint:'Dot color at label = C/N/Pan mix. Pan-organ projects are also counted in C or N — counters overlap; total = unique projects. Size ∝ √N. All organs shown; bright = has projects, faded = none.',
     legSize:'size ∝ √N',
-    matChartTitle:'Sample material by organ',
-    matChartHint:'Unique project IDs per organ. “Tissue normal” includes healthy samples, e.g. GTEx (PXD016999, 32 tissues).',
+    matChartTitle:'Sample material by anatomical / biological-material category',
+    matChartHint:'Unique project IDs per category. Categories can overlap and are not independent cohorts. “Tissue normal” includes healthy samples, e.g. GTEx (PXD016999, 32 tissues).',
     matClC:'Cell lines · cancer',matClN:'Cell lines · normal',
     matTisC:'Tissue · cancer',matTisN:'Tissue · normal',
     matOrganTitle:'Sample material',
@@ -268,7 +268,7 @@ const I18N={
     protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from data/projects.csv.',
     sheetCountHint:'Proteins Quantified — from data/projects.csv; for most projects this is unique UniProt from the Atlas summary.',
     resultFile:'Result Files',geneIds:'genes',compareBy:'UniProt or gene',
-    fromIndex:'in index',inIndex:'in index',showOrganProt:'Show organ proteins',
+    fromIndex:'index records',inIndex:'index records',showOrganProt:'Show organ proteins',
     geneOnly:'gene only',built:'built',rebuildHint:'Not in index — run scripts/build-organ-proteome.py',
     noIndexOrgan:'No index data for this organ',indexLoading:'Loading index…',
     withCount:'with count',sheetTotal:'Σ from sheet',loadOrganProt:'Load project proteins',
@@ -285,7 +285,7 @@ const I18N={
     verifyNoFile:'no file',verifyNoFolder:'no folder',verifyMismatch:'mismatch',
     protLoadedHint:'This project proteins are in the index (its own Result File).',protMissingHint:'Not in index — open',
     excelSheets:'Excel sheets',multiSheetHint:'Multi-sheet xlsx: all sheets with Gene/UniProt columns are merged (not summary).',
-    protCompareHint:'Venn shows unique protein sets per organ (UniProt or gene). Protein lists are hidden.',
+    protCompareHint:'Compare protein sets from complete datasets in each category (UniProt or gene). This is not a comparison of sample-filtered organ proteomes.',
     protTableTitle:'Proteins per project',protTableHint:'Catalog (projects.csv), File (parsed), Index, UniProt (mapped), genes without UniProt.',
     organUnique:'unique in organ',sumIndexProjects:'Σ index per projects',countDiff:'mismatch',countDiffHint:'Sheet count differs from file/index by >5% — check Result File or rebuild index (REBUILD.md).',
     sysNervous:'Nervous',sysCardio:'Cardiovascular',sysResp:'Respiratory',sysDigest:'Digestive',
@@ -333,8 +333,11 @@ const DIS_LABELS={
   },
   en:{}
 };
+Object.assign(I18N.en,{organs:'categories',searchOrgan:'Search categories',noOrganMatches:'No projects in this category match the selected filters.',m2:'Projects can belong to several anatomical or biological-material categories.',m3:'Broadly sampled projects carry a multi-site badge.',panBadge:'MULTI-SITE',wholeOrganIndex:'This protein index is not filtered by project selection.'});
+Object.assign(I18N.ru,{organs:'категорий',searchOrgan:'Поиск категорий',noOrganMatches:'Нет проектов этой категории с выбранными фильтрами.',m2:'Проект может относиться к нескольким анатомическим категориям или типам материала.',m3:'Проекты с широким анатомическим охватом отмечены отдельным значком.',panBadge:'МНОГО ЛОКАЛИЗАЦИЙ',wholeOrganIndex:'Этот индекс белков не ограничен выбранными проектами.'});
 function diseaseDisplayName(d){return (DIS_LABELS[lang]||{})[d]||d;}
 function organDisplayName(o){
+  if(PROJECT_ANATOMY?.terms?.[o]) return AnatomyMapping.label(PROJECT_ANATOMY,o,lang);
   const m=ORGAN_LABELS[lang]||ORGAN_LABELS.en;
   return m[o]||o.replace(/_/g,' ');
 }
@@ -344,12 +347,12 @@ function organSearchText(o){
   return base+' '+disp;
 }
 Object.assign(I18N.en, {
-  noOrganMatches:'No projects for this organ match the selected filters. Clear or change the filters.',
-  wholeOrganIndex:'The protein index covers the whole organ and is not narrowed by project filters.'
+  noOrganMatches:'No projects for this category match the selected filters. Clear or change the filters.',
+  wholeOrganIndex:'Protein coverage of complete datasets in this category; not an organ-specific or sample-filtered proteome. Project filters do not narrow this category index.'
 });
 Object.assign(I18N.ru, {
-  noOrganMatches:'Для этого органа нет проектов с выбранными фильтрами. Сбросьте или измените фильтры.',
-  wholeOrganIndex:'Белковый индекс относится ко всему органу и не ограничивается фильтрами проектов.'
+  noOrganMatches:'Для этой категории нет проектов с выбранными фильтрами. Сбросьте или измените фильтры.',
+  wholeOrganIndex:'Белковое покрытие полных наборов данных этой категории; это не органоспецифичный протеом и не результат отбора образцов. Фильтры проектов не сужают этот индекс категории.'
 });
 Object.assign(I18N.en, {"explore0":"Explore TMT Atlas","explore1":"Browse studies, discover candidates and access project data.","explore2":"Organ Map","explore3":"Explore studies by organ. View cohorts, study design, methods and limitations.","explore4":"Open Organ Map →","explore5":"Discovery","explore6":"Find candidate datasets and review screening results, data availability and sources.","explore7":"AI keyword search →","explore8":"Discovery results →","explore9":"QC report →","explore10":"Atlas profile →","explore11":"Candidates require review before inclusion.","explore12":"Data and downloads","explore13":"Project descriptions, protein data, sample annotations and archived releases.","explore14":"GitHub Projects →","explore15":"Zenodo archive →","explore16":"Data Dictionary →","explore17":"Show details","explore18":"Study description, file contents and limitations.","explore19":"Study metadata and dataset counts.","explore20":"Links between measurement columns, samples and experimental conditions.","explore21":"Protein identifiers and quantitative values.","explore22":"Available sample or donor information.","explore23":"Excel workbook","explore24":"Project tables in separate worksheets.","explore25":"Tables are provided as CSV and Excel files, often in a ZIP archive. Check the project README for the exact contents.","explore26":"GitHub access is required. Zenodo file access is restricted."});
 Object.assign(I18N.ru, {"explore0":"Исследуйте TMT Atlas","explore1":"Исследования, поиск кандидатов и данные проектов.","explore2":"Карта органов","explore3":"Просматривайте исследования по органам: когорты, дизайн, методы и ограничения.","explore4":"Открыть карту органов →","explore5":"Поиск кандидатов","explore6":"Находите наборы данных и просматривайте результаты отбора, доступность данных и источники.","explore7":"ИИ-поиск по ключевым словам →","explore8":"Результаты поиска →","explore9":"Отчёт контроля качества →","explore10":"Профиль атласа →","explore11":"Кандидаты требуют проверки перед включением.","explore12":"Данные и загрузки","explore13":"Описания проектов, белковые данные, аннотации образцов и архивные версии.","explore14":"Проекты на GitHub →","explore15":"Архив Zenodo →","explore16":"Словарь данных →","explore17":"Подробнее","explore18":"Описание исследования, содержимое файлов и ограничения.","explore19":"Метаданные исследования и счётчики набора данных.","explore20":"Связи между столбцами измерений, образцами и условиями эксперимента.","explore21":"Идентификаторы белков и количественные значения.","explore22":"Доступные сведения об образцах или донорах.","explore23":"Книга Excel","explore24":"Таблицы проекта на отдельных листах.","explore25":"Таблицы доступны в форматах CSV и Excel, часто в ZIP-архиве. Точный состав указан в README проекта.","explore26":"Для GitHub необходим доступ. Доступ к файлам Zenodo ограничен."});
@@ -412,6 +415,7 @@ function filteredRows(){return D.filter(r=>{
     if((r.dis||'').toLowerCase().includes(q)) return true;
     if((r.disCanon||'').toLowerCase().includes(q)) return true;
     if(r.organs.some(o=>organSearchText(o).includes(q))) return true;
+    if(AnatomyMapping.search(r.anatomy).includes(q)) return true;
     return false;
   }
   return true;
@@ -523,11 +527,12 @@ function closeAboutNoop(){}
 function closeAbout(){document.getElementById('aboutModal').classList.remove('open');}
 function csvEscape(s){const x=String(s??'');return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
 function downloadCSV(filename,rows){
-  const cols=['Project ID','PMID','Organs','Disease','Disease group','TMT','Sample Type','Database','Status','URL'];
+  const cols=['Project ID','PMID','Anatomical and material categories','Disease','Disease group','TMT','Sample Type','Database','Status','URL','Measured material','Collection site','Primary disease site','Cell origin','Uncertainty'];
   const lines=[cols.join(',')];
   rows.forEach(r=>lines.push([
     r.pid,r.pmid,r.organs.join('; '),r.dis,r.disCanon,r.tmt,r.st,r.db,
-    r.healthy?'Normal':'Cancer',r.link||prideUrl(r.pid)
+    r.healthy?'Normal':'Cancer',r.link||prideUrl(r.pid),
+    ...['measured_material','collection_site','primary_site','cell_line_origin','uncertainty'].map(k=>AnatomyMapping.list(r.anatomy?.[k]))
   ].map(csvEscape).join(',')));
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'}));
@@ -555,7 +560,7 @@ function renderUvp(){
   const el=document.getElementById('uvp');
   if(!el) return;
   const proj=META.uniqPids||D.length;
-  const org=Object.keys(C).filter(o=>!['Multiple_Organs','Other'].includes(o)).length;
+  const org=Object.keys(C).filter(o=>C[o]>0).length;
   let pat=0;const seen=new Set();
   D.forEach(r=>{if(seen.has(r.pid))return;seen.add(r.pid);if(r.patients!=null)pat+=r.patients;});
   el.innerHTML=`<h2>${t('uvpTitle')}</h2>`+
@@ -674,6 +679,7 @@ function buildHeader(){
   document.getElementById('hs').innerHTML=statKeys.map((k,i)=>
     `<div class="hstat"><div class="hstat-ico">${iconSvg(statIco[k],'ico ico-stat')}</div><div class="v">${statVals[i]}</div><div class="l">${t(k)}</div></div>`
   ).join('');
+  renderCategoryBrowser();
   const vb=document.getElementById('validBanner');
   if(vb){
     const filtersOn=!!(F.q||F.tmt||F.health||F.db);
@@ -738,7 +744,12 @@ function compareBlock(currentOrgan){
     <div id="cmpOut"></div>
   </details>`;
 }
-function runCompare(){
+async function runCompare(){
+  const waiting=document.getElementById('cmpOut');
+  if(waiting) waiting.textContent=t('loadingProt');
+  try { if(window.ProteinAtlas?.ensureIndex) await ProteinAtlas.ensureIndex(); }
+  catch(e){if(waiting) waiting.textContent=L('Не удалось загрузить белковый индекс. Повторите попытку.','Could not load the protein index. Please retry.');return;}
+
   const a=document.getElementById('cmpA')?.value;
   const b=document.getElementById('cmpB')?.value;
   if(!a||!b||a===b) return;
@@ -815,41 +826,32 @@ const MAT_COL={clC:'#e0a898',clN:'#a8c4e0',tisC:'#d4a8a8',tisN:'#9dc9b0'};
 const GTEX_PID='PXD016999';
 const MAT_CHART_SKIP=new Set(['Multiple_Organs','Other']);
 
-function projectMaterialBucket(r){
-  const isCL=r.st==='Cell Lines';
-  if(isCL&&r.healthy) return 'clN';
-  if(isCL&&!r.healthy) return 'clC';
-  if(!isCL&&r.healthy) return 'tisN';
-  return 'tisC';
+function projectMaterialBucket(r){return r.st||'Unknown';}
+function materialDisplayName(value){
+  const ru={'Cell Lines':'Клеточные линии','Cell Line Panel':'Панель клеточных линий','Primary cells':'Первичные клетки','Tissue':'Ткань','FFPE Tissue':'FFPE-ткань','LCM Tissue':'Микродиссектированная ткань','Cell Lines; Primary cells':'Клеточные линии и первичные клетки','Mixed':'Смешанный материал','Unknown':'Не указано'};
+  return lang==='ru'?(ru[value]||value):value;
 }
-
+function materialColor(value){
+  const palette=['#85b8d0','#c5a0c4','#94bea4','#d1af84','#9ba8d1','#cf9297','#a8b782'];
+  let hash=0;for(const c of value) hash=(hash*31+c.charCodeAt(0))>>>0;
+  return palette[hash%palette.length];
+}
 function organMaterialMatrix(){
-  const m={}, seen={};
-  filteredRows().forEach(r=>{
-    const b=projectMaterialBucket(r);
-    r.organs.forEach(o=>{
-      if(!m[o]) m[o]={clC:0,clN:0,tisC:0,tisN:0,total:0,gtex:false};
-      if(!seen[o]) seen[o]=new Set();
-      if(seen[o].has(r.pid)) return;
-      seen[o].add(r.pid);
-      m[o][b]++;
-      m[o].total++;
-      if(r.pid===GTEX_PID) m[o].gtex=true;
-    });
-  });
-  return m;
-}
-
-function materialChartDatasets(organs,matrix){
-  const mk=key=>organs.map(o=>(matrix[o]||{})[key]||0);
-  return [
-    {key:'clC',label:t('matClC'),bg:MAT_COL.clC},
-    {key:'tisC',label:t('matTisC'),bg:MAT_COL.tisC},
-    {key:'tisN',label:t('matTisN'),bg:MAT_COL.tisN},
-    {key:'clN',label:t('matClN'),bg:MAT_COL.clN},
-  ].map(d=>({
-    label:d.label,data:mk(d.key),backgroundColor:d.bg,stack:'mat',borderRadius:2,borderSkipped:false
+  const result={},seen={};
+  filteredRows().forEach(r=>r.organs.forEach(category=>{
+    if(!result[category]) result[category]={counts:{},total:0,gtex:false};
+    if(!seen[category]) seen[category]=new Set();
+    if(seen[category].has(r.pid)) return;
+    seen[category].add(r.pid);
+    const key=projectMaterialBucket(r);const out=result[category];
+    out.counts[key]=(out.counts[key]||0)+1;out.total++;
+    if(r.pid===GTEX_PID) out.gtex=true;
   }));
+  return result;
+}
+function materialChartDatasets(categories,matrix){
+  const keys=[...new Set(categories.flatMap(k=>Object.keys(matrix[k].counts)))].sort();
+  return keys.map(key=>({label:materialDisplayName(key),data:categories.map(k=>matrix[k].counts[key]||0),backgroundColor:materialColor(key),stack:'mat',borderRadius:2,borderSkipped:false}));
 }
 
 function chartAxisColors(){
@@ -893,7 +895,7 @@ function renderAtlasMaterialChart(){
             const o=organs[i], row=matrix[o];
             const lines=[];
             if(row.gtex) lines.push('GTEx PXD016999');
-            if(!row.clC&&!row.clN&&row.tisN&&!row.tisC) lines.push(lang==='ru'?'Только неопухолевая ткань':'Non-tumor tissue only');
+
             return lines;
           }
         }}
@@ -912,9 +914,7 @@ function renderAtlasMaterialChart(){
 }
 
 function organMaterialCounts(rows){
-  const m={clC:0,clN:0,tisC:0,tisN:0};
-  uniqProjects(rows).forEach(r=>{m[projectMaterialBucket(r)]++;});
-  return m;
+  const counts={};uniqProjects(rows).forEach(r=>{const k=projectMaterialBucket(r);counts[k]=(counts[k]||0)+1;});return counts;
 }
 
 const GRP=[
@@ -934,235 +934,58 @@ function grpTitle(g){return t(g.tKey)||g.tKey;}
 const COL={};
 GRP.forEach(g=>g.o.forEach(o=>{COL[o]=organColor(o);}));
 
-const MAP={
-  'substantia nigra':'Brain','ventral mesencephalon':'Brain','pontine glioma':'Brain','rhabdoid tumor':'Brain',
-  brain:'Brain',cerebr:'Brain',neural:'Brain',glioma:'Brain',glioblastoma:'Brain',
-  cns:'Brain',hippocamp:'Brain',cortex:'Brain',cerebellum:'Brain',
-  medulloblastoma:'Brain',astrocytoma:'Brain',ependymoma:'Brain',
-  meningioma:'Brain',neuroblastoma:'Brain',dipg:'Brain',atrt:'Brain',
-  craniopharyngioma:'Brain',ganglioglioma:'Brain',
-  pituitary:'Pituitary',
-  orbit:'Eye',orbital:'Eye',ocular:'Eye',uveal:'Eye',adnexa:'Eye',adnexal:'Eye',eye:'Eye',
-  salivary:'Salivary_Gland',
-  thyroid:'Thyroid',
-  esophag:'Esophagus',barrett:'Esophagus',
-  lung:'Lung',respiratory:'Lung',pleura:'Lung',pleural:'Lung',bronch:'Lung',
-  'left ventricle':'Heart',
-  heart:'Heart',cardiac:'Heart',coronary:'Heart',aorta:'Heart',atrial:'Heart',ventricle:'Heart',
-  breast:'Breast',mammary:'Breast',
-  liver:'Liver',hepat:'Liver',
-  gallbladder:'Gallbladder','biliary':'Gallbladder',
-  stomach:'Stomach',gastric:'Stomach',gastroesophageal:'Stomach',
-  appendix:'Appendix',appendiceal:'Appendix',
-  pancrea:'Pancreas',
-  spleen:'Spleen',splenic:'Spleen',
-  adrenal:'Adrenal_Gland',
-  kidney:'Kidney',renal:'Kidney',nephr:'Kidney',
-  'small intestine':'Small_Intestine','small intestinal':'Small_Intestine',
-  intestin:'Small_Intestine',ileum:'Small_Intestine',duoden:'Small_Intestine',
-  colon:'Colon',colorectal:'Colon',sigmoid:'Colon',rectum:'Colon',rectal:'Colon',
-  bladder:'Bladder',urinary:'Bladder',urothelial:'Bladder',
-  'fallopian tube':'Ovary',fallopian:'Ovary',hgsoc:'Ovary',ccoc:'Ovary',lgsoc:'Ovary',
-  ovary:'Ovary',ovarian:'Ovary',
-  uterus:'Uterus',uterine:'Uterus',endometri:'Uterus',vagina:'Uterus',placenta:'Uterus',myometrium:'Uterus',
-  cervix:'Cervix',cervical:'Cervix',
-  prostate:'Prostate',
-  testis:'Testis',testic:'Testis',
-  'bone marrow':'Bone_Marrow',marrow:'Bone_Marrow',myeloma:'Bone_Marrow',
-  'plasma cell':'Bone_Marrow',plasmacells:'Bone_Marrow',
-  'lymph node':'Lymph_Node','lymph nodes':'Lymph_Node',tonsil:'Lymph_Node',
-  thymus:'Thymus',thymic:'Thymus',
-  'peripheral blood':'Blood',
-  't cell':'Blood','t-cell':'Blood','t cells':'Blood',
-  'b cell':'Blood','b-cell':'Blood','b cells':'Blood',
-  blood:'Blood',leukemia:'Blood',leukaemia:'Blood',lymphoma:'Blood',
-  'hematopoietic system':'Blood',hematopoietic:'Blood',haematopoietic:'Blood',lymphoid:'Blood',pbmc:'Blood',
-  'peripheral blood':'Blood','bone marrow and peripheral blood':'Blood',
-  monocyte:'Blood',cd34:'Blood',cd138:'Blood',cd4:'Blood',cd14:'Blood',
-  aml:'Blood',cll:'Blood',mds:'Blood',cml:'Blood',
-  'jaw bone':'Bone','fibrous dysplasia':'Bone','cemento-ossifying':'Bone',
-  jaw:'Bone',bone:'Bone',osteo:'Bone',musculoskeletal:'Bone',skeletal:'Bone',
-  muscle:'Muscle',tendon:'Muscle',
-  melanoma:'Skin',skin:'Skin',dermal:'Skin',fibroblast:'Skin',epidermoid:'Skin',
-  adipose:'Adipose_Tissue',
-  'soft tissue':'Soft_Tissue',
-  leiomyosarcoma:'Soft_Tissue',liposarcoma:'Soft_Tissue',
-  synovial:'Soft_Tissue',fibrosarcoma:'Soft_Tissue',sarcoma:'Soft_Tissue',
-  'tibial nerve':'Nerve',nerve:'Nerve',
-  'multi-organ':'Multiple_Organs',multiple:'Multiple_Organs',
-  peritoneum:'Multiple_Organs',omentum:'Multiple_Organs',diaphragm:'Multiple_Organs',
-  'cul-de-sac':'Multiple_Organs','cul de sac':'Multiple_Organs',
-  organoid:'Other',stem:'Other',embryonic:'Other',ipsc:'Other',
-  'head and neck':'Salivary_Gland','oral cavity':'Salivary_Gland','oropharyngeal':'Salivary_Gland',
-  'endometri':'Uterus','endometrium':'Uterus','myometrium':'Uterus',
-  'colorectal':'Colon','rectal':'Colon','sigmoid':'Colon',
-  'ovarian':'Ovary','fallopian':'Ovary',
-  'hepatocellular':'Liver','hepat':'Liver',
-  'glioblastoma':'Brain','medulloblastoma':'Brain','astrocytoma':'Brain',
-  'neuroblastoma':'Bone_Marrow','aml':'Blood','leukemia':'Blood',
-  'lymphoma':'Lymph_Node','myeloma':'Bone_Marrow',
-  'prostate':'Prostate','pancreatic':'Pancreas','gastric':'Stomach',
-  'melanoma':'Skin','sarcoma':'Soft_Tissue',
-  'peritoneal':'Multiple_Organs','omentum':'Multiple_Organs',
-  gastrointestinal:'Colon','colon/rectum':'Colon','rectum':'Colon',
-  'hematopoietic system':'Blood','hematopoietic':'Blood','hematologic':'Blood','haematologic':'Blood',
-  colorectum:'Colon',
-  'brain/cns':'Brain','brain tumour':'Brain','brain tumor':'Brain',
-  'oral cavity':'Salivary_Gland','head and neck':'Salivary_Gland',
-  'jaw bone':'Bone','orbit':'Eye','ocular adnexal':'Eye',
-  'embryonic stem':'Other','biliary tract':'Liver','pleura':'Lung',
-  endometrium:'Uterus',myometrium:'Uterus',thymus:'Lymph_Node',
-  omentum:'Multiple_Organs',peritoneum:'Multiple_Organs',diaphragm:'Multiple_Organs',
-  'fallopian tube':'Ovary','oesophagus':'Esophagus','esophagus mucosa':'Esophagus',
-  'urinary tract':'Bladder','leukemia cell line':'Blood',
-  'cancer cell line panel':'Multiple_Organs','cancer cell lines':'Multiple_Organs',
-  'soft tissue sarcoma':'Soft_Tissue','neural progenitor':'Brain',
-  'primary b cells':'Blood','primary t cells':'Blood','pbmc':'Blood',
-  'bone marrow and peripheral blood':'Bone_Marrow',
-  'mammary gland':'Breast','mammary tissue':'Breast','cerebellum':'Brain',
-  'cerebral cortex':'Brain','ventral mesencephalon':'Brain','substantia nigra':'Brain',
-  'lymph nodes':'Lymph_Node','lymph node':'Lymph_Node',
-  'adnexa':'Eye','uveal':'Eye','hgsoc':'Ovary','pdac':'Pancreas',
-  'escc':'Esophagus','luad':'Lung','lusc':'Lung',
-  'kidney tumor':'Kidney','colon epithelium':'Colon'
-};
-
-const ORGAN_EXACT={
-  kidney:'Kidney',cervix:'Cervix',pancreas:'Pancreas',liver:'Liver',lung:'Lung',
-  brain:'Brain',breast:'Breast',colon:'Colon',stomach:'Stomach',spleen:'Spleen',
-  'bone marrow':'Bone_Marrow',blood:'Blood','lymph node':'Lymph_Node',
-  ovary:'Ovary',uterus:'Uterus',prostate:'Prostate',testis:'Testis',
-  thyroid:'Thyroid',bladder:'Bladder',muscle:'Muscle',bone:'Bone',skin:'Skin',
-  esophagus:'Esophagus',heart:'Heart',nerve:'Nerve',pituitary:'Pituitary',
-  'small intestine':'Small_Intestine','adrenal gland':'Adrenal_Gland',
-  'salivary gland':'Salivary_Gland','minor salivary gland':'Salivary_Gland',
-  'adipose tissue':'Adipose_Tissue','soft tissue':'Soft_Tissue',
-  'multiple organs':'Multiple_Organs','multiple organs (22 types)':'Multiple_Organs',
-  'hematopoietic system':'Blood','hematopoietic and reticuloendothelial system':'Blood',
-  'hematopoietic / immune system':'Blood','hematologic':'Blood','haematologic':'Blood',
-  'blood and lymphoid':'Blood','gastrointestinal':'Colon','neural':'Brain',
-  'jaw bone':'Bone','soft tissue sarcoma':'Soft_Tissue','orbit':'Eye',
-  'head and neck':'Salivary_Gland','oral cavity':'Salivary_Gland',
-  'esophageal squamous cell carcinoma':'Esophagus','pleura':'Lung','thymus':'Lymph_Node',
-  'tonsil':'Lymph_Node',
-  'not specified':'Other',
-  'adrenal gland':'Adrenal_Gland','artery aorta':'Heart','artery coronary':'Heart',
-  'artery tibial':'Nerve','brain cerebellum':'Brain','brain cortex':'Brain',
-  'breast mammary tissue':'Breast','colon sigmoid':'Colon','colon transverse':'Colon',
-  'esophagus gastroesophageal junction':'Esophagus','esophagus mucosa':'Esophagus',
-  'esophagus muscularis':'Esophagus','heart atrial appendage':'Heart',
-  'heart left ventricle':'Heart','muscle skeletal':'Muscle',
-  'nerve tibial':'Nerve','skin not sun exposed suprapubic':'Skin',
-  'skin sun exposed lower leg':'Skin','small intestine terminal ileum':'Small_Intestine',
-  'ovary':'Ovary','uterus':'Uterus','vagina':'Uterus','prostate':'Prostate',
-  'testis':'Testis','pituitary':'Pituitary','placenta':'Uterus',
-  'liver metastases':'Liver','matched primary tumor':'Pancreas',
-  'tumor-adjacent liver':'Liver','liver; pancreas':'Liver',
-  'ovary; fallopian tube':'Ovary','ovary; omentum':'Ovary',
-  'colon/rectum':'Colon','brain/cns':'Brain','bone marrow; peripheral blood':'Bone_Marrow',
-  'breast; blood; embryonic stem cells':'Breast',
-  'multiple (lung, colon, breast, blood)':'Multiple_Organs'
-};
-
-const VAGUE_ORGAN=/^(not specified|unknown|n\/a|na|—|-)$/i;
-
-function splitOrganParts(raw){
-  return raw.split(/[;\n,]+/)
-    .map(x=>x.trim().replace(/^multiple\s+organs?\s*/i,'').replace(/^\(\d+[^)]*\)\s*/,'').trim())
-    .filter(p=>p&&!VAGUE_ORGAN.test(p));
-}
-
-function hintOrgansFromText(text){
-  if(!text) return [];
-  const l=text.toLowerCase();
-  const found=new Set();
-  const hints=[
-    [/epidermoid|a431\b/i,'Skin'],[/mcf[- ]?7|breast cancer|mammary/i,'Breast'],
-    [/glioblastoma|glioma|u251|dao[y]?/i,'Brain'],[/lung cancer|hcc827|nci-h322|luad|nsclc/i,'Lung'],
-    [/hepatocellular|liver|\bhcc\b/i,'Liver'],[/colon|colorectal|crc|rectal/i,'Colon'],
-    [/pancrea|pdac/i,'Pancreas'],[/ovarian|ovary|hgsoc/i,'Ovary'],
-    [/prostate|pca\b/i,'Prostate'],[/kidney|renal|rcc/i,'Kidney'],
-    [/stomach|gastric/i,'Stomach'],[/melanoma/i,'Skin'],
-    [/leukemia|aml|cll|myeloma|jurkat|k562|thp-1/i,'Blood'],
-    [/fibroblast|skin/i,'Skin'],[/endometri/i,'Uterus'],
-    [/esophag|barrett/i,'Esophagus'],[/thyroid/i,'Thyroid'],
-    [/bladder|urothel/i,'Bladder'],[/sarcoma|osteosarcoma|fibrosarcoma/i,'Soft_Tissue'],
-    [/b cell|t cell|pbmc|monocyte|cd14|cd4\+/i,'Blood']
-  ];
-  hints.forEach(([re,o])=>{if(re.test(l)) found.add(o);});
-  return [...found];
-}
-
+// Anatomical assignments are curated by exact project ID; no substring inference.
 let D=[],C={},charts=[];
-
+let PROJECT_ANATOMY=null;
 function esc(s){
   return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-function pickOrganRaw(row){
-  const organMain=(row['Organ']||'').trim();
-  const parts=[];
-  const addParts=raw=>{
-    splitOrganParts(raw).forEach(p=>{
-      if(p&&!VAGUE_ORGAN.test(p)) parts.push(p);
-    });
-  };
-  /* Curator Organ column is authoritative for map counts (TMT ATLAS sheet). */
-  if(organMain&&!VAGUE_ORGAN.test(organMain)){
-    if(classifyAllOrgans(organMain).length===1&&classifyAllOrgans(organMain)[0]==='Multiple_Organs')
-      return organMain;
-    addParts(organMain);
-    return parts.length?parts.join('; '):organMain;
-  }
-  ['Cell Line Organ','Tissue for cell lines','Tissue'].forEach(k=>addParts(row[k]||''));
-  const detail=(row['Tissue Cell Type Detailed']||'').trim();
-  if(!parts.length&&detail) addParts(detail);
-  if(parts.length<=1&&/cancer cell lines/i.test(detail)){
-    hintOrgansFromText(detail).forEach(o=>parts.push(o.replace(/_/g,' ')));
-  }
-  return parts.length?parts.join('; '):'Unknown';
+async function loadProjectAnatomy(){
+  const response=await fetch('data/project-anatomy.json',{cache:'no-store'});
+  if(!response.ok) throw new Error('Anatomical metadata could not be loaded.');
+  const bytes=await response.arrayBuffer();
+  PROJECT_ANATOMY=AnatomyMapping.validate(JSON.parse(new TextDecoder().decode(bytes)));
+  const digest=await crypto.subtle.digest('SHA-256',bytes);
+  window.ProjectAnatomySHA=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function anatomicalContextHtml(r){
+  const a=r.anatomy;
+  if(!a) return '';
+  const fields=[
+    [L('Измеренный материал','Measured material'),a.measured_material],
+    [L('Место забора','Collection site'),a.collection_site],
+    [L('Первичная локализация заболевания','Primary disease site'),a.primary_site],
+    [L('Происхождение клеток','Cell origin'),a.cell_line_origin],
+    [L('Неопределённость и ограничения','Uncertainty and limitations'),a.uncertainty]
+  ];
+  return '<dl class="anatomy-context">'+fields.map(([label,value])=>{
+    const text=AnatomyMapping.list(value)||L('Не указано в проверенной разметке; см. описание материала','Not specified in reviewed metadata; see material description');
+    return '<div><dt>'+esc(label)+'</dt><dd>'+esc(text)+'</dd></div>';
+  }).join('')+'</dl>';
+}
+function isCellModel(r){return /^(cell\s*lines?|cell\s*line\s*panel|pluripotent\s*cell\s*models?)$/i.test(r.st||'');}
+function projectStatusHtml(r){
+  if(isCellModel(r)) return '<span class="status '+(r.healthy?'normal':'cancer')+'">'+L('КЛЕТОЧНАЯ МОДЕЛЬ','CELL MODEL')+'</span>';
+  return '<span class="status '+(r.healthy?'normal':'cancer')+'">'+(r.healthy?L('ГРУППА СРАВНЕНИЯ','COMPARATOR GROUP'):L('СВЯЗАНО С РАКОМ','CANCER-ASSOCIATED'))+'</span>';
+}
+// Explicit heterogeneous model cohorts reviewed against exact-ID cell-line origins.
+const HETEROGENEOUS_MODEL_COHORTS=new Set(['MSV000085836','MSV000090700','PXD005361','PXD006895_total_lysate','PXD052353','PXD054500']);
+function projectDiseaseGroup(anatomy,tumorType){
+  return HETEROGENEOUS_MODEL_COHORTS.has(anatomy.project_id)?'Multiple annotated diseases/cell lineages':canonDisease(tumorType);
+}
+function projectDiseaseLabel(r){
+  if(isCellModel(r)&&r.healthy) return L('Клеточная модель; раковый диагноз не назначен в реестре','Cell model; no cancer diagnosis assigned in the registry');
+  return diseaseDisplayName(r.disCanon)||r.dis||'—';
+}
+function renderCategoryBrowser(){
+  const target=document.getElementById('categoryBrowser');
+  if(!target) return;
+  const keys=Object.keys(C).filter(k=>C[k]>0).sort((a,b)=>organDisplayName(a).localeCompare(organDisplayName(b)));
+  target.innerHTML='<label for="categorySelect">'+L('Все анатомические и материальные категории','All anatomical and biological-material categories')+'</label>'+
+    '<select id="categorySelect" onchange="if(this.value) sel(this.value)"><option value="">'+L('Выберите категорию','Choose a category')+'</option>'+keys.map(k=>'<option value="'+esc(k)+'"'+(selOrgan===k?' selected':'')+'>'+esc(organDisplayName(k))+' ('+C[k]+')</option>').join('')+'</select>'+
+    '<p>'+L('Список включает ткани, места забора и клеточные модели. Категории без позиции на схеме доступны здесь; один проект может входить в несколько категорий.','The list includes tissues, collection sites and cell models. Categories without a map position are available here; a project may belong to several categories.')+'</p>';
 }
 
-function classifyOrgan(n){
-  const l=(n||'').toLowerCase().trim();
-  if(!l) return 'Other';
-  if(ORGAN_EXACT[l]) return ORGAN_EXACT[l];
-  const ks=Object.keys(MAP).sort((a,b)=>b.length-a.length);
-  for(const k of ks) if(l.includes(k)) return MAP[k];
-  return 'Other';
-}
-function classifyAllOrgans(raw){
-  if(!raw) return ['Other'];
-  const cleaned=raw.toLowerCase().trim();
-  if(/multiple organs\s*\(\s*22\s*types?\s*\)/i.test(raw)||/22 lineages/i.test(cleaned))
-    return ['Multiple_Organs'];
-  if(cleaned==='multiple organs'||cleaned==='multi-organ') return ['Multiple_Organs'];
-  const parts=splitOrganParts(raw);
-  if(!parts.length) return ['Other'];
-  const organs=new Set();
-  parts.forEach(p=>{
-    const o=classifyOrgan(p);
-    if(o!=='Other'||p.toLowerCase()==='other') organs.add(o);
-    else hintOrgansFromText(p).forEach(h=>organs.add(h));
-  });
-  if(organs.size===0){
-    hintOrgansFromText(raw).forEach(h=>organs.add(h));
-  }
-  if(organs.size===0) organs.add('Other');
-  const list=[...organs];
-  if(list.length>=3&&!list.includes('Multiple_Organs')) list.push('Multiple_Organs');
-  return list;
-}
-/* Metastasis sites in multi-organ strings — keep primary organ only (e.g. LUAD autopsy → not Liver). */
-function trimMetastasisOrgans(organs,tumorType){
-  if(organs.length<2) return organs;
-  const dc=canonDisease(tumorType);
-  if(dc==='Lung cancer'&&organs.includes('Lung'))
-    return organs.filter(o=>o!=='Liver');
-  if(dc==='Liver cancer'&&organs.includes('Liver'))
-    return organs.filter(o=>o!=='Lung');
-  return organs;
-}
 function isHealthy(tumorType,sampleType,title,disease){
   const t=(tumorType||'').toLowerCase().trim();
   const d=(disease||'').toLowerCase().trim();
@@ -1247,11 +1070,13 @@ async function loadPdcOverrides(){
 }
 
 function normalizeRow(x){
-  const organRaw=pickOrganRaw(x);
+  x={...x,...(x._curatedScientificMetadata||{})};
+  const anatomy=AnatomyMapping.project(PROJECT_ANATOMY,(x['Project ID']||'').trim());
   const tumorType=x['Tumor Type']||x['Disease Subtype']||x['Disease']||'Not specified';
-  const sampleType=normalizeSampleType(x['Sample Type'])||'Unknown';
+  x={...x,'Sample Type':anatomy.material_type,'Tissue Cell Type Detailed':anatomy.measured_material};
+  const sampleType=normalizeSampleType(anatomy.material_type)||'Unknown';
   const title=x['Title']||'';
-  const organList=trimMetastasisOrgans(classifyAllOrgans(organRaw),tumorType);
+  const organList=[...anatomy.categories];
   const isPan=organList.length>=PAN_ORGAN_THRESHOLD;
   let projectId=(x['Project ID']||'').trim();
   let pid=projectId;
@@ -1266,7 +1091,7 @@ function normalizeRow(x){
   const sexUnknown=numField(x['Sex unknown']??x['Sex_unknown']);
   return {
     ...x,
-    organs:organList,om:organList[0],isMulti:organList.length>1,isPan,
+    anatomy,organs:organList,om:organList[0],isMulti:organList.length>1,isPan,
     patients:numField(x['Patients / donors']),
     male,female,sexUnknown,
     totalSamples:numField(x['Total Samples']),
@@ -1291,12 +1116,13 @@ function normalizeRow(x){
     fastaDb:(x['FASTA (Unified)']||'').trim(),
     link:(x['URL']||'').trim(),
     tissue:(x['Tissue']||'').trim(),
-    organRaw,
-    disCanon:canonDisease(tumorType)
+    organRaw:anatomy.categories.map(k=>AnatomyMapping.label(PROJECT_ANATOMY,k,'en')).join('; '),
+    disCanon:projectDiseaseGroup(anatomy,tumorType)
   };
 }
 
 function onDataLoaded(rows,sourceName){
+  AnatomyMapping.validate(PROJECT_ANATOMY,rows.filter(x=>(x['Project ID']||'').trim()).map(x=>x['Project ID'].trim()));
   D=rows
     .filter(x=>(x['Project ID']||'').trim())
     .map(applyPdcOverride)
@@ -1361,7 +1187,11 @@ function parseCsvText(text,msg,sourceName){
     header:true,
     skipEmptyLines:true,
     complete(r){
-      try{onDataLoaded(applyProteomicsOverrides(r.data),sourceName);}
+      try{
+        const descriptive=['Title','Disease','Disease Subtype','Tumor Type','Sample Type','Tissue Cell Type Detailed','Tissue','Experimental Design','Short Description','Cell Line Name','Cell Line Organ','Tumor type for cell lines','Tissue for cell lines','Cell Line Cancer;Normal','Main_Finding','Data_Caveats','Quantification_Format'];
+        const exactRows=r.data.map(row=>({...row,_curatedScientificMetadata:Object.fromEntries(descriptive.map(k=>[k,row[k]]))}));
+        onDataLoaded(applyProteomicsOverrides(exactRows),sourceName);
+      }
       catch(e){
         console.error(e);
         msg.textContent=(lang==='ru'?'Ошибка обработки: ':'Parse error: ')+e.message;
@@ -1392,11 +1222,13 @@ async function loadProteomicsStats(){
 async function loadSheetData(){
   const msg=document.querySelector('#loader p');
   msg.textContent=t('loading');
+  try { await loadProjectAnatomy(); } catch(e) {
+    msg.textContent=L('Не удалось загрузить проверенную анатомическую разметку. Обновите страницу.','Reviewed anatomical metadata could not be loaded. Refresh the page.');
+    console.error(e);return;
+  }
   pdcOverrides=await loadPdcOverrides();
   const sources=[
-    {name:'local',url:LOCAL_CSV},
-    {name:'raw',url:RAW_CSV},
-    {name:'sheet',url:SHEET_CSV}
+    {name:'local-reviewed',url:LOCAL_CSV}
   ];
   for(const src of sources){
     try{
@@ -1620,9 +1452,7 @@ function projectCard(r){
   const pmHref=r.pmid?pubmedUrl(r.pmid):'';
   const ghHref=ghResultsUrl(r.ghFolder||r.projectId||r.pid);
   const ghAlt =ghSearchUrl(r.pid);
-  const tag=r.healthy
-    ?`<span class="status normal">NORMAL</span>`
-    :`<span class="status cancer">CANCER</span>`;
+  const tag=projectStatusHtml(r);
   const pan=r.isPan?`<span class="status pan">${t('panBadge')}</span>`:'';
   const organs=r.organs.map(x=>organDisplayName(x)).join(', ');
   const tmt=r.tmt?`<span class="meta-pill">${esc(r.tmt)}</span>`:'';
@@ -1656,11 +1486,12 @@ function projectCard(r){
       </div>
       <div class="proj-organs">${esc(organs)}</div>
     </div>
-    <div class="proj-disease" title="${esc(r.dis)}">${esc(diseaseDisplayName(r.disCanon)||'—')}<span style="color:var(--t3);font-size:10px"> · ${esc((r.dis||'').slice(0,40))}</span></div>
+    <div class="proj-disease" title="${esc(r.dis)}">${esc(projectDiseaseLabel(r))}<span style="color:var(--t3);font-size:10px"> · ${esc((isCellModel(r)&&r.healthy?r.anatomy.measured_material:(r.dis||'')).slice(0,80))}</span></div>
     <div class="proj-meta">
       <span class="meta-pill subtle">${esc(r.st||'—')}</span>
       ${cohort}${tmt}${platform}${proteins}
     </div>
+    <details class="project-anatomy"><summary>${L('Материал и анатомический контекст','Material and anatomical context')}</summary>${anatomicalContextHtml(r)}</details>
     <div class="proj-links">
       <button type="button" class="plink plink-dossier" onclick="openProject('${esc(r.pid)}')" title="${L('Полное досье: критерии отбора, дизайн, выводы, методы, источники','Full dossier: selection criteria, design, findings, methods, sources')}">
         <span class="li">ℹ</span><span class="lt">${L('Досье','Dossier')}</span></button>
@@ -1686,7 +1517,7 @@ function projDossier(r){
   const crit=[L2('Человек','Human')];
   if(r.tmt) crit.push('TMT: '+r.tmt);
   if(r.proteinCount) crit.push(`${r.proteinCount.toLocaleString()} ${L2('белков','proteins')}`);
-  crit.push(`${L2('орган','organ')}: ${organs}`);
+  crit.push(`${L2('категории материала','material categories')}: ${organs}`);
   if(r.st) crit.push(r.st);
   const critChips=crit.map(c=>`<span class="dos-chip">${esc(c)}</span>`).join('');
   /* Cohort composition */
@@ -1721,17 +1552,18 @@ function projDossier(r){
   return `
     <div class="dos-top">
       <div class="dos-id">${esc(r.pid)}
-        ${r.healthy?'<span class="status normal">NORMAL</span>':'<span class="status cancer">CANCER</span>'}
+        ${projectStatusHtml(r)}
         ${r.isPan?`<span class="status pan">${t('panBadge')}</span>`:''}
         <span class="meta-pill">${esc(r.db||'—')}</span>
       </div>
       <div class="dos-title">${esc(v('Title')||r.cl||r.pid)}</div>
-      <div class="dos-sub">${esc(organs)} · ${esc(diseaseDisplayName(r.disCanon)||r.dis||'—')}</div>
+      <div class="dos-sub">${esc(organs)} · ${esc(projectDiseaseLabel(r))}</div>
     </div>
     ${sec(L('Почему включён в атлас · критерии отбора','Why it is in the atlas · selection criteria'),
       `<div class="dos-chips">${critChips}</div>
        <p class="dos-note">${L('Включается, если это человеческий датасет TMT-мультиплексной протеомики с количественной оценкой протеома и привязкой к органу/ткани. Полные критерии — см.','Included when it is a human TMT multiplex proteomics dataset with a quantified proteome and an organ/tissue assignment. Full criteria:')}
        <a href="https://github.com/arinaatom-cyber/TMT/blob/main/METHODS.md" target="_blank" rel="noopener">METHODS.md</a>.</p>`)}
+    ${sec(L('Материал и анатомический контекст','Material and anatomical context'),anatomicalContextHtml(r))}
     ${sec(L('Дизайн исследования','Study design'),design?`<p class="dos-text">${esc(design)}</p>`:'')}
     ${sec(L('Что собрано · когорта','What was collected · cohort'),cohort?`<div class="dos-grid">${cohort}</div>`:'')}
     ${sec(L('Ключевой вывод статьи','Main finding of the article'),findings?`<p class="dos-find">${esc(findings)}</p>`:'')}
@@ -2187,9 +2019,10 @@ function sel(o){
       if(typeof Chart==='undefined') return;
       const ax=chartAxisColors();
       const mat=organMaterialCounts(uniqRows);
-      const matLabels=[t('matClC'),t('matTisC'),t('matTisN'),t('matClN')];
-      const matData=[mat.clC,mat.tisC,mat.tisN,mat.clN];
-      const matColors=[MAT_COL.clC,MAT_COL.tisC,MAT_COL.tisN,MAT_COL.clN];
+      const matKeys=Object.keys(mat).sort();
+      const matLabels=matKeys.map(materialDisplayName);
+      const matData=matKeys.map(k=>mat[k]);
+      const matColors=matKeys.map(materialColor);
       const cMat=document.getElementById('chMat');
       if(cMat&&matData.some(v=>v>0)){
         charts.push(new Chart(cMat,{
@@ -2255,3 +2088,5 @@ window.filterByHealth=filterByHealth;
 window.ghResultsUrl=ghResultsUrl;
 window.getOrganRows=getOrganRows;
 window.uniqProjects=uniqProjects;
+
+window.getAtlasProject=pid=>D.find(r=>r.pid===pid);
