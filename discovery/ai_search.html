@@ -6,7 +6,7 @@
   <meta name="description" content="Monitor human TMT in PRIDE, PDC, MassIVE, iProX · LLM abstract screening · large literature cohorts"/>
   <title>Human Cancer-Associated TMT Proteome Atlas — AI search</title>
   <link rel="stylesheet" href="assets/theme.css"/>
-  <script src="assets/i18n.js" defer></script>
+  <script src="assets/i18n.js?v=20261112-ui-audit" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -30,8 +30,8 @@
 
 <div class="page-hero">
   <h1 data-i18n="ai_title">AI keyword search</h1>
-  <p class="lead" data-i18n="ai_lead">Run repository + literature search with LLM scoring — same engine as the Discovery portal</p>
-  <div class="page-meta"><span class="meta-pill badge badge-muted"><span data-i18n="meta_updated">Updated</span> 2026-08-10 18:09:03 UTC</span><span class="meta-pill badge badge-ok" data-i18n="ai_badge_live">Live app</span></div>
+  <p class="lead" data-i18n="ai_lead">Keywords and saved results from repository and literature screening with LLM scoring.</p>
+  <div class="page-meta"><span class="meta-pill badge badge-muted"><span data-i18n="meta_updated">Updated</span> 2026-08-10 18:09:03 UTC</span><span class="meta-pill badge badge-ok" data-i18n="ai_badge_live">Saved results</span></div>
 </div>
 <div class="page-content">
   <div class="how-to-panel">
@@ -45,8 +45,8 @@
   </div>
 
   <div class="card ai-launch-card">
-    <h2 data-i18n="ai_launch_title">Launch interactive search</h2>
-    <p data-i18n="ai_launch_desc">Full search runs in Streamlit (APIs + local LLM). Results are not auto-added to projects.csv.</p>
+    <h2 data-i18n="ai_launch_title">Open catalog and results</h2>
+    <p data-i18n="ai_launch_desc">The deployed app provides the catalog and a New projects tab. Running a new LLM search is not currently available in this interface.</p>
     <div class="btn-row">
       <a class="btn btn-primary btn-lg" href="https://human-cancser-tmt-proteome-atlas.streamlit.app" target="_blank" rel="noopener" data-i18n="ai_launch_btn"></a>
       <a class="btn" href="discovery.html" data-i18n="ai_view_discovery"></a>
@@ -64,7 +64,7 @@
     <iframe
       class="embed-frame embed-frame-tall"
       src="https://human-cancser-tmt-proteome-atlas.streamlit.app"
-      title="AI keyword search"
+      title="TMT Atlas catalog"
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
     ></iframe>
