@@ -137,7 +137,7 @@ const I18N={
   ru:{
     loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
     searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
-    cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV (все)',
+    cancerOnly:'Только cancer',normalOnly:'Только normal',exportAll:'Экспорт CSV с фильтрами',
     about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи слева и справа',
     anatomyNote:'Схематический вид спереди. Органы не в масштабе. Забрюшинные органы показаны в передней проекции.',
     noMapProjects:'Нет проектов при текущем фильтре',
@@ -162,7 +162,7 @@ const I18N={
     m6:'Число пациентов отражает биологических доноров; клеточные линии — 0 пациентов. Total Samples для не-PDC-проектов может отражать каналы TMT или файлы, а не биообразцы.',
     m7:'Данные из PRIDE (EBI), PDC/CPTAC (NCI), MassIVE (UCSD) и iProX (Пекин). Для PDC — количество пациентов и образцов из *_summary.csv каждого проекта.',
     m8:'Каталог ведётся вручную; Discovery-pipeline (еженедельный автоматический поиск) находит кандидатов для ревью куратора.',
-    cite:'Цитирование',exportOrgan:'Экспорт органа',extras:'Дополнительно',
+    cite:'Цитирование',exportOrgan:'Экспорт показанных проектов',extras:'Дополнительно',
     compare:'Сравнение двух органов',compareHint:'Выберите два органа и нажмите «Сравнить»',runCompare:'Сравнить',
     panBadge:'PAN-ORGAN',projects:'проектов',proteins:'белков',rows:'строк',organs:'органов',databases:'баз',
     tmtFormats:'форматов TMT',sampleTypes:'типов образцов',validOk:'Данные загружены',
@@ -216,7 +216,7 @@ const I18N={
   en:{
     loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
     searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
-    cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export all CSV',
+    cancerOnly:'Cancer only',normalOnly:'Normal only',exportAll:'Export filtered CSV',
     about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · labels on both sides',
     anatomyNote:'Schematic anterior view. Organs are not shown to scale. Retroperitoneal organs are projected onto the anterior view.',
     noMapProjects:'No projects with current filters',
@@ -241,7 +241,7 @@ const I18N={
     m6:'Patient count reflects biological donors; cell-line studies have 0 patients. Non-PDC Total Samples values may reflect TMT channels or raw files rather than biological samples.',
     m7:'Data retrieved from PRIDE (EBI), PDC/CPTAC (NCI), MassIVE (UCSD) and iProX (Beijing). PDC patient and sample counts are sourced from per-project *_summary.csv files.',
     m8:'The atlas catalogue is maintained manually; the Discovery pipeline (automated weekly scan) surfaces candidate datasets for curator review.',
-    cite:'Citation',exportOrgan:'Export organ',extras:'More',
+    cite:'Citation',exportOrgan:'Export shown projects',extras:'More',
     compare:'Compare two organs',compareHint:'Pick two organs and click Compare',runCompare:'Compare',
     panBadge:'PAN-ORGAN',projects:'projects',proteins:'proteins',rows:'rows',organs:'organs',databases:'databases',
     tmtFormats:'TMT formats',sampleTypes:'sample types',validOk:'Data loaded',
@@ -540,7 +540,7 @@ function exportAllCSV(){
 }
 function exportOrganCSV(o){
   const seen=new Set(),u=[];
-  filteredRows().filter(r=>r.organs.includes(o)).forEach(r=>{
+  filterOrganProjects(filteredRows().filter(r=>r.organs.includes(o)),organUI.projQ).forEach(r=>{
     if(!seen.has(r.pid)){seen.add(r.pid);u.push(r);}
   });
   downloadCSV(`atlas-${o.replace(/_/g,'-').toLowerCase()}.csv`,u);
@@ -2138,7 +2138,7 @@ function sel(o){
     <div class="sub">${nShown} shown / ${nProj} ${t('projects')} · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} disease groups</div></div>
   </div>
   <div class="mstats">
-    <div class="ms"><div class="v accent" style="color:${col}">${nProj}</div><div class="l">${t('projects')}</div></div>
+    <div class="ms"><div class="v accent" style="color:${col}">${nShown}</div><div class="l">${t('projects')}</div></div>
     <div class="ms"><div class="v" style="color:${PASTEL_CANCER}">${nCancer}</div><div class="l">Cancer</div></div>
     <div class="ms"><div class="v" style="color:${PASTEL_NORMAL}">${nHealthy}</div><div class="l">Normal</div></div>
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
