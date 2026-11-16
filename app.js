@@ -1002,7 +1002,8 @@ function renderCategoryBrowser(){
   const keys=Object.keys(C).filter(k=>C[k]>0).sort((a,b)=>organDisplayName(a).localeCompare(organDisplayName(b)));
   target.innerHTML='<label for="categorySelect">'+L('Все анатомические и материальные категории','All anatomical and biological-material categories')+'</label>'+
     '<select id="categorySelect" onchange="if(this.value) sel(this.value)"><option value="">'+L('Выберите категорию','Choose a category')+'</option>'+keys.map(k=>'<option value="'+esc(k)+'"'+(selOrgan===k?' selected':'')+'>'+esc(organDisplayName(k))+' ('+C[k]+')</option>').join('')+'</select>'+
-    '<p>'+L('Список включает ткани, места забора и клеточные модели. Категории без позиции на схеме доступны здесь; один проект может входить в несколько категорий.','The list includes tissues, collection sites and cell models. Categories without a map position are available here; a project may belong to several categories.')+'</p>';
+    '<p>'+L('Список включает ткани, места забора и клеточные модели. Категории без позиции на схеме доступны здесь; один проект может входить в несколько категорий.','The list includes tissues, collection sites and cell models. Categories without a map position are available here; a project may belong to several categories.')+'</p>'+
+    '<p>'+L('При объединении частей и однотипных структур: 33 органные группы. Это не число отдельных органов.','After grouping organ parts and structure classes: 33 broad organ/organ-structure classes, not individual organs.')+' <a href="anatomical-coverage.html">'+L('Полный список и правила подсчёта →','Full list and counting rules →')+'</a></p>';
 }
 
 function isHealthy(tumorType,sampleType,title,disease){

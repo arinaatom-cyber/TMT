@@ -9104,7 +9104,7 @@
       "project_id": "PXD027335",
       "exact_id": "PXD027335",
       "measured_material": "Six patient-derived glioblastoma stem-cell lines, the T98G glioblastoma cell line and primary human astrocytes.",
-      "material_type": "Cell Lines",
+      "material_type": "Cell Lines; Primary cells",
       "primary_site": [
         "Not applicable (cultured-cell experiment)"
       ],
