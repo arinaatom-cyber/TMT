@@ -11,6 +11,18 @@
     nav_discovery: { ru: "Discovery", en: "Discovery" },
     nav_cohorts: { ru: "Когорты", en: "Cohorts" },
     nav_qc: { ru: "QC", en: "QC" },
+    quick_brain: { ru: "Головной мозг", en: "Brain" },
+    quick_lung: { ru: "Лёгкое", en: "Lung" },
+    quick_cell_models: { ru: "Клеточные модели кроветворной и лимфоидной тканей", en: "Hematopoietic and lymphoid cell models" },
+    quick_ovary: { ru: "Яичник", en: "Ovary" },
+    quick_blood: { ru: "Кровь", en: "Blood" },
+    quick_breast: { ru: "Молочная железа", en: "Breast" },
+    quick_pancreas: { ru: "Поджелудочная железа", en: "Pancreas" },
+    quick_kidney: { ru: "Почка", en: "Kidney" },
+    quick_liver: { ru: "Печень", en: "Liver" },
+    quick_uterus: { ru: "Матка", en: "Uterus" },
+    quick_colon_rectum: { ru: "Ободочная и прямая кишка", en: "Colon and rectum" },
+    quick_bone_marrow: { ru: "Костный мозг", en: "Bone marrow" },
     meta_updated: { ru: "Сохранённый отчёт от", en: "Scan snapshot dated" },
     badge_readonly: { ru: "только чтение", en: "read-only" },
     meta_candidates: { ru: "кандидатов", en: "candidates" },
@@ -194,7 +206,7 @@
       map_how_title: "Как пользоваться",
       map_step1: "Кликните орган на силуэте или выберите быструю ссылку ниже",
       map_step2: "Просмотрите проекты ткани — откройте репозиторий или PubMed в боковой панели",
-      map_step3: "Диплинки: добавьте ?organ=gastric (или другой ключ) к URL карты",
+      map_step3: "Ссылка на категорию: добавьте ?organ=Stomach (или точный ключ категории) к URL карты",
       map_open_full: "Открыть карту на весь экран",
       map_embed_hint: "Встроено с GitHub Pages TMT — прокручивайте внутри фрейма",
       map_organs_title: "Быстрые ссылки на органы",
@@ -324,7 +336,7 @@
       map_how_title: "How to use",
       map_step1: "Click an organ on the silhouette or use quick links below",
       map_step2: "Browse tissue projects — open repository or PubMed from the sidebar",
-      map_step3: "Share deep links: add ?organ=gastric (or other organ key) to the map URL",
+      map_step3: "Share a category link: add ?organ=Stomach (or another exact category key) to the map URL",
       map_open_full: "Open full-screen map",
       map_embed_hint: "Embedded from GitHub Pages TMT — scroll inside the frame if needed",
       map_organs_title: "Quick organ links",
@@ -358,15 +370,25 @@
   const T = { ru: buildDict("ru"), en: buildDict("en") };
 
   function getLang() {
-    return "en";
+    try {
+      const saved = localStorage.getItem("hpa-lang") || localStorage.getItem(STORAGE_KEY);
+      return saved === "ru" ? "ru" : "en";
+    } catch (_) {
+      return document.documentElement.lang === "ru" ? "ru" : "en";
+    }
   }
 
   function setLang(lang) {
-    localStorage.setItem(STORAGE_KEY, lang);
+    lang = lang === "ru" ? "ru" : "en";
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+      localStorage.setItem("hpa-lang", lang);
+    } catch (_) { /* Language selection still works when browser storage is unavailable. */ }
     document.documentElement.lang = lang;
     apply(lang);
     document.querySelectorAll(".lang-toggle button").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.lang === lang);
+      btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
     });
   }
 
@@ -394,6 +416,7 @@
     apply(lang);
     document.querySelectorAll(".lang-toggle button").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.lang === lang);
+      btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
       btn.addEventListener("click", () => setLang(btn.dataset.lang));
     });
   });

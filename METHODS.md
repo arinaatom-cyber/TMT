@@ -38,46 +38,56 @@ because of sub-cohorts. Per‑organ counts are reported as **unique catalogue pr
 | iProX | `IPX` | Often dual‑listed with PXD |
 | MassIVE | `MSV` | Additional ProteomeXchange deposits |
 
-The live catalogue is `data/projects.csv` in the GitHub repository.
-The site loads that file first (local Pages copy, then the raw GitHub copy, then a Google Sheet as a last fallback).
+The catalogue is loaded from the deployed local `data/projects.csv`. The current
+loader does not fall back to a different catalogue or a Google Sheet. Displayed
+fields may also incorporate matching entries from `data/proteomics_stats.json`
+and `data/pdc-summary-overrides.json`; these supplemental sources are linked in
+the project dossier. The proteomics-statistics loader tries the local file, then
+the raw GitHub copy. Anatomical navigation uses the exact-project metadata in
+`data/project-anatomy.json` as described below. These files document the sources
+used by the viewer; their counting units still require the project annotations.
 
 **Full reader dictionary (all pack columns and cell labels):** [`data/Atlas_data_dictionary.csv`](data/Atlas_data_dictionary.csv) — browsable at [dictionary.html](https://arinaatom-cyber.github.io/TMT/dictionary.html). Short catalogue notes remain in `DATA_DICTIONARY.md`.
 
-## 3. Organ classification (how matching works)
+## 3. Anatomical navigation (current implementation)
 
-Organ assignment is **deterministic and keyword/substring based**:
+The site obtains category membership from `data/project-anatomy.json`, using
+`AnatomyMapping.project` in `anatomy.js` and the **exact project record ID** from
+the catalogue. Sub-cohort suffixes are part of that lookup. The current navigation
+does not infer membership from tumour keywords, substrings or anatomical proximity.
 
-1. The curator **`Organ`** column is authoritative. It is split on `;`, `,` and
-   newlines into parts.
-2. Each part is matched against a controlled dictionary, first by **exact** lookup,
-   then by longest **substring** match (e.g. `gastric → Stomach`, `glioma → Brain`,
-   `renal → Kidney`).
-3. If the `Organ` column is empty, the classifier falls back to cell‑line/tissue
-   columns and finally to regex **hints** from free text (e.g. `MCF‑7 → Breast`).
-4. Rows resolving to **≥ 3 organs** are additionally tagged `Multiple Organs`; rows
-   with **≥ 8 organs** are flagged as pan‑organ.
+Each project record provides explicit `categories` plus separate descriptions of
+`measured_material`, `collection_site`, `primary_site`, `cell_line_origin` and
+`uncertainty`. These fields must be interpreted separately: a primary tumour site
+is not necessarily the measured collection site, and a cell-origin label does not
+mean that tissue from that organ was measured. Unknown or conflicting assignments
+remain explicit in the metadata; the viewer does not replace them with a guessed organ.
 
-### Documented proxy mappings
+The embedded `terms` vocabulary supplies English/Russian display labels, entity
+types and qualifications. Navigation includes anatomical sites, tissues and cell-model
+groups; its category count is **not a count of independent anatomical organs**.
+The source field `Organ` in `projects.csv` remains available as catalogue metadata,
+but is not the current membership classifier.
 
-Some source labels are anatomical regions rather than single organs; they are mapped to
-the nearest organ available on the map. Reviewers should be aware of these:
+### Validation and interpretation limits
 
-| Source label | Mapped to | Rationale |
-|---|---|---|
-| Head and neck / Oral cavity | Salivary gland | nearest mapped head‑and‑neck site |
-| Gastrointestinal | Large intestine (Colon) | dominant GI proteomics tissue |
-| Orbit | Eye | orbital region |
-| Placenta | Uterus | female reproductive proxy |
-| Tonsil | Lymph node | lymphoid tissue |
-| Pleura | Lung | thoracic proximity |
+At load time, `AnatomyMapping.validate` checks valid category keys, non-empty and
+non-duplicated project category arrays, references to defined terms, and equality
+of the exact project-ID sets in the anatomical file and catalogue. These are
+structural consistency checks, not an independent revalidation of every original
+publication. Per-record evidence and uncertainty are retained in the anatomical file.
 
-### Metastasis handling
+A project may appear under several navigation tags. Its full matrix is not split
+into organ-specific samples by those tags; use the project's Annotation to select
+the relevant measurement columns. Do not count repeated appearances as independent
+studies or assume that every protein in a multi-site project was measured in every site.
 
-For multi‑organ strings from autopsy/metastasis studies, the primary tumour organ is
-kept and obvious distant‑metastasis organs are trimmed where the primary is
-unambiguous (e.g. lung‑adenocarcinoma autopsy → not counted as a liver project). Small
-organ counts (e.g. adrenal, spleen) may still include metastatic‑site tissue; this is
-disclosed in the project dossier’s **Data caveats**.
+The category protein index is accepted only when its `anatomy_sha256` matches the
+SHA-256 digest of the loaded anatomical file and its `scope` is
+`complete_project_matrices` (`proteins.js`, `anatomyIndexCompatible`). It therefore
+describes coverage of complete project matrices associated with a category, not a
+sample-filtered organ proteome. The checksum establishes version compatibility;
+it does not establish biological specificity.
 
 ## 4. Cancer vs normal
 

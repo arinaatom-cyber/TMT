@@ -1,3 +1,12 @@
+async function readSiteResource(url,kind='json'){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),20000);
+  try {
+    const response=await fetch(url,{cache:'no-store',signal:controller.signal});
+    if(!response.ok) throw new Error('HTTP '+response.status+' for '+url);
+    return await response[kind]();
+  } finally {clearTimeout(timer);}
+}
 const SHEET='1M6hc3vmk1bNchMvEwXsIyyO5iq3mAzP877HTXzhzg38';
 const GID='1072380314';
 const SHEET_CSV=`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv&gid=${GID}`;
@@ -135,14 +144,14 @@ const MAP_DUAL_GAP=24;
 
 const I18N={
   ru:{
-    loading:'Загрузка данных…',subtitle:'Интерактивная карта экспрессии тканей',
-    searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все образцы',
-    cancerOnly:'Только опухолевые',normalOnly:'Только неопухолевые',exportAll:'Экспорт CSV с фильтрами',
+    loading:'Загрузка данных…',subtitle:'Интерактивная карта TMT-проектов',
+    searchPh:'Орган, PXD, PMID…',allTmt:'Все TMT',allSamples:'Все проекты',
+    cancerOnly:'Проекты: tumor',normalOnly:'Проекты: non-tumor',exportAll:'Экспорт CSV с фильтрами',
     about:'О проекте',close:'Закрыть',bodyCap:'Женщина (слева) · мужчина (справа) · подписи слева и справа',
     anatomyNote:'Схематический вид спереди. Органы не в масштабе. Забрюшинные органы показаны в передней проекции.',
     noMapProjects:'Нет проектов при текущем фильтре',
     pickOrgan:'Клик по органу на карте или в подписи',footer:'Human TMT Proteome Atlas · TMT протеомика',
-    aboutTitle:'О атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Каталог: data/projects.csv в репозитории GitHub (PRIDE, PDC/CPTAC, MassIVE, iProX).',
+    aboutTitle:'Об атласе',aboutP1:'Интерактивная карта TMT-протеомных проектов по органам. Каталог: data/projects.csv в репозитории GitHub (PRIDE, PDC/CPTAC, MassIVE, iProX).',
     aboutP2:'Группировка органов согласована со справочником MSD Manual (Merck Manual): основные системы органов человека.',
     sysRefTitle:'Основные системы органов (MSD Manual)',
     refTitle:'Референс-размеры органов (эталон атласа)',
@@ -171,11 +180,11 @@ const I18N={
     uvpTitle:'Атлас TMT-протеомики человека',
     patients:'пациентов',samples:'образцов',patientsShort:'пациент.',samplesShort:'обр.',
     sumPatients:'Σ пациентов',sumSamples:'Σ образцов',
-    patSampHint:'Пациенты/доноры и Total Samples — из каталога data/projects.csv (синхронизация с Atlas *_summary.csv). Для клеточных линий пациенты = 0. Часть значений Total Samples отражает каналы/файлы TMT, а не биообразцы — суммы приблизительные.',
+    patSampHint:'Показаны поля каталога с применением proteomics_stats.json и pdc-summary-overrides.json. Нулевые значения и единицы учёта требуют сверки с аннотацией: это не проверенная сумма уникальных доноров или биообразцов.',
     validWarn:'Проверьте фильтр или источник данных',validFilter:'Показано с фильтром',searchOrgan:'Поиск органа…',
     allDb:'Все базы',refresh:'Обновить',share:'Ссылка',legend:'Легенда · точки',
-    legNormal:'Normal (только)',legCancer:'Cancer (только)',legPan:'Pan-organ',legMixed:'Mixed C+N',
-    legHint:'Цвет точки у подписи = C/N/Pan. Pan-проекты учитываются и в C, и в N — счётчики пересекаются; итого = уникальные проекты. Размер ∝ √N. Все органы на карте; яркие — с проектами, бледные — без данных.',
+    legNormal:'Проекты non-tumor',legCancer:'Проекты tumor',legPan:'Несколько органов',legMixed:'Обе категории проектов',
+    legHint:'C = проекты tumor, N = проекты non-tumor; Pan = проекты с несколькими локализациями, также учтённые в C или N. Это категории проектов, не состав образцов. Итого = уникальные проекты. Размер ∝ √N. Все органы на карте; яркие — с проектами, бледные — без данных.',
     legSize:'размер ∝ √N',
     matChartTitle:'Материал образца по анатомическим категориям и типам материала',
     matChartHint:'Уникальные Project ID по категории. Категории могут пересекаться и не являются независимыми когортами. «Ткань normal» — здоровые образцы, в т.ч. GTEx (PXD016999, 32 ткани).',
@@ -184,7 +193,7 @@ const I18N={
     matOrganTitle:'Материал образца',
     pelvisTip:'Unisex-схема: ♂ и ♀ органы в одной области таза',
     sortBy:'Сортировка',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Диагноз',
-    projSearch:'Поиск в проектах…',updated:'Обновлено',dataFromSheet:'Google Sheet (fallback)',dataFromBundle:'копия на сайте',
+    projSearch:'Поиск в проектах…',updated:'Загружено в браузер',dataFromSheet:'Google Sheet (fallback)',dataFromBundle:'копия на сайте',
     linkCopied:'Ссылка скопирована',openSheet:'Каталог GitHub',
     protSummary:'Белки в органе',protIndexHint:'Индекс в data/organ-proteome.json: белки из Result Files (tmt-projects), гены CPTAC/Ensembl сопоставлены с UniProt (GeneCards→Swiss-Prot, человек). Счётчики на карточках — из data/projects.csv.',
     sheetCountHint:'Proteins Quantified — из каталога data/projects.csv; для большинства проектов — UniProt из Atlas summary.',
@@ -197,7 +206,7 @@ const I18N={
     noProtFile:'Файл не найден — откройте папку в tmt-projects/Projects/PXD…',loaded:'загружено',
     compareProt:'Сравнить белки',shared:'Общие',
     vennTitle:'Сравнение белков (диаграмма Венна)',vennOnlyA:'только A',vennOnlyB:'только B',vennBoth:'оба органа',
-    multiProjectHint:'Несколько проектов в одном органе: белки объединяются (объединение). Один и тот же UniProt или ген считается один раз на орган, даже если он есть в PXD001 и PXD002.',
+    multiProjectHint:'Списки белков проектов объединяются; повторяющиеся идентификаторы учитываются один раз. Один и тот же UniProt или ген считается один раз на орган, даже если он есть в PXD001 и PXD002.',
     multiProjectDetail:'Белок встречается в 2+ проектах этого органа',
     multiProjectShort:'В 2+ проектах',
     compareUseExtras:'Сравнение с другим органом — раздел «Дополнительно» → диаграмма Венна.',
@@ -214,9 +223,9 @@ const I18N={
     sysMale:'Мужская репродуктивная',sysImmune:'Кровь и иммунная',sysMSK:'Опора и покровы',sysOther:'Прочее'
   },
   en:{
-    loading:'Loading proteome data…',subtitle:'Interactive Tissue Expression Map',
-    searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All samples',
-    cancerOnly:'Tumor only',normalOnly:'Non-tumor only',exportAll:'Export filtered CSV',
+    loading:'Loading proteome data…',subtitle:'Interactive TMT Project Map',
+    searchPh:'Organ, PXD, PMID…',allTmt:'All TMT',allSamples:'All projects',
+    cancerOnly:'Tumor-classified projects',normalOnly:'Non-tumor-classified projects',exportAll:'Export filtered CSV',
     about:'About',close:'Close',bodyCap:'Female (left) · Male (right) · labels on both sides',
     anatomyNote:'Schematic anterior view. Organs are not shown to scale. Retroperitoneal organs are projected onto the anterior view.',
     noMapProjects:'No projects with current filters',
@@ -250,11 +259,11 @@ const I18N={
     uvpTitle:'Human TMT proteomics atlas',
     patients:'patients',samples:'samples',patientsShort:'pat.',samplesShort:'smp.',
     sumPatients:'Σ patients',sumSamples:'Σ samples',
-    patSampHint:'Patients/donors and Total Samples come from data/projects.csv (aligned with Atlas *_summary.csv). Cell-line studies have 0 patients. Some Total Samples values reflect TMT channels/files rather than biological samples — sums are approximate.',
+    patSampHint:'Catalog fields with proteomics_stats.json and pdc-summary-overrides.json applied. Check zero values and counting units against project annotations: these are not verified totals of unique donors or biological samples.',
     validWarn:'Check filter or data source',validFilter:'Showing filtered set',searchOrgan:'Search organ…',
     allDb:'All databases',refresh:'Refresh',share:'Copy link',legend:'Legend · dots',
-    legNormal:'Normal only',legCancer:'Cancer only',legPan:'Pan-organ',legMixed:'Mixed C+N',
-    legHint:'Dot color at label = C/N/Pan mix. Pan-organ projects are also counted in C or N — counters overlap; total = unique projects. Size ∝ √N. All organs shown; bright = has projects, faded = none.',
+    legNormal:'Non-tumor projects',legCancer:'Tumor projects',legPan:'Multi-site',legMixed:'Both project categories',
+    legHint:'C = tumor-classified projects; N = non-tumor-classified projects; Pan = multi-site projects also counted in C or N. These are project categories, not sample composition. Total = unique projects. Size ∝ √N. All organs shown; bright = has projects, faded = none.',
     legSize:'size ∝ √N',
     matChartTitle:'Sample material by anatomical / biological-material category',
     matChartHint:'Unique project IDs per category. Categories can overlap and are not independent cohorts. “Tissue normal” includes healthy samples, e.g. GTEx (PXD016999, 32 tissues).',
@@ -263,7 +272,7 @@ const I18N={
     matOrganTitle:'Sample material',
     pelvisTip:'Unisex map: male & female organs share the pelvic region',
     sortBy:'Sort',sortPid:'Project ID',sortPmid:'PMID',sortTmt:'TMT',sortDis:'Disease',
-    projSearch:'Search projects…',updated:'Updated',dataFromSheet:'Google Sheet (fallback)',dataFromBundle:'site bundle',
+    projSearch:'Search projects…',updated:'Loaded in browser',dataFromSheet:'Google Sheet (fallback)',dataFromBundle:'site bundle',
     linkCopied:'Link copied',openSheet:'Catalog on GitHub',
     protSummary:'Proteins in organ',protIndexHint:'Index in data/organ-proteome.json: proteins from tmt-projects Result Files; CPTAC/Ensembl genes mapped to UniProt (GeneCards→Swiss-Prot, human). Card counts from data/projects.csv.',
     sheetCountHint:'Proteins Quantified — from data/projects.csv; for most projects this is unique UniProt from the Atlas summary.',
@@ -343,8 +352,8 @@ function organDisplayName(o){
 }
 function organSearchText(o){
   const base=o.replace(/_/g,' ').toLowerCase();
-  const disp=organDisplayName(o).toLowerCase();
-  return base+' '+disp;
+  const term=PROJECT_ANATOMY?.terms?.[o];
+  return [base,term?.label_en,term?.label_ru,ORGAN_LABELS.en?.[o],ORGAN_LABELS.ru?.[o]].filter(Boolean).join(' ').toLowerCase();
 }
 Object.assign(I18N.en, {
   noOrganMatches:'No projects for this category match the selected filters. Clear or change the filters.',
@@ -366,7 +375,7 @@ function i18nApply(){
   const lb=document.getElementById('langBtn');if(lb) lb.textContent=lang==='ru'?'EN':'RU';
   document.documentElement.lang=lang;
 }
-function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();refreshAll();if(document.getElementById('aboutModal')?.classList.contains('open')){renderSysRef();renderOrganRef();}}
+function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();rebuildCounts();refreshAll();if(document.getElementById('aboutModal')?.classList.contains('open')){renderSysRef();renderOrganRef();}}
 
 const F={q:'',tmt:'',health:'',db:''};
 let META={rawRows:0,uniqPids:0,loadedAt:null,dataSource:''},selOrgan=null;
@@ -446,14 +455,16 @@ function setFilter(key,val){
 }
 function filterByDb(db){setFilter('db',db||'');}
 function filterByHealth(h){setFilter('health',h||'');}
-function onGlobalSearch(v){F.q=(v||'').trim();rebuildCounts();refreshAll();if(selOrgan) sel(selOrgan);}
+function onGlobalSearch(v){F.q=(v||'').trim();rebuildCounts();refreshAll();}
 function updateUrl(organ){
   const u=new URL(location.href);
   if(organ) u.searchParams.set('organ',organ);else u.searchParams.delete('organ');
   history.replaceState({},'',u);
 }
 function parseUrlOrgan(){
-  const o=new URLSearchParams(location.search).get('organ');
+  const value=new URLSearchParams(location.search).get('organ');
+  const alias={gastric:'Stomach'};
+  const o=value&&(alias[value.toLowerCase()]||Object.keys(C).find(k=>k.toLowerCase()===value.toLowerCase()));
   if(o&&C[o]) sel(o);
 }
 function openAbout(){
@@ -525,7 +536,7 @@ function renderOrganRef(){
 }
 function closeAboutNoop(){}
 function closeAbout(){document.getElementById('aboutModal').classList.remove('open');}
-function csvEscape(s){const x=String(s??'');return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
+function csvEscape(s){const x=String(s??'');return /[",\n\r]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;}
 function downloadCSV(filename,rows){
   const cols=['Project ID','PMID','Anatomical and material categories','Disease','Disease group','TMT','Sample Type','Database','Status','URL','Measured material','Collection site','Primary disease site','Cell origin','Uncertainty'];
   const lines=[cols.join(',')];
@@ -653,7 +664,16 @@ function filterOrganProjects(rows,q){
   );
 }
 function setOrganSort(v){organUI.sort=v||'pid';if(selOrgan) sel(selOrgan);}
-function setOrganProjQ(v){organUI.projQ=(v||'').trim();if(selOrgan) sel(selOrgan);}
+function setOrganProjQ(v){
+  const input=document.getElementById('organProjectSearch');
+  const typing=input&&document.activeElement===input;
+  const cursor=typing?input.selectionStart:(v||'').length;
+  organUI.projQ=v||'';
+  if(input) input.value=organUI.projQ;
+  if(selOrgan) sel(selOrgan);
+  const replacement=document.getElementById('organProjectSearch');
+  if(input&&replacement){replacement.replaceWith(input);input.focus({preventScroll:true});if(cursor!=null) input.setSelectionRange(cursor,cursor);}
+}
 function shareOrganLink(o){
   const u=new URL(location.href);
   u.searchParams.set('organ',o);
@@ -745,14 +765,15 @@ function compareBlock(currentOrgan){
   </details>`;
 }
 async function runCompare(){
+  const a=document.getElementById('cmpA')?.value;
+  const b=document.getElementById('cmpB')?.value;
   const waiting=document.getElementById('cmpOut');
+  if(!a||!b||a===b){if(waiting) waiting.textContent=L('Выберите две разные категории.','Choose two different categories.');return;}
   if(waiting) waiting.textContent=t('loadingProt');
   try { if(window.ProteinAtlas?.ensureIndex) await ProteinAtlas.ensureIndex(); }
   catch(e){if(waiting) waiting.textContent=L('Не удалось загрузить белковый индекс. Повторите попытку.','Could not load the protein index. Please retry.');return;}
 
-  const a=document.getElementById('cmpA')?.value;
-  const b=document.getElementById('cmpB')?.value;
-  if(!a||!b||a===b) return;
+  if(waiting!==document.getElementById('cmpOut')||a!==document.getElementById('cmpA')?.value||b!==document.getElementById('cmpB')?.value) return;
   const sa=organStats(a),sb=organStats(b);
   const out=document.getElementById('cmpOut');
   if(!out) return;
@@ -767,7 +788,7 @@ async function runCompare(){
   </div>${venn}`;
 }
 function cmpRows(s){
-  return [['Projects',s.n],['Cancer',s.nC],['Normal',s.nN],['Top disease',s.topDis||'—'],['Top TMT',s.topTmt||'—']].map(
+  return [[t('projects'),s.n],[L('Проекты: tumor','Tumor projects'),s.nC],[L('Проекты: non-tumor','Non-tumor projects'),s.nN],[L('Частая группа заболеваний','Top disease'),diseaseDisplayName(s.topDis)||'—'],[L('Частый формат TMT','Top TMT'),s.topTmt||'—']].map(
     ([k,v])=>`<div class="compare-row"><span>${k}</span><strong>${esc(String(v))}</strong></div>`
   ).join('');
 }
@@ -806,10 +827,10 @@ function organProjectBreakdown(o){
   const uniq=uniqProjects(getOrganRows(o));
   const pan=uniq.filter(r=>r.isPan);
   const core=uniq.filter(r=>!r.isPan);
-  /* Color/count from non-pan projects; pan-only organs use pan rows */
+  /* Counts cover all unique projects; pan is a separate overlapping indicator. */
   const base=core.length?core:(pan.length?pan:uniq);
   let nC=0,nN=0;
-  base.forEach(r=>{if(r.healthy)nN++; else nC++;});
+  uniq.forEach(r=>{if(r.healthy)nN++; else nC++;});
   return {uniq, pan, core, base, n:uniq.length, nPan:pan.length, nCore:core.length, nC, nN};
 }
 
@@ -941,9 +962,7 @@ function esc(s){
   return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 async function loadProjectAnatomy(){
-  const response=await fetch('data/project-anatomy.json',{cache:'no-store'});
-  if(!response.ok) throw new Error('Anatomical metadata could not be loaded.');
-  const bytes=await response.arrayBuffer();
+  const bytes=await readSiteResource('data/project-anatomy.json','arrayBuffer');
   PROJECT_ANATOMY=AnatomyMapping.validate(JSON.parse(new TextDecoder().decode(bytes)));
   const digest=await crypto.subtle.digest('SHA-256',bytes);
   window.ProjectAnatomySHA=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -1059,9 +1078,7 @@ function applyPdcOverride(row){
 
 async function loadPdcOverrides(){
   try{
-    const res=await fetch(PDC_OVERRIDES_URL,{cache:'no-store'});
-    if(!res.ok) return {};
-    const j=await res.json();
+    const j=await readSiteResource(PDC_OVERRIDES_URL);
     return j.projects||{};
   }catch(e){
     console.warn('PDC overrides not loaded:',e);
@@ -1183,32 +1200,18 @@ function applyProteomicsOverrides(rows){
 function parseCsvText(text,msg,sourceName){
   if(typeof Papa==='undefined') throw new Error('PapaParse not loaded');
   if(!text||text.length<100) throw new Error('Empty CSV');
-  Papa.parse(text,{
-    header:true,
-    skipEmptyLines:true,
-    complete(r){
-      try{
-        const descriptive=['Title','Disease','Disease Subtype','Tumor Type','Sample Type','Tissue Cell Type Detailed','Tissue','Experimental Design','Short Description','Cell Line Name','Cell Line Organ','Tumor type for cell lines','Tissue for cell lines','Cell Line Cancer;Normal','Main_Finding','Data_Caveats','Quantification_Format'];
-        const exactRows=r.data.map(row=>({...row,_curatedScientificMetadata:Object.fromEntries(descriptive.map(k=>[k,row[k]]))}));
-        onDataLoaded(applyProteomicsOverrides(exactRows),sourceName);
-      }
-      catch(e){
-        console.error(e);
-        msg.textContent=(lang==='ru'?'Ошибка обработки: ':'Parse error: ')+e.message;
-      }
-    },
-    error(err){
-      msg.textContent=(lang==='ru'?'Ошибка CSV: ':'CSV error: ')+(err.message||err);
-    }
-  });
+  const r=Papa.parse(text,{header:true,skipEmptyLines:true});
+  if(r.errors?.length) throw new Error('Invalid catalogue CSV: '+r.errors[0].message);
+  if(!r.meta?.fields?.includes('Project ID')) throw new Error('Project ID column missing');
+  const descriptive=['Title','Disease','Disease Subtype','Tumor Type','Sample Type','Tissue Cell Type Detailed','Tissue','Experimental Design','Short Description','Cell Line Name','Cell Line Organ','Tumor type for cell lines','Tissue for cell lines','Cell Line Cancer;Normal','Main_Finding','Data_Caveats','Quantification_Format'];
+  const exactRows=r.data.map(row=>({...row,_curatedScientificMetadata:Object.fromEntries(descriptive.map(k=>[k,row[k]]))}));
+  onDataLoaded(applyProteomicsOverrides(exactRows),sourceName);
 }
 
 async function loadProteomicsStats(){
   for(const url of [LOCAL_PROTEOMICS, RAW_PROTEOMICS]){
     try{
-      const res=await fetch(url,{cache:'no-store'});
-      if(!res.ok) continue;
-      const data=await res.json();
+      const data=await readSiteResource(url);
       if(data&&data.projects){
         PROTEOMICS_STATS=data;
         return;
@@ -1232,9 +1235,7 @@ async function loadSheetData(){
   ];
   for(const src of sources){
     try{
-      const res=await fetch(src.url,{cache:'no-store'});
-      if(!res.ok) continue;
-      const text=await res.text();
+      const text=await readSiteResource(src.url,'text');
       if(!text.includes('Project ID')) continue;
       parseCsvText(text,msg,src.name+(Object.keys(pdcOverrides).length?`+pdc-summary(${Object.keys(pdcOverrides).length})`:''));
       return;
@@ -1463,21 +1464,21 @@ function projectCard(r){
     r.female!=null?`F ${r.female}`:''
   ].filter(Boolean).join(' · ');
   const cohort=[
-    r.patients!=null?`<span class="meta-pill cohort" title="Patients / donors">👥 ${r.patients} ${t('patientsShort')}</span>`:'',
-    sexBits?`<span class="meta-pill cohort" title="Male / Female from patients">${esc(sexBits)}</span>`:'',
+    r.patients!=null?`<span class="meta-pill cohort" title="${esc(L('Поле Patients / donors каталога','Catalog Patients / donors field'))}">👥 ${r.patients} ${t('patientsShort')}</span>`:'',
+    sexBits?`<span class="meta-pill cohort" title="${esc(L('Поля Male/Female каталога; единицу учёта см. в аннотации проекта','Catalog Male/Female fields; see project annotation for counting units'))}">${esc(sexBits)}</span>`:'',
     r.totalSamples!=null?`<span class="meta-pill cohort" title="Total Samples">🧪 ${r.totalSamples} ${t('samplesShort')}</span>`:''
   ].join('');
   const linkProj=projHref
-    ? `<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener" title="Open in ${esc(r.db||'database')}">
+    ? `<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener" title="${L('Открыть в','Open in')} ${esc(r.db||'database')}">
          <span class="li">DB</span><span class="lt">${esc(r.db||'Database')}</span></a>`
     : `<span class="plink disabled" title="No URL"><span class="li">DB</span><span class="lt">—</span></span>`;
   const linkArt=pmHref
-    ? `<a class="plink plink-art" href="${esc(pmHref)}" target="_blank" rel="noopener" title="Open article on PubMed">
+    ? `<a class="plink plink-art" href="${esc(pmHref)}" target="_blank" rel="noopener" title="${L('Открыть статью в PubMed','Open article on PubMed')}">
          <span class="li">PMID</span><span class="lt">${esc(r.pmid)}</span></a>`
     : `<span class="plink disabled" title="No PMID"><span class="li">PMID</span><span class="lt">—</span></span>`;
-  const linkGh=`<a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener" title="Result files in repo (or 404 if not uploaded yet)"
+  const linkGh=`<a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener" title="${L('Файлы проекта на GitHub','Project files on GitHub')}"
         onmouseup="if(event.button===1){window.open('${esc(ghAlt)}','_blank')}">
-         <span class="li">GH</span><span class="lt">Results</span></a>`;
+         <span class="li">GH</span><span class="lt">${L('Результаты','Results')}</span></a>`;
   return `<div class="proj-card">
     <div class="proj-head">
       <div class="proj-id-block">
@@ -1528,9 +1529,9 @@ function projDossier(r){
     fld(L2('Женщины','Female'), (r.female!=null?String(r.female):v('Female')) || ''),
     fld(L2('Пол не указан','Sex unknown'), (r.sexUnknown!=null?String(r.sexUnknown):v('Sex unknown')) || ''),
     fld(L2('Образцов использовано','Samples used'),v('Samples Used N')),
-    fld(L2('Случаи: рак (без лечения)','Cases: cancer (untreated)'),v('Case Cancer Untreated')),
-    fld(L2('Случаи: рак (после лечения)','Cases: cancer (treated)'),v('Case Cancer Treated')),
-    fld(L2('Контроль: здоровые','Controls: healthy'),v('Control Healthy'))
+    fld(L2('Категория Case Cancer Untreated (по аннотации)','Case Cancer Untreated category (as annotated)'),v('Case Cancer Untreated')),
+    fld(L2('Категория Case Cancer Treated (по аннотации)','Case Cancer Treated category (as annotated)'),v('Case Cancer Treated')),
+    fld(L2('Категория Control Healthy (по аннотации)','Control Healthy category (as annotated)'),v('Control Healthy'))
   ].join('');
   /* Methods / acquisition & quantification */
   const methods=[
@@ -1542,7 +1543,7 @@ function projDossier(r){
     fld('FDR (%)',v('FDR (Unified %)')),
     fld(L2('База FASTA','FASTA database'),[v('FASTA (Unified)'),v('FASTA Year')].filter(Boolean).join(' · ')),
     fld(L2('Модификации','Modifications'),v('Modifications')),
-    fld(L2('Белков количественно','Proteins quantified'),v('Proteins Quantified'))
+    fld(L2('Количественно определено белков','Proteins quantified'),v('Proteins Quantified'))
   ].join('');
   const sec=(title,html)=>html?`<div class="dos-section"><h4>${title}</h4>${html}</div>`:'';
   const findings=v('Main_Finding');
@@ -1574,8 +1575,11 @@ function projDossier(r){
       `<div class="dos-links">
         ${projHref?`<a class="plink plink-db" href="${esc(projHref)}" target="_blank" rel="noopener"><span class="li">DB</span><span class="lt">${esc(r.db||'Database')}</span></a>`:''}
         ${pmHref?`<a class="plink plink-art" href="${esc(pmHref)}" target="_blank" rel="noopener"><span class="li">PMID</span><span class="lt">${esc(r.pmid)}</span></a>`:''}
-        <a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener"><span class="li">GH</span><span class="lt">Result files</span></a>
-        <a class="plink" href="${esc(SHEET_VIEW)}" target="_blank" rel="noopener"><span class="li">CSV</span><span class="lt">${L('Строка таблицы','Sheet row')}</span></a>
+        <a class="plink plink-gh" href="${esc(ghHref)}" target="_blank" rel="noopener"><span class="li">GH</span><span class="lt">${L('Файлы результатов','Result files')}</span></a>
+        <a class="plink" href="https://github.com/arinaatom-cyber/TMT/blob/main/data/projects.csv" target="_blank" rel="noopener"><span class="li">CSV</span><span class="lt">${L('Каталог CSV','Catalog CSV')}</span></a>
+        <a class="plink" href="https://github.com/arinaatom-cyber/TMT/blob/main/data/proteomics_stats.json" target="_blank" rel="noopener">proteomics_stats.json</a>
+        <a class="plink" href="https://github.com/arinaatom-cyber/TMT/blob/main/data/pdc-summary-overrides.json" target="_blank" rel="noopener">pdc-summary-overrides.json</a>
+        <a class="plink" href="https://github.com/arinaatom-cyber/TMT/blob/main/data/project-anatomy.json" target="_blank" rel="noopener">${L('Анатомическая разметка','Anatomical metadata')}</a>
         <a class="plink plink-dict" href="dictionary.html" target="_blank" rel="noopener"><span class="li">?</span><span class="lt">${L('Словарь полей','Data dictionary')}</span></a>
       </div>`)}`;
 }
@@ -1635,7 +1639,7 @@ function assignLabelPositions(active, forceSide){
 }
 
 function formatProjectCount(n){
-  return n===1?'1 project':`${n} projects`;
+  return lang==='ru'?`${n} ${n%10===1&&n%100!==11?'проект':n%10>=2&&n%10<=4&&(n%100<12||n%100>14)?'проекта':'проектов'}`:(n===1?'1 project':`${n} projects`);
 }
 function formatMapOrganStats(s){
   const pan=s.nPan?` · Pan: ${s.nPan}`:'';
@@ -1769,7 +1773,7 @@ function bodySilhouetteSex(sex){
           L 278 624 Q 272 640 264 638 L 256 630
           Q 254 556 251 482 L 248 412 Q 246 382 242 372
           L 240 370 L 266 370 Z`;
-    title='MALE · ANTERIOR VIEW';
+    title=L('МУЖЧИНА · ВИД СПЕРЕДИ','MALE · ANTERIOR VIEW');
   }else{
     torso=`M 218 130 Q 192 136 180 146 L 174 188 Q 176 230 180 270
            Q 184 304 192 336 Q 200 352 206 362 L 210 370 L 270 370 L 276 362
@@ -1791,7 +1795,7 @@ function bodySilhouetteSex(sex){
           L 286 624 Q 280 640 272 638 L 264 630
           Q 262 556 259 482 L 256 412 Q 254 382 250 372
           L 248 370 L 274 370 Z`;
-    title='FEMALE · ANTERIOR VIEW';
+    title=L('ЖЕНЩИНА · ВИД СПЕРЕДИ','FEMALE · ANTERIOR VIEW');
   }
   const stroke='#c88888', fill='rgba(200,136,136,.09)';
   return `
@@ -1909,7 +1913,9 @@ function ht(){
   hlLabels(selOrgan||null);
 }
 
+let organRenderVersion=0;
 function sel(o){
+  const renderVersion=++organRenderVersion;
   if(!C[o]){
     selOrgan=o;
     charts.forEach(x=>x.destroy()); charts=[];
@@ -1955,7 +1961,7 @@ function sel(o){
     <button type="button" class="tbtn" onclick="shareOrganLink('${o}')">${t('share')}</button>
   </div>
   <div class="organ-toolbar">
-    <input type="search" placeholder="${esc(t('projSearch'))}" value="${esc(organUI.projQ)}"
+    <input id="organProjectSearch" type="search" placeholder="${esc(t('projSearch'))}" value="${esc(organUI.projQ)}"
       oninput="setOrganProjQ(this.value)">
     <select onchange="setOrganSort(this.value)">
       <option value="pid"${organUI.sort==='pid'?' selected':''}>${t('sortPid')}</option>
@@ -1967,17 +1973,18 @@ function sel(o){
   <div class="hero" style="border-left-color:${col}">
     <div class="ic" style="background:${col}22;border:1px solid ${col}"></div>
     <div><h2 class="hero-title">${organDisplayName(o)}</h2>
-    <div class="sub">${nShown} shown / ${nProj} ${t('projects')} · ${nCancer} cancer · ${nHealthy} normal · ${ds.length} disease groups</div></div>
+    <div class="sub">${nShown} ${L('показано из','shown of')} ${nProj} ${t('projects')} · ${nCancer} tumor · ${nHealthy} non-tumor · ${ds.length} ${L('групп заболеваний','disease groups')}</div></div>
   </div>
   <div class="mstats">
     <div class="ms"><div class="v accent" style="color:${col}">${nShown}</div><div class="l">${t('projects')}</div></div>
-    <div class="ms"><div class="v" style="color:${PASTEL_CANCER}">${nCancer}</div><div class="l">Cancer</div></div>
-    <div class="ms"><div class="v" style="color:${PASTEL_NORMAL}">${nHealthy}</div><div class="l">Normal</div></div>
+    <div class="ms"><div class="v" style="color:${PASTEL_CANCER}">${nCancer}</div><div class="l">${L("Проекты: tumor","Tumor projects")}</div></div>
+    <div class="ms"><div class="v" style="color:${PASTEL_NORMAL}">${nHealthy}</div><div class="l">${L("Проекты: non-tumor","Non-tumor projects")}</div></div>
     <div class="ms"><div class="v">${ss.length}</div><div class="l">${t('sampleTypes')}</div></div>
     <div class="ms" title="${esc(t('patSampHint'))}"><div class="v">${nPat?sumPat.toLocaleString():'—'}</div><div class="l">${t('sumPatients')}</div></div>
-    <div class="ms" title="Male / Female from patients"><div class="v">${nSex?`${sumMale.toLocaleString()} / ${sumFemale.toLocaleString()}`:'—'}</div><div class="l">M / F</div></div>
+    <div class="ms" title="${esc(L('Поля Male/Female каталога; единицу учёта см. в аннотации проекта','Catalog Male/Female fields; see project annotation for counting units'))}"><div class="v">${nSex?`${sumMale.toLocaleString()} / ${sumFemale.toLocaleString()}`:'—'}</div><div class="l">M / F</div></div>
     <div class="ms" title="${esc(t('patSampHint'))}"><div class="v">${nSamp?sumSamp.toLocaleString():'—'}</div><div class="l">${t('sumSamples')}</div></div>
   </div>
+  <p class="prot-hint">${L('Фильтры tumor/non-tumor относятся к проекту целиком; состав образцов уточняется в Annotation. В CSV сохранены исходные метки Status: Cancer = tumor, Normal = non-tumor.','Tumor/non-tumor filters classify whole projects; consult Annotation for sample composition. CSV retains the original Status labels: Cancer = tumor, Normal = non-tumor.')}</p>
   ${compareBlock(o)}
   ${window.ProteinAtlas?ProteinAtlas.organProteinsSummaryHtml(o,uniqRows):''}
   <div class="ccard"><h4 class="sec-h">${lang==='ru'?'Группы заболеваний':'Disease groups'}</h4><div class="dtags">`;
@@ -1986,7 +1993,7 @@ function sel(o){
     const rowsD=uniqRows.filter(r=>(r.disCanon||r.dis)===d);
     const healthyTag=rowsD.length&&rowsD.every(r=>r.healthy);
     const dc=healthyTag?PASTEL_NORMAL:chartColor(i+2);
-    h+=`<div class="dtag dtag-click" onclick="filterByHealth('${healthyTag?'normal':'cancer'}')" title="Filter"><span class="dd" style="background:${dc}"></span>${esc(diseaseDisplayName(d))}<span class="dc" style="color:${dc}">${n}</span></div>`;
+    h+=`<div class="dtag dtag-click" data-disease="${esc(d)}" onclick="setOrganProjQ(this.dataset.disease)" title="${esc(L('Искать эту группу заболеваний','Search this disease group'))}"><span class="dd" style="background:${dc}"></span>${esc(diseaseDisplayName(d))}<span class="dc" style="color:${dc}">${n}</span></div>`;
   });
   h+=`</div></div>`;
 
@@ -2004,7 +2011,7 @@ function sel(o){
     <div class="ccard"><h4 class="sec-h">${lang==='ru'?'Группы заболеваний':'Disease groups'}</h4><canvas id="ch2"></canvas></div>
   </div>
   <div class="projects-section">
-    <h4 class="sec-h">Projects <span class="sec-count">${nShown}</span></h4>
+    <h4 class="sec-h">${t("projects")} <span class="sec-count">${nShown}</span></h4>
     <div class="proj-grid">`;
 
   uniqRows.slice(0,200).forEach(r=>{h+=projectCard(r);});
@@ -2012,11 +2019,11 @@ function sel(o){
 
   const dc=document.getElementById('dc');
   dc.innerHTML=h;
-  dc.scrollTo({top:0,behavior:'smooth'});
+  if(!organUI.projQ) dc.scrollTo({top:0,behavior:'smooth'});
 
   requestAnimationFrame(()=>{
     try{
-      if(typeof Chart==='undefined') return;
+      if(renderVersion!==organRenderVersion||typeof Chart==='undefined') return;
       const ax=chartAxisColors();
       const mat=organMaterialCounts(uniqRows);
       const matKeys=Object.keys(mat).sort();

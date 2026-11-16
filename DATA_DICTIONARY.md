@@ -1,6 +1,6 @@
 # Data dictionary — `data/projects.csv` (short index)
 
-> **Full dictionary:** [`data/Atlas_data_dictionary.csv`](Atlas_data_dictionary.csv) (English, 1:1 with file headers) · [Browse on site](../dictionary.html) · [`Atlas_reader_guide.md`](Atlas_reader_guide.md)
+> **Full dictionary:** [`data/Atlas_data_dictionary.csv`](data/Atlas_data_dictionary.csv) (English, 1:1 with file headers) · [Browse on site](dictionary.html) · [`Atlas_reader_guide.md`](data/Atlas_reader_guide.md)
 
 One row = one project (or analytically distinct sub‑cohort). Columns are free‑text as
 curated from repository metadata and publications unless noted. Fields surfaced in the
@@ -37,7 +37,7 @@ in‑app **project dossier** are marked ★.
 | `Tissue Cell Type Detailed` | Detailed free‑text tissue/cell description. |
 | `Sample Type` | Normalised material type (Tissue, FFPE, LCM, Cell Lines, PBMC, Plasma, …). ★ |
 | `Tissue` | Tissue as reported. |
-| `Organ` | **Authoritative** organ field used for map classification (see `METHODS.md`). ★ |
+| `Organ` | Original catalogue organ label. Current navigation uses exact-project metadata in `data/project-anatomy.json`; see `METHODS.md`, section 3. ★ |
 | `Tumor Type` | Tumour type / disease as reported. ★ |
 | `Cell Line Name` | Cell line(s) profiled, if applicable. |
 | `Cell Line Cancer;Normal` | Cancer/normal status of cell lines. |

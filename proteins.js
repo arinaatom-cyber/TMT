@@ -257,9 +257,9 @@
     const label=global.organDisplayName||((k)=>k.replace(/_/g,' '));
     const t=global.t||((k)=>k);
     return '<div class="prot-hint">'+escHtml(t('wholeOrganIndex'))+'</div><div class="mstats">'+
-      '<div class="ms"><div class="v">'+(aa.size-shared)+'</div><div class="l">'+escHtml(label(a))+' only</div></div>'+
+      '<div class="ms"><div class="v">'+(aa.size-shared)+'</div><div class="l">'+escHtml(label(a))+' '+escHtml(global.L?global.L('только','only'):'only')+'</div></div>'+
       '<div class="ms"><div class="v">'+shared+'</div><div class="l">'+escHtml(t('shared'))+'</div></div>'+
-      '<div class="ms"><div class="v">'+(bb.size-shared)+'</div><div class="l">'+escHtml(label(b))+' only</div></div></div>';
+      '<div class="ms"><div class="v">'+(bb.size-shared)+'</div><div class="l">'+escHtml(label(b))+' '+escHtml(global.L?global.L('только','only'):'only')+'</div></div></div>';
   }
   function proteinCompareBar(){
     const t=global.t||((k)=>k);
@@ -270,18 +270,22 @@
 
   let indexPromise=null;
   async function fetchProteomeIndex(){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),60000);
+    try {
     if(typeof DecompressionStream!=='undefined'){
       try {
-        const packed=await fetch(PROTEOME_URL+'.gz',{cache:'no-store'});
+        const packed=await fetch(PROTEOME_URL+'.gz',{cache:'no-store',signal:controller.signal});
         if(packed.ok&&packed.body){
           if((packed.headers.get('content-encoding')||'').includes('gzip')) return await packed.json();
           return await new Response(packed.body.pipeThrough(new DecompressionStream('gzip'))).json();
         }
       } catch(e) {console.warn('Compressed protein index unavailable; trying JSON.',e);}
     }
-    const response=await fetch(PROTEOME_URL,{cache:'no-store'});
+    const response=await fetch(PROTEOME_URL,{cache:'no-store',signal:controller.signal});
     if(!response.ok) throw new Error('Protein index unavailable');
-    return response.json();
+    return await response.json();
+    } finally {clearTimeout(timer);}
   }
   function initProteome(){
     if(ready) return Promise.resolve();
@@ -294,7 +298,7 @@
   async function loadCategoryProteinIndex(category){
     const status=document.getElementById('proteinIndexStatus');
     if(status) status.textContent=(global.t||((k)=>k))('loadingProt');
-    try {await initProteome();if(global.sel) global.sel(category);}
+    try {await initProteome();if(global.sel&&status===document.getElementById('proteinIndexStatus')) global.sel(category);}
     catch(e){if(status) status.textContent=global.L?global.L('Не удалось загрузить белковый индекс. Повторите попытку.','Could not load the protein index. Please retry.'):'Protein index unavailable.';}
   }
   global.loadCategoryProteinIndex=loadCategoryProteinIndex;
