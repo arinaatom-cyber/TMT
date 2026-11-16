@@ -474,6 +474,42 @@
       ],
       "membership_source": "project_anatomy.json#projects/categories"
     },
+    "Lacrimal_Gland": {
+      "label_en": "Lacrimal gland",
+      "type": "organ_or_organ_part",
+      "stable_code": "Lacrimal_Gland",
+      "label_ru": "Слёзная железа",
+      "entity_type": "organ",
+      "canonical_broad_type": "organ_or_organ_part",
+      "parent": "Orbit_Ocular_Adnexa",
+      "parent_relation": "part_of_or_anatomically_associated_with",
+      "qualification": "Explicit lacrimal-gland sampling is distinct from orbit, eyelid, conjunctiva and eyeball. Combined orbit/gland labels remain combined.",
+      "source": [
+        {
+          "url": "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/lacrimal-gland",
+          "scope": "Official anatomical definition, not project membership."
+        }
+      ],
+      "membership_source": "project_anatomy.json#projects/categories"
+    },
+    "Larynx": {
+      "label_en": "Larynx",
+      "type": "organ_or_organ_part",
+      "stable_code": "Larynx",
+      "label_ru": "Гортань",
+      "entity_type": "organ",
+      "canonical_broad_type": "organ_or_organ_part",
+      "parent": "Head_and_Neck",
+      "parent_relation": "part_of_or_anatomically_associated_with",
+      "qualification": "Named laryngeal site; not equivalent to every head-and-neck specimen.",
+      "source": [
+        {
+          "url": "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/larynx",
+          "scope": "Official anatomical definition, not project membership."
+        }
+      ],
+      "membership_source": "project_anatomy.json#projects/categories"
+    },
     "Liver": {
       "label_en": "Liver",
       "type": "organ_or_organ_part",
@@ -826,6 +862,24 @@
       ],
       "membership_source": "project_anatomy.json#projects/categories"
     },
+    "Pharynx": {
+      "label_en": "Pharynx",
+      "type": "organ_or_organ_part",
+      "stable_code": "Pharynx",
+      "label_ru": "Глотка",
+      "entity_type": "organ",
+      "canonical_broad_type": "organ_or_organ_part",
+      "parent": "Head_and_Neck",
+      "parent_relation": "part_of_or_anatomically_associated_with",
+      "qualification": "Includes explicitly reported oropharynx. Overlapping lip, oral-cavity and pharynx labels remain combined and do not localize every component independently.",
+      "source": [
+        {
+          "url": "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/pharynx",
+          "scope": "Official anatomical definition, not project membership."
+        }
+      ],
+      "membership_source": "project_anatomy.json#projects/categories"
+    },
     "Pituitary": {
       "label_en": "Pituitary gland",
       "type": "organ_or_organ_part",
@@ -1036,6 +1090,24 @@
       ],
       "membership_source": "project_anatomy.json#projects/categories"
     },
+    "Spinal_Cord": {
+      "label_en": "Spinal cord",
+      "type": "organ_or_organ_part",
+      "stable_code": "Spinal_Cord",
+      "label_ru": "Спинной мозг",
+      "entity_type": "organ",
+      "canonical_broad_type": "organ_or_organ_part",
+      "parent": "Central_Nervous_System",
+      "parent_relation": "part_of_or_anatomically_associated_with",
+      "qualification": "Explicit cervical or thoracic spinal-cord sites support this category. Lumbar/thecal-sac and multisite labels remain qualified; not every CNS sample is spinal cord.",
+      "source": [
+        {
+          "url": "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/spinal-cord",
+          "scope": "Official anatomical definition, not project membership."
+        }
+      ],
+      "membership_source": "project_anatomy.json#projects/categories"
+    },
     "Spleen": {
       "label_en": "Spleen",
       "type": "organ_or_organ_part",
@@ -1104,6 +1176,24 @@
         {
           "url": "https://ifaa.net/committees/anatomical-terminology-fipat/fipat-ifaa-terminologies/",
           "scope": "General anatomical terminology framework; no individual TA2 identifier is asserted."
+        }
+      ],
+      "membership_source": "project_anatomy.json#projects/categories"
+    },
+    "Tongue": {
+      "label_en": "Tongue",
+      "type": "organ_or_organ_part",
+      "stable_code": "Tongue",
+      "label_ru": "Язык",
+      "entity_type": "organ",
+      "canonical_broad_type": "organ_or_organ_part",
+      "parent": "Oral_Cavity",
+      "parent_relation": "part_of_or_anatomically_associated_with",
+      "qualification": "Includes explicitly reported tongue and base-of-tongue sites; oral cavity alone does not establish tongue sampling.",
+      "source": [
+        {
+          "url": "https://training.seer.cancer.gov/head-neck/anatomy/",
+          "scope": "Anatomical framework for tongue and head-and-neck subsites, not project membership."
         }
       ],
       "membership_source": "project_anatomy.json#projects/categories"
@@ -1349,14 +1439,18 @@
       ],
       "cell_line_origin": [],
       "navigation_terms": [
-        "Orbit and ocular adnexa"
+        "Orbit and ocular adnexa",
+        "Lacrimal gland"
       ],
       "categories": [
-        "Orbit_Ocular_Adnexa"
+        "Orbit_Ocular_Adnexa",
+        "Lacrimal_Gland"
       ],
       "navigation_basis": "selected archived specimen metadata",
-      "s1_organ_display": "Orbit and ocular adnexa [sampling-site navigation; original labels retained in project metadata]",
-      "uncertainty": [],
+      "s1_organ_display": "Orbit and ocular adnexa; Lacrimal gland [selected sampling sites; combined sites retained; not eyeball tissue]",
+      "uncertainty": [
+        "Selected Annotation columns explicitly include lacrimal gland and combined orbit/lacrimal-gland sites. Orbit, eyelid and conjunctiva are not reclassified as eyeball or lacrimal-gland tissue."
+      ],
       "evidence": [
         {
           "source": "original deposited CSV archive",
@@ -1377,6 +1471,11 @@
             "Limitations"
           ],
           "level": "curated_project_metadata"
+        },
+        {
+          "source": "Original deposited Annotation and Samples, independently read for all 68 tissue projects; organ_count_audit_20261116/candidate_omitted_organs.json and all68_selected_anatomical_fields.csv",
+          "level": "Selected Result columns verified; exact declared sample/case join; reviewed 2026-11-16",
+          "finding": "Selected Annotation columns explicitly include lacrimal gland and combined orbit/lacrimal-gland sites. Orbit, eyelid and conjunctiva are not reclassified as eyeball or lacrimal-gland tissue."
         }
       ],
       "legacy_site_categories": [
@@ -1417,7 +1516,7 @@
         "matched_samples_rows": 65,
         "selected_ID_count": 65
       },
-      "full_matrix_repeated_across_tags": false,
+      "full_matrix_repeated_across_tags": true,
       "column_selection_required": true
     },
     "MSV000085836": {
@@ -2975,16 +3074,21 @@
       ],
       "cell_line_origin": [],
       "navigation_terms": [
-        "Central nervous system"
+        "Central nervous system",
+        "Spinal cord",
+        "Brain"
       ],
       "categories": [
-        "Central_Nervous_System"
+        "Central_Nervous_System",
+        "Spinal_Cord",
+        "Brain"
       ],
       "navigation_basis": "selected archived specimen metadata",
-      "s1_organ_display": "Central nervous system-associated sampling regions [brain, spinal and other reported regions; mixed or overlapping labels not resolved to separate organs]",
+      "s1_organ_display": "Central nervous system-associated regions; Brain; Spinal cord [selected sample-linked sites; mixed labels and lumbar/thecal-sac ambiguity retained]",
       "uncertainty": [
         "Joined Samples annotations include spinal-cord/thecal, optic-pathway, meningeal and skull regions. Broad CNS navigation avoids declaring each combined/overlapping label a distinct isolated organ. Raw site labels remain available; these are not 218 independent verified organ assignments.",
-        "Some archived site values are blank, not reported or not applicable; technical/reference profiles and missing anatomical values are retained in the original CSV."
+        "Some archived site values are blank, not reported or not applicable; technical/reference profiles and missing anatomical values are retained in the original CSV.",
+        "Sample submitter ID joins identify selected temporal/frontal-lobe and cervical spinal-cord samples. Multisite labels and lumbar/thecal-sac ambiguity remain qualified. Skull is retained as a reported location and is not evidence of bone-tissue composition."
       ],
       "evidence": [
         {
@@ -3011,6 +3115,11 @@
           "source": "Original project ZIP Annotation/Samples; corrected/archived_anatomy_fields_all120.json and metadata_join_all120.json; scoped archived-metadata audit, not a new source-paper audit.",
           "level": "accepted descriptive metadata correction",
           "field": "Tissue Cell Type Detailed"
+        },
+        {
+          "source": "Original deposited Annotation and Samples, independently read for all 68 tissue projects; organ_count_audit_20261116/candidate_omitted_organs.json and all68_selected_anatomical_fields.csv",
+          "level": "Selected Result columns verified; exact declared sample/case join; reviewed 2026-11-16",
+          "finding": "Sample submitter ID joins identify selected temporal/frontal-lobe and cervical spinal-cord samples. Multisite labels and lumbar/thecal-sac ambiguity remain qualified. Skull is retained as a reported location and is not evidence of bone-tissue composition."
         }
       ],
       "legacy_site_categories": [
@@ -3129,7 +3238,7 @@
         "matched_samples_rows": 218,
         "selected_ID_count": 218
       },
-      "full_matrix_repeated_across_tags": false,
+      "full_matrix_repeated_across_tags": true,
       "column_selection_required": true
     },
     "PDC000198": {
@@ -3392,15 +3501,22 @@
       ],
       "cell_line_origin": [],
       "navigation_terms": [
-        "Head and neck region"
+        "Head and neck region",
+        "Larynx",
+        "Tongue",
+        "Pharynx"
       ],
       "categories": [
-        "Head_and_Neck"
+        "Head_and_Neck",
+        "Larynx",
+        "Tongue",
+        "Pharynx"
       ],
       "navigation_basis": "selected archived specimen metadata",
-      "s1_organ_display": "Head and neck region [sampling-site navigation; original labels retained in project metadata]",
+      "s1_organ_display": "Head and neck region; Larynx; Tongue; Pharynx [selected-channel-linked case metadata; overlapping sites remain qualified]",
       "uncertainty": [
-        "Some archived site values are blank, not reported or not applicable; technical/reference profiles and missing anatomical values are retained in the original CSV."
+        "Some archived site values are blank, not reported or not applicable; technical/reference profiles and missing anatomical values are retained in the original CSV.",
+        "Selected-channel-linked case metadata support larynx, tongue and oropharynx. Case submitter ID joins do not prove that every channel has every case-linked sampling site. Overlapping lesion labels remain combined; select relevant columns using the source metadata."
       ],
       "evidence": [
         {
@@ -3427,6 +3543,11 @@
           "source": "S1 Tissue Cell Type Detailed; https://pubmed.ncbi.nlm.nih.gov/33417831/",
           "level": "Confirmed conflict",
           "finding": "HNSCC from oral cavity/larynx/other sites is not a salivary-gland cohort. Specific subsite assignments require Annotation."
+        },
+        {
+          "source": "Original deposited Annotation and Samples, independently read for all 68 tissue projects; organ_count_audit_20261116/candidate_omitted_organs.json and all68_selected_anatomical_fields.csv",
+          "level": "Selected Result columns verified; exact declared sample/case join; reviewed 2026-11-16",
+          "finding": "Selected-channel-linked case metadata support larynx, tongue and oropharynx. Case submitter ID joins do not prove that every channel has every case-linked sampling site. Overlapping lesion labels remain combined; select relevant columns using the source metadata."
         }
       ],
       "legacy_site_categories": [
@@ -3470,7 +3591,7 @@
         "matched_samples_rows": 115,
         "selected_ID_count": 115
       },
-      "full_matrix_repeated_across_tags": false,
+      "full_matrix_repeated_across_tags": true,
       "column_selection_required": true
     },
     "PDC000234": {
@@ -5422,17 +5543,20 @@
       "cell_line_origin": [],
       "navigation_terms": [
         "Oral cavity",
-        "Paranasal sinuses"
+        "Paranasal sinuses",
+        "Tongue"
       ],
       "categories": [
         "Oral_Cavity",
-        "Paranasal_sinuses"
+        "Paranasal_sinuses",
+        "Tongue"
       ],
       "navigation_basis": "selected archived specimen metadata",
-      "s1_organ_display": "Oral cavity; Paranasal sinuses [sampling-site navigation; original labels retained in project metadata]",
+      "s1_organ_display": "Oral cavity; Paranasal sinuses; Tongue [selected-channel-linked case metadata; exact sample sites retained]",
       "uncertainty": [
         "One joined case carries maxillary/accessory-sinus labels and an Other disease qualification. Preserve this exception; do not present every profile as oral-cavity SCC.",
-        "Some archived site values are blank, not reported or not applicable; technical/reference profiles and missing anatomical values are retained in the original CSV."
+        "Some archived site values are blank, not reported or not applicable; technical/reference profiles and missing anatomical values are retained in the original CSV.",
+        "Selected-channel-linked case metadata and explicit archived tongue labels support tongue. Case submitter ID joins retain case-level uncertainty; oral-cavity or sinus labels alone do not imply tongue sampling."
       ],
       "evidence": [
         {
@@ -5464,6 +5588,11 @@
           "source": "Original project ZIP Annotation/Samples; corrected/archived_anatomy_fields_all120.json and metadata_join_all120.json; scoped archived-metadata audit, not a new source-paper audit.",
           "level": "accepted descriptive metadata correction",
           "field": "Tissue Cell Type Detailed"
+        },
+        {
+          "source": "Original deposited Annotation and Samples, independently read for all 68 tissue projects; organ_count_audit_20261116/candidate_omitted_organs.json and all68_selected_anatomical_fields.csv",
+          "level": "Selected Result columns verified; exact declared sample/case join; reviewed 2026-11-16",
+          "finding": "Selected-channel-linked case metadata and explicit archived tongue labels support tongue. Case submitter ID joins retain case-level uncertainty; oral-cavity or sinus labels alone do not imply tongue sampling."
         }
       ],
       "legacy_site_categories": [

@@ -1003,7 +1003,7 @@ function renderCategoryBrowser(){
   target.innerHTML='<label for="categorySelect">'+L('Все анатомические и материальные категории','All anatomical and biological-material categories')+'</label>'+
     '<select id="categorySelect" onchange="if(this.value) sel(this.value)"><option value="">'+L('Выберите категорию','Choose a category')+'</option>'+keys.map(k=>'<option value="'+esc(k)+'"'+(selOrgan===k?' selected':'')+'>'+esc(organDisplayName(k))+' ('+C[k]+')</option>').join('')+'</select>'+
     '<p>'+L('Список включает ткани, места забора и клеточные модели. Категории без позиции на схеме доступны здесь; один проект может входить в несколько категорий.','The list includes tissues, collection sites and cell models. Categories without a map position are available here; a project may belong to several categories.')+'</p>'+
-    '<p>'+L('При объединении частей и однотипных структур: 33 органные группы. Это не число отдельных органов.','After grouping organ parts and structure classes: 33 broad organ/organ-structure classes, not individual organs.')+' <a href="anatomical-coverage.html">'+L('Полный список и правила подсчёта →','Full list and counting rules →')+'</a></p>';
+    '<p>'+L('По выбранным исходным образцам: 38 органных групп (31 именованная локализация и 7 классов структур). Это отдельный показатель от 69 категорий навигации.','Selected-source inventory: 38 organ/organ-structure groups (31 named-organ sites and 7 structure classes), distinct from 69 navigation categories.')+' <a href="anatomical-coverage.html">'+L('Полный список и правила подсчёта →','Full list and counting rules →')+'</a></p>';
 }
 
 function isHealthy(tumorType,sampleType,title,disease){
