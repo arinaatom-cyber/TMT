@@ -302,7 +302,7 @@ const I18N={
     sysMale:'Male reproductive',sysImmune:'Blood & immune',sysMSK:'Support & integument',sysOther:'Other'
   }
 };
-let lang=localStorage.getItem('hpa-lang')||'en';
+const lang='en';
 function t(k){return (I18N[lang]||I18N.ru)[k]||k;}
 function L(ru,en){return lang==='ru'?ru:en;}
 const ORGAN_LABELS={
@@ -372,10 +372,8 @@ function i18nApply(){
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
     const k=el.getAttribute('data-i18n-ph');if(I18N[lang][k]) el.placeholder=I18N[lang][k];
   });
-  const lb=document.getElementById('langBtn');if(lb) lb.textContent=lang==='ru'?'EN':'RU';
   document.documentElement.lang=lang;
 }
-function toggleLang(){lang=lang==='ru'?'en':'ru';localStorage.setItem('hpa-lang',lang);i18nApply();rebuildCounts();refreshAll();if(document.getElementById('aboutModal')?.classList.contains('open')){renderSysRef();renderOrganRef();}}
 
 const F={q:'',tmt:'',health:'',db:''};
 let META={rawRows:0,uniqPids:0,loadedAt:null,dataSource:''},selOrgan=null;
@@ -2086,7 +2084,6 @@ window.openAbout=openAbout;
 window.closeAbout=closeAbout;
 window.openProject=openProject;
 window.closeProject=closeProject;
-window.toggleLang=toggleLang;
 window.reloadData=reloadData;
 window.setOrganSort=setOrganSort;
 window.setOrganProjQ=setOrganProjQ;

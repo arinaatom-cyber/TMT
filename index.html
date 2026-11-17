@@ -129,7 +129,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
 .tbtn{font-weight:600;transition:all .15s}
 .tbtn:hover{border-color:var(--accent);background:var(--hover)}
 .tbtn.primary{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
-.tbtn.lang{min-width:40px}
 
 .uvp{max-width:1700px;margin:8px auto 0;padding:8px 24px 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
 .uvp h2{font-size:19px;font-weight:700;color:var(--t1);letter-spacing:.01em}
@@ -469,7 +468,6 @@ footer a{color:var(--accent);text-decoration:none}
     </div>
     <div class="header-actions">
       <button type="button" class="tbtn" id="themeBtn" onclick="toggleTheme()" title="Theme" aria-label="Toggle theme"></button>
-      <button type="button" class="tbtn lang" id="langBtn" onclick="toggleLang()" title="RU / EN">RU</button>
       <button type="button" class="tbtn" onclick="openAbout()" data-i18n="about">About</button>
       <div class="hstats" id="hs"></div>
     </div>
@@ -651,6 +649,6 @@ function toggleTheme(){
 })();
 </script>
 <script src="anatomy.js?v=20261112-anatomy-review"></script>
-<script src="app.js?v=20261116-review-fixes"></script>
+<script src="app.js?v=20261117-en"></script>
 </body>
 </html>
